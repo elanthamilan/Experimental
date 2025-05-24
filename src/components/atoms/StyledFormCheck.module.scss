@@ -1,0 +1,59 @@
+@use '../../styles/variables' as v;
+@use 'sass:math'; 
+
+// Base styles for checkbox and radio
+.formCheck {
+  :global(.form-check-input) {
+    border-radius: v.$input-border-radius; 
+    border: v.$base-border-width solid v.$border-color; // Themed
+    background-color: v.$background-app; // Themed
+    margin-top: 0.2em; 
+
+    &:focus {
+      box-shadow: none;
+      border-color: v.$input-focus-border-color; 
+    }
+    &:checked {
+        background-color: v.$primary-brand-color; // Themed
+        border-color: v.$primary-brand-color; // Themed
+    }
+  }
+
+  :global(.form-check-input[type="radio"]) {
+     border-radius: 50%; 
+  }
+
+  .checkLabel { 
+    font-family: v.$font-family-primary; // Themed
+    font-size: v.$font-size-base; // SCSS
+    color: v.$text-color-primary; // Themed
+    line-height: v.$line-height-base; // SCSS
+    padding-left: math.div(v.$gap-small, 2); 
+  }
+}
+
+// Styles for switches (can inherit from formCheck or be separate)
+.formSwitch {
+  @extend .formCheck; 
+
+  :global(.form-switch .form-check-input) {
+    // Example using variables defined previously in ResultsTable.module.scss
+    // These would need to be themed or use fixed values if uncommented
+    // $_switch-track-bg: #DFE1E5; 
+    // $_switch-track-border: 2px solid #7F8A9D;
+    // $_switch-track-radius: 14px;
+    // $_switch-thumb-bg: #7F8A9D;
+
+    // background-color: $_switch-track-bg;
+    // border: $_switch-track-border;
+    // border-radius: $_switch-track-radius;
+    // background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='#{$_switch-thumb-bg}'/%3e%3c/svg%3e");
+
+    // &:focus { box-shadow: none; }
+    // &:checked {
+    //   background-color: v.$primary-brand-color;
+    //   border-color: v.$primary-brand-color;
+    //   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='#{v.$white}'/%3e%3c/svg%3e"); // Use public v.$white
+    // }
+  }
+}

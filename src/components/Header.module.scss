@@ -1,0 +1,102 @@
+@use 'sass:color';
+
+// SCSS Variables from user feedback and image
+$header-background: #ffffff;
+$header-link-color: #0D9BE1;
+$header-link-font-family: 'Lato', sans-serif;
+$header-link-font-weight: 600;
+$header-link-font-size: 14px;
+$header-link-line-height: 22px;
+
+$mit-brand-text-color: #3D4F6D; // For "Massachusetts Institute of Technology media sciences"
+$mit-brand-font-family: 'Lato', sans-serif;
+$mit-brand-title-font-size: 14px; // Assuming based on "media sciences" part
+$mit-brand-subtitle-font-size: 12px; // Smaller for "media sciences"
+
+$avatar-size: 40px;
+$avatar-border-color: #DCF5FF; // From "right side bar" feedback for avatar
+$avatar-background-image: url("https://via.placeholder.com/40"); // Placeholder, user should replace
+
+.navbarCustom {
+  background-color: $header-background !important;
+  padding: 12px 24px; // Increased vertical padding slightly
+  // border-bottom: 1px solid #e0e0e0; // Removed border for flatter look
+  min-height: 60px; // Ensure enough height
+  // The feedback "Header" padding: 24px 0px 8px 12px; seems to be for the content area below this nav
+  // Frame 4392 (top bar) height: 32px; this seems too small for the whole bar with logo.
+  // The links themselves are 32px high.
+
+  .navbarBrand {
+    display: flex;
+    align-items: center;
+    padding: 0; // Remove default padding if any
+    margin-right: 1rem; // Space after brand
+
+    .logoPlaceholder {
+      // From "Navigation" feedback for image 1 (logo)
+      // background: url(image.png); // User should replace with actual logo
+      // For now, a simple placeholder:
+      background-color: #A31F34; // MIT Red
+      color: white;
+      width: 50px; // Approximate from image
+      height: 50px; // Approximate
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-right: 12px;
+      // In design: width: 196px; height: 82px; left: 22px; top: 9px; - this is for a large logo image
+    }
+
+    .brandTextContainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center; // Align text vertically
+      font-family: $mit-brand-font-family;
+      color: $mit-brand-text-color;
+    }
+
+    .brandTitle {
+      font-size: $mit-brand-title-font-size;
+      font-weight: 600; // Bolder for the main title
+      line-height: 1.3;
+    }
+
+    .brandSubtitle {
+      font-size: $mit-brand-subtitle-font-size;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+  }
+
+  .navLinksContainer {
+    // This will wrap the "Send feedback", "Video tutorial", "User manual" links
+    // Based on "Frame 4392" from Header feedback
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px; // Gap between link groups
+    // justify-content: flex-end; // This is handled by ms-auto on Nav
+  }
+
+  // Styles for .navLinkItem, .navLinkIcon, .navLinkText are removed.
+  // Styling is now handled by StyledButton variant="link".
+
+  .avatarPlaceholder {
+    // From "right side bar" feedback for Avatars / 3d_avatar_20
+    width: $avatar-size;
+    height: $avatar-size;
+    background-image: $avatar-background-image;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid $avatar-border-color;
+    border-radius: 50%; // circle
+    margin-left: 16px; // Space before avatar
+  }
+}
+
+// Ensure react-bootstrap Nav uses full height if needed
+:global(.navbar-nav) {
+  align-items: center;
+}

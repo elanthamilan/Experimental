@@ -1,0 +1,11 @@
+@use '../../styles/variables' as v;
+
+.formLabel {
+  font-family: v.$font-family-primary; // Themed
+  font-weight: v.$input-label-font-weight; // SCSS (uses themed font weight)
+  font-size: v.$input-label-font-size; // SCSS
+  line-height: v.$line-height-base; // SCSS
+  color: v.$input-label-color; // Themed (via $text-color-secondary)
+  margin-bottom: v.$gap-small; 
+  display: block; 
+}

@@ -1,0 +1,72 @@
+@use '../../styles/variables' as v;
+@use 'sass:color';
+@use 'sass:math'; 
+
+.dropzoneBase {
+  padding: v.$base-padding * 1.5; 
+  border: v.$secondary-border-width dashed v.$border-color; // Themed
+  border-radius: v.$input-border-radius; // SCSS
+  background-color: v.$background-content; // Themed
+  color: v.$text-color-secondary; // Themed
+  font-family: v.$font-family-primary; // Themed
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+
+  &:hover {
+    border-color: v.$dropzone-hover-border-color; // Use themed hover variable
+  }
+}
+
+.placeholderContent {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: 576px) { 
+    flex-direction: row;
+  }
+
+  span { 
+    margin-left: v.$gap-medium;
+    margin-right: v.$gap-medium;
+  }
+}
+
+.dropzoneFocused {
+  border-color: v.$input-focus-border-color; // Themed (via $primary-brand-color)
+}
+
+.dropzoneActive {
+   border-style: solid;
+}
+
+.dropzoneAccept {
+  border-color: v.$dropzone-accept-border-color; // Use themed variable
+  background-color: v.$dropzone-accept-bg-color; // Use themed variable
+}
+
+.dropzoneReject {
+  border-color: v.$danger-color-fixed; // Uses public SCSS utility color
+  background-color: color.adjust(v.$danger-color-fixed, $alpha: -0.9); // Uses public SCSS utility color
+}
+
+.fileList {
+  margin-top: v.$base-margin;
+  text-align: left;
+  font-size: v.$font-size-base * 0.9;
+
+  h6 {
+    font-weight: v.$font-weight-semibold;
+    margin-bottom: v.$gap-small;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    margin-bottom: math.div(v.$gap-small, 2); 
+  }
+}

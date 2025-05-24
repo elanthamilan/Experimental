@@ -1,0 +1,40 @@
+@use 'sass:math'; 
+@use '../../styles/variables' as v;
+
+.formControl {
+  background-color: v.$input-bg;
+  border: v.$input-border;
+  border-radius: v.$input-border-radius;
+  height: v.$input-height;
+  padding: v.$input-padding;
+  font-family: v.$font-family-primary; // Themed
+  font-weight: v.$font-weight-normal;
+  font-size: v.$input-font-size;
+  line-height: v.$line-height-base;
+  color: v.$input-text-color; 
+  box-shadow: none !important; 
+
+  &:focus {
+    border-color: v.$input-focus-border-color;
+    box-shadow: v.$input-focus-box-shadow !important;
+    color: v.$text-color-primary; // Themed
+  }
+  &::placeholder {
+     color: v.$input-text-color; // Should this be a specific placeholder color variable?
+  }
+
+  &[as="textarea"] {
+    height: auto; 
+    min-height: v.$input-height; 
+  }
+
+  &[type="number"] {
+    text-align: center;
+  }
+
+  &.form-control-sm {
+    height: auto;
+    padding: math.div(v.$gap-small, 2) v.$gap-small; 
+    font-size: v.$font-size-base * 0.9; 
+  }
+}

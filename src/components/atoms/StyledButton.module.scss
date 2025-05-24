@@ -1,0 +1,94 @@
+@use '../../styles/variables' as v;
+@use 'sass:color';
+
+// Base styles for all buttons using this component
+.buttonBase {
+  height: v.$button-height;
+  padding: v.$button-padding;
+  border-radius: v.$base-border-radius;
+  font-family: v.$font-family-primary; // Themed
+  font-weight: v.$font-weight-semibold; // SCSS
+  font-size: v.$font-size-base; // SCSS
+  line-height: v.$button-line-height;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: v.$button-icon-gap;
+  border: none; 
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  white-space: nowrap;
+
+  &:focus, &:focus-visible {
+    box-shadow: none; 
+  }
+
+  :global(.material-symbols-outlined) {
+     font-size: 18px; 
+     vertical-align: text-bottom; 
+  }
+}
+
+// Variant Styles
+.button-primary {
+  background-color: v.$button-primary-bg !important; // Themed
+  background-image: none !important; // Ensure no Bootstrap gradients interfere
+  border: v.$primary-button-border !important; // SCSS (which is 'none')
+  color: v.$button-primary-text !important; // Themed
+  &:hover {
+    background-color: v.$button-primary-hover-bg !important; // Themed
+    background-image: none !important; // Ensure no Bootstrap gradients interfere on hover
+    color: v.$button-primary-text !important; // Ensure text color persists on hover if bg changes
+  }
+}
+
+.button-secondary {
+  background-color: v.$button-secondary-bg !important; // Themed
+  border: v.$secondary-button-border !important; // Themed border-color
+  color: v.$button-secondary-text !important; // Themed
+   &:hover {
+     background-color: v.$button-secondary-hover-bg !important; // Themed
+     color: v.$button-secondary-text !important; // Ensure text color persists
+     // border-color can also be set for hover if needed, e.g., darken(v.$secondary-button-border-color, 10%)
+   }
+}
+
+.button-outline-secondary {
+  background-color: v.$outline-secondary-button-bg; // Themed
+  border: v.$outline-secondary-button-border; // Themed border-color
+  color: v.$outline-secondary-button-text; // Themed
+   &:hover {
+     background-color: v.$outline-secondary-button-hover-bg; // Themed
+   }
+}
+
+.button-link {
+  background-color: transparent;
+  border: none;
+  color: v.$text-color-link; // Themed
+  text-decoration: underline; 
+  padding: 10px 8px; 
+  height: 32px; 
+  gap: 4px; 
+
+  :global(.material-symbols-outlined) { 
+    color: v.$text-color-link; // Themed
+    font-size: 16px; 
+  }
+
+  &:hover {
+    color: v.$link-button-hover-color; // Themed
+    text-decoration: none; 
+    background-color: v.$link-button-hover-bg; // Use themed hover background
+    border-radius: 4px; 
+
+    :global(.material-symbols-outlined) { 
+       color: v.$link-button-hover-color; // Themed
+    }
+  }
+}
+
+.button-icon-secondary {
+  @extend .button-secondary; 
+  width: v.$button-height; 
+  padding: 0; 
+}

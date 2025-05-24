@@ -1,0 +1,233 @@
+@use 'sass:color';
+@use 'sass:math'; // Add math import
+@use './styles/variables' as v; // Use shared variables (Corrected path)
+
+// --- Component Specific Variables ---
+// Keep sidebar specific variables here if they aren't shared globally
+$sidebar-width: 280px; // Width of the left sidebar
+// $sidebar-background: #e1eaf0; // This would be handled in LeftSidebar.module.scss if specific
+
+// Utility Sidebar specific variables
+$utility-sidebar-width: 72px;
+$utility-sidebar-bg: v.$sidebar-background; // Align with LeftSidebar background theme
+$utility-sidebar-padding: v.$base-padding v.$gap-medium;
+$utility-sidebar-gap: v.$gap-large;
+// Icon containers on utility sidebar could be Surface Variant or a slightly different tone
+$utility-icon-container-bg: v.$surface-color; // Or v.$secondary-container-color for a subtle difference
+$utility-icon-container-radius-rect: 12px;
+$utility-icon-container-radius-circle: 24px;
+$utility-icon-color: v.$on-surface-variant-color; // Icons on surface
+$utility-divider-color: v.$outline-color; // Dividers use outline color
+
+
+.appContainer {
+  display: flex;
+  min-height: 100vh;
+  background-color: v.$background-color; // Use MD3 background for the overall app container
+}
+
+// .sidebar styles removed as it's now a separate component with its own SCSS module.
+// $sidebar-width and $sidebar-background are kept for reference if needed for other layout adjustments.
+
+.mainContent {
+  flex-grow: 1;
+  // The header is outside this main scrollable area in many designs
+  // For this example, assuming header is part of the .appPage
+}
+
+.appPage {
+  // This div wraps the content that is not the fixed top header or fixed left sidebar
+  // It allows for independent scrolling of the page content if needed.
+  // For this specific design, the header is at the top of the .mainContent
+  // and the sidebar is to the left.
+  display: flex;
+  flex-direction: column;
+  width: 100%; // Takes remaining width after sidebar
+  position: relative; // Establish stacking context
+  z-index: 1; // Lower than utilitySidebar
+}
+
+.pageBody {
+    padding: v.$base-padding * 1.5; // Use shared variable
+    // background-color: v.$white; // Use shared variable if needed
+    flex-grow: 1;
+    overflow-y: auto; // Allow content within pageBody to scroll if it exceeds viewport height
+}
+
+// Styles for the right utility sidebar based on "right side bar" feedback
+.utilitySidebar {
+    width: $utility-sidebar-width;
+    min-width: $utility-sidebar-width; // Prevent shrinking
+    height: 100vh; // Full height
+    background-color: $utility-sidebar-bg; // Themed
+    padding: $utility-sidebar-padding;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $utility-sidebar-gap;
+    overflow-y: auto; // In case of many icons
+    position: relative; // Needed for z-index to apply
+    z-index: 1050; // Higher than typical content, similar to modals/offcanvas
+
+    .iconButton { // Common style for icon containers
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: $utility-icon-container-bg; // Themed
+      color: $utility-icon-color; // Themed
+      cursor: pointer;
+      font-size: 24px; // Default icon size from feedback
+      transition: background-color 0.2s ease-in-out;
+
+      &:hover {
+        background-color: v.$background-hover; // Use themed hover variable
+      }
+    }
+
+    // Theme switcher dropdown specific styles
+    // Theme switcher dropdown specific styles (custom implementation)
+    .themeSwitcherWrapper {
+      position: relative; // For positioning the custom menu (though menu is now modal)
+    }
+
+    // .themeMenu is removed as it's replaced by Modal
+
+    // Styles for items within the Theme Modal
+    .themeModalBody {
+      // max-height: 400px; // Example max height
+      // overflow-y: auto; // Scroll if many themes
+    }
+
+    // Styles for Form.Check items (radio buttons) in the Theme Modal
+    .themeRadioItem {
+      // Override default react-bootstrap form-check styling for a list-item feel
+      :global(.form-check-input) {
+        margin-top: 0.4em; // Adjust vertical alignment of radio button
+        &:focus {
+          box-shadow: none; // Remove focus box shadow if not desired
+        }
+        // Theming the radio button itself can be tricky across browsers
+        // For MD3 look, custom SVGs or pseudo-elements are often used.
+        // Keeping it simple for now, relying on browser default or Bootstrap's styling.
+      }
+      :global(.form-check-label) {
+        display: block; // Make label take full width for clickability
+        padding: v.$gap-medium v.$base-padding;
+        margin-bottom: v.$gap-small;
+        border: v.$base-border-width solid v.$outline-variant-color;
+        border-radius: v.$input-border-radius;
+        cursor: pointer;
+        color: v.$on-surface-color;
+        transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+
+        &:hover {
+          background-color: v.$background-hover;
+          border-color: v.$outline-color;
+        }
+      }
+      // Style for the checked (active) item's label
+      :global(.form-check-input:checked + .form-check-label) {
+        background-color: v.$primary-container-color;
+        color: v.$on-primary-container-color;
+        font-weight: v.$font-weight-semibold;
+        border-color: v.$primary-color;
+        border-width: 2px; // Make border thicker for active
+      }
+       &:last-child :global(.form-check-label) {
+        margin-bottom: 0;
+      }
+    }
+
+    .modalDivider {
+      margin-top: v.$base-margin;
+      margin-bottom: v.$base-margin;
+      border-top: v.$base-border-width solid v.$outline-variant-color;
+    }
+
+    .modalSectionTitle {
+      font-size: v.$font-size-base * 0.9; // Slightly smaller for section title
+      font-weight: v.$font-weight-semibold;
+      color: v.$text-color-secondary;
+      margin-bottom: v.$gap-medium;
+      padding-left: v.$base-padding; // Align with radio item content padding
+    }
+    
+    .squareIconButton { // e.g., Frame 4412 (apps icon)
+      @extend .iconButton;
+      width: 48px; // From feedback
+      height: 50px; // From feedback
+      border-radius: $utility-icon-container-radius-rect;
+    }
+
+    .circleIconButton { // e.g., Toggle Button, Logout Button
+       @extend .iconButton;
+       width: 39px; // From feedback
+       height: 40px; // From feedback
+       border-radius: $utility-icon-container-radius-circle;
+    }
+
+    .divider {
+        width: 33px; // From feedback Line 206
+        height: v.$base-border-width; // Use shared variable
+        border: none;
+        border-top: v.$base-border-width solid $utility-divider-color;
+        margin: 0; // Override default hr margin
+    }
+}
+
+// Placeholder Mobile Header Styles
+.mobileHeader {
+  display: flex;
+  align-items: center;
+  padding: v.$gap-small v.$base-padding; 
+  background-color: v.$surface-color; // MD3: Headers are typically Surface or Primary Container
+  // Or use v.$primary-container-color for a colored header
+  border-bottom: v.$base-border-width solid v.$outline-color; // MD3: Border uses outline
+  gap: v.$base-margin; 
+
+  // Style the menu button if needed
+  :global(.btn-light) { 
+     background: none;
+     border: none;
+     color: v.$on-surface-variant-color; // MD3: Icons/text on surface
+     padding: math.div(v.$gap-small, 2); 
+     &:hover, &:focus {
+        background-color: v.$background-hover; // MD3: Hover state
+     }
+  }
+
+  span:not(.material-symbols-outlined) { // Target the title text
+    font-weight: v.$font-weight-semibold; 
+    color: v.$on-surface-color;  // MD3: Title text on surface
+  }
+}
+
+// Style for Offcanvas body to remove padding
+.mobileOffcanvasBody {
+  padding: 0 !important; // Override default Offcanvas padding
+}
+
+// --- Responsive Adjustments ---
+$breakpoint-large: 992px; // Example breakpoint (Bootstrap lg)
+
+@media (max-width: #{$breakpoint-large - 1px}) {
+  // .appContainer styles might not need changes if handled by JS conditional rendering
+
+   // Utility Sidebar is hidden via JS conditional rendering, no CSS needed here
+
+   .appPage {
+      width: 100%; // Take full width when sidebars are hidden/removed
+   }
+
+   .pageBody {
+      padding: v.$base-padding; // Use shared variable for smaller padding
+   }
+}
+// Responsive hiding is now handled by conditional rendering in App.js
+
+
+// If the top header is fixed and main content scrolls:
+// .appContainer { display: flex; flex-direction: column; min-height: 100vh; }
+// .contentWrapper { display: flex; flex-grow: 1; }
+// .mainContent { flex-grow: 1; overflow-y: auto; }
+// Header would be a direct child of .appContainer

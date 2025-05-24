@@ -1,0 +1,153 @@
+@use 'sass:color';
+@use 'sass:math'; 
+@use '../styles/variables' as v; 
+
+// --- Component Specific Variables (If any needed beyond shared) ---
+$form-background-color: v.$search-criteria-form-bg; // Themed
+$form-border-color: v.$border-color; // Themed
+
+// Page Title specific styles
+$page-title-font-family: v.$font-family-secondary; 
+$page-title-font-weight: v.$font-weight-bold; 
+$page-title-font-size: 24px; 
+$page-title-color: v.$text-color-primary; 
+
+
+.searchCriteriaContainer {
+  padding: v.$base-padding * 1.5; 
+}
+
+.pageTitle {
+  font-family: $page-title-font-family; 
+  font-weight: $page-title-font-weight;
+  font-size: $page-title-font-size;
+  color: $page-title-color;
+  letter-spacing: 0.005em; 
+  margin-bottom: v.$base-margin; 
+}
+
+.formContainer {
+  background-color: $form-background-color; 
+  padding: v.$base-padding * 1.5; 
+  border-radius: v.$base-border-radius; 
+  border: v.$base-border-width solid $form-border-color; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+  :global(.form-label) { 
+    font-family: v.$font-family-primary; 
+    font-weight: v.$input-label-font-weight; 
+    font-size: v.$input-label-font-size; 
+    line-height: v.$line-height-base; 
+    color: v.$input-label-color; 
+    margin-bottom: math.div(v.$gap-small, 2); 
+  }
+
+  :global(.form-select) {
+    background-color: v.$input-bg;
+    border: v.$input-border;
+    border-radius: v.$input-border-radius;
+    height: v.$input-height; 
+    padding: v.$input-padding; 
+    font-family: v.$font-family-primary; 
+    font-weight: v.$font-weight-normal; 
+    font-size: v.$input-font-size; 
+    line-height: v.$line-height-base;
+    color: v.$input-text-color; 
+    &:focus {
+      border-color: v.$input-focus-border-color;
+      box-shadow: v.$input-focus-box-shadow;
+    }
+  }
+
+  :global(.form-control) { 
+    border-radius: v.$input-border-radius;
+    border: v.$input-border; 
+    height: v.$input-height; 
+    padding: v.$input-padding; 
+    font-family: v.$font-family-primary; 
+    font-size: v.$input-font-size; 
+    color: v.$input-text-color; 
+    &:focus {
+      border-color: v.$input-focus-border-color;
+      box-shadow: v.$input-focus-box-shadow;
+    }
+  }
+}
+
+.displayRevaluationCheck {
+  :global(.form-check-label) {
+    font-size: 0.9rem; 
+    color: v.$input-label-color; 
+  }
+}
+
+.resetButton {
+  height: v.$button-height;
+  width: v.$button-height; 
+  margin-right: v.$gap-small; 
+  background-color: v.$button-secondary-bg; // Themed
+  border: v.$secondary-button-border; // Themed
+  color: v.$button-secondary-text; // Themed
+  padding: 0; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: v.$base-border-radius; 
+  font-family: v.$font-family-primary; // Themed
+
+  &:hover {
+    background-color: v.$button-secondary-hover-bg; // Themed
+  }
+}
+
+.searchButton {
+  height: v.$button-height;
+  background-color: v.$button-primary-bg; // Themed
+  border: v.$primary-button-border; 
+  color: v.$button-primary-text; // Themed
+  padding: v.$button-padding; 
+  border-radius: v.$base-border-radius; 
+  font-family: v.$font-family-primary; // Themed
+  font-weight: v.$font-weight-semibold; 
+  font-size: v.$font-size-base; 
+  line-height: v.$button-line-height; 
+  display: inline-flex;
+  align-items: center;
+  gap: v.$button-icon-gap; 
+
+  :global(.material-symbols-outlined) {
+     font-size: 16px; 
+  }
+
+  &:hover {
+    background-color: v.$button-primary-hover-bg; // Themed
+  }
+}
+
+// Styles for Preview State
+.previewContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: v.$base-padding v.$base-padding * 1.5; // Match formContainer padding
+}
+
+.previewText {
+  font-family: v.$font-family-primary;
+  font-size: v.$font-size-base;
+  color: v.$text-color-secondary; // Use secondary text color for preview
+  flex-grow: 1;
+  margin-right: v.$base-margin;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.editButton {
+  // Uses StyledButton variant="link", so base link styles apply
+  // Add specific overrides if needed, e.g., for icon alignment or size
+  :global(.material-symbols-outlined) {
+    font-size: 18px; // Match other icon sizes
+    margin-right: math.div(v.$gap-small, 2);
+  }
+}
