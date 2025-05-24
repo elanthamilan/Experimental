@@ -78,6 +78,13 @@ const LeftSidebar = () => {
         },
         { eventKey: 'assignment_student', icon: 'assignment', label: 'My Assignments', path: '/assignments', roles: [USER_ROLES.STUDENT] },
         { eventKey: 'assignment_teacher', icon: 'assignment_turned_in', label: 'Manage Assignments', path: '/assignments/manage', roles: [USER_ROLES.TEACHER] },
+        {
+          eventKey: 'exam_schedules',
+          icon: 'event_note', // Example icon
+          label: 'Exam Schedules',
+          path: '/academic/examschedules',
+          roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER]
+        }
       ]
     },
     administration: {
@@ -91,7 +98,13 @@ const LeftSidebar = () => {
            roles: [USER_ROLES.ADMIN],
            children: [
              { eventKey: 'admissions_dashboard', label: 'Admissions Overview', path: '/admissions', roles: [USER_ROLES.ADMIN] }, // Link to existing page
-             { eventKey: 'app_form_fields', label: 'Form Fields Config', path: '/admin/admissions/formfields', roles: [USER_ROLES.ADMIN] }
+             { eventKey: 'app_form_fields', label: 'Form Fields Config', path: '/admin/admissions/formfields', roles: [USER_ROLES.ADMIN] },
+             { 
+               eventKey: 'submitted_applications', 
+               label: 'Submitted Applications', 
+               path: '/admissions/applications', 
+               roles: [USER_ROLES.ADMIN] 
+             }
            ]
          },
          { 
@@ -122,6 +135,13 @@ const LeftSidebar = () => {
            label: 'Departments',
            path: '/admin/masterdata/departments',
            roles: [USER_ROLES.ADMIN] // Assuming Admin role
+         },
+         {
+           eventKey: 'org_hierarchy',
+           icon: 'account_tree', // Example icon
+           label: 'Org Hierarchy',
+           path: '/admin/organisation/hierarchy',
+           roles: [USER_ROLES.ADMIN]
          }
       ]
     },

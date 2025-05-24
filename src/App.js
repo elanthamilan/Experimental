@@ -40,6 +40,15 @@ import AddEditFinancialYearPage from './pages/admin/AddEditFinancialYearPage';
 // Application Form Field Management Page Imports
 import AppFormFieldListPage from './pages/admin/AppFormFieldListPage';
 import AddEditAppFormFieldPage from './pages/admin/AddEditAppFormFieldPage';
+// Application Submission Tracking Page Imports
+import ApplicationListPage from './pages/admissions/ApplicationListPage';
+import ViewApplicationPage from './pages/admissions/ViewApplicationPage';
+// Organizational Hierarchy Management Page Imports
+import OrgHierarchyPage from './pages/admin/OrgHierarchyPage';
+import AddEditOrgHierarchyNodePage from './pages/admin/AddEditOrgHierarchyNodePage';
+// Examination Schedule Management Page Imports
+import ExamScheduleListPage from './pages/academic/ExamScheduleListPage';
+import AddEditExamSchedulePage from './pages/academic/AddEditExamSchedulePage';
 // Course Detail Page Import
 import CourseDetailPage from './pages/academic/CourseDetailPage';
 
@@ -142,22 +151,37 @@ const UtilitySidebar = () => {
         </Modal.Header>
         <Modal.Body className={styles.themeModalBody}>
           <Form>
-            {themes.map(theme => (
-              <Form.Check
-                type="radio"
-                key={theme.id}
-                id={`theme-radio-${theme.id}`}
-                name="themeSelection"
-                label={theme.name}
-                value={theme.id}
-                checked={currentTheme === theme.id}
-                onChange={() => { 
-                  setTheme(theme.id); 
-                  setShowThemeModal(false); 
-                }}
-                className={styles.themeRadioItem} // Custom class for styling radio items
-              />
-            ))}
+            {themes.map(theme => {
+              const currentGlobalFontWeightValue = fontWeightOptions.find(fw => fw.value === globalFontWeight)?.cssValue || '400';
+              return (
+                <Form.Check
+                  type="radio"
+                  key={theme.id}
+                  id={`theme-radio-${theme.id}`}
+                  name="themeSelection"
+                  value={theme.id}
+                  checked={currentTheme === theme.id}
+                  onChange={() => {
+                    setTheme(theme.id);
+                    // setShowThemeModal(false); // Keep modal open to see changes
+                  }}
+                  className={styles.themeRadioItem}
+                  label={
+                    <div className={styles.themeOptionContainer}>
+                      <span>{theme.name}</span>
+                      <div className={styles.themePreviewPalette}>
+                        <div className={styles.themeColorSwatch} style={{ backgroundColor: theme.seedColors.primary }}></div>
+                        <div className={styles.themeColorSwatch} style={{ backgroundColor: theme.seedColors.secondary }}></div>
+                        <div className={styles.themeColorSwatch} style={{ backgroundColor: theme.seedColors.tertiary }}></div>
+                      </div>
+                      <div className={styles.themeFontPreview} style={{ fontFamily: `"${theme.fonts.body}", sans-serif`, fontWeight: currentGlobalFontWeightValue }}>
+                        Aa Bb Cc
+                      </div>
+                    </div>
+                  }
+                />
+              );
+            })}
           </Form>
 
           <hr className={styles.modalDivider} />
@@ -337,6 +361,20 @@ function App() {
               <Route path="/admin/admissions/formfields" element={<AppFormFieldListPage />} />
               <Route path="/admin/admissions/formfields/new" element={<AddEditAppFormFieldPage />} />
               <Route path="/admin/admissions/formfields/edit/:fieldId" element={<AddEditAppFormFieldPage />} />
+
+              {/* Application Submission Tracking Routes */}
+              <Route path="/admissions/applications" element={<ApplicationListPage />} />
+              <Route path="/admissions/applications/view/:applicationId" element={<ViewApplicationPage />} />
+
+              {/* Organizational Hierarchy Management Routes */}
+              <Route path="/admin/organisation/hierarchy" element={<OrgHierarchyPage />} />
+              <Route path="/admin/organisation/hierarchy/new" element={<AddEditOrgHierarchyNodePage />} />
+              <Route path="/admin/organisation/hierarchy/edit/:nodeId" element={<AddEditOrgHierarchyNodePage />} />
+
+              {/* Examination Schedule Management Routes */}
+              <Route path="/academic/examschedules" element={<ExamScheduleListPage />} />
+              <Route path="/academic/examschedules/new" element={<AddEditExamSchedulePage />} />
+              <Route path="/academic/examschedules/edit/:scheduleId" element={<AddEditExamSchedulePage />} />
             </Routes>
           </main>
         </div>
