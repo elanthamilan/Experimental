@@ -100,18 +100,11 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
 
     // Styles for Form.Check items (radio buttons) in the Theme Modal
     .themeRadioItem {
-      // Override default react-bootstrap form-check styling for a list-item feel
-      :global(.form-check-input) {
-        margin-top: 0.4em; // Adjust vertical alignment of radio button
-        &:focus {
-          box-shadow: none; // Remove focus box shadow if not desired
-        }
-        // Theming the radio button itself can be tricky across browsers
-        // For MD3 look, custom SVGs or pseudo-elements are often used.
-        // Keeping it simple for now, relying on browser default or Bootstrap's styling.
-      }
       :global(.form-check-label) {
-        display: block; // Make label take full width for clickability
+        display: flex; // Use flex to align radio and custom content
+        flex-direction: row; // Radio button on left, custom content on right
+        align-items: flex-start; // Align items to the top
+        width: 100%; // Ensure label takes full width
         padding: v.$gap-medium v.$base-padding;
         margin-bottom: v.$gap-small;
         border: v.$base-border-width solid v.$outline-variant-color;
@@ -125,17 +118,68 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
           border-color: v.$outline-color;
         }
       }
+      :global(.form-check-input) {
+        margin-top: 0.3em; // Fine-tune vertical alignment of radio
+        margin-right: v.$gap-medium; // Space between radio and custom content
+        &:focus {
+          box-shadow: none;
+        }
+      }
       // Style for the checked (active) item's label
       :global(.form-check-input:checked + .form-check-label) {
         background-color: v.$primary-container-color;
         color: v.$on-primary-container-color;
-        font-weight: v.$font-weight-semibold;
         border-color: v.$primary-color;
-        border-width: 2px; // Make border thicker for active
+        border-width: 2px;
+        
+        // Ensure nested preview elements also adapt their colors for readability
+        .themeOptionContainer span, .themeFontPreview {
+           color: v.$on-primary-container-color;
+        }
+        .themeFontPreview {
+           background-color: rgba(v.$on-primary-container-color, 0.1); // Subtle bg for font preview
+           border-color: rgba(v.$on-primary-container-color, 0.3);
+        }
+         .themeColorSwatch {
+           border-color: rgba(v.$on-primary-container-color, 0.5); // Darker border for swatches on colored bg
+         }
       }
        &:last-child :global(.form-check-label) {
         margin-bottom: 0;
       }
+    }
+    
+    .themeOptionContainer {
+      display: flex;
+      flex-direction: column;
+      gap: v.$gap-small;
+      align-items: flex-start;
+      width: 100%; // Take remaining width in the label
+    }
+
+    .themePreviewPalette {
+      display: flex;
+      gap: math.div(v.$gap-small, 2);
+      margin-top: math.div(v.$gap-small, 2);
+    }
+
+    .themeColorSwatch {
+      width: 20px;
+      height: 20px;
+      border-radius: v.$border-radius-small;
+      border: 1px solid v.$outline-variant-color;
+    }
+
+    .themeFontPreview {
+      margin-top: math.div(v.$gap-small, 2);
+      padding: math.div(v.$gap-small, 2) v.$gap-small;
+      background-color: v.$surface-color;
+      border: 1px solid v.$outline-variant-color;
+      border-radius: v.$border-radius-small;
+      font-size: v.$font-size-small;
+      color: v.$on-surface-color;
+      width: fit-content;
+      max-width: 100%;
     }
 
     .modalDivider {
