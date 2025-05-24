@@ -227,3 +227,8 @@ $dropzone-accept-bg-color: var(--theme-dropzone-accept-bg-color, rgba($_secondar
 
 // Dropdown Menu
 // $dropdown-bg, $dropdown-text-color already defined
+$surface-variant-color: var(--theme-surface-variant, #E7E0EC); // MD3 surface-variant fallback
+$surface-container-highest-color: var(--theme-surface-container-highest, #E6E0E9); // MD3 surface-container-highest fallback
+$surface-container-color: var(--theme-surface-container, #F3EDF7); // MD3 surface-container fallback
+$surface-container-lowest-color: var(--theme-surface-container-lowest, #FFFFFF); // MD3 surface-container-lowest fallback
+$surface-container-low-color: var(--theme-surface-container-low, #F7F2FA); // MD3 surface-container-low fallback
