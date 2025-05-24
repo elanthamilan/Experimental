@@ -1,33 +1,33 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mockSemesters } from '../../data/mockSemesters';
+import { mockFinancialYears } from '../../data/mockFinancialYears';
 import { Button, Table, Card } from 'react-bootstrap';
 import styles from './AdminPages.module.scss';
 
-const SemesterListPage = () => {
+const FinancialYearListPage = () => {
   const navigate = useNavigate();
 
   return (
     <div className={styles.pageContainer}>
       <Card className={styles.formCard}>
         <Card.Header>
-          <Card.Title>Semester Management</Card.Title>
+          <Card.Title>Financial Year Management</Card.Title>
         </Card.Header>
         <Card.Body>
           <div className="d-flex justify-content-end mb-3">
-            <Button variant="primary" onClick={() => navigate('/admin/semesters/new')}>
+            <Button variant="primary" onClick={() => navigate('/admin/financialyears/new')}>
               <span className="material-symbols-outlined me-2" style={{ verticalAlign: 'middle' }}>add</span>
-              Add New Semester
+              Add New Financial Year
             </Button>
           </div>
 
-          {mockSemesters.length === 0 ? (
-            <p>No semesters found.</p>
+          {mockFinancialYears.length === 0 ? (
+            <p>No financial years found.</p>
           ) : (
             <Table striped bordered hover responsive className={styles.table}>
               <thead>
                 <tr>
-                  <th>Semester ID</th>
+                  <th>ID</th>
                   <th>Name</th>
                   <th>Start Date</th>
                   <th>End Date</th>
@@ -36,19 +36,19 @@ const SemesterListPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {mockSemesters.map((semester) => (
-                  <tr key={semester.id}>
-                    <td>{semester.id}</td>
-                    <td>{semester.name}</td>
-                    <td>{semester.startDate}</td>
-                    <td>{semester.endDate}</td>
-                    <td>{semester.status}</td>
+                {mockFinancialYears.map((fy) => (
+                  <tr key={fy.id}>
+                    <td>{fy.id}</td>
+                    <td>{fy.name}</td>
+                    <td>{fy.startDate}</td>
+                    <td>{fy.endDate}</td>
+                    <td>{fy.status}</td>
                     <td>
                       <Button
                         variant="outline-primary"
                         size="sm"
-                        onClick={() => navigate(`/admin/semesters/edit/${semester.id}`)}
-                        title="Edit Semester"
+                        onClick={() => navigate(`/admin/financialyears/edit/${fy.id}`)}
+                        title="Edit Financial Year"
                       >
                         <span className="material-symbols-outlined">edit</span>
                       </Button>
@@ -64,4 +64,4 @@ const SemesterListPage = () => {
   );
 };
 
-export default SemesterListPage;
+export default FinancialYearListPage;

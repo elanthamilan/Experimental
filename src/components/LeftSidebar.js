@@ -83,7 +83,17 @@ const LeftSidebar = () => {
     administration: {
       title: 'Administration',
       items: [
-         { eventKey: 'admissions', icon: 'confirmation_number', label: 'Admissions', path: '/admissions', roles: [USER_ROLES.ADMIN] },
+         { 
+           eventKey: 'admissions_group', // New eventKey for parent
+           icon: 'confirmation_number', 
+           label: 'Admissions', 
+           // path: '/admissions', // Optional: parent can still link to main admissions page
+           roles: [USER_ROLES.ADMIN],
+           children: [
+             { eventKey: 'admissions_dashboard', label: 'Admissions Overview', path: '/admissions', roles: [USER_ROLES.ADMIN] }, // Link to existing page
+             { eventKey: 'app_form_fields', label: 'Form Fields Config', path: '/admin/admissions/formfields', roles: [USER_ROLES.ADMIN] }
+           ]
+         },
          { 
            eventKey: 'students', icon: 'school', label: 'Students', path: '/students', roles: [USER_ROLES.ADMIN], 
            children: [
@@ -106,12 +116,26 @@ const LeftSidebar = () => {
            roles: [USER_ROLES.ADMIN]
          },
          { eventKey: 'reports', icon: 'analytics', label: 'Reports', path: '/reports', roles: [USER_ROLES.ADMIN] },
+         {
+           eventKey: 'department_mgmt',
+           icon: 'corporate_fare', // Example icon
+           label: 'Departments',
+           path: '/admin/masterdata/departments',
+           roles: [USER_ROLES.ADMIN] // Assuming Admin role
+         }
       ]
     },
      finance: {
       title: 'Finance',
       items: [
         { eventKey: 'billing', icon: 'payments', label: 'Billing', path: '/billing', roles: [USER_ROLES.ADMIN, USER_ROLES.STUDENT] }, // Admin manages, Student views own
+        {
+          eventKey: 'financial_year_mgmt',
+          icon: 'account_balance_wallet', // Example icon
+          label: 'Financial Years',
+          path: '/admin/financialyears',
+          roles: [USER_ROLES.ADMIN]
+        }
       ]
     },
     // Removed facilities and studentServices for brevity in example, can be added back similarly
