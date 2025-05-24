@@ -4,29 +4,31 @@
 // Base styles for checkbox and radio
 .formCheck {
   :global(.form-check-input) {
-    border-radius: v.$input-border-radius; 
-    border: v.$base-border-width solid v.$border-color; // Themed
-    background-color: v.$background-app; // Themed
-    margin-top: 0.2em; 
+    border-radius: v.$input-border-radius;
+    border: v.$base-border-width solid v.$outline-color; // Use outline color for base border
+    background-color: v.$surface-color; // Background should be surface or transparent
+    margin-top: 0.2em;
 
     &:focus {
       box-shadow: none;
-      border-color: v.$input-focus-border-color; 
+      border-color: v.$primary-color; // Focus with primary color
     }
     &:checked {
-        background-color: v.$primary-brand-color; // Themed
-        border-color: v.$primary-brand-color; // Themed
+        background-color: v.$primary-color; // Checked state uses primary color
+        border-color: v.$primary-color; // Border also primary
+        // For M3, the checkmark icon itself would be v.$on-primary-color
+        // This requires SVG background-image which is more complex here.
     }
   }
 
   :global(.form-check-input[type="radio"]) {
-     border-radius: 50%; 
+     border-radius: 50%;
   }
 
-  .checkLabel { 
-    font-family: v.$font-family-primary; // Themed
+  .checkLabel {
+    font-family: v.$font-family-body; // Changed to body font
     font-size: v.$font-size-base; // SCSS
-    color: v.$text-color-primary; // Themed
+    color: v.$on-surface-color; // Text on surface
     line-height: v.$line-height-base; // SCSS
     padding-left: math.div(v.$gap-small, 2); 
   }

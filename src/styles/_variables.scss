@@ -152,8 +152,8 @@ $border-color: $outline-color;          // General borders should use outline co
 $primary-brand-color: $primary-color; // Legacy name for primary color
 
 // Typography Accessors (pointing to SCSS fallbacks, as fonts are less themed by color themes)
-$font-family-primary: var(--theme-font-primary, $_font-family-lato);
-$font-family-secondary: var(--theme-font-secondary, $_font-family-manrope);
+$font-family-display: var(--theme-font-display, $_font-family_lato); // Changed from primary to display
+$font-family-body: var(--theme-font-body, $_font-family_manrope);    // Changed from secondary to body
 $font-size-base: $_font-size-base;
 $font-weight-normal: var(--theme-global-body-font-weight, $_font-weight-normal); // Use global CSS var
 $font-weight-semibold: $_font-weight-semibold; // Keep semibold and bold fixed unless also globalized
@@ -177,7 +177,7 @@ $input-label-font-weight: $font-weight-semibold;
 $input-label-font-size: $font-size-base;
 
 // Buttons
-$button-font-family: $font-family-primary;
+$button-font-family: $font-family-body; // Buttons typically use the body font
 $button-font-weight: $font-weight-semibold;
 $button-font-size: $font-size-base;
 $button-line-height: 22px; // Adjust if needed for $button-height

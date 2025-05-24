@@ -4,17 +4,17 @@
 
 .dropzoneBase {
   padding: v.$base-padding * 1.5; 
-  border: v.$secondary-border-width dashed v.$border-color; // Themed
+  border: v.$secondary-border-width dashed v.$outline-color; // Use outline-color directly
   border-radius: v.$input-border-radius; // SCSS
-  background-color: v.$background-content; // Themed
-  color: v.$text-color-secondary; // Themed
-  font-family: v.$font-family-primary; // Themed
+  background-color: v.$surface-color; // Use surface-color directly
+  color: v.$on-surface-variant-color; // Use on-surface-variant directly
+  font-family: v.$font-family-body; // Changed to body font
   text-align: center;
   cursor: pointer;
   transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 
   &:hover {
-    border-color: v.$dropzone-hover-border-color; // Use themed hover variable
+    border-color: v.$primary-color; // Changed to primary color for hover
   }
 }
 

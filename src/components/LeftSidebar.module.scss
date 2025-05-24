@@ -56,7 +56,7 @@ $tree-line-l3-left: $tree-indent-l2 - math.div($tree-line-h-length, 2) - math.di
   background-color: $sidebar-background; 
   display: flex;
   flex-direction: column;
-  font-family: v.$font-family-primary; 
+  font-family: v.$font-family-body; // Changed to body font
   color: $sidebar-text-color; 
   overflow-y: auto;
   border-right: 1px solid $sidebar-border-color; 
@@ -99,7 +99,7 @@ $tree-line-l3-left: $tree-indent-l2 - math.div($tree-line-h-length, 2) - math.di
 }
 
 .brandName {
-  font-family: v.$font-family-secondary; // Themed
+  font-family: v.$font-family-display; // Changed to display font for brand name
   font-weight: v.$font-weight-bold; // Make it bolder
   font-size: v.$font-size-base * 1.15; // Slightly larger
   color: $sidebar-text-color; 
@@ -109,7 +109,7 @@ $tree-line-l3-left: $tree-indent-l2 - math.div($tree-line-h-length, 2) - math.di
 // .brandSubtitle is removed from JS, so styles can be removed or commented
 /*
 .brandSubtitle {
-  font-family: v.$font-family-primary; // Themed
+  font-family: v.$font-family-body; // Changed to body font
   font-size: v.$font-size-base * 0.85;
   color: $section-title-color; 
   margin-left: v.$gap-small;
@@ -147,7 +147,7 @@ $tree-line-l3-left: $tree-indent-l2 - math.div($tree-line-h-length, 2) - math.di
   // border: 1px solid v.$outline-color; // Optional: if a visible border is desired
   // border-radius: v.$input-border-radius;
   padding: math.div(v.$gap-small, 2) v.$gap-small;
-  font-family: v.$font-family-primary;
+  font-family: v.$font-family-body; // Changed to body font
   font-size: v.$font-size-base * 0.95;
   color: $sidebar-text-color;
   outline: none;
@@ -179,7 +179,7 @@ $tree-line-l3-left: $tree-indent-l2 - math.div($tree-line-h-length, 2) - math.di
     padding: $nav-link-vertical-padding $tree-indent-l1; // Base L1 padding
     gap: v.$gap-medium; 
     border-radius: v.$input-border-radius;
-    font-family: v.$font-family-primary;
+    font-family: v.$font-family-body; // Changed to body font
     font-weight: v.$font-weight-semibold; 
     font-size: v.$font-size-base;         
     line-height: v.$line-height-base;
@@ -317,7 +317,7 @@ $tree-line-l3-left: $tree-indent-l2 - math.div($tree-line-h-length, 2) - math.di
     margin-top: v.$base-padding;
 
     .groupHeader {
-      font-family: v.$font-family-primary; 
+      font-family: v.$font-family-body; // Changed to body font
       font-weight: v.$font-weight-semibold; 
       font-size: 11px; 
       line-height: 1.5;

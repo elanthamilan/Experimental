@@ -7,7 +7,7 @@ $form-background-color: v.$search-criteria-form-bg; // Themed
 $form-border-color: v.$border-color; // Themed
 
 // Page Title specific styles
-$page-title-font-family: v.$font-family-secondary; 
+$page-title-font-family: v.$font-family-display; // Changed to display font
 $page-title-font-weight: v.$font-weight-bold; 
 $page-title-font-size: 24px; 
 $page-title-color: v.$text-color-primary; 
@@ -34,7 +34,7 @@ $page-title-color: v.$text-color-primary;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 
   :global(.form-label) { 
-    font-family: v.$font-family-primary; 
+    font-family: v.$font-family-body; // Changed to body font
     font-weight: v.$input-label-font-weight; 
     font-size: v.$input-label-font-size; 
     line-height: v.$line-height-base; 
@@ -48,7 +48,7 @@ $page-title-color: v.$text-color-primary;
     border-radius: v.$input-border-radius;
     height: v.$input-height; 
     padding: v.$input-padding; 
-    font-family: v.$font-family-primary; 
+    font-family: v.$font-family-body; // Changed to body font
     font-weight: v.$font-weight-normal; 
     font-size: v.$input-font-size; 
     line-height: v.$line-height-base;
@@ -64,7 +64,7 @@ $page-title-color: v.$text-color-primary;
     border: v.$input-border; 
     height: v.$input-height; 
     padding: v.$input-padding; 
-    font-family: v.$font-family-primary; 
+    font-family: v.$font-family-body; // Changed to body font
     font-size: v.$input-font-size; 
     color: v.$input-text-color; 
     &:focus {
@@ -93,7 +93,7 @@ $page-title-color: v.$text-color-primary;
   align-items: center;
   justify-content: center;
   border-radius: v.$base-border-radius; 
-  font-family: v.$font-family-primary; // Themed
+  font-family: v.$font-family-body; // Changed to body font
 
   &:hover {
     background-color: v.$button-secondary-hover-bg; // Themed
@@ -107,7 +107,7 @@ $page-title-color: v.$text-color-primary;
   color: v.$button-primary-text; // Themed
   padding: v.$button-padding; 
   border-radius: v.$base-border-radius; 
-  font-family: v.$font-family-primary; // Themed
+  font-family: v.$font-family-body; // Changed to body font
   font-weight: v.$font-weight-semibold; 
   font-size: v.$font-size-base; 
   line-height: v.$button-line-height; 
@@ -133,7 +133,7 @@ $page-title-color: v.$text-color-primary;
 }
 
 .previewText {
-  font-family: v.$font-family-primary;
+  font-family: v.$font-family-body; // Changed to body font
   font-size: v.$font-size-base;
   color: v.$text-color-secondary; // Use secondary text color for preview
   flex-grow: 1;

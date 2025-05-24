@@ -5,14 +5,49 @@ import SummaryStats from './components/SummaryStats';
 import ResultsTable from './components/ResultsTable';
 import LeftSidebar from './components/LeftSidebar';
 import AddEditForm from './components/AddEditForm';
-import { Button, Offcanvas, OverlayTrigger, Tooltip, Modal, Form } from 'react-bootstrap'; 
+import { Button, Offcanvas, OverlayTrigger, Tooltip, Modal, Form } from 'react-bootstrap';
 import { Routes, Route } from 'react-router-dom';
+
+// Import SIS Page Placeholders
+import DashboardPage from './pages/DashboardPage';
+import StudentListPage from './pages/admin/StudentListPage';
+import AddEditStudentPage from './pages/admin/AddEditStudentPage';
+import StaffListPage from './pages/admin/StaffListPage';
+import AddEditStaffPage from './pages/admin/AddEditStaffPage';
+import CourseListPage from './pages/academic/CourseListPage';
+import AddEditCoursePage from './pages/academic/AddEditCoursePage';
+import GradebookPage from './pages/academic/GradebookPage';
+import AdmissionsPage from './pages/admin/AdmissionsPage';
+import BillingPage from './pages/finance/BillingPage';
+import ReportsPage from './pages/admin/ReportsPage';
+import UserProfilePage from './pages/user/UserProfilePage';
+// Faculty Management Page Imports
+import FacultyListPage from './pages/admin/FacultyListPage';
+import AddEditFacultyPage from './pages/admin/AddEditFacultyPage';
+import FacultyProfilePage from './pages/user/FacultyProfilePage';
+// Program Management Page Imports
+import ProgramListPage from './pages/admin/ProgramListPage';
+import AddEditProgramPage from './pages/admin/AddEditProgramPage';
+// Semester Management Page Imports
+import SemesterListPage from './pages/admin/SemesterListPage';
+import AddEditSemesterPage from './pages/admin/AddEditSemesterPage';
+// Course Detail Page Import
+import CourseDetailPage from './pages/academic/CourseDetailPage';
+
 import styles from './App.module.scss';
 import './App.css';
 
 // Create Theme Context
 const ThemeContext = createContext();
+// Updated useTheme to include role management - this export might be better placed where ThemeContext is defined if it were in a separate file.
 export const useTheme = () => useContext(ThemeContext);
+
+// User Roles
+const USER_ROLES = {
+  ADMIN: 'Admin',
+  TEACHER: 'Teacher',
+  STUDENT: 'Student',
+};
 
 // Font weight options
 const fontWeightOptions = [
@@ -37,7 +72,7 @@ const fontWeightOptions = [
 // }
 
 const UtilitySidebar = () => {
-  const { currentTheme, setTheme, globalFontWeight, setGlobalFontWeight } = useTheme();
+  const { currentTheme, setTheme, globalFontWeight, setGlobalFontWeight, currentUserRole, setCurrentUserRole, USER_ROLES } = useTheme();
   const [showThemeModal, setShowThemeModal] = useState(false);
   // const themeMenuRef = useRef(null); // No longer needed
   // useOutsideAlerter(themeMenuRef, () => setShowThemeMenu(false)); // No longer needed
@@ -52,15 +87,35 @@ const UtilitySidebar = () => {
   return (
     <div className={styles.utilitySidebar}>
       <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Apps')}>
-        <div className={styles.squareIconButton}> 
+        <div className={styles.squareIconButton}>
           <span className="material-symbols-outlined">apps</span>
         </div>
       </OverlayTrigger>
-      
+
+      {/* Role Selector */}
+      <div className={styles.sidebarSection}>
+        <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Switch User Role')}>
+          <div className={styles.circleIconButton} style={{ marginBottom: '8px' }}> {/* Added style for spacing, or use SCSS */}
+             <span className="material-symbols-outlined">admin_panel_settings</span>
+          </div>
+        </OverlayTrigger>
+        <Form.Select
+          value={currentUserRole}
+          onChange={(e) => setCurrentUserRole(e.target.value)}
+          aria-label="Select User Role"
+          className={styles.roleSelectorDropdown}
+          bsPrefix="form-select-sm" // Use Bootstrap's small select
+        >
+          <option value={USER_ROLES.ADMIN}>Admin</option>
+          <option value={USER_ROLES.TEACHER}>Teacher</option>
+          <option value={USER_ROLES.STUDENT}>Student</option>
+        </Form.Select>
+      </div>
+
       {/* Theme Switcher Icon - Triggers Modal */}
       <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Change Theme')}>
-        <div 
-          className={styles.circleIconButton} 
+        <div
+          className={styles.circleIconButton}
           onClick={() => setShowThemeModal(true)}
           role="button"
           tabIndex={0}
@@ -74,7 +129,7 @@ const UtilitySidebar = () => {
       {/* Theme Selection Modal */}
       <Modal show={showThemeModal} onHide={() => setShowThemeModal(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Select Theme</Modal.Title>
+          <Modal.Title>Select Theme / Font Weight</Modal.Title> {/* Updated Title */}
         </Modal.Header>
         <Modal.Body className={styles.themeModalBody}>
           <Form>
@@ -159,10 +214,11 @@ const useWindowWidth = () => {
 
 function App() {
   const width = useWindowWidth();
-  const isMobile = width < 992; 
-  const [showMobileMenu, setShowMobileMenu] = useState(false); 
-  const [currentTheme, setCurrentTheme] = useState(themes[0].id); 
+  const isMobile = width < 992;
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState(themes[0].id);
   const [globalFontWeight, setGlobalFontWeight] = useState(fontWeightOptions[0].value); // Default to 'normal'
+  const [currentUserRole, setCurrentUserRole] = useState(USER_ROLES.ADMIN); // Default role
 
   useEffect(() => {
     applyTheme(currentTheme); // Applies color and font-family variables
@@ -180,7 +236,15 @@ function App() {
   };
 
   return (
-    <ThemeContext.Provider value={{ currentTheme, setTheme, globalFontWeight, setGlobalFontWeight }}>
+    <ThemeContext.Provider value={{
+      currentTheme,
+      setTheme,
+      globalFontWeight,
+      setGlobalFontWeight,
+      currentUserRole,
+      setCurrentUserRole,
+      USER_ROLES // Expose USER_ROLES if needed by consumers
+    }}>
       <div className={`${styles.appContainer} ${isMobile ? styles.mobile : ''}`}>
         {!isMobile ? (
            <LeftSidebar />
@@ -214,7 +278,41 @@ function App() {
                 </>
               } />
               <Route path="/add" element={<AddEditForm />} />
-              <Route path="/edit/:id" element={<AddEditForm />} /> 
+              <Route path="/edit/:id" element={<AddEditForm />} />
+
+              {/* SIS Page Routes */}
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/students" element={<StudentListPage />} />
+              <Route path="/students/new" element={<AddEditStudentPage />} />
+              <Route path="/students/edit/:studentId" element={<AddEditStudentPage />} />
+              <Route path="/staff" element={<StaffListPage />} />
+              <Route path="/staff/new" element={<AddEditStaffPage />} />
+              <Route path="/staff/edit/:staffId" element={<AddEditStaffPage />} />
+              <Route path="/courses" element={<CourseListPage />} />
+              <Route path="/courses/new" element={<AddEditCoursePage />} />
+              <Route path="/courses/edit/:courseId" element={<AddEditCoursePage />} />
+              <Route path="/courses/:courseId" element={<CourseDetailPage />} /> {/* Added this route */}
+              <Route path="/grades" element={<GradebookPage />} />
+              <Route path="/admissions" element={<AdmissionsPage />} />
+              <Route path="/billing" element={<BillingPage />} />
+              <Route path="/reports" element={<ReportsPage />} />
+              <Route path="/profile" element={<UserProfilePage />} />
+
+              {/* Faculty Management Routes */}
+              <Route path="/admin/faculty" element={<FacultyListPage />} />
+              <Route path="/admin/faculty/new" element={<AddEditFacultyPage />} />
+              <Route path="/admin/faculty/edit/:facultyId" element={<AddEditFacultyPage />} />
+              <Route path="/faculty/:facultyId" element={<FacultyProfilePage />} />
+
+              {/* Program Management Routes */}
+              <Route path="/admin/programs" element={<ProgramListPage />} />
+              <Route path="/admin/programs/new" element={<AddEditProgramPage />} />
+              <Route path="/admin/programs/edit/:programId" element={<AddEditProgramPage />} />
+
+              {/* Semester Management Routes */}
+              <Route path="/admin/semesters" element={<SemesterListPage />} />
+              <Route path="/admin/semesters/new" element={<AddEditSemesterPage />} />
+              <Route path="/admin/semesters/edit/:semesterId" element={<AddEditSemesterPage />} />
             </Routes>
           </main>
         </div>
