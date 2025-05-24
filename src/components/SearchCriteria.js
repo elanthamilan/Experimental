@@ -4,6 +4,18 @@ import StyledButton from './atoms/StyledButton';
 import FormField from './molecules/FormField'; // Import molecule
 import styles from './SearchCriteria.module.scss';
 
+// Define options for label lookup
+const degreeOptions = [
+  { value: '', label: 'Select' },
+  { value: 'BE CSE', label: 'B.E CSE' },
+  { value: 'BTech IT', label: 'B.Tech IT' },
+];
+const programOptions = [
+  { value: '', label: 'Select' },
+  { value: 'CS', label: 'Computer Science' },
+  { value: 'ECE', label: 'Electronics' },
+];
+
 const initialFormState = {
   institution: 'SSM University',
   degree: '',
@@ -45,12 +57,12 @@ const SearchCriteria = () => {
   const getPreviewText = () => {
     const parts = [];
     if (formData.institution) parts.push(formData.institution);
-    if (formData.degree) { // Find label for degree
-      const degreeOption = FormField.propTypes.options.find(opt => opt.value === formData.degree);
+    if (formData.degree) {
+      const degreeOption = degreeOptions.find(opt => opt.value === formData.degree);
       parts.push(degreeOption ? degreeOption.label : formData.degree);
     }
     if (formData.program) {
-      const programOption = FormField.propTypes.options.find(opt => opt.value === formData.program);
+      const programOption = programOptions.find(opt => opt.value === formData.program);
       parts.push(programOption ? programOption.label : formData.program);
     }
     if (formData.academicYear) parts.push(formData.academicYear);
@@ -101,11 +113,7 @@ const SearchCriteria = () => {
                 placeholder="Select"
                 value={formData.degree}
                 onChange={handleChange}
-                options={[
-                  { value: '', label: 'Select' },
-                  { value: 'BE CSE', label: 'B.E CSE' },
-                  { value: 'BTech IT', label: 'B.Tech IT' },
-                ]}
+                options={degreeOptions}
               />
             </Col>
             <Col xs={12} sm={6} md={4}>
@@ -116,11 +124,7 @@ const SearchCriteria = () => {
                 placeholder="Select"
                 value={formData.program}
                 onChange={handleChange}
-                options={[
-                  { value: '', label: 'Select' },
-                  { value: 'CS', label: 'Computer Science' },
-                  { value: 'ECE', label: 'Electronics' },
-                ]}
+                options={programOptions}
               />
             </Col>
           </Row>
