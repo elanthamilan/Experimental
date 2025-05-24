@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Nav, Collapse } from 'react-bootstrap';
-import StyledButton from './atoms/StyledButton';
+import StyledButton from './atoms/StyledButton'; // Restoring import
 import styles from './LeftSidebar.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../App'; // Assuming USER_ROLES is exported via useTheme or directly
@@ -191,13 +192,6 @@ const LeftSidebar = () => {
 
   }, [currentUserRole, searchTerm, navGroups]); // Rerun on role or search term change
 
-  const handleNavClick = (path, eventKey, isLeaf) => {
-    if (isLeaf && path) {
-      navigate(path);
-      setActiveKey(eventKey);
-    }
-  };
-
 
   // Filter logic
   const lowerSearchTerm = searchTerm.toLowerCase();
@@ -236,17 +230,38 @@ const LeftSidebar = () => {
         {/* Render top-level items first */}
         {topLevelItems.length === 0 && searchTerm ? (
           <div className={styles.noResults}>No top-level items found.</div>
-        ) : topLevelItems.map(item => (
-          <StyledButton
+        ) : topLevelItems.map(item => {
+      if (item.eventKey === 'dashboard') { // Specifically target the dashboard link
+        return (
+          <Link
+            to={item.path} // Should be '/dashboard'
             key={item.eventKey}
-            variant="link"
-            active={activeKey === item.eventKey}
-            onClick={() => handleNavClick(item.path, item.eventKey, true)}
-            className={`${styles.navLink} ${activeKey === item.eventKey ? styles.active : ''}`}
+            className={`${styles.navLink} ${activeKey === item.eventKey ? styles.active : ''} d-flex align-items-center px-3 py-2`} // Basic styling, you might need to adjust
+            onClick={() => setActiveKey(item.eventKey)} // Keep active state update
+            style={{ textDecoration: 'none' }} 
           >
-            <Icon name={item.icon} className={styles.navLinkIcon} /> {item.label}
-          </StyledButton>
-        ))}
+            <Icon name={item.icon} className={styles.navLinkIcon} /> <span className="ms-2">{item.label}</span>
+          </Link>
+        );
+      }
+      // For other top-level items, use the existing StyledButton
+      // Convert other top-level items (e.g., User Profile)
+      if (item.path) { // Ensure it's a navigation item
+         return (
+           <Link
+             to={item.path}
+             key={item.eventKey}
+             className={`${styles.navLink} ${activeKey === item.eventKey ? styles.active : ''} d-flex align-items-center px-3 py-2`}
+             onClick={() => setActiveKey(item.eventKey)}
+             style={{ textDecoration: 'none' }}
+           >
+             <Icon name={item.icon} className={styles.navLinkIcon} /> <span className="ms-2">{item.label}</span>
+           </Link>
+         );
+      }
+      // Fallback or non-navigational items (if any)
+      return null; 
+    })}
 
         {groupedItems.length === 0 && searchTerm && topLevelItems.length > 0 ? (
           <div className={styles.noResults}>No grouped items found.</div>
@@ -272,54 +287,111 @@ const LeftSidebar = () => {
                     const hasChildren = item.children && item.children.length > 0;
                     const isSubmenuOpen = searchTerm && hasChildren ? true : openSubmenus[item.eventKey];
 
-                    return (
-                      <div key={item.eventKey} className={styles.level2Wrapper}>
-                        <StyledButton
-                          variant="link"
-                          onClick={() => {
-                            if (hasChildren) {
-                              toggleSubmenu(item.eventKey);
-                            } else {
-                              handleNavClick(item.path, item.eventKey, true);
-                            }
-                          }}
-                          active={!hasChildren && activeKey === item.eventKey}
-                          className={`${styles.navLink} ${styles.level2Link} ${(!hasChildren && activeKey === item.eventKey) ? styles.active : ''} ${(!searchTerm && hasChildren && item.children.some(child => activeKey === child.eventKey)) ? styles.activePathParent : ''}`}
-                          aria-controls={hasChildren ? `submenu-${item.eventKey}` : undefined}
-                          aria-expanded={hasChildren ? isSubmenuOpen : undefined}
-                          tabIndex={0}
-                        >
-                          <Icon name={item.icon} className={styles.navLinkIcon} />
-                          <span className={styles.linkLabel}>{item.label}</span>
-                          {hasChildren && (
-                            <Icon
-                              name={isSubmenuOpen ? 'expand_more' : 'chevron_right'}
-                              className={`${styles.expandIconSubmenu} ${!searchTerm && item.children.some(child => activeKey === child.eventKey) ? styles.activePathIcon : ''}`}
-                            />
-                          )}
-                        </StyledButton>
-
-                        {hasChildren && (
-                          <Collapse in={isSubmenuOpen}>
-                            <div id={`submenu-${item.eventKey}`} className={styles.level3Container}>
-                              {item.children.map(childItem => (
-                                <div key={childItem.eventKey} className={styles.level3Wrapper}>
-                                  <StyledButton
-                                    variant="link"
-                                    active={activeKey === childItem.eventKey}
-                                    onClick={() => handleNavClick(childItem.path, childItem.eventKey, true)}
-                                    className={`${styles.navLink} ${activeKey === childItem.eventKey ? styles.active : ''} ${styles.level3Link}`}
-                                  >
-                                    {childItem.icon && <Icon name={childItem.icon} className={styles.navLinkIcon} />}
-                                    <span className={styles.linkLabel}>{childItem.label}</span>
-                                  </StyledButton>
-                                </div>
-                              ))}
+                    // Refactored Level 2 items based on detailed instructions
+                    if (item.path) { // If it's meant to be a link
+                      return (
+                        <div key={item.eventKey} className={styles.level2Wrapper}>
+                          <Link
+                            to={item.path}
+                            key={item.eventKey}
+                            onClick={() => {
+                              setActiveKey(item.eventKey);
+                              if (hasChildren) {
+                                toggleSubmenu(item.eventKey);
+                              }
+                            }}
+                            className={`${styles.navLink} ${styles.level2Link} ${(!hasChildren && activeKey === item.eventKey) ? styles.active : ''} ${(!searchTerm && hasChildren && item.children && item.children.some(child => activeKey === child.eventKey)) ? styles.activePathParent : ''} d-flex justify-content-between align-items-center w-100`}
+                            aria-controls={hasChildren ? `submenu-${item.eventKey}` : undefined}
+                            aria-expanded={hasChildren ? isSubmenuOpen : undefined}
+                            style={{ textDecoration: 'none' }}
+                          >
+                            <div className="d-flex align-items-center">
+                              <Icon name={item.icon} className={styles.navLinkIcon} />
+                              <span className={`${styles.linkLabel} ms-2`}>{item.label}</span>
                             </div>
-                          </Collapse>
-                        )}
-                      </div>
-                    );
+                            {hasChildren && (
+                              <Icon
+                                name={isSubmenuOpen ? 'expand_more' : 'chevron_right'}
+                                className={`${styles.expandIconSubmenu} ${!searchTerm && item.children.some(child => activeKey === child.eventKey) ? styles.activePathIcon : ''}`}
+                              />
+                            )}
+                          </Link>
+                          {hasChildren && (
+                            <Collapse in={isSubmenuOpen}>
+                              <div id={`submenu-${item.eventKey}`} className={styles.level3Container}>
+                                {/* Refactored Level 3 items */}
+                                {item.children.map(childItem => {
+                                  if (childItem.path) { // Ensure it's a navigational item
+                                    return (
+                                      <div key={childItem.eventKey} className={styles.level3Wrapper}>
+                                        <Link
+                                          to={childItem.path}
+                                          key={childItem.eventKey}
+                                          className={`${styles.navLink} ${activeKey === childItem.eventKey ? styles.active : ''} ${styles.level3Link} d-flex align-items-center w-100`}
+                                          onClick={() => setActiveKey(childItem.eventKey)}
+                                          style={{ textDecoration: 'none' }}
+                                        >
+                                          {childItem.icon && <Icon name={childItem.icon} className={styles.navLinkIcon} />}
+                                          <span className={`${styles.linkLabel} ms-2`}>{childItem.label}</span>
+                                        </Link>
+                                      </div>
+                                    );
+                                  }
+                                  return null;
+                                })}
+                              </div>
+                            </Collapse>
+                          )}
+                        </div>
+                      );
+                    } else if (hasChildren) { // Purely a toggle, not a link itself (item.path is false)
+                        return ( 
+                          <div key={item.eventKey} className={styles.level2Wrapper}>
+                            <StyledButton // This is a toggle-only button
+                              variant="link"
+                              onClick={() => toggleSubmenu(item.eventKey)}
+                              className={`${styles.navButton} ${styles.level2Link} ${(!searchTerm && item.children && item.children.some(child => activeKey === child.eventKey)) ? styles.activePathParent : ''} d-flex justify-content-between align-items-center w-100`}
+                              aria-controls={`submenu-${item.eventKey}`}
+                              aria-expanded={isSubmenuOpen}
+                            >
+                              <div className="d-flex align-items-center">
+                                <Icon name={item.icon} className={styles.navLinkIcon} />
+                                <span className={`${styles.linkLabel} ms-2`}>{item.label}</span>
+                              </div>
+                              <Icon
+                                name={isSubmenuOpen ? 'expand_more' : 'chevron_right'}
+                                className={styles.expandIconSubmenu}
+                              />
+                            </StyledButton>
+                            <Collapse in={isSubmenuOpen}>
+                              <div id={`submenu-${item.eventKey}`} className={styles.level3Container}>
+                                {/* Level 3 items under a toggle-only parent */}
+                                {item.children.map(childItem => { // These children should still be Links
+                                  if (childItem.path) {
+                                    return (
+                                      <div key={childItem.eventKey} className={styles.level3Wrapper}>
+                                        <Link
+                                          to={childItem.path}
+                                          key={childItem.eventKey}
+                                          className={`${styles.navLink} ${activeKey === childItem.eventKey ? styles.active : ''} ${styles.level3Link} d-flex align-items-center w-100`}
+                                          onClick={() => setActiveKey(childItem.eventKey)}
+                                          style={{ textDecoration: 'none' }}
+                                        >
+                                          {childItem.icon && <Icon name={childItem.icon} className={styles.navLinkIcon} />}
+                                          <span className={`${styles.linkLabel} ms-2`}>{childItem.label}</span>
+                                        </Link>
+                                      </div>
+                                    );
+                                  }
+                                  return null;
+                                })}
+                              </div>
+                            </Collapse>
+                          </div>
+                        );
+                    }
+                    // Fallback for items that don't fit above criteria (e.g. no path, no children)
+                    return null; 
                   })}
                 </div>
               </Collapse>
