@@ -31,6 +31,15 @@ import AddEditProgramPage from './pages/admin/AddEditProgramPage';
 // Semester Management Page Imports
 import SemesterListPage from './pages/admin/SemesterListPage';
 import AddEditSemesterPage from './pages/admin/AddEditSemesterPage';
+// Department Management Page Imports
+import DepartmentListPage from './pages/admin/DepartmentListPage';
+import AddEditDepartmentPage from './pages/admin/AddEditDepartmentPage';
+// Financial Year Management Page Imports
+import FinancialYearListPage from './pages/admin/FinancialYearListPage';
+import AddEditFinancialYearPage from './pages/admin/AddEditFinancialYearPage';
+// Application Form Field Management Page Imports
+import AppFormFieldListPage from './pages/admin/AppFormFieldListPage';
+import AddEditAppFormFieldPage from './pages/admin/AddEditAppFormFieldPage';
 // Course Detail Page Import
 import CourseDetailPage from './pages/academic/CourseDetailPage';
 
@@ -313,6 +322,21 @@ function App() {
               <Route path="/admin/semesters" element={<SemesterListPage />} />
               <Route path="/admin/semesters/new" element={<AddEditSemesterPage />} />
               <Route path="/admin/semesters/edit/:semesterId" element={<AddEditSemesterPage />} />
+
+              {/* Master Data Management Routes */}
+              <Route path="/admin/masterdata/departments" element={<DepartmentListPage />} />
+              <Route path="/admin/masterdata/departments/new" element={<AddEditDepartmentPage />} />
+              <Route path="/admin/masterdata/departments/edit/:departmentId" element={<AddEditDepartmentPage />} />
+
+              {/* Financial Year Management Routes */}
+              <Route path="/admin/financialyears" element={<FinancialYearListPage />} />
+              <Route path="/admin/financialyears/new" element={<AddEditFinancialYearPage />} />
+              <Route path="/admin/financialyears/edit/:financialYearId" element={<AddEditFinancialYearPage />} />
+
+              {/* Application Form Field Management Routes */}
+              <Route path="/admin/admissions/formfields" element={<AppFormFieldListPage />} />
+              <Route path="/admin/admissions/formfields/new" element={<AddEditAppFormFieldPage />} />
+              <Route path="/admin/admissions/formfields/edit/:fieldId" element={<AddEditAppFormFieldPage />} />
             </Routes>
           </main>
         </div>
