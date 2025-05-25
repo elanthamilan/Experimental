@@ -2,9 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockExamSchedules } from '../../data/mockExamSchedules';
 import { mockCourses } from '../../data/mockCourses';
-import { mockFaculty } from '../../data/mockFaculty'; // For invigilator names (optional, or for a future multi-select)
-import { Button, Form, Row, Col, Card, Alert } from 'react-bootstrap';
-import styles from '../admin/AdminPages.module.scss'; // Reusing admin styles
+// import { mockFaculty } from '../../data/mockFaculty'; // For invigilator names (optional, or for a future multi-select) - Not directly used for selection options in this version
+import { Form, Row, Col, Alert } from 'react-bootstrap'; // Alert is kept, Form, Row, Col for structure
+import {
+  StyledContainer,
+  StyledCard,
+  StyledButton,
+  FormField,
+} from '../../components';
+import styles from './AddEditExamSchedulePage.module.scss'; // Using its own SCSS module
 
 const AddEditExamSchedulePage = () => {
   const { scheduleId } = useParams();
@@ -98,108 +104,142 @@ const AddEditExamSchedulePage = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>{isEditMode ? 'Edit Exam Schedule' : 'Add New Exam Schedule'}</Card.Title>
-        </Card.Header>
-        <Card.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {successMessage && <Alert variant="success">{successMessage}</Alert>}
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header as="h4" className={styles.formCardHeaderTitle}>
+          {isEditMode ? 'Edit Exam Schedule' : 'Add New Exam Schedule'}
+        </StyledCard.Header>
+        <StyledCard.Body>
+          {error && <Alert variant="danger" className={styles.alert}>{error}</Alert>}
+          {successMessage && <Alert variant="success" className={styles.alert}>{successMessage}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="formScheduleId">
-                  <Form.Label>Schedule ID</Form.Label>
-                  <Form.Control type="text" name="id" value={formData.id} readOnly />
-                </Form.Group>
+                <FormField
+                  controlId="formScheduleId"
+                  label="Schedule ID"
+                  type="text"
+                  name="id"
+                  value={formData.id}
+                  readOnly
+                />
               </Col>
               <Col md={8}>
-                <Form.Group className="mb-3" controlId="formCourseId">
-                  <Form.Label>Course</Form.Label>
-                  <Form.Select name="courseId" value={formData.courseId} onChange={handleChange} required>
-                    <option value="">Select Course</option>
-                    {mockCourses.map(course => (
-                      <option key={course.id} value={course.id}>
-                        {`${course.name} (${course.courseCode})`}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
+                <FormField
+                  controlId="formCourseId"
+                  label="Course"
+                  as="select"
+                  name="courseId"
+                  value={formData.courseId}
+                  onChange={handleChange}
+                  required
+                  options={[
+                    { value: '', label: 'Select Course' },
+                    ...mockCourses.map(course => ({
+                      value: course.id,
+                      label: `${course.name} (${course.courseCode})`
+                    }))
+                  ]}
+                />
               </Col>
             </Row>
 
-            <Form.Group className="mb-3" controlId="formExamName">
-              <Form.Label>Exam Name</Form.Label>
-              <Form.Control type="text" name="examName" value={formData.examName} onChange={handleChange} required />
-            </Form.Group>
+            <FormField
+              controlId="formExamName"
+              label="Exam Name"
+              type="text"
+              name="examName"
+              value={formData.examName}
+              onChange={handleChange}
+              required
+              className="mb-3" // Adding margin bottom, can be handled by FormField wrapper if configured
+            />
             
             <Row>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formDate">
-                  <Form.Label>Date</Form.Label>
-                  <Form.Control type="date" name="date" value={formData.date} onChange={handleChange} required />
-                </Form.Group>
+                <FormField
+                  controlId="formDate"
+                  label="Date"
+                  type="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formTime">
-                  <Form.Label>Time</Form.Label>
-                  <Form.Control type="time" name="time" value={formData.time} onChange={handleChange} required />
-                </Form.Group>
+                <FormField
+                  controlId="formTime"
+                  label="Time"
+                  type="time"
+                  name="time"
+                  value={formData.time}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
             </Row>
 
             <Row>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formRoom">
-                  <Form.Label>Room/Venue</Form.Label>
-                  <Form.Control type="text" name="room" value={formData.room} onChange={handleChange} />
-                </Form.Group>
+                <FormField
+                  controlId="formRoom"
+                  label="Room/Venue"
+                  type="text"
+                  name="room"
+                  value={formData.room}
+                  onChange={handleChange}
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formDuration">
-                  <Form.Label>Duration</Form.Label>
-                  <Form.Control type="text" name="duration" value={formData.duration} onChange={handleChange} placeholder="e.g., 2 hours" />
-                </Form.Group>
+                <FormField
+                  controlId="formDuration"
+                  label="Duration"
+                  type="text"
+                  name="duration"
+                  value={formData.duration}
+                  onChange={handleChange}
+                  placeholder="e.g., 2 hours"
+                />
               </Col>
             </Row>
 
-            <Form.Group className="mb-3" controlId="formInvigilators">
-              <Form.Label>Invigilators (Faculty IDs, comma-separated)</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={2}
-                name="invigilators"
-                value={formData.invigilators}
-                onChange={handleChange}
-                placeholder="e.g., faculty001, faculty002"
-              />
-              {/* Note: A multi-select dropdown from mockFaculty would be a good enhancement here. */}
-            </Form.Group>
+            <FormField
+              controlId="formInvigilators"
+              label="Invigilators (Faculty IDs, comma-separated)"
+              as="textarea"
+              rows={2}
+              name="invigilators"
+              value={formData.invigilators}
+              onChange={handleChange}
+              placeholder="e.g., faculty001, faculty002"
+              className="mb-3"
+            />
+            {/* Note: A multi-select dropdown from mockFaculty would be a good enhancement here. */}
 
-            <Form.Group className="mb-3" controlId="formNotes">
-              <Form.Label>Notes</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                name="notes"
-                value={formData.notes}
-                onChange={handleChange}
-              />
-            </Form.Group>
+            <FormField
+              controlId="formNotes"
+              label="Notes"
+              as="textarea"
+              rows={3}
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              className="mb-3"
+            />
 
-            <div className="d-flex justify-content-end mt-3">
-              <Button variant="secondary" onClick={() => navigate('/academic/examschedules')} className="me-2">
+            <div className={styles.formActions}>
+              <StyledButton variant="secondary" onClick={() => navigate('/academic/examschedules')}>
                 Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              </StyledButton>
+              <StyledButton variant="primary" type="submit">
                 {isEditMode ? 'Save Changes' : 'Add Schedule'}
-              </Button>
+              </StyledButton>
             </div>
           </Form>
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

@@ -111,25 +111,7 @@ const UtilitySidebar = () => {
         </div>
       </OverlayTrigger>
 
-      {/* Role Selector */}
-      <div className={styles.sidebarSection}>
-        <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Switch User Role')}>
-          <div className={styles.circleIconButton} style={{ marginBottom: '8px' }}> {/* Added style for spacing, or use SCSS */}
-             <span className="material-symbols-outlined">admin_panel_settings</span>
-          </div>
-        </OverlayTrigger>
-        <StyledFormSelect
-          value={currentUserRole}
-          onChange={(e) => setCurrentUserRole(e.target.value)}
-          aria-label="Select User Role"
-          className={styles.roleSelectorDropdown}
-          size="sm"
-        >
-          <option value={USER_ROLES.ADMIN}>Admin</option>
-          <option value={USER_ROLES.TEACHER}>Teacher</option>
-          <option value={USER_ROLES.STUDENT}>Student</option>
-        </StyledFormSelect>
-      </div>
+      {/* Role Selector Removed from UtilitySidebar */}
 
       {/* Theme Switcher Icon - Triggers Modal */}
       <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Change Theme')}>
@@ -327,7 +309,7 @@ function App() {
                   <ResultsTable />
                 </>
               } />
-              <Route path="/add" element={<AddEditForm />} />
+              {/* <Route path="/add" element={<AddEditForm />} /> */} {/* Removed orphaned route */}
               <Route path="/edit/:id" element={<AddEditForm />} />
 
               {/* SIS Page Routes */}

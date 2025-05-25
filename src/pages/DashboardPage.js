@@ -1,12 +1,13 @@
 import React from 'react';
 import { StyledContainer } from '../components';
+import styles from './DashboardPage.module.scss';
 
 const DashboardPage = () => {
   return (
-    <StyledContainer fluid style={{backgroundColor: '#e3f2fd', padding: '2rem', border: '3px solid #1976d2'}}>
-      <h1 style={{color: '#1976d2', fontSize: '3rem'}}>🏠 DASHBOARD PAGE</h1>
-      <p style={{fontSize: '1.5rem', color: '#1976d2'}}>✅ You are now on the DASHBOARD page! Navigation is working!</p>
-      <p style={{fontSize: '1.2rem'}}>Current time: {new Date().toLocaleTimeString()}</p>
+    <StyledContainer fluid className={styles.dashboardContainer}>
+      <h1 className={styles.pageTitle}>🏠 DASHBOARD PAGE</h1>
+      <p className={styles.pageSubtitle}>✅ You are now on the DASHBOARD page! Navigation is working!</p>
+      <p className={styles.currentTime}>Current time: {new Date().toLocaleTimeString()}</p>
 
       {/*
         Conceptual Admin Dashboard Widget Ideas (Student Data Focused):

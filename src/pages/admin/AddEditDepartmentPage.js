@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockDepartments } from '../../data/mockDepartments';
 import { mockFaculty } from '../../data/mockFaculty';
-import { Form, Row, Col, Alert } from 'react-bootstrap';
+import { Form, Row, Col } from 'react-bootstrap'; // Alert will be replaced by styled divs
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
   StyledCard,
-  StyledButton
+  StyledButton,
+  FormField // Import FormField
 } from '../../components';
-import styles from './AdminPages.module.scss';
+import styles from './AddEditDepartmentPage.module.scss'; // Use new SCSS module
 
 const AddEditDepartmentPage = () => {
   const { departmentId } = useParams();
@@ -88,82 +89,79 @@ const AddEditDepartmentPage = () => {
     <StyledContainer className={styles.pageContainer}>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header>
-          <StyledCard.Title>{isEditMode ? 'Edit Department' : 'Add New Department'}</StyledCard.Title>
+          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Department' : 'Add New Department'}</StyledCard.Title>
         </StyledCard.Header>
         <StyledCard.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {successMessage && <Alert variant="success">{successMessage}</Alert>}
-          <Form onSubmit={handleSubmit}>
-            <Row>
+          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
+          {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
+          <Form onSubmit={handleSubmit}> {/* Keep react-bootstrap Form for now as FormField is used within */}
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formDepartmentId">
-                  <Form.Label>Department ID</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="id"
-                    value={formData.id}
-                    readOnly
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formDepartmentId"
+                  label="Department ID"
+                  type="text"
+                  name="id"
+                  value={formData.id}
+                  readOnly
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formDepartmentName">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formDepartmentName"
+                  label="Name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
             </Row>
 
-            <Form.Group className="mb-3" controlId="formDepartmentDescription">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-              />
-            </Form.Group>
+            <FormField
+              controlId="formDepartmentDescription"
+              label="Description"
+              as="textarea"
+              rows={3}
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className={styles.formFieldMarginBottom} // Add margin if not in Col/Row with mb-3
+            />
 
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formDepartmentHead">
-                  <Form.Label>Head of Department</Form.Label>
-                  <Form.Select
-                    name="head"
-                    value={formData.head || ''}
-                    onChange={handleChange}
-                  >
-                    <option value="">None / N/A</option>
-                    {mockFaculty.map(faculty => (
-                      <option key={faculty.id} value={faculty.id}>
-                        {`${faculty.firstName} ${faculty.lastName}`}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
+                <FormField
+                  controlId="formDepartmentHead"
+                  label="Head of Department"
+                  as="select"
+                  name="head"
+                  value={formData.head || ''}
+                  onChange={handleChange}
+                  options={[
+                    { value: '', label: 'None / N/A' },
+                    ...mockFaculty.map(faculty => ({
+                      value: faculty.id,
+                      label: `${faculty.firstName} ${faculty.lastName}`
+                    }))
+                  ]}
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formDepartmentOfficeLocation">
-                  <Form.Label>Office Location</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="officeLocation"
-                    value={formData.officeLocation}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formDepartmentOfficeLocation"
+                  label="Office Location"
+                  type="text"
+                  name="officeLocation"
+                  value={formData.officeLocation}
+                  onChange={handleChange}
+                />
               </Col>
             </Row>
 
-            <div className="d-flex justify-content-end mt-3">
-              <StyledButton variant="secondary" onClick={() => navigate('/admin/masterdata/departments')} className="me-2">
+            <div className={styles.formActions}>
+              <StyledButton variant="secondary" onClick={() => navigate('/admin/masterdata/departments')}>
                 Cancel
               </StyledButton>
               <StyledButton variant="primary" type="submit">

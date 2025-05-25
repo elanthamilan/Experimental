@@ -94,6 +94,19 @@
   }
 }
 
+.primarySwatch {
+  composes: swatch;
+  /* background-color will be applied inline via JS */
+}
+.secondarySwatch {
+  composes: swatch;
+  /* background-color will be applied inline via JS */
+}
+.tertiarySwatch {
+  composes: swatch;
+  /* background-color will be applied inline via JS */
+}
+
 .activeTheme { // For predefined themes
   border-left: 5px solid var(--theme-primary);
   background-color: var(--theme-surface-container-low, var(--theme-surface-variant)); // Highlight active theme
@@ -163,7 +176,18 @@
   align-items: center;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
-  .previewSwatch { width: 20px; height: 20px; margin-right: 0.75rem; border-radius: 4px; border: 1px solid var(--theme-outline); }
+  .previewSwatch {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--theme-outline);
+    /* background-color will be applied inline via JS */
+  }
+  .colorValueSwatch {
+    composes: previewSwatch;
+    /* background-color will be applied inline via JS */
+  }
   .colorName { min-width: 180px; color: var(--theme-on-surface-variant); }
   .colorValue { font-family: monospace; color: var(--theme-on-surface); }
 }

@@ -166,6 +166,40 @@ $tree-line-l3-left: $tree-indent-l2 - math.div($tree-line-h-length, 2) - math.di
   font-size: v.$font-size-base * 0.9;
 }
 
+// Role Selector Styles (New)
+.roleSelectorContainer {
+  padding: v.$gap-medium v.$base-padding;
+  border-bottom: 1px solid $sidebar-border-color;
+  background-color: var(--theme-surface-container-low); // Subtle distinction
+}
+
+.roleSelectorLabel {
+  display: flex;
+  align-items: center;
+  font-size: v.$font-size-small;
+  font-weight: v.$font-weight-semibold;
+  color: $section-title-color; // Use same as group headers
+  margin-bottom: v.$gap-small;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  .roleSelectorIcon {
+    color: $sidebar-icon-color;
+    margin-right: v.$gap-small;
+    font-size: 18px; // Slightly smaller icon
+  }
+}
+
+.roleSelectorDropdown {
+  // Assuming StyledFormSelect will pick up global form styles or its own atom styles
+  // Add specific overrides if needed, e.g., width
+  width: 100%;
+  // Ensure it uses themed variables for background, text, border
+  // background-color: var(--theme-surface);
+  // color: var(--theme-on-surface);
+  // border-color: var(--theme-outline);
+}
+
 .sidebarNav {
   padding: v.$gap-small 0;
   width: 100%;

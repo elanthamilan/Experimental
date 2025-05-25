@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockCourses } from '../../data/mockCourses';
 import { mockUsers } from '../../data/mockUsers'; // For teacher selection
-import { Form, Row, Col } from 'react-bootstrap';
+import { Form, Row, Col } from 'react-bootstrap'; // Keeping Form, Row, Col for structure if FormField handles the rest
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
   StyledCard,
   StyledButton,
-  FormField
+  FormField // FormField should replace Form.Group, Form.Label, Form.Control, Form.Select
 } from '../../components';
-import styles from '../admin/AdminPages.module.scss'; // Using admin styles for consistency
+import styles from './AddEditCoursePage.module.scss'; // Using its own SCSS module
 
 const AddEditCoursePage = () => {
   const { courseId } = useParams();
@@ -78,73 +78,142 @@ const AddEditCoursePage = () => {
         </StyledCard.Header>
         <StyledCard.Body>
           <Form onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="2" controlId="formCourseId">
-                <Form.Label>Course ID</Form.Label>
-                <Form.Control type="text" name="id" value={formData.id} readOnly />
-              </Form.Group>
-              <Form.Group as={Col} md="5" controlId="formCourseCode">
-                <Form.Label>Course Code</Form.Label>
-                <Form.Control type="text" name="courseCode" value={formData.courseCode} onChange={handleChange} required />
-              </Form.Group>
-              <Form.Group as={Col} md="5" controlId="formCourseName">
-                <Form.Label>Course Name</Form.Label>
-                <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} required />
-              </Form.Group>
+            <Row className="mb-3"> {/* Using Bootstrap Row for now, can be replaced if StyledRow exists */}
+              <Col md="2">
+                <FormField
+                  controlId="formCourseId"
+                  label="Course ID"
+                  type="text"
+                  name="id"
+                  value={formData.id}
+                  readOnly
+                />
+              </Col>
+              <Col md="5">
+                <FormField
+                  controlId="formCourseCode"
+                  label="Course Code"
+                  type="text"
+                  name="courseCode"
+                  value={formData.courseCode}
+                  onChange={handleChange}
+                  required
+                />
+              </Col>
+              <Col md="5">
+                <FormField
+                  controlId="formCourseName"
+                  label="Course Name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </Col>
             </Row>
 
             <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="formDescription">
-                <Form.Label>Description</Form.Label>
-                <Form.Control as="textarea" rows={3} name="description" value={formData.description} onChange={handleChange} />
-              </Form.Group>
+              <Col md="12">
+                <FormField
+                  controlId="formDescription"
+                  label="Description"
+                  as="textarea"
+                  rows={3}
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                />
+              </Col>
             </Row>
 
             <Row className="mb-3">
-              <Form.Group as={Col} md="3" controlId="formCredits">
-                <Form.Label>Credits</Form.Label>
-                <Form.Control type="number" name="credits" value={formData.credits} onChange={handleChange} required min="0" />
-              </Form.Group>
-              <Form.Group as={Col} md="9" controlId="formTeacherId">
-                <Form.Label>Teacher</Form.Label>
-                <Form.Select name="teacherId" value={formData.teacherId} onChange={handleChange} required>
-                  <option value="">Select Teacher</option>
-                  {teachers.map(teacher => (
-                    <option key={teacher.id} value={teacher.id}>
-                      {`${teacher.firstName} ${teacher.lastName} (${teacher.department || 'N/A'})`}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
+              <Col md="3">
+                <FormField
+                  controlId="formCredits"
+                  label="Credits"
+                  type="number"
+                  name="credits"
+                  value={formData.credits}
+                  onChange={handleChange}
+                  required
+                  min="0"
+                />
+              </Col>
+              <Col md="9">
+                <FormField
+                  controlId="formTeacherId"
+                  label="Teacher"
+                  as="select"
+                  name="teacherId"
+                  value={formData.teacherId}
+                  onChange={handleChange}
+                  required
+                  options={[
+                    { value: '', label: 'Select Teacher' },
+                    ...teachers.map(teacher => ({
+                      value: teacher.id,
+                      label: `${teacher.firstName} ${teacher.lastName} (${teacher.department || 'N/A'})`
+                    }))
+                  ]}
+                />
+              </Col>
             </Row>
 
             <Row className="mb-3">
-              <Form.Group as={Col} md="6" controlId="formDepartment">
-                <Form.Label>Department</Form.Label>
-                <Form.Control type="text" name="department" value={formData.department} onChange={handleChange} />
-              </Form.Group>
-              <Form.Group as={Col} md="6" controlId="formSemester">
-                <Form.Label>Semester</Form.Label>
-                <Form.Control type="text" name="semester" value={formData.semester} onChange={handleChange} />
-              </Form.Group>
+              <Col md="6">
+                <FormField
+                  controlId="formDepartment"
+                  label="Department"
+                  type="text"
+                  name="department"
+                  value={formData.department}
+                  onChange={handleChange}
+                />
+              </Col>
+              <Col md="6">
+                <FormField
+                  controlId="formSemester"
+                  label="Semester"
+                  type="text"
+                  name="semester"
+                  value={formData.semester}
+                  onChange={handleChange}
+                />
+              </Col>
             </Row>
 
             <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="formSchedule">
-                <Form.Label>Schedule</Form.Label>
-                <Form.Control type="text" name="schedule" value={formData.schedule} onChange={handleChange} placeholder="e.g., MWF 10:00-11:00 AM" />
-              </Form.Group>
+              <Col md="12">
+                <FormField
+                  controlId="formSchedule"
+                  label="Schedule"
+                  type="text"
+                  name="schedule"
+                  value={formData.schedule}
+                  onChange={handleChange}
+                  placeholder="e.g., MWF 10:00-11:00 AM"
+                />
+              </Col>
             </Row>
 
             <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="formSyllabus">
-                <Form.Label>Syllabus</Form.Label>
-                <Form.Control as="textarea" rows={5} name="syllabus" value={formData.syllabus} onChange={handleChange} placeholder="Enter course syllabus or learning objectives..." />
-              </Form.Group>
+              <Col md="12">
+                <FormField
+                  controlId="formSyllabus"
+                  label="Syllabus"
+                  as="textarea"
+                  rows={5}
+                  name="syllabus"
+                  value={formData.syllabus}
+                  onChange={handleChange}
+                  placeholder="Enter course syllabus or learning objectives..."
+                />
+              </Col>
             </Row>
 
-            <div className="mt-4 d-flex justify-content-end">
-              <StyledButton variant="secondary" onClick={() => navigate('/courses')} className="me-2">
+            <div className={styles.formActions}>
+              <StyledButton variant="secondary" onClick={() => navigate('/courses')}>
                 Cancel
               </StyledButton>
               <StyledButton variant="primary" type="submit">

@@ -6,7 +6,7 @@ import StyledButton from '../../components/atoms/StyledButton';
 import StyledCard from '../../components/atoms/StyledCard';
 import StyledContainer from '../../components/atoms/StyledContainer';
 import FormField from '../../components/molecules/FormField';
-import styles from './AdminPages.module.scss';
+import styles from './AddEditProgramPage.module.scss'; // Use new SCSS module
 
 const AddEditProgramPage = () => {
   const { programId } = useParams();
@@ -92,16 +92,16 @@ const AddEditProgramPage = () => {
     <StyledContainer className={styles.pageContainer}>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header>
-          <StyledCard.Title>{isEditMode ? 'Edit Program' : 'Add New Program'}</StyledCard.Title>
+          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Program' : 'Add New Program'}</StyledCard.Title>
         </StyledCard.Header>
         <StyledCard.Body>
           {error && (
-            <div className="alert alert-danger" role="alert">
+            <div className={styles.alertDanger} role="alert">
               {error}
             </div>
           )}
           <form onSubmit={handleSubmit}>
-            <Row>
+            <Row className="mb-3"> {/* Ensure Row has margin if FormFields within don't */}
               <Col md={6}>
                 <FormField
                   controlId="formProgramId"
@@ -134,9 +134,10 @@ const AddEditProgramPage = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
+              className={styles.formFieldMarginBottom}
             />
 
-            <Row>
+            <Row className="mb-3"> {/* Ensure Row has margin */}
               <Col md={6}>
                 <FormField
                   controlId="formProgramDepartment"
@@ -174,6 +175,7 @@ const AddEditProgramPage = () => {
               value={formData.requiredCourses}
               onChange={handleChange}
               placeholder="Enter course IDs, comma-separated"
+              className={styles.formFieldMarginBottom}
             />
 
             <FormField
@@ -183,10 +185,11 @@ const AddEditProgramPage = () => {
               name="duration"
               value={formData.duration}
               onChange={handleChange}
+              className={styles.formFieldMarginBottom}
             />
 
-            <div className="d-flex justify-content-end">
-              <StyledButton variant="secondary" onClick={() => navigate('/admin/programs')} className="me-2">
+            <div className={styles.formActions}>
+              <StyledButton variant="secondary" onClick={() => navigate('/admin/programs')}>
                 Cancel
               </StyledButton>
               <StyledButton variant="primary" type="submit">

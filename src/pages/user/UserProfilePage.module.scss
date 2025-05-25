@@ -1,0 +1,21 @@
+.pageContainer {
+  padding: var(--spacing-large); 
+  background-color: var(--theme-background);
+  min-height: calc(100vh - var(--header-height, 60px)); 
+  color: var(--theme-on-background);
+}
+
+.pageTitle {
+  font-family: var(--theme-font-display);
+  font-size: var(--font-size-xxlarge, 2.5rem);
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--theme-primary);
+  margin-bottom: var(--spacing-medium);
+}
+
+.pageText {
+  font-family: var(--theme-font-body);
+  font-size: var(--font-size-medium, 1rem);
+  color: var(--theme-on-surface);
+  line-height: 1.6;
+}

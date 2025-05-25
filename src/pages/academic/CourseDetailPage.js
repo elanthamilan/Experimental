@@ -4,8 +4,14 @@ import { mockCourses } from '../../data/mockCourses';
 import { mockUsers } from '../../data/mockUsers';
 import { mockStudents } from '../../data/mockStudents';
 import { mockEnrollments } from '../../data/mockEnrollments';
-import { Card, Row, Col, Table, Alert } from 'react-bootstrap';
-import styles from '../admin/AdminPages.module.scss'; // Using admin styles for consistency
+import { Row, Col, Table, Alert } from 'react-bootstrap'; // Alert and Table are kept from react-bootstrap for now
+import {
+  StyledContainer,
+  StyledCard,
+  // StyledButton, // Not used in this file
+  // FormField, // Not used in this file
+} from '../../components';
+import styles from './CourseDetailPage.module.scss'; // Using its own SCSS module
 
 const CourseDetailPage = () => {
   const { courseId } = useParams();
@@ -13,9 +19,10 @@ const CourseDetailPage = () => {
 
   if (!course) {
     return (
-      <div className={styles.pageContainer}>
-        <Alert variant="danger">Course not found.</Alert>
-      </div>
+      <StyledContainer className={styles.pageContainer}>
+        {/* Using react-bootstrap Alert, styled via SCSS module */}
+        <Alert variant="danger" className={styles.alertDanger}>Course not found.</Alert>
+      </StyledContainer>
     );
   }
 
@@ -30,38 +37,38 @@ const CourseDetailPage = () => {
   });
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}> {/* Reusing formCard style for consistency */}
-        <Card.Header as="h4" className={styles.formCardHeader}>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.contentCard}>
+        <StyledCard.Header as="h4" className={styles.cardHeaderTitle}>
           Course Details: {course.name} ({course.courseCode})
-        </Card.Header>
-        <Card.Body>
+        </StyledCard.Header>
+        <StyledCard.Body>
           <Row className="mb-3">
             <Col md={6}>
-              <p><strong>Description:</strong> {course.description}</p>
-              <p><strong>Department:</strong> {course.department}</p>
-              <p><strong>Credits:</strong> {course.credits}</p>
+              <p className={styles.detailText}><strong>Description:</strong> {course.description}</p>
+              <p className={styles.detailText}><strong>Department:</strong> {course.department}</p>
+              <p className={styles.detailText}><strong>Credits:</strong> {course.credits}</p>
             </Col>
             <Col md={6}>
-              <p><strong>Teacher:</strong> {teacher ? `${teacher.firstName} ${teacher.lastName}` : 'N/A'}</p>
-              <p><strong>Semester:</strong> {course.semester}</p>
-              <p><strong>Schedule:</strong> {course.schedule}</p>
+              <p className={styles.detailText}><strong>Teacher:</strong> {teacher ? `${teacher.firstName} ${teacher.lastName}` : 'N/A'}</p>
+              <p className={styles.detailText}><strong>Semester:</strong> {course.semester}</p>
+              <p className={styles.detailText}><strong>Schedule:</strong> {course.schedule}</p>
             </Col>
           </Row>
           {course.syllabus && (
             <Row className="mb-3">
               <Col>
-                <h5>Syllabus / Learning Objectives</h5>
-                <Card>
-                  <Card.Body style={{ whiteSpace: 'pre-wrap', fontFamily: 'monospace', fontSize: '0.9rem', backgroundColor: '#f8f9fa' }}>
+                <h5 className={styles.sectionTitle}>Syllabus / Learning Objectives</h5>
+                <StyledCard className={styles.syllabusCard}>
+                  <StyledCard.Body> {/* SCSS handles styling via .syllabusCard :global(.card-body) */}
                     {course.syllabus}
-                  </Card.Body>
-                </Card>
+                  </StyledCard.Body>
+                </StyledCard>
               </Col>
             </Row>
           )}
 
-          <h5 className="mt-4">Enrolled Students</h5>
+          <h5 className={styles.sectionTitle}>Enrolled Students</h5>
           {enrolledStudentsDetails.length > 0 ? (
             <Table striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
               <thead>
@@ -78,17 +85,17 @@ const CourseDetailPage = () => {
                     <td>{student.id}</td>
                     <td>{`${student.firstName} ${student.lastName}`}</td>
                     <td>{student.email}</td>
-                    <td>{student.grade}</td>
+                    <td>{student.grade || 'N/A'}</td> {/* Ensure grade has a fallback */}
                   </tr>
                 ))}
               </tbody>
             </Table>
           ) : (
-            <p>No students currently enrolled in this course.</p>
+            <p className={styles.detailText}>No students currently enrolled in this course.</p>
           )}
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

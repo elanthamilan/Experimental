@@ -1,0 +1,147 @@
+.pageContainer {
+  padding: var(--spacing-large);
+  background-color: var(--theme-background);
+  min-height: calc(100vh - var(--header-height, 60px));
+  color: var(--theme-on-background);
+}
+
+.profileCard {
+  background-color: var(--theme-surface);
+  border: 1px solid var(--theme-outline-variant);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-elevation-2);
+  margin-bottom: var(--spacing-large);
+}
+
+.profileCardHeader { // For StyledCard.Header
+  background-color: var(--theme-surface-container);
+  color: var(--theme-on-surface-variant);
+  font-family: var(--theme-font-display);
+  font-size: var(--font-size-xlarge); // Header is more prominent
+  font-weight: var(--font-weight-bold);
+  border-bottom: 1px solid var(--theme-outline-variant);
+  padding: var(--spacing-medium) var(--spacing-large);
+}
+
+.profileImage {
+  width: 180px; // Larger profile image
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--theme-primary-container);
+  background-color: var(--theme-surface-container-highest);
+  margin-bottom: var(--spacing-medium);
+}
+
+.profileImagePlaceholder {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background-color: var(--theme-surface-container-highest);
+  border: 4px solid var(--theme-outline-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--spacing-medium);
+  .placeholderIcon { // Class for the span material-symbols-outlined
+    font-size: 6rem; // from inline style
+    color: var(--theme-primary);
+  }
+}
+
+.studentName { // For h3
+  font-family: var(--theme-font-display);
+  font-size: var(--font-size-xlarge);
+  color: var(--theme-on-surface);
+  margin-top: var(--spacing-medium);
+  margin-bottom: var(--spacing-xsmall);
+}
+
+.studentMajor { // For p.text-muted
+  font-family: var(--theme-font-body);
+  font-size: var(--font-size-medium);
+  color: var(--theme-on-surface-variant); // text-muted equivalent
+  margin-bottom: var(--spacing-small);
+}
+
+.statusBadgeContainer { // For p containing badge
+  margin-bottom: var(--spacing-medium);
+}
+
+.detailText { // General purpose detail text, can wrap strong tags
+  font-family: var(--theme-font-body);
+  font-size: var(--font-size-regular); // Standard text size
+  color: var(--theme-on-surface);
+  margin-bottom: var(--spacing-xsmall);
+  .detailLabel { // For <strong> tags within detailText or tables
+    font-weight: var(--font-weight-semibold);
+    color: var(--theme-on-surface-variant);
+  }
+}
+
+.sectionTitle { // For h5
+  font-family: var(--theme-font-display);
+  font-size: var(--font-size-large);
+  font-weight: var(--font-weight-medium);
+  color: var(--theme-primary);
+  margin-top: var(--spacing-xlarge); // More space for sections
+  margin-bottom: var(--spacing-medium);
+  padding-bottom: var(--spacing-small);
+  border-bottom: 1px solid var(--theme-outline);
+}
+
+.detailsTable { // For StyledTable borderless hover size="sm"
+  font-size: var(--font-size-small);
+  :global(td) {
+    padding: var(--spacing-xsmall) var(--spacing-small);
+    vertical-align: top; // Better for descriptive text
+    color: var(--theme-on-surface);
+  }
+  .labelColumn { // For td containing only a label
+    width: 150px; // Standardize label column width
+    font-weight: var(--font-weight-semibold);
+    color: var(--theme-on-surface-variant);
+  }
+}
+
+.contactCard { // For StyledCard used for emergency/parent contacts
+  background-color: var(--theme-surface-container-low);
+  border: 1px solid var(--theme-outline-variant);
+  margin-bottom: var(--spacing-small);
+  :global(.card-body) {
+    padding: var(--spacing-small) var(--spacing-medium);
+    font-size: var(--font-size-small);
+    line-height: 1.5;
+  }
+  .contactName { // For strong tag with contact name
+    font-weight: var(--font-weight-bold);
+    color: var(--theme-primary);
+  }
+}
+
+.dataTable { // For main data tables (courses, health, disciplinary)
+  margin-top: var(--spacing-small);
+  font-size: var(--font-size-small);
+  :global(th) {
+    background-color: var(--theme-surface-container-low);
+    color: var(--theme-on-surface-variant);
+  }
+  :global(td) {
+    color: var(--theme-on-surface);
+    vertical-align: middle;
+  }
+}
+
+.noDataText {
+  font-style: italic;
+  color: var(--theme-on-surface-variant);
+  margin-top: var(--spacing-medium);
+}
+
+.alertDanger { // For react-bootstrap Alert
+  background-color: var(--theme-error-container);
+  color: var(--theme-on-error-container);
+  border-color: var(--theme-error);
+  padding: var(--spacing-medium);
+  border-radius: var(--border-radius-medium);
+}

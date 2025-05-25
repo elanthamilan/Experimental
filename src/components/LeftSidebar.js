@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Nav, Collapse } from 'react-bootstrap';
-import StyledButton from './atoms/StyledButton'; // Restoring import
+import { Nav, Collapse, OverlayTrigger, Tooltip } from 'react-bootstrap'; // Added OverlayTrigger, Tooltip
+import StyledButton from './atoms/StyledButton';
+import StyledFormSelect from './atoms/StyledFormSelect'; // Added StyledFormSelect
 import styles from './LeftSidebar.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { useTheme } from '../App'; // Assuming USER_ROLES is exported via useTheme or directly
+import { useTheme } from '../App';
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
-  const { currentUserRole, USER_ROLES } = useTheme(); // Get role and USER_ROLES from context
+  const { currentUserRole, setCurrentUserRole, USER_ROLES } = useTheme(); // Added setCurrentUserRole
   const [activeKey, setActiveKey] = useState('dashboard');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -19,6 +21,7 @@ const LeftSidebar = () => {
     finance: false,
     facilities: false,
     studentServices: false,
+    helpAndResources: false, // Add new group here, default to closed
   });
   // State for collapsible Level 2 submenus
   const [openSubmenus, setOpenSubmenus] = useState({}); // Track expanded L2 items by eventKey
@@ -47,6 +50,7 @@ const LeftSidebar = () => {
       { eventKey: 'dashboard', icon: 'dashboard', label: 'Dashboard', path: '/dashboard' },
       { eventKey: 'profile', icon: 'account_circle', label: 'User Profile', path: '/profile' },
       { eventKey: 'settings', icon: 'settings', label: 'Settings', path: '/settings' },
+      { eventKey: 'logout', icon: 'logout', label: 'Logout', path: '/logout' }, // Added Logout link
     ],
     academics: {
       title: 'Academics',
@@ -77,8 +81,8 @@ const LeftSidebar = () => {
           eventKey: 'gradebook', icon: 'assessment', label: 'Gradebook', path: '/grades',
           roles: [USER_ROLES.TEACHER, USER_ROLES.STUDENT] // Teachers manage, Students view their own
         },
-        { eventKey: 'assignment_student', icon: 'assignment', label: 'My Assignments', path: '/assignments', roles: [USER_ROLES.STUDENT] },
-        { eventKey: 'assignment_teacher', icon: 'assignment_turned_in', label: 'Manage Assignments', path: '/assignments/manage', roles: [USER_ROLES.TEACHER] },
+        // { eventKey: 'assignment_student', icon: 'assignment', label: 'My Assignments', path: '/assignments', roles: [USER_ROLES.STUDENT] }, // Removed
+        // { eventKey: 'assignment_teacher', icon: 'assignment_turned_in', label: 'Manage Assignments', path: '/assignments/manage', roles: [USER_ROLES.TEACHER] }, // Removed
         {
           eventKey: 'exam_schedules',
           icon: 'event_note', // Example icon
@@ -143,7 +147,14 @@ const LeftSidebar = () => {
            label: 'Org Hierarchy',
            path: '/admin/organisation/hierarchy',
            roles: [USER_ROLES.ADMIN]
-         }
+         },
+         { 
+           eventKey: 'component_preview', 
+           icon: 'science', 
+           label: 'Component Preview', 
+           path: '/component-preview', 
+           roles: [USER_ROLES.ADMIN] 
+         } // Added Component Preview link
       ]
     },
      finance: {
@@ -160,23 +171,35 @@ const LeftSidebar = () => {
       ]
     },
     // Removed facilities and studentServices for brevity in example, can be added back similarly
+    helpAndResources: { // Added Help & Resources group
+      title: 'Help & Resources',
+      items: [
+        { eventKey: 'feedback', icon: 'feedback', label: 'Feedback', path: '/feedback' },
+        { eventKey: 'tutorial', icon: 'integration_instructions', label: 'Tutorial', path: '/tutorial' },
+        { eventKey: 'manual', icon: 'library_books', label: 'User Manual', path: '/manual' },
+      ]
+    }
   }), [USER_ROLES]); // Only recreate when USER_ROLES changes
 
   // Filter logic based on role and search term
   // Initialize openGroups based on all group keys to ensure new groups are considered
   useEffect(() => {
-    const initialOpenGroups = {};
+    const initialOpenGroupsState = { ...openGroups }; // Start with current open groups
+    let changed = false;
     Object.keys(navGroups).forEach(key => {
-      if (key !== 'topLevel') {
+      if (key !== 'topLevel' && initialOpenGroupsState[key] === undefined) {
         // Default new groups to false, keep existing or default 'academics' to true
-        initialOpenGroups[key] = openGroups[key] === undefined ? (key === 'academics') : openGroups[key];
+        initialOpenGroupsState[key] = (key === 'academics'); // Default academics to open, others to closed
+        changed = true;
       }
     });
-    // Only set if there's a change to avoid potential loop with navGroups dependency
-    if (JSON.stringify(openGroups) !== JSON.stringify(initialOpenGroups)) {
-      setOpenGroups(initialOpenGroups);
+    if (changed) {
+      setOpenGroups(initialOpenGroupsState);
     }
-  }, []); // Run once on mount to initialize openGroups for potentially new groups
+  // eslint-disable-next-line react-hooks/exhaustive-deps 
+  }, [navGroups]); // Rerun if navGroups structure changes (e.g. new group added)
+  // Removed openGroups from dependency array to prevent loop, as we are setting it here.
+  // This hook's purpose is to initialize open state for *newly added* groups.
 
 
   const [filteredNavGroups, setFilteredNavGroups] = useState({ topLevel: [], grouped: [] });
@@ -268,6 +291,25 @@ const LeftSidebar = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+      </div>
+
+      {/* Role Selector Added Here */}
+      <div className={styles.roleSelectorContainer}>
+        <div className={styles.roleSelectorLabel}>
+          <Icon name="admin_panel_settings" className={styles.roleSelectorIcon} />
+          <span>Current Role</span>
+        </div>
+        <StyledFormSelect
+          value={currentUserRole}
+          onChange={(e) => setCurrentUserRole(e.target.value)}
+          aria-label="Select User Role"
+          className={styles.roleSelectorDropdown}
+          size="sm"
+        >
+          <option value={USER_ROLES.ADMIN}>Admin</option>
+          <option value={USER_ROLES.TEACHER}>Teacher</option>
+          {/* Student option intentionally excluded */}
+        </StyledFormSelect>
       </div>
 
       {/* Updated Nav section */}

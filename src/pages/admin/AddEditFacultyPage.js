@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockFaculty } from '../../data/mockFaculty';
-import { mockCourses } from '../../data/mockCourses'; // Optional: for course selection
-import { Button, Form, Row, Col, Card, Alert } from 'react-bootstrap';
-import styles from './AdminPages.module.scss';
+// import { mockCourses } from '../../data/mockCourses'; // Optional: for course selection - not directly used for select options
+import { Form, Row, Col } from 'react-bootstrap'; // Alert & Button will be replaced
+import {
+  StyledContainer,
+  StyledCard,
+  StyledButton,
+  FormField,
+} from '../../components';
+import styles from './AddEditFacultyPage.module.scss'; // Use new SCSS module
 
 const AddEditFacultyPage = () => {
   const { facultyId } = useParams();
@@ -93,152 +99,143 @@ const AddEditFacultyPage = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>{isEditMode ? 'Edit Faculty Member' : 'Add New Faculty Member'}</Card.Title>
-        </Card.Header>
-        <Card.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {successMessage && <Alert variant="success">{successMessage}</Alert>}
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Faculty Member' : 'Add New Faculty Member'}</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
+          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
+          {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
           <Form onSubmit={handleSubmit}>
-            <Row>
+            <Row className="mb-3">
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="formFacultyId">
-                  <Form.Label>Faculty ID</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="id"
-                    value={formData.id}
-                    readOnly
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formFacultyId"
+                  label="Faculty ID"
+                  type="text"
+                  name="id"
+                  value={formData.id}
+                  readOnly
+                />
               </Col>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="formFirstName">
-                  <Form.Label>First Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formFirstName"
+                  label="First Name"
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="formLastName">
-                  <Form.Label>Last Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formLastName"
+                  label="Last Name"
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formEmail">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formEmail"
+                  label="Email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formDepartment">
-                  <Form.Label>Department</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="department"
-                    value={formData.department}
-                    onChange={handleChange}
-                    required
-                  />
-                  {/* Consider a Form.Select if departments are managed elsewhere */}
-                </Form.Group>
+                <FormField
+                  controlId="formDepartment"
+                  label="Department"
+                  type="text" // Consider FormField as="select" if departments are managed
+                  name="department"
+                  value={formData.department}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
             </Row>
             
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formTitle">
-                  <Form.Label>Title</Form.Label>
-                  <Form.Control // Or Form.Select
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    required
-                  />
-                  {/* Example Form.Select:
-                  <Form.Select name="title" value={formData.title} onChange={handleChange} required>
-                    <option value="">Select Title</option>
-                    <option value="Lecturer">Lecturer</option>
-                    <option value="Assistant Professor">Assistant Professor</option>
-                    <option value="Associate Professor">Associate Professor</option>
-                    <option value="Professor">Professor</option>
-                  </Form.Select>
-                  */}
-                </Form.Group>
+                <FormField
+                  controlId="formTitle"
+                  label="Title"
+                  type="text" // Or as="select" with options
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  required
+                  // options for select:
+                  // options={[
+                  //   { value: '', label: 'Select Title' },
+                  //   { value: 'Lecturer', label: 'Lecturer' },
+                  //   { value: 'Assistant Professor', label: 'Assistant Professor' },
+                  //   { value: 'Associate Professor', label: 'Associate Professor' },
+                  //   { value: 'Professor', label: 'Professor' },
+                  // ]}
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formOfficeLocation">
-                  <Form.Label>Office Location</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="officeLocation"
-                    value={formData.officeLocation}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formOfficeLocation"
+                  label="Office Location"
+                  type="text"
+                  name="officeLocation"
+                  value={formData.officeLocation}
+                  onChange={handleChange}
+                />
               </Col>
             </Row>
 
-            <Form.Group className="mb-3" controlId="formCoursesTaught">
-              <Form.Label>Courses Taught (comma-separated course IDs)</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                name="coursesTaught"
-                value={formData.coursesTaught}
-                onChange={handleChange}
-                placeholder="e.g., CS101, MA203, PH101"
-              />
-              {/* TODO: Consider implementing a multi-select dropdown using mockCourses if time permits */}
-            </Form.Group>
+            <FormField
+              controlId="formCoursesTaught"
+              label="Courses Taught (comma-separated course IDs)"
+              as="textarea"
+              rows={3}
+              name="coursesTaught"
+              value={formData.coursesTaught}
+              onChange={handleChange}
+              placeholder="e.g., CS101, MA203, PH101"
+              className={styles.formFieldMarginBottom}
+            />
+            {/* TODO: Consider implementing a multi-select dropdown using mockCourses if time permits */}
 
-            <Form.Group className="mb-3" controlId="formProfileImageUrl">
-              <Form.Label>Profile Image URL</Form.Label>
-              <Form.Control
-                type="url"
-                name="profileImageUrl"
-                value={formData.profileImageUrl}
-                onChange={handleChange}
-                placeholder="https://example.com/image.jpg"
-              />
-            </Form.Group>
+            <FormField
+              controlId="formProfileImageUrl"
+              label="Profile Image URL"
+              type="url"
+              name="profileImageUrl"
+              value={formData.profileImageUrl}
+              onChange={handleChange}
+              placeholder="https://example.com/image.jpg"
+              className={styles.formFieldMarginBottom}
+            />
 
-            <div className="d-flex justify-content-end mt-3">
-              <Button variant="secondary" onClick={() => navigate('/admin/faculty')} className="me-2">
+            <div className={styles.formActions}>
+              <StyledButton variant="secondary" onClick={() => navigate('/admin/faculty')}>
                 Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              </StyledButton>
+              <StyledButton variant="primary" type="submit">
                 {isEditMode ? 'Save Changes' : 'Add Faculty Member'}
-              </Button>
+              </StyledButton>
             </div>
           </Form>
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

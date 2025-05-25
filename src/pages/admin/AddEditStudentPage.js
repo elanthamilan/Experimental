@@ -9,7 +9,7 @@ import {
   StyledButton,
   FormField
 } from '../../components';
-import styles from './AdminPages.module.scss';
+import styles from './AddEditStudentPage.module.scss'; // Use new SCSS module
 
 const AddEditStudentPage = () => {
   const { studentId } = useParams();
@@ -149,167 +149,164 @@ const AddEditStudentPage = () => {
   return (
     <StyledContainer className={styles.pageContainer}>
       <StyledCard className={styles.formCard}>
-        <StyledCard.Header as="h4" className={styles.formCardHeader}>
+        <StyledCard.Header as="h4" className={styles.cardTitle}> {/* Use cardTitle from SCSS */}
           {isEditMode ? 'Edit Student Information' : 'Add New Student'}
         </StyledCard.Header>
         <StyledCard.Body>
-          <Form onSubmit={handleSubmit}>
-            <h5 className="mt-3 mb-3">Personal Details</h5>
+          <Form onSubmit={handleSubmit}> {/* Keep react-bootstrap Form as main wrapper for FormField */}
+            <h5 className={styles.sectionTitle}>Personal Details</h5> {/* Styled section title */}
             <Row className="mb-3">
-              <Form.Group as={Col} md="2" controlId="formStudentId">
-                <Form.Label>Student ID</Form.Label>
-                <Form.Control type="text" name="id" value={formData.id} onChange={handleChange} readOnly required />
-              </Form.Group>
-              <Form.Group as={Col} md="3" controlId="formFirstName">
-                <Form.Label>First Name</Form.Label>
-                <Form.Control type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
-              </Form.Group>
-              <Form.Group as={Col} md="3" controlId="formLastName">
-                <Form.Label>Last Name</Form.Label>
-                <Form.Control type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
-              </Form.Group>
-              <Form.Group as={Col} md="4" controlId="formEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required />
-              </Form.Group>
+              <Col md="2">
+                <FormField controlId="formStudentId" label="Student ID" type="text" name="id" value={formData.id} onChange={handleChange} readOnly required />
+              </Col>
+              <Col md="3">
+                <FormField controlId="formFirstName" label="First Name" type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
+              </Col>
+              <Col md="3">
+                <FormField controlId="formLastName" label="Last Name" type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
+              </Col>
+              <Col md="4">
+                <FormField controlId="formEmail" label="Email" type="email" name="email" value={formData.email} onChange={handleChange} required />
+              </Col>
             </Row>
 
             <Row className="mb-3">
-              <Form.Group as={Col} md="3" controlId="formDateOfBirth">
-                <Form.Label>Date of Birth</Form.Label>
-                <Form.Control type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
-              </Form.Group>
-              <Form.Group as={Col} md="3" controlId="formGender">
-                <Form.Label>Gender</Form.Label>
-                <Form.Select name="gender" value={formData.gender} onChange={handleChange}>
-                  <option value="">Select Gender...</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Non-binary">Non-binary</option>
-                  <option value="Other">Other</option>
-                  <option value="Prefer not to say">Prefer not to say</option>
-                </Form.Select>
-              </Form.Group>
-              <Form.Group as={Col} md="3" controlId="formNationality">
-                <Form.Label>Nationality</Form.Label>
-                <Form.Control type="text" name="nationality" value={formData.nationality} onChange={handleChange} />
-              </Form.Group>
-               <Form.Group as={Col} md="3" controlId="formProfileImageUrl">
-                <Form.Label>Profile Image URL</Form.Label>
-                <Form.Control type="url" name="profileImageUrl" value={formData.profileImageUrl} onChange={handleChange} placeholder="https://example.com/image.jpg" />
-              </Form.Group>
+              <Col md="3">
+                <FormField controlId="formDateOfBirth" label="Date of Birth" type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
+              </Col>
+              <Col md="3">
+                <FormField
+                  controlId="formGender"
+                  label="Gender"
+                  as="select"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  options={[
+                    { value: '', label: 'Select Gender...' },
+                    { value: 'Male', label: 'Male' },
+                    { value: 'Female', label: 'Female' },
+                    { value: 'Non-binary', label: 'Non-binary' },
+                    { value: 'Other', label: 'Other' },
+                    { value: 'Prefer not to say', label: 'Prefer not to say' },
+                  ]}
+                />
+              </Col>
+              <Col md="3">
+                <FormField controlId="formNationality" label="Nationality" type="text" name="nationality" value={formData.nationality} onChange={handleChange} />
+              </Col>
+              <Col md="3">
+                <FormField controlId="formProfileImageUrl" label="Profile Image URL" type="url" name="profileImageUrl" value={formData.profileImageUrl} onChange={handleChange} placeholder="https://example.com/image.jpg" />
+              </Col>
             </Row>
 
-            <h5 className="mt-4 mb-3">Address</h5>
+            <h5 className={styles.sectionTitle}>Address</h5>
             <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="formStreet">
-                <Form.Label>Street</Form.Label>
-                <Form.Control type="text" name="street" value={formData.address.street} onChange={handleAddressChange} />
-              </Form.Group>
+              <Col md="12">
+                <FormField controlId="formStreet" label="Street" type="text" name="street" value={formData.address.street} onChange={handleAddressChange} />
+              </Col>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="formCity">
-                <Form.Label>City</Form.Label>
-                <Form.Control type="text" name="city" value={formData.address.city} onChange={handleAddressChange} />
-              </Form.Group>
-              <Form.Group as={Col} md="3" controlId="formState">
-                <Form.Label>State</Form.Label>
-                <Form.Control type="text" name="state" value={formData.address.state} onChange={handleAddressChange} />
-              </Form.Group>
-              <Form.Group as={Col} md="2" controlId="formZipCode">
-                <Form.Label>Zip Code</Form.Label>
-                <Form.Control type="text" name="zipCode" value={formData.address.zipCode} onChange={handleAddressChange} />
-              </Form.Group>
-              <Form.Group as={Col} md="3" controlId="formCountry">
-                <Form.Label>Country</Form.Label>
-                <Form.Control type="text" name="country" value={formData.address.country} onChange={handleAddressChange} />
-              </Form.Group>
+              <Col md="4">
+                <FormField controlId="formCity" label="City" type="text" name="city" value={formData.address.city} onChange={handleAddressChange} />
+              </Col>
+              <Col md="3">
+                <FormField controlId="formState" label="State" type="text" name="state" value={formData.address.state} onChange={handleAddressChange} />
+              </Col>
+              <Col md="2">
+                <FormField controlId="formZipCode" label="Zip Code" type="text" name="zipCode" value={formData.address.zipCode} onChange={handleAddressChange} />
+              </Col>
+              <Col md="3">
+                <FormField controlId="formCountry" label="Country" type="text" name="country" value={formData.address.country} onChange={handleAddressChange} />
+              </Col>
             </Row>
 
-            <h5 className="mt-4 mb-3">Academic Information</h5>
+            <h5 className={styles.sectionTitle}>Academic Information</h5>
             <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="formMajor">
-                <Form.Label>Major</Form.Label>
-                <Form.Control type="text" name="major" value={formData.major} onChange={handleChange} required />
-              </Form.Group>
-              <Form.Group as={Col} md="4" controlId="formAdmissionDate">
-                <Form.Label>Admission Date</Form.Label>
-                <Form.Control type="date" name="admissionDate" value={formData.admissionDate} onChange={handleChange} />
-              </Form.Group>
-              <Form.Group as={Col} md="4" controlId="formEnrollmentDate">
-                <Form.Label>Enrollment Date</Form.Label>
-                <Form.Control type="date" name="enrollmentDate" value={formData.enrollmentDate} onChange={handleChange} required />
-              </Form.Group>
+              <Col md="4">
+                <FormField controlId="formMajor" label="Major" type="text" name="major" value={formData.major} onChange={handleChange} required />
+              </Col>
+              <Col md="4">
+                <FormField controlId="formAdmissionDate" label="Admission Date" type="date" name="admissionDate" value={formData.admissionDate} onChange={handleChange} />
+              </Col>
+              <Col md="4">
+                <FormField controlId="formEnrollmentDate" label="Enrollment Date" type="date" name="enrollmentDate" value={formData.enrollmentDate} onChange={handleChange} required />
+              </Col>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="formEnrollmentStatus">
-                <Form.Label>Enrollment Status</Form.Label>
-                <Form.Select name="enrollmentStatus" value={formData.enrollmentStatus} onChange={handleChange}>
-                  <option value="Prospective">Prospective</option>
-                  <option value="Enrolled">Enrolled</option>
-                  <option value="On Leave">On Leave</option>
-                  <option value="Withdrawn">Withdrawn</option>
-                  <option value="Graduated">Graduated</option>
-                </Form.Select>
-              </Form.Group>
-              <Form.Group as={Col} md="4" controlId="formAcademicStanding">
-                <Form.Label>Academic Standing</Form.Label>
-                <Form.Select name="academicStanding" value={formData.academicStanding} onChange={handleChange}>
-                  <option value="Good Standing">Good Standing</option>
-                  <option value="Academic Probation">Academic Probation</option>
-                  <option value="Dean's List">Dean's List</option>
-                  <option value="Suspended">Suspended</option>
-                  <option value="Expelled">Expelled</option>
-                </Form.Select>
-              </Form.Group>
-              <Form.Group as={Col} md="4" controlId="formWithdrawalDate">
-                <Form.Label>Withdrawal Date (if any)</Form.Label>
-                <Form.Control type="date" name="withdrawalDate" value={formData.withdrawalDate || ''} onChange={handleChange} />
-              </Form.Group>
-            </Row>
-
-            <h5 className="mt-4 mb-3">Emergency Contact</h5>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="formEmergencyContactName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control type="text" name="emergencyContactName" value={formData.emergencyContactName} onChange={handleChange} />
-              </Form.Group>
-              <Form.Group as={Col} md="3" controlId="formEmergencyContactRelationship">
-                <Form.Label>Relationship</Form.Label>
-                <Form.Control type="text" name="emergencyContactRelationship" value={formData.emergencyContactRelationship} onChange={handleChange} />
-              </Form.Group>
-              <Form.Group as={Col} md="3" controlId="formEmergencyContactPhone">
-                <Form.Label>Phone</Form.Label>
-                <Form.Control type="tel" name="emergencyContactPhone" value={formData.emergencyContactPhone} onChange={handleChange} />
-              </Form.Group>
-              <Form.Group as={Col} md="2" controlId="formEmergencyContactEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control type="email" name="emergencyContactEmail" value={formData.emergencyContactEmail} onChange={handleChange} />
-              </Form.Group>
+              <Col md="4">
+                <FormField
+                  controlId="formEnrollmentStatus"
+                  label="Enrollment Status"
+                  as="select"
+                  name="enrollmentStatus"
+                  value={formData.enrollmentStatus}
+                  onChange={handleChange}
+                  options={[
+                    { value: 'Prospective', label: 'Prospective' },
+                    { value: 'Enrolled', label: 'Enrolled' },
+                    { value: 'On Leave', label: 'On Leave' },
+                    { value: 'Withdrawn', label: 'Withdrawn' },
+                    { value: 'Graduated', label: 'Graduated' },
+                  ]}
+                />
+              </Col>
+              <Col md="4">
+                <FormField
+                  controlId="formAcademicStanding"
+                  label="Academic Standing"
+                  as="select"
+                  name="academicStanding"
+                  value={formData.academicStanding}
+                  onChange={handleChange}
+                  options={[
+                    { value: 'Good Standing', label: 'Good Standing' },
+                    { value: 'Academic Probation', label: 'Academic Probation' },
+                    { value: "Dean's List", label: "Dean's List" },
+                    { value: 'Suspended', label: 'Suspended' },
+                    { value: 'Expelled', label: 'Expelled' },
+                  ]}
+                />
+              </Col>
+              <Col md="4">
+                <FormField controlId="formWithdrawalDate" label="Withdrawal Date (if any)" type="date" name="withdrawalDate" value={formData.withdrawalDate || ''} onChange={handleChange} />
+              </Col>
             </Row>
 
-            <h5 className="mt-4 mb-3">Parent/Guardian Information</h5>
+            <h5 className={styles.sectionTitle}>Emergency Contact</h5>
             <Row className="mb-3">
-              <Form.Group as={Col} md="4" controlId="formParentGuardianName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control type="text" name="parentGuardianName" value={formData.parentGuardianName} onChange={handleChange} />
-              </Form.Group>
-              <Form.Group as={Col} md="3" controlId="formParentGuardianRelationship">
-                <Form.Label>Relationship</Form.Label>
-                <Form.Control type="text" name="parentGuardianRelationship" value={formData.parentGuardianRelationship} onChange={handleChange} />
-              </Form.Group>
-              <Form.Group as={Col} md="3" controlId="formParentGuardianPhone">
-                <Form.Label>Phone</Form.Label>
-                <Form.Control type="tel" name="parentGuardianPhone" value={formData.parentGuardianPhone} onChange={handleChange} />
-              </Form.Group>
-              <Form.Group as={Col} md="2" controlId="formParentGuardianEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control type="email" name="parentGuardianEmail" value={formData.parentGuardianEmail} onChange={handleChange} />
-              </Form.Group>
+              <Col md="4">
+                <FormField controlId="formEmergencyContactName" label="Name" type="text" name="emergencyContactName" value={formData.emergencyContactName} onChange={handleChange} />
+              </Col>
+              <Col md="3">
+                <FormField controlId="formEmergencyContactRelationship" label="Relationship" type="text" name="emergencyContactRelationship" value={formData.emergencyContactRelationship} onChange={handleChange} />
+              </Col>
+              <Col md="3">
+                <FormField controlId="formEmergencyContactPhone" label="Phone" type="tel" name="emergencyContactPhone" value={formData.emergencyContactPhone} onChange={handleChange} />
+              </Col>
+              <Col md="2">
+                <FormField controlId="formEmergencyContactEmail" label="Email" type="email" name="emergencyContactEmail" value={formData.emergencyContactEmail} onChange={handleChange} />
+              </Col>
             </Row>
 
-            <div className="mt-4 d-flex justify-content-end">
-              <StyledButton variant="secondary" onClick={() => navigate('/students')} className="me-2">
+            <h5 className={styles.sectionTitle}>Parent/Guardian Information</h5>
+            <Row className="mb-3">
+              <Col md="4">
+                <FormField controlId="formParentGuardianName" label="Name" type="text" name="parentGuardianName" value={formData.parentGuardianName} onChange={handleChange} />
+              </Col>
+              <Col md="3">
+                <FormField controlId="formParentGuardianRelationship" label="Relationship" type="text" name="parentGuardianRelationship" value={formData.parentGuardianRelationship} onChange={handleChange} />
+              </Col>
+              <Col md="3">
+                <FormField controlId="formParentGuardianPhone" label="Phone" type="tel" name="parentGuardianPhone" value={formData.parentGuardianPhone} onChange={handleChange} />
+              </Col>
+              <Col md="2">
+                <FormField controlId="formParentGuardianEmail" label="Email" type="email" name="parentGuardianEmail" value={formData.parentGuardianEmail} onChange={handleChange} />
+              </Col>
+            </Row>
+
+            <div className={styles.formActions}> {/* Use formActions from SCSS */}
+              <StyledButton variant="secondary" onClick={() => navigate('/students')}> {/* Remove me-2 */}
                 Cancel
               </StyledButton>
               <StyledButton variant="primary" type="submit">

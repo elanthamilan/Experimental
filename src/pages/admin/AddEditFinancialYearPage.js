@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockFinancialYears } from '../../data/mockFinancialYears';
-import { Button, Form, Row, Col, Card, Alert } from 'react-bootstrap';
-import styles from './AdminPages.module.scss';
+import { Form, Row, Col } from 'react-bootstrap'; // Alert & Button will be replaced
+import {
+  StyledContainer,
+  StyledCard,
+  StyledButton,
+  FormField,
+} from '../../components';
+import styles from './AddEditFinancialYearPage.module.scss'; // Use new SCSS module
 
 const AddEditFinancialYearPage = () => {
   const { financialYearId } = useParams();
@@ -82,94 +88,92 @@ const AddEditFinancialYearPage = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>{isEditMode ? 'Edit Financial Year' : 'Add New Financial Year'}</Card.Title>
-        </Card.Header>
-        <Card.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {successMessage && <Alert variant="success">{successMessage}</Alert>}
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Financial Year' : 'Add New Financial Year'}</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
+          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
+          {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
           <Form onSubmit={handleSubmit}>
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formFinancialYearId">
-                  <Form.Label>ID</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="id"
-                    value={formData.id}
-                    readOnly
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formFinancialYearId"
+                  label="ID"
+                  type="text"
+                  name="id"
+                  value={formData.id}
+                  readOnly
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formFinancialYearName">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formFinancialYearName"
+                  label="Name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formFinancialYearStartDate">
-                  <Form.Label>Start Date</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="startDate"
-                    value={formData.startDate}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formFinancialYearStartDate"
+                  label="Start Date"
+                  type="date"
+                  name="startDate"
+                  value={formData.startDate}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formFinancialYearEndDate">
-                  <Form.Label>End Date</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="endDate"
-                    value={formData.endDate}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formFinancialYearEndDate"
+                  label="End Date"
+                  type="date"
+                  name="endDate"
+                  value={formData.endDate}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
             </Row>
             
-            <Form.Group className="mb-3" controlId="formFinancialYearStatus">
-              <Form.Label>Status</Form.Label>
-              <Form.Select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                required
-              >
-                <option value="Upcoming">Upcoming</option>
-                <option value="Open">Open</option>
-                <option value="Closed">Closed</option>
-              </Form.Select>
-            </Form.Group>
+            <FormField
+              controlId="formFinancialYearStatus"
+              label="Status"
+              as="select"
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              required
+              options={[
+                { value: 'Upcoming', label: 'Upcoming' },
+                { value: 'Open', label: 'Open' },
+                { value: 'Closed', label: 'Closed' },
+              ]}
+              className={styles.formFieldMarginBottom}
+            />
 
-            <div className="d-flex justify-content-end mt-3">
-              <Button variant="secondary" onClick={() => navigate('/admin/financialyears')} className="me-2">
+            <div className={styles.formActions}>
+              <StyledButton variant="secondary" onClick={() => navigate('/admin/financialyears')}>
                 Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              </StyledButton>
+              <StyledButton variant="primary" type="submit">
                 {isEditMode ? 'Save Changes' : 'Add Financial Year'}
-              </Button>
+              </StyledButton>
             </div>
           </Form>
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

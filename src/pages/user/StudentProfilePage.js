@@ -10,9 +10,10 @@ import { Row, Col, Image, Alert, Badge } from 'react-bootstrap';
 import {
   StyledContainer,
   StyledTable,
-  StyledCard
+  StyledCard,
+  StyledBadge // Added StyledBadge import
 } from '../../components';
-import styles from './UserPages.module.scss';
+import styles from './StudentProfilePage.module.scss'; // Use new SCSS module
 
 const StudentProfilePage = () => {
   const { studentId } = useParams();
@@ -20,9 +21,10 @@ const StudentProfilePage = () => {
 
   if (!student) {
     return (
-      <div className={styles.pageContainer}>
-        <Alert variant="danger">Student not found.</Alert>
-      </div>
+      // Assuming StyledContainer is already imported and used as pageContainer
+      <StyledContainer className={styles.pageContainer}> 
+        <div className={styles.alertDanger}>Student not found.</div> {/* Use styled div for alert */}
+      </StyledContainer>
     );
   }
 
@@ -52,43 +54,43 @@ const StudentProfilePage = () => {
                 <Image src={student.profileImageUrl} roundedCircle fluid thumbnail className={styles.profileImage} />
               ) : (
                 <div className={styles.profileImagePlaceholder}>
-                  <span className="material-symbols-outlined" style={{ fontSize: '6rem' }}>person</span>
+                  <span className={`material-symbols-outlined ${styles.placeholderIcon}`}>person</span>
                 </div>
               )}
-              <h3 className="mt-3">{`${student.firstName} ${student.lastName}`}</h3>
-              <p className="text-muted">{student.major}</p>
-              <p><Badge bg={student.enrollmentStatus === 'Enrolled' ? 'success' : 'secondary'}>{student.enrollmentStatus}</Badge></p>
-              <p><strong>Academic Standing:</strong> {student.academicStanding}</p>
+              <h3 className={styles.studentName}>{`${student.firstName} ${student.lastName}`}</h3>
+              <p className={styles.studentMajor}>{student.major}</p>
+              <p className={styles.statusBadgeContainer}><StyledBadge variant={student.enrollmentStatus === 'Enrolled' ? 'success' : 'secondary'}>{student.enrollmentStatus}</StyledBadge></p>
+              <p className={styles.detailText}><strong className={styles.detailLabel}>Academic Standing:</strong> {student.academicStanding}</p>
             </Col>
             <Col md={8}>
-              <h5>Personal & Contact Information</h5>
+              <h5 className={styles.sectionTitle}>Personal & Contact Information</h5>
               <StyledTable borderless hover size="sm" className={styles.detailsTable}>
                 <tbody>
-                  <tr><td><strong>Student ID:</strong></td><td>{student.id}</td></tr>
-                  <tr><td><strong>Email:</strong></td><td>{student.email}</td></tr>
-                  <tr><td><strong>Date of Birth:</strong></td><td>{student.dateOfBirth}</td></tr>
-                  <tr><td><strong>Gender:</strong></td><td>{student.gender}</td></tr>
-                  <tr><td><strong>Nationality:</strong></td><td>{student.nationality}</td></tr>
+                  <tr><td className={styles.labelColumn}>Student ID:</td><td>{student.id}</td></tr>
+                  <tr><td className={styles.labelColumn}>Email:</td><td>{student.email}</td></tr>
+                  <tr><td className={styles.labelColumn}>Date of Birth:</td><td>{student.dateOfBirth}</td></tr>
+                  <tr><td className={styles.labelColumn}>Gender:</td><td>{student.gender}</td></tr>
+                  <tr><td className={styles.labelColumn}>Nationality:</td><td>{student.nationality}</td></tr>
                 </tbody>
               </StyledTable>
 
-              <h5 className="mt-3">Address</h5>
+              <h5 className={styles.sectionTitle}>Address</h5>
               <StyledTable borderless hover size="sm" className={styles.detailsTable}>
                 <tbody>
-                  <tr><td style={{ width: '100px' }}>Street:</td><td>{student.address.street}</td></tr>
-                  <tr><td>City:</td><td>{student.address.city}</td></tr>
-                  <tr><td>State:</td><td>{student.address.state}</td></tr>
-                  <tr><td>Zip Code:</td><td>{student.address.zipCode}</td></tr>
-                  <tr><td>Country:</td><td>{student.address.country}</td></tr>
+                  <tr><td className={styles.labelColumn}>Street:</td><td>{student.address.street}</td></tr>
+                  <tr><td className={styles.labelColumn}>City:</td><td>{student.address.city}</td></tr>
+                  <tr><td className={styles.labelColumn}>State:</td><td>{student.address.state}</td></tr>
+                  <tr><td className={styles.labelColumn}>Zip Code:</td><td>{student.address.zipCode}</td></tr>
+                  <tr><td className={styles.labelColumn}>Country:</td><td>{student.address.country}</td></tr>
                 </tbody>
               </StyledTable>
 
-              <h5 className="mt-3">Academic Details</h5>
+              <h5 className={styles.sectionTitle}>Academic Details</h5>
               <StyledTable borderless hover size="sm" className={styles.detailsTable}>
                 <tbody>
-                  <tr><td style={{ width: '150px' }}><strong>Admission Date:</strong></td><td>{student.admissionDate}</td></tr>
-                  <tr><td><strong>Enrollment Date:</strong></td><td>{student.enrollmentDate}</td></tr>
-                  {student.withdrawalDate && <tr><td><strong>Withdrawal Date:</strong></td><td>{student.withdrawalDate}</td></tr>}
+                  <tr><td className={styles.labelColumn}>Admission Date:</td><td>{student.admissionDate}</td></tr>
+                  <tr><td className={styles.labelColumn}>Enrollment Date:</td><td>{student.enrollmentDate}</td></tr>
+                  {student.withdrawalDate && <tr><td className={styles.labelColumn}>Withdrawal Date:</td><td>{student.withdrawalDate}</td></tr>}
                 </tbody>
               </StyledTable>
             </Col>
@@ -96,11 +98,11 @@ const StudentProfilePage = () => {
 
           {student.emergencyContacts && student.emergencyContacts.length > 0 && (
             <>
-              <h5 className="mt-4">Emergency Contact(s)</h5>
+              <h5 className={styles.sectionTitle}>Emergency Contact(s)</h5>
               {student.emergencyContacts.map((contact, index) => (
-                <StyledCard key={index} className="mb-2">
-                  <StyledCard.Body className="p-2">
-                    <strong>{contact.name}</strong> ({contact.relationship})<br />
+                <StyledCard key={index} className={styles.contactCard}>
+                  <StyledCard.Body> {/* Removed p-2, assuming contactCard style handles padding */}
+                    <strong className={styles.contactName}>{contact.name}</strong> ({contact.relationship})<br />
                     Phone: {contact.phone || 'N/A'}<br />
                     Email: {contact.email || 'N/A'}
                   </StyledCard.Body>
@@ -111,11 +113,11 @@ const StudentProfilePage = () => {
 
           {student.parentGuardianInfo && student.parentGuardianInfo.length > 0 && (
             <>
-              <h5 className="mt-4">Parent/Guardian Information</h5>
+              <h5 className={styles.sectionTitle}>Parent/Guardian Information</h5>
               {student.parentGuardianInfo.map((info, index) => (
-                 <StyledCard key={index} className="mb-2">
-                  <StyledCard.Body className="p-2">
-                    <strong>{info.name}</strong> ({info.relationship})<br />
+                 <StyledCard key={index} className={styles.contactCard}>
+                  <StyledCard.Body> {/* Removed p-2 */}
+                    <strong className={styles.contactName}>{info.name}</strong> ({info.relationship})<br />
                     Phone: {info.phone || 'N/A'}<br />
                     Email: {info.email || 'N/A'}
                   </StyledCard.Body>
@@ -124,7 +126,7 @@ const StudentProfilePage = () => {
             </>
           )}
 
-          <h5 className="mt-4">Enrolled Courses</h5>
+          <h5 className={styles.sectionTitle}>Enrolled Courses</h5>
           {enrolledCoursesDetails.length > 0 ? (
             <StyledTable striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
               <thead><tr><th>Course Code</th><th>Name</th><th>Department</th><th>Credits</th><th>Grade</th></tr></thead>
@@ -134,9 +136,9 @@ const StudentProfilePage = () => {
                 ))}
               </tbody>
             </StyledTable>
-          ) : <p>No courses currently enrolled.</p>}
+          ) : <p className={styles.noDataText}>No courses currently enrolled.</p>}
 
-          <h5 className="mt-4">Health Records</h5>
+          <h5 className={styles.sectionTitle}>Health Records</h5>
           {healthRecords.length > 0 ? (
             <StyledTable striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
               <thead><tr><th>Record ID</th><th>Conditions</th><th>Allergies</th><th>Immunizations</th><th>Last Updated</th></tr></thead>
@@ -152,9 +154,9 @@ const StudentProfilePage = () => {
                 ))}
               </tbody>
             </StyledTable>
-          ) : <p>No health records found for this student.</p>}
+          ) : <p className={styles.noDataText}>No health records found for this student.</p>}
 
-          <h5 className="mt-4">Disciplinary Records</h5>
+          <h5 className={styles.sectionTitle}>Disciplinary Records</h5>
           {disciplinaryRecords.length > 0 ? (
             <StyledTable striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
               <thead><tr><th>Record ID</th><th>Incident Date</th><th>Description</th><th>Action Taken</th><th>Reported By</th></tr></thead>
@@ -170,7 +172,7 @@ const StudentProfilePage = () => {
                 ))}
               </tbody>
             </StyledTable>
-          ) : <p>No disciplinary records found for this student.</p>}
+          ) : <p className={styles.noDataText}>No disciplinary records found for this student.</p>}
 
         </StyledCard.Body>
       </StyledCard>

@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockOrgHierarchyNodes } from '../../data/mockOrgHierarchy';
-import { Button, Form, Row, Col, Card, Alert } from 'react-bootstrap';
-import styles from './AdminPages.module.scss';
+import { Form, Row, Col } from 'react-bootstrap'; // Alert & Button will be replaced
+import {
+  StyledContainer,
+  StyledCard,
+  StyledButton,
+  FormField,
+} from '../../components';
+import styles from './AddEditOrgHierarchyNodePage.module.scss'; // Use new SCSS module
 
 const AddEditOrgHierarchyNodePage = () => {
-  const { nodeId } = useParams(); // Changed from departmentId to nodeId to match route
+  const { nodeId } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(nodeId);
 
@@ -90,86 +96,83 @@ const AddEditOrgHierarchyNodePage = () => {
   const parentNodeOptions = mockOrgHierarchyNodes.filter(node => !isEditMode || node.id !== nodeId);
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>{isEditMode ? 'Edit Hierarchy Node' : 'Add New Hierarchy Node'}</Card.Title>
-        </Card.Header>
-        <Card.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {successMessage && <Alert variant="success">{successMessage}</Alert>}
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Hierarchy Node' : 'Add New Hierarchy Node'}</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
+          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
+          {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
           <Form onSubmit={handleSubmit}>
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formNodeId">
-                  <Form.Label>Node ID</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="id"
-                    value={formData.id}
-                    readOnly
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formNodeId"
+                  label="Node ID"
+                  type="text"
+                  name="id"
+                  value={formData.id}
+                  readOnly
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formNodeName">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formNodeName"
+                  label="Name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formNodeType">
-                  <Form.Label>Type</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="type"
-                    value={formData.type}
-                    onChange={handleChange}
-                    required
-                    placeholder="e.g., Faculty, Department, Office"
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formNodeType"
+                  label="Type"
+                  type="text"
+                  name="type"
+                  value={formData.type}
+                  onChange={handleChange}
+                  required
+                  placeholder="e.g., Faculty, Department, Office"
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formNodeParentId">
-                  <Form.Label>Parent Node</Form.Label>
-                  <Form.Select
-                    name="parentId"
-                    value={formData.parentId}
-                    onChange={handleChange}
-                  >
-                    <option value="">None (Top Level)</option>
-                    {parentNodeOptions.map(node => (
-                      <option key={node.id} value={node.id}>
-                        {`${node.name} (${node.type})`}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
+                <FormField
+                  controlId="formNodeParentId"
+                  label="Parent Node"
+                  as="select"
+                  name="parentId"
+                  value={formData.parentId}
+                  onChange={handleChange}
+                  options={[
+                    { value: '', label: 'None (Top Level)' },
+                    ...parentNodeOptions.map(node => ({
+                      value: node.id,
+                      label: `${node.name} (${node.type})`
+                    }))
+                  ]}
+                />
               </Col>
             </Row>
 
-            <div className="d-flex justify-content-end mt-3">
-              <Button variant="secondary" onClick={() => navigate('/admin/organisation/hierarchy')} className="me-2">
+            <div className={styles.formActions}>
+              <StyledButton variant="secondary" onClick={() => navigate('/admin/organisation/hierarchy')}>
                 Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              </StyledButton>
+              <StyledButton variant="primary" type="submit">
                 {isEditMode ? 'Save Changes' : 'Add Node'}
-              </Button>
+              </StyledButton>
             </div>
           </Form>
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

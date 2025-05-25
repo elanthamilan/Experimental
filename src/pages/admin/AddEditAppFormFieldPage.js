@@ -6,7 +6,7 @@ import StyledButton from '../../components/atoms/StyledButton';
 import StyledCard from '../../components/atoms/StyledCard';
 import StyledContainer from '../../components/atoms/StyledContainer';
 import FormField from '../../components/molecules/FormField';
-import styles from './AdminPages.module.scss';
+import styles from './AddEditAppFormFieldPage.module.scss'; // Using its own SCSS module
 
 const AddEditAppFormFieldPage = () => {
   const { fieldId } = useParams();
@@ -101,21 +101,22 @@ const AddEditAppFormFieldPage = () => {
     <StyledContainer className={styles.pageContainer}>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header>
-          <StyledCard.Title>{isEditMode ? 'Edit Application Form Field' : 'Add New Application Form Field'}</StyledCard.Title>
+          {/* Assuming StyledCard.Title can accept a className or is styled by parent .formCard :global(.card-header) */}
+          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Application Form Field' : 'Add New Application Form Field'}</StyledCard.Title>
         </StyledCard.Header>
         <StyledCard.Body>
           {error && (
-            <div className="alert alert-danger" role="alert">
+            <div className={styles.alertDanger} role="alert">
               {error}
             </div>
           )}
           {successMessage && (
-            <div className="alert alert-success" role="alert">
+            <div className={styles.alertSuccess} role="alert">
               {successMessage}
             </div>
           )}
           <form onSubmit={handleSubmit}>
-            <Row>
+            <Row className="mb-3"> {/* Ensure Rows have bottom margin if FormFields don't */}
               <Col md={4}>
                 <FormField
                   controlId="formFieldId"
@@ -152,7 +153,7 @@ const AddEditAppFormFieldPage = () => {
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
                 <FormField
                   controlId="formFieldType"
@@ -181,7 +182,7 @@ const AddEditAppFormFieldPage = () => {
                   name="required"
                   checked={formData.required}
                   onChange={handleChange}
-                  className={styles.formCheckInputLarge}
+                  className={styles.formCheckInputLarge} // This class styles the input inside FormField
                 />
               </Col>
             </Row>
@@ -190,6 +191,7 @@ const AddEditAppFormFieldPage = () => {
               <FormField
                 controlId="formFieldOptions"
                 label="Options (for Dropdown type)"
+                className={styles.formFieldMarginBottom} // Add margin for this field
                 as="textarea"
                 rows={3}
                 name="options"
@@ -199,8 +201,8 @@ const AddEditAppFormFieldPage = () => {
               />
             )}
 
-            <div className="d-flex justify-content-end mt-3">
-              <StyledButton variant="secondary" onClick={() => navigate('/admin/admissions/formfields')} className="me-2">
+            <div className={styles.formActions}>
+              <StyledButton variant="secondary" onClick={() => navigate('/admin/admissions/formfields')}>
                 Cancel
               </StyledButton>
               <StyledButton variant="primary" type="submit">

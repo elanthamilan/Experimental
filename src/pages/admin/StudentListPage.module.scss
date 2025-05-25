@@ -1,0 +1,189 @@
+@use '../../styles/variables' as v; // Assuming variables are accessible like this
+
+.pageContainer {
+  padding: var(--spacing-medium) var(--spacing-large);
+  background-color: var(--theme-background);
+  min-height: 100vh;
+  color: var(--theme-on-background);
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between; // Title and other global page actions if any (Add button moves to tableControls)
+  align-items: center;
+  margin-bottom: var(--spacing-large);
+}
+
+.pageTitle {
+  font-family: var(--theme-font-display);
+  font-size: var(--font-size-xxlarge, 2.5rem);
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--theme-primary);
+}
+
+/* Styles adapted from ResultsTable.module.scss for Control Bar */
+.tableControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; /* Align items to bottom for varied heights */
+  padding: v.$spacing-medium v.$spacing-large; /* Use theme variables */
+  background-color: var(--theme-surface-container-lowest); /* Subtle background */
+  border-radius: var(--border-radius-medium);
+  margin-bottom: var(--spacing-large);
+  gap: var(--spacing-medium);
+  flex-wrap: wrap;
+
+  .filterSection { // Wrapper for filter elements
+    display: flex;
+    gap: var(--spacing-medium);
+    align-items: flex-end; /* Align form fields if labels are on top */
+    flex-wrap: wrap; /* Allow filters to wrap on smaller screens */
+    flex-grow: 1; /* Allow filter section to take available space */
+  }
+
+  .searchFilterItem, .dropdownFilterItem {
+    flex-grow: 1; /* Allow individual filters to grow */
+    min-width: 200px; /* Minimum width for filters */
+  }
+  
+  .actionsSection { // Wrapper for action buttons like "Add New"
+    display: flex;
+    align-items: flex-end; /* Align with form fields */
+  }
+}
+
+.addButton { // For the "Add New Student" button
+  display: inline-flex;
+  align-items: center;
+  .buttonIcon {
+    vertical-align: middle;
+    margin-right: var(--spacing-xsmall);
+  }
+}
+
+/* Styles adapted from ResultsTable.module.scss for Pagination */
+.paginationContainer {
+  display: flex;
+  justify-content: flex-end; /* Align to the right */
+  align-items: center;
+  padding: var(--spacing-medium) 0; /* Padding top and bottom */
+  font-size: var(--font-size-small);
+  color: var(--theme-on-surface-variant);
+  flex-wrap: wrap;
+  gap: var(--spacing-large);
+}
+
+.resultsText {
+  margin-right: auto; /* Pushes text to the left */
+  color: var(--theme-on-surface-variant);
+}
+
+.paginationControls { // For react-bootstrap Pagination component
+  display: flex;
+  gap: var(--spacing-xsmall);
+  margin-bottom: 0; // Override default Bootstrap margin
+
+  :global(.page-item) {
+    margin: 0 !important;
+  }
+
+  :global(.page-link) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(var(--input-height-small, 32px) + 2px); // Match small input height
+    padding: var(--button-padding-small);
+    background-color: var(--theme-surface-container-high);
+    border: 1px solid var(--theme-outline-variant);
+    border-radius: var(--border-radius-small);
+    color: var(--theme-on-surface-variant);
+    font-weight: var(--font-weight-medium);
+    box-shadow: none !important;
+    gap: var(--spacing-xxsmall);
+    white-space: nowrap;
+
+    &:hover {
+      background-color: var(--theme-surface-container-high-hover);
+    }
+    .material-symbols-outlined {
+      font-size: 1.1rem;
+    }
+  }
+
+  :global(.page-item.disabled .page-link) {
+    opacity: 0.6;
+  }
+
+  :global(.page-item.active .page-link) {
+    background-color: var(--theme-primary);
+    border-color: var(--theme-primary);
+    color: var(--theme-on-primary);
+  }
+}
+
+.pageInputControls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  color: var(--theme-on-surface-variant);
+
+  .pageInput { // For StyledFormControl
+    width: 60px; // Fixed width for page number input
+    height: calc(var(--input-height-small, 32px) + 2px);
+    text-align: center;
+    font-size: var(--font-size-small);
+    border-radius: var(--border-radius-small);
+    // Assumes StyledFormControl picks up theme variables for border, bg, color
+  }
+  .totalPagesText { // For "of X" text
+     color: var(--theme-on-surface-variant);
+  }
+}
+
+.itemsPerPageSelect { // For StyledFormSelect
+  width: auto; // Adjust width as needed
+  height: calc(var(--input-height-small, 32px) + 2px);
+  font-size: var(--font-size-small);
+  border-radius: var(--border-radius-small);
+  // Assumes StyledFormSelect picks up theme variables
+}
+
+
+/* Existing styles, ensure they are compatible */
+.filterCard { // This will be removed, styles moved to .tableControls
+  // background-color: var(--theme-surface-container-low);
+  // border: 1px solid var(--theme-outline-variant);
+  // border-radius: var(--border-radius-medium);
+  // margin-bottom: var(--spacing-large);
+  // :global(.card-body) {
+  //   padding: var(--spacing-large);
+  // }
+}
+
+.dataTable {
+  margin-top: 0; // tableControls now has margin-bottom
+  font-size: var(--font-size-small);
+
+  :global(th) {
+    background-color: var(--theme-surface-container-low);
+    color: var(--theme-on-surface-variant);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  :global(td) {
+    color: var(--theme-on-surface);
+    vertical-align: middle;
+  }
+}
+
+.actionButtonIcon {
+  vertical-align: middle;
+  font-size: 1rem;
+}
+
+.noDataText {
+  color: var(--theme-on-surface-variant);
+  margin-top: var(--spacing-medium);
+  font-style: italic;
+  text-align: center;
+}

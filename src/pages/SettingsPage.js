@@ -195,9 +195,9 @@ const SettingsPage = () => {
                     <div className={styles.themeInfo}>
                       <h4>{theme.name}</h4>
                       <div className={styles.colorSwatches}>
-                        <div className={styles.swatch} style={{ backgroundColor: theme.seedColors.primary }} title={`Primary: ${theme.seedColors.primary}`} />
-                        <div className={styles.swatch} style={{ backgroundColor: theme.seedColors.secondary }} title={`Secondary: ${theme.seedColors.secondary}`} />
-                        <div className={styles.swatch} style={{ backgroundColor: theme.seedColors.tertiary }} title={`Tertiary: ${theme.seedColors.tertiary}`} />
+                        <div className={styles.primarySwatch} style={{ backgroundColor: theme.seedColors.primary }} title={`Primary: ${theme.seedColors.primary}`} />
+                        <div className={styles.secondarySwatch} style={{ backgroundColor: theme.seedColors.secondary }} title={`Secondary: ${theme.seedColors.secondary}`} />
+                        <div className={styles.tertiarySwatch} style={{ backgroundColor: theme.seedColors.tertiary }} title={`Tertiary: ${theme.seedColors.tertiary}`} />
                       </div>
                       <p>Display: {theme.fonts.display}, Body: {theme.fonts.body}</p>
                       {theme.vibe && <p><em>Vibe: {theme.vibe}</em></p>}
@@ -228,9 +228,9 @@ const SettingsPage = () => {
                       <div className={styles.myThemeInfo}>
                         <h4>{theme.name}</h4>
                         <div className={styles.colorSwatches}>
-                          <div className={styles.swatch} style={{ backgroundColor: theme.seedColors.primary }} title={`Primary: ${theme.seedColors.primary}`} />
-                          <div className={styles.swatch} style={{ backgroundColor: theme.seedColors.secondary }} title={`Secondary: ${theme.seedColors.secondary}`} />
-                          <div className={styles.swatch} style={{ backgroundColor: theme.seedColors.tertiary }} title={`Tertiary: ${theme.seedColors.tertiary}`} />
+                          <div className={styles.primarySwatch} style={{ backgroundColor: theme.seedColors.primary }} title={`Primary: ${theme.seedColors.primary}`} />
+                          <div className={styles.secondarySwatch} style={{ backgroundColor: theme.seedColors.secondary }} title={`Secondary: ${theme.seedColors.secondary}`} />
+                          <div className={styles.tertiarySwatch} style={{ backgroundColor: theme.seedColors.tertiary }} title={`Tertiary: ${theme.seedColors.tertiary}`} />
                         </div>
                         <p>Display: {theme.fonts.display}, Body: {theme.fonts.body}</p>
                         <p>Base Size: {theme.baseFontSize}px, Weight: {fontWeightOptions.find(fw => fw.value === theme.globalFontWeight)?.label || theme.globalFontWeight}</p>
@@ -293,7 +293,7 @@ const SettingsPage = () => {
                       const displayName = key.replace('--theme-', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                       return (
                         <div key={key} className={styles.colorPreviewItem}>
-                          <div className={styles.previewSwatch} style={{ backgroundColor: colorValue }} />
+                          <div className={styles.colorValueSwatch} style={{ backgroundColor: colorValue }} />
                           <span className={styles.colorName}>{displayName}:</span>
                           <span className={styles.colorValue}>{colorValue}</span>
                         </div>
@@ -364,7 +364,7 @@ const SettingsPage = () => {
               <StyledButton variant="success" onClick={handleSaveCustomTheme} className={styles.saveThemeButton}>
                 Save Current Custom Theme
               </StyledButton>
-              <p className={styles.placeholderText} style={{marginTop: '1rem', fontSize: '0.8rem'}}>
+              <p className={styles.placeholderTextDetails}>
                 Live previews are temporary. Save to persist your custom settings.
               </p>
             </StyledCard.Body>

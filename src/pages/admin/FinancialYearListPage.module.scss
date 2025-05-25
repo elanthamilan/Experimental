@@ -1,0 +1,201 @@
+@use '../../styles/variables' as v; 
+
+.pageContainer {
+  padding: var(--spacing-medium) var(--spacing-large);
+  background-color: var(--theme-background);
+  min-height: 100vh;
+}
+
+.contentCard { 
+  background-color: var(--theme-surface);
+  border: 1px solid var(--theme-outline-variant);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-elevation-2);
+
+  :global(.card-header) { 
+    background-color: var(--theme-surface-container);
+    color: var(--theme-on-surface-variant);
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-semibold);
+    border-bottom: 1px solid var(--theme-outline-variant);
+    padding: var(--spacing-medium) var(--spacing-large);
+  }
+
+  :global(.card-body) { 
+    padding: var(--spacing-large); 
+    color: var(--theme-on-surface);
+  }
+}
+
+.cardTitle { 
+  font-family: var(--theme-font-display);
+}
+
+/* Control Bar for filters and actions - Placed inside Card, before Card.Body */
+.tableControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: var(--spacing-medium) var(--spacing-large); 
+  border-bottom: 1px solid var(--theme-outline-variant); 
+  background-color: var(--theme-surface-container-lowest); 
+  gap: var(--spacing-medium);
+  flex-wrap: wrap;
+
+  .filterSection {
+    display: flex;
+    gap: var(--spacing-medium);
+    align-items: flex-end;
+    flex-wrap: wrap;
+    flex-grow: 1;
+  }
+
+  .searchFilterItem, .dropdownFilterItem { 
+    flex-grow: 1;
+    min-width: 180px; 
+  }
+  
+  .actionsSection {
+    display: flex;
+    align-items: flex-end;
+  }
+}
+
+.addButton {
+  display: inline-flex;
+  align-items: center;
+  .buttonIcon {
+    vertical-align: middle;
+    margin-right: var(--spacing-xsmall);
+  }
+}
+
+/* Pagination styles */
+.paginationContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: var(--spacing-medium) 0; 
+  font-size: var(--font-size-small);
+  color: var(--theme-on-surface-variant);
+  flex-wrap: wrap;
+  gap: var(--spacing-large);
+  margin-top: var(--spacing-large); 
+}
+
+.resultsText {
+  margin-right: auto;
+  color: var(--theme-on-surface-variant);
+}
+
+.paginationControls { 
+  display: flex;
+  gap: var(--spacing-xsmall);
+  margin-bottom: 0;
+
+  :global(.page-item) {
+    margin: 0 !important;
+  }
+
+  :global(.page-link) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(var(--input-height-small, 32px) + 2px);
+    padding: var(--button-padding-small);
+    background-color: var(--theme-surface-container-high);
+    border: 1px solid var(--theme-outline-variant);
+    border-radius: var(--border-radius-small);
+    color: var(--theme-on-surface-variant);
+    font-weight: var(--font-weight-medium);
+    box-shadow: none !important;
+    gap: var(--spacing-xxsmall);
+    white-space: nowrap;
+
+    &:hover {
+      background-color: var(--theme-surface-container-high-hover);
+    }
+    .material-symbols-outlined {
+      font-size: 1.1rem;
+    }
+  }
+
+  :global(.page-item.disabled .page-link) {
+    opacity: 0.6;
+  }
+
+  :global(.page-item.active .page-link) {
+    background-color: var(--theme-primary);
+    border-color: var(--theme-primary);
+    color: var(--theme-on-primary);
+  }
+}
+
+.pageInputControls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+  color: var(--theme-on-surface-variant);
+
+  .pageInput { 
+    width: 60px;
+    height: calc(var(--input-height-small, 32px) + 2px);
+    text-align: center;
+    font-size: var(--font-size-small);
+    border-radius: var(--border-radius-small);
+  }
+  .totalPagesText {
+     color: var(--theme-on-surface-variant);
+  }
+}
+
+.itemsPerPageSelect { 
+  width: auto;
+  height: calc(var(--input-height-small, 32px) + 2px);
+  font-size: var(--font-size-small);
+  border-radius: var(--border-radius-small);
+}
+
+.dataTable {
+  // margin-top: 0; // No longer needed as control bar is part of card structure
+  font-size: var(--font-size-small);
+
+  :global(th) {
+    background-color: var(--theme-surface-container-low);
+    color: var(--theme-on-surface-variant);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  :global(td) {
+    color: var(--theme-on-surface);
+    vertical-align: middle;
+  }
+}
+
+.actionButtonIcon {
+  vertical-align: middle; 
+  font-size: 1rem; 
+}
+
+.noDataText {
+  color: var(--theme-on-surface-variant);
+  // margin-top: var(--spacing-medium); // No longer needed if card body has padding
+  padding: var(--spacing-large) 0; // Add padding if card body padding is removed for table
+  font-style: italic;
+  text-align: center;
+}
+
+/* Badge Styles for Status */
+/* Assuming StyledBadge props handle colors, but can add specific classes if needed */
+/* Example:
+.statusUpcoming { }
+.statusOpen { }
+.statusClosed { }
+*/
+
+// Remove .headerActions as it's fully replaced by .tableControls .actionsSection
+// .headerActions {
+//   display: flex;
+//   justify-content: flex-end;
+//   margin-bottom: var(--spacing-medium); 
+// }

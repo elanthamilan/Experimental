@@ -11,7 +11,7 @@ import {
   StyledBadge,
   FormField
 } from '../../components';
-import styles from '../admin/AdminPages.module.scss'; // Reusing admin styles
+import styles from './ViewApplicationPage.module.scss'; // Use new SCSS module
 
 const ViewApplicationPage = () => {
   const { applicationId } = useParams();
@@ -79,67 +79,67 @@ const ViewApplicationPage = () => {
   if (error && !application) { // Show error prominently if app not found
     return (
       <StyledContainer className={styles.pageContainer}>
-        <div className="alert alert-danger" role="alert">{error}</div>
+        <div className={styles.alertDanger} role="alert">{error}</div>
         <StyledButton variant="primary" onClick={() => navigate('/admissions/applications')}>Back to List</StyledButton>
       </StyledContainer>
     );
   }
 
   if (!application) {
-    return <StyledContainer className={styles.pageContainer}><p>Loading application details...</p></StyledContainer>;
+    return <StyledContainer className={styles.pageContainer}><p className={styles.loadingText}>Loading application details...</p></StyledContainer>;
   }
 
   const showInterviewFields = ['Interview Scheduled', 'Accepted', 'Rejected'].includes(application.status);
 
   return (
     <StyledContainer className={styles.pageContainer}>
-      <StyledCard className={styles.formCard}>
+      <StyledCard className={styles.contentCard}> {/* Use contentCard */}
         <StyledCard.Header>
-          <StyledCard.Title>View Application: {application.applicantName} - {application.id}</StyledCard.Title>
+          <StyledCard.Title className={styles.cardTitle}>View Application: {application.applicantName} - {application.id}</StyledCard.Title>
         </StyledCard.Header>
         <StyledCard.Body>
           {error && (
-            <div className="alert alert-danger alert-dismissible" role="alert">
+            <div className={styles.alertDanger} role="alert">
               {error}
-              <button type="button" className="btn-close" onClick={() => setError('')} aria-label="Close"></button>
+              <button type="button" className={styles.closeButton} onClick={() => setError('')} aria-label="Close">&times;</button>
             </div>
           )}
           {success && (
-            <div className="alert alert-success alert-dismissible" role="alert">
+            <div className={styles.alertSuccess} role="alert">
               {success}
-              <button type="button" className="btn-close" onClick={() => setSuccess('')} aria-label="Close"></button>
+              <button type="button" className={styles.closeButton} onClick={() => setSuccess('')} aria-label="Close">&times;</button>
             </div>
           )}
 
-          <Row className="mb-3">
-            <Col md={6}><strong>Applicant:</strong> {application.applicantName}</Col>
-            <Col md={6}><strong>Email:</strong> {application.email}</Col>
+          <Row className={styles.detailRow}>
+            <Col md={6}><strong className={styles.detailLabel}>Applicant:</strong> {application.applicantName}</Col>
+            <Col md={6}><strong className={styles.detailLabel}>Email:</strong> {application.email}</Col>
           </Row>
-          <Row className="mb-3">
-            <Col md={6}><strong>Date of Birth:</strong> {application.dateOfBirth}</Col>
-            <Col md={6}><strong>Submitted:</strong> {application.submittedDate}</Col>
+          <Row className={styles.detailRow}>
+            <Col md={6}><strong className={styles.detailLabel}>Date of Birth:</strong> {application.dateOfBirth}</Col>
+            <Col md={6}><strong className={styles.detailLabel}>Submitted:</strong> {application.submittedDate}</Col>
           </Row>
-          <Row className="mb-3">
-            <Col md={6}><strong>Applying for:</strong> {application.programName}</Col>
-            <Col md={6}><strong>Current Status:</strong> {getStatusBadge(application.status)}</Col>
+          <Row className={styles.detailRow}>
+            <Col md={6}><strong className={styles.detailLabel}>Applying for:</strong> {application.programName}</Col>
+            <Col md={6}><strong className={styles.detailLabel}>Current Status:</strong> {getStatusBadge(application.status)}</Col>
           </Row>
 
           <hr />
-          <h5>Application Responses</h5>
+          <h5 className={styles.sectionTitle}>Application Responses</h5>
           {application.fieldResponses && application.fieldResponses.length > 0 ? (
-            <ListGroup variant="flush" className="mb-3">
+            <ListGroup variant="flush" className={styles.applicationResponsesList}>
               {application.fieldResponses.map(response => (
                 <ListGroup.Item key={response.fieldId}>
-                  <strong>{response.label}:</strong> {response.response}
+                  <strong className={styles.detailLabel}>{response.label}:</strong> {response.response}
                 </ListGroup.Item>
               ))}
             </ListGroup>
-          ) : <p>No specific field responses recorded.</p>}
+          ) : <p className={styles.loadingText}>No specific field responses recorded.</p>}
 
           <hr />
-          <h5>Update Status</h5>
-          <Row className="mb-3 align-items-center">
-            <Col sm={3}><strong>New Status:</strong></Col>
+          <h5 className={styles.sectionTitle}>Update Status</h5>
+          <Row className={`${styles.statusUpdateSection} align-items-center`}> {/* Keep align-items-center from bootstrap */}
+            <Col sm={3}><strong className={styles.detailLabel}>New Status:</strong></Col>
             <Col sm={6}>
               <FormField
                 as="select"
@@ -154,7 +154,7 @@ const ViewApplicationPage = () => {
                 ]}
               />
             </Col>
-            <Col sm={3}>
+            <Col sm={3}> {/* This button might need margin adjustment via a specific class if not fitting well */}
               <StyledButton variant="info" onClick={handleStatusUpdate}>Update Status</StyledButton>
             </Col>
           </Row>
@@ -162,9 +162,9 @@ const ViewApplicationPage = () => {
           {showInterviewFields && (
             <>
               <hr />
-              <h5>Interview Details</h5>
-              <Row className="mb-3">
-                <Col sm={3}><strong>Interview Date:</strong></Col>
+              <h5 className={styles.sectionTitle}>Interview Details</h5>
+              <Row className={styles.detailRow}>
+                <Col sm={3}><strong className={styles.detailLabel}>Interview Date:</strong></Col>
                 <Col sm={9}>
                   <FormField
                     type="date"
@@ -173,8 +173,8 @@ const ViewApplicationPage = () => {
                   />
                 </Col>
               </Row>
-              <Row className="mb-3">
-                <Col sm={3}><strong>Interview Notes:</strong></Col>
+              <Row className={styles.detailRow}>
+                <Col sm={3}><strong className={styles.detailLabel}>Interview Notes:</strong></Col>
                 <Col sm={9}>
                   <FormField
                     as="textarea"
@@ -185,14 +185,14 @@ const ViewApplicationPage = () => {
                   />
                 </Col>
               </Row>
-              <div className="d-flex justify-content-end">
+              <div className={styles.formActionsEnd}>
                  <StyledButton variant="primary" onClick={handleInterviewDetailsSave}>Save Interview Details</StyledButton>
               </div>
             </>
           )}
 
           <hr />
-          <div className="d-flex justify-content-start mt-4">
+          <div className={styles.formActionsStart}>
             <StyledButton variant="secondary" onClick={() => navigate('/admissions/applications')}>
               Back to Application List
             </StyledButton>

@@ -2,8 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockStaff } from '../../data/mockStaff';
 import { mockDepartments } from '../../data/mockDepartments'; // Using this for department dropdown
-import { Button, Form, Row, Col, Card, Alert } from 'react-bootstrap';
-import styles from './AdminPages.module.scss';
+import { Form, Row, Col } from 'react-bootstrap'; // Alert & Button will be replaced
+import {
+  StyledContainer,
+  StyledCard,
+  StyledButton,
+  FormField,
+} from '../../components';
+import styles from './AddEditStaffPage.module.scss'; // Use new SCSS module
 
 const AddEditStaffPage = () => {
   const { staffId } = useParams();
@@ -96,113 +102,99 @@ const AddEditStaffPage = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>{isEditMode ? 'Edit Staff Member' : 'Add New Staff Member'}</Card.Title>
-        </Card.Header>
-        <Card.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {successMessage && <Alert variant="success">{successMessage}</Alert>}
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Staff Member' : 'Add New Staff Member'}</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
+          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
+          {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
           <Form onSubmit={handleSubmit}>
-            <Row>
+            <Row className="mb-3">
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="formStaffId">
-                  <Form.Label>Staff ID</Form.Label>
-                  <Form.Control type="text" name="id" value={formData.id} readOnly />
-                </Form.Group>
+                <FormField controlId="formStaffId" label="Staff ID" type="text" name="id" value={formData.id} readOnly />
               </Col>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="formFirstName">
-                  <Form.Label>First Name</Form.Label>
-                  <Form.Control type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
-                </Form.Group>
+                <FormField controlId="formFirstName" label="First Name" type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
               </Col>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="formLastName">
-                  <Form.Label>Last Name</Form.Label>
-                  <Form.Control type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
-                </Form.Group>
+                <FormField controlId="formLastName" label="Last Name" type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formEmail">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required />
-                </Form.Group>
+                <FormField controlId="formEmail" label="Email" type="email" name="email" value={formData.email} onChange={handleChange} required />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formDepartment">
-                  <Form.Label>Department</Form.Label>
-                  <Form.Select name="department" value={formData.department} onChange={handleChange} required>
-                    <option value="">Select Department</option>
-                    {mockDepartments.map(dept => (
-                      <option key={dept.id} value={dept.name}>{dept.name}</option>
-                    ))}
-                     <option value="Administration">Administration</option>
-                     <option value="Student Support">Student Support</option>
-                     <option value="IT Services">IT Services</option>
-                     <option value="Library">Library</option>
-                     <option value="Maintenance">Maintenance</option>
-                     {/* Add other departments if not covered by mockDepartments */}
-                  </Form.Select>
-                </Form.Group>
+                <FormField
+                  controlId="formDepartment"
+                  label="Department"
+                  as="select"
+                  name="department"
+                  value={formData.department}
+                  onChange={handleChange}
+                  required
+                  options={[
+                    { value: '', label: 'Select Department' },
+                    ...mockDepartments.map(dept => ({ value: dept.name, label: dept.name })),
+                    { value: 'Administration', label: 'Administration' },
+                    { value: 'Student Support', label: 'Student Support' },
+                    { value: 'IT Services', label: 'IT Services' },
+                    { value: 'Library', label: 'Library' },
+                    { value: 'Maintenance', label: 'Maintenance' },
+                  ]}
+                />
               </Col>
             </Row>
             
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formRole">
-                  <Form.Label>Role/Title</Form.Label>
-                  <Form.Control type="text" name="role" value={formData.role} onChange={handleChange} required />
-                </Form.Group>
+                <FormField controlId="formRole" label="Role/Title" type="text" name="role" value={formData.role} onChange={handleChange} required />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formEmploymentDate">
-                  <Form.Label>Employment Date</Form.Label>
-                  <Form.Control type="date" name="employmentDate" value={formData.employmentDate} onChange={handleChange} required />
-                </Form.Group>
+                <FormField controlId="formEmploymentDate" label="Employment Date" type="date" name="employmentDate" value={formData.employmentDate} onChange={handleChange} required />
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formPhone">
-                  <Form.Label>Phone</Form.Label>
-                  <Form.Control type="tel" name="phone" value={formData.phone} onChange={handleChange} />
-                </Form.Group>
+                <FormField controlId="formPhone" label="Phone" type="tel" name="phone" value={formData.phone} onChange={handleChange} />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formOfficeLocation">
-                  <Form.Label>Office Location</Form.Label>
-                  <Form.Control type="text" name="officeLocation" value={formData.officeLocation} onChange={handleChange} />
-                </Form.Group>
+                <FormField controlId="formOfficeLocation" label="Office Location" type="text" name="officeLocation" value={formData.officeLocation} onChange={handleChange} />
               </Col>
             </Row>
 
-            <Form.Group className="mb-3" controlId="formStatus">
-              <Form.Label>Status</Form.Label>
-              <Form.Select name="status" value={formData.status} onChange={handleChange} required>
-                <option value="Active">Active</option>
-                <option value="On Leave">On Leave</option>
-                <option value="Terminated">Terminated</option>
-              </Form.Select>
-            </Form.Group>
+            <FormField
+              controlId="formStatus"
+              label="Status"
+              as="select"
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              required
+              options={[
+                { value: 'Active', label: 'Active' },
+                { value: 'On Leave', label: 'On Leave' },
+                { value: 'Terminated', label: 'Terminated' },
+              ]}
+              className={styles.formFieldMarginBottom}
+            />
 
-            <div className="d-flex justify-content-end mt-3">
-              <Button variant="secondary" onClick={() => navigate('/staff')} className="me-2">
+            <div className={styles.formActions}>
+              <StyledButton variant="secondary" onClick={() => navigate('/staff')}>
                 Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              </StyledButton>
+              <StyledButton variant="primary" type="submit">
                 {isEditMode ? 'Save Changes' : 'Add Staff Member'}
-              </Button>
+              </StyledButton>
             </div>
           </Form>
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

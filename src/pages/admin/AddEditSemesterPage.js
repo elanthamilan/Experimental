@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockSemesters } from '../../data/mockSemesters';
-import { Button, Form, Row, Col, Card, Alert } from 'react-bootstrap';
-import styles from './AdminPages.module.scss';
+import { Form, Row, Col } from 'react-bootstrap'; // Alert & Button will be replaced
+import {
+  StyledContainer,
+  StyledCard,
+  StyledButton,
+  FormField,
+} from '../../components';
+import styles from './AddEditSemesterPage.module.scss'; // Use new SCSS module
 
 const AddEditSemesterPage = () => {
   const { semesterId } = useParams();
@@ -90,111 +96,107 @@ const AddEditSemesterPage = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>{isEditMode ? 'Edit Semester' : 'Add New Semester'}</Card.Title>
-        </Card.Header>
-        <Card.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {success && <Alert variant="success">{success}</Alert>}
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Semester' : 'Add New Semester'}</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
+          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
+          {success && <div className={styles.alertSuccess} role="alert">{success}</div>}
           <Form onSubmit={handleSubmit}>
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formSemesterId">
-                  <Form.Label>Semester ID</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="id"
-                    value={formData.id}
-                    readOnly
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formSemesterId"
+                  label="Semester ID"
+                  type="text"
+                  name="id"
+                  value={formData.id}
+                  readOnly
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formSemesterName">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formSemesterName"
+                  label="Name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mb-3">
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formSemesterStartDate">
-                  <Form.Label>Start Date</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="startDate"
-                    value={formData.startDate}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formSemesterStartDate"
+                  label="Start Date"
+                  type="date"
+                  name="startDate"
+                  value={formData.startDate}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formSemesterEndDate">
-                  <Form.Label>End Date</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="endDate"
-                    value={formData.endDate}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formSemesterEndDate"
+                  label="End Date"
+                  type="date"
+                  name="endDate"
+                  value={formData.endDate}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
             </Row>
 
-            <Row>
+            <Row className="mb-3">
                 <Col md={6}>
-                    <Form.Group className="mb-3" controlId="formSemesterRegistrationDeadline">
-                    <Form.Label>Registration Deadline</Form.Label>
-                    <Form.Control
+                    <FormField
+                        controlId="formSemesterRegistrationDeadline"
+                        label="Registration Deadline"
                         type="date"
                         name="registrationDeadline"
                         value={formData.registrationDeadline}
                         onChange={handleChange}
                     />
-                    </Form.Group>
                 </Col>
                 <Col md={6}>
-                    <Form.Group className="mb-3" controlId="formSemesterStatus">
-                    <Form.Label>Status</Form.Label>
-                    <Form.Select
+                    <FormField
+                        controlId="formSemesterStatus"
+                        label="Status"
+                        as="select"
                         name="status"
                         value={formData.status}
                         onChange={handleChange}
                         required
-                    >
-                        <option value="Upcoming">Upcoming</option>
-                        <option value="Active">Active</option>
-                        <option value="Registration Open">Registration Open</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Archived">Archived</option>
-                    </Form.Select>
-                    </Form.Group>
+                        options={[
+                            { value: 'Upcoming', label: 'Upcoming' },
+                            { value: 'Active', label: 'Active' },
+                            { value: 'Registration Open', label: 'Registration Open' },
+                            { value: 'Completed', label: 'Completed' },
+                            { value: 'Archived', label: 'Archived' },
+                        ]}
+                    />
                 </Col>
             </Row>
             
-            <div className="d-flex justify-content-end mt-3">
-              <Button variant="secondary" onClick={() => navigate('/admin/semesters')} className="me-2">
+            <div className={styles.formActions}>
+              <StyledButton variant="secondary" onClick={() => navigate('/admin/semesters')}>
                 Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              </StyledButton>
+              <StyledButton variant="primary" type="submit">
                 {isEditMode ? 'Save Changes' : 'Add Semester'}
-              </Button>
+              </StyledButton>
             </div>
           </Form>
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

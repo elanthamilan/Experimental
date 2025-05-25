@@ -1,11 +1,13 @@
 import React from 'react';
+import { StyledContainer } from '../../components';
+import styles from './AdmissionsPage.module.scss';
 
 const AdmissionsPage = () => {
   return (
-    <div>
-      <h1>Admissions</h1>
-      <p>Details for Admissions will be displayed here.</p>
-    </div>
+    <StyledContainer className={styles.pageContainer}>
+      <h1 className={styles.pageTitle}>Admissions</h1>
+      <p className={styles.pageText}>Details for Admissions will be displayed here.</p>
+    </StyledContainer>
   );
 };
 

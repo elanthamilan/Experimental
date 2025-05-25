@@ -1,0 +1,64 @@
+.pageContainer {
+  padding: var(--spacing-medium) var(--spacing-large);
+  background-color: var(--theme-background);
+  min-height: 100vh;
+}
+
+.formCard {
+  background-color: var(--theme-surface);
+  border: 1px solid var(--theme-outline-variant);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-elevation-2);
+  margin-bottom: var(--spacing-large);
+
+  :global(.card-header) {
+    background-color: var(--theme-surface-container);
+    color: var(--theme-on-surface-variant);
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-semibold);
+    border-bottom: 1px solid var(--theme-outline-variant);
+    padding: var(--spacing-medium) var(--spacing-large);
+  }
+
+  :global(.card-body) {
+    padding: var(--spacing-large);
+    color: var(--theme-on-surface);
+  }
+}
+
+.cardTitle { // For StyledCard.Title
+  font-family: var(--theme-font-display);
+}
+
+.alert {
+  padding: var(--spacing-medium);
+  margin-bottom: var(--spacing-medium);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-medium);
+}
+
+.alertDanger {
+  composes: alert;
+  color: var(--theme-on-error-container);
+  background-color: var(--theme-error-container);
+  border-color: var(--theme-error);
+}
+
+.alertSuccess { // Added for completeness, though not used in the JS provided previously
+  composes: alert;
+  color: var(--theme-on-success-container);
+  background-color: var(--theme-success-container);
+  border-color: var(--theme-success);
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-medium);
+  margin-top: var(--spacing-large); // Ensure space above buttons
+}
+
+// If FormField components need explicit margins and are not wrapped in Col or Row with mb-3
+.formFieldMarginBottom {
+  margin-bottom: var(--spacing-medium); // Standardize margin for standalone FormFields
+}
