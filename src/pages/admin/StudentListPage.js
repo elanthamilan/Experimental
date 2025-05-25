@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockStudents } from '../../data/mockStudents';
-import { Form, Row, Col } from 'react-bootstrap';
+import { Pagination } from 'react-bootstrap';
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
-import { Pagination } from 'react-bootstrap'; // Import Pagination
-import {
-  StyledContainer,
   StyledTable,
-  // StyledCard, // Will be removed for filters
   StyledButton,
   FormField,
   StyledFormControl, // For page input
@@ -56,7 +52,7 @@ const StudentListPage = () => {
       setCurrentPage(pageNumber);
     }
   };
-  
+
   const handlePageInputSubmit = (e) => {
     e.preventDefault();
     const pageNumber = parseInt(e.target.elements.pageInput.value, 10);
@@ -67,7 +63,7 @@ const StudentListPage = () => {
     setItemsPerPage(Number(event.target.value));
     setCurrentPage(1); // Reset to first page
   };
-  
+
   // Generate pagination items
   const paginationItems = [];
   if (totalPages <= 7) { // Show all pages if 7 or less
@@ -92,7 +88,7 @@ const StudentListPage = () => {
 
     if (currentPage <= 2) endPage = Math.min(totalPages -1, 3);
     if (currentPage >= totalPages -1) startPage = Math.max(2, totalPages -2);
-    
+
     for (let number = startPage; number <= endPage; number++) {
       paginationItems.push(
         <Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>
@@ -191,7 +187,7 @@ const StudentListPage = () => {
                 <StyledButton
                   variant="outline-info"
                   size="sm"
-                  className="me-2 mb-1 mb-md-0" 
+                  className="me-2 mb-1 mb-md-0"
                   onClick={() => navigate(`/profile/${student.id}`)}
                 >
                   <span className={`material-symbols-outlined ${styles.actionButtonIcon}`}>visibility</span> {/* Apply actionButtonIcon */}

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Nav, Collapse, OverlayTrigger, Tooltip } from 'react-bootstrap'; // Added OverlayTrigger, Tooltip
 import StyledButton from './atoms/StyledButton';
@@ -148,12 +147,12 @@ const LeftSidebar = () => {
            path: '/admin/organisation/hierarchy',
            roles: [USER_ROLES.ADMIN]
          },
-         { 
-           eventKey: 'component_preview', 
-           icon: 'science', 
-           label: 'Component Preview', 
-           path: '/component-preview', 
-           roles: [USER_ROLES.ADMIN] 
+         {
+           eventKey: 'component_preview',
+           icon: 'science',
+           label: 'Component Preview',
+           path: '/component-preview',
+           roles: [USER_ROLES.ADMIN]
          } // Added Component Preview link
       ]
     },
@@ -196,7 +195,7 @@ const LeftSidebar = () => {
     if (changed) {
       setOpenGroups(initialOpenGroupsState);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navGroups]); // Rerun if navGroups structure changes (e.g. new group added)
   // Removed openGroups from dependency array to prevent loop, as we are setting it here.
   // This hook's purpose is to initialize open state for *newly added* groups.

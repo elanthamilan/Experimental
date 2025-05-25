@@ -1,4 +1,3 @@
-import React from 'react';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockCourses } from '../../data/mockCourses';
@@ -70,7 +69,7 @@ const CourseListPage = () => {
     setItemsPerPage(Number(event.target.value));
     setCurrentPage(1);
   };
-  
+
   const paginationItems = [];
   if (totalPages > 0) {
     if (totalPages <= 7) {
@@ -188,7 +187,7 @@ const CourseListPage = () => {
         </tbody>
       </StyledTable>
       {filteredCourses.length === 0 && <p className={styles.noDataText}>No courses found matching your criteria.</p>}
-      
+
       {totalPages > 0 && (
         <div className={styles.paginationContainer}>
           <span className={styles.resultsText}>
@@ -208,7 +207,7 @@ const CourseListPage = () => {
                 type="number"
                 name="pageInput"
                 defaultValue={currentPage}
-                key={currentPage} 
+                key={currentPage}
                 className={styles.pageInput}
                 min="1"
                 max={totalPages}

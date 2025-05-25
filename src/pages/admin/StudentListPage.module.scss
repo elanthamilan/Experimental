@@ -26,7 +26,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end; /* Align items to bottom for varied heights */
-  padding: v.$spacing-medium v.$spacing-large; /* Use theme variables */
+  padding: var(--spacing-medium) var(--spacing-large); /* Use theme variables */
   background-color: var(--theme-surface-container-lowest); /* Subtle background */
   border-radius: var(--border-radius-medium);
   margin-bottom: var(--spacing-large);
@@ -45,7 +45,7 @@
     flex-grow: 1; /* Allow individual filters to grow */
     min-width: 200px; /* Minimum width for filters */
   }
-  
+
   .actionsSection { // Wrapper for action buttons like "Add New"
     display: flex;
     align-items: flex-end; /* Align with form fields */

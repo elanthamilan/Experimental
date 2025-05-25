@@ -1,4 +1,3 @@
-import React from 'react';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockStaff } from '../../data/mockStaff';
@@ -59,7 +58,7 @@ const StaffListPage = () => {
       setCurrentPage(pageNumber);
     }
   };
-  
+
   const handlePageInputSubmit = (e) => {
     e.preventDefault();
     const pageNumber = parseInt(e.target.elements.pageInput.value, 10);
@@ -79,7 +78,7 @@ const StaffListPage = () => {
       default: return <StyledBadge variant="secondary">{status}</StyledBadge>;
     }
   };
-  
+
   const paginationItems = [];
   if (totalPages > 0) {
     if (totalPages <= 7) {

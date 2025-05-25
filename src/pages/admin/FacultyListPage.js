@@ -1,4 +1,3 @@
-import React from 'react';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockFaculty } from '../../data/mockFaculty';
@@ -66,7 +65,7 @@ const FacultyListPage = () => {
     setItemsPerPage(Number(event.target.value));
     setCurrentPage(1);
   };
-  
+
   const paginationItems = [];
   if (totalPages > 0) {
     if (totalPages <= 7) {
@@ -119,7 +118,7 @@ const FacultyListPage = () => {
                 />
               </div>
               <div className={styles.dropdownFilterItem}>
-                <FormField 
+                <FormField
                   controlId="titleFilter"
                   label="Title/Role"
                   as="select" // Changed to select for consistency, can be text if free-form search is preferred
@@ -197,7 +196,7 @@ const FacultyListPage = () => {
                 type="number"
                 name="pageInput"
                 defaultValue={currentPage}
-                key={currentPage} 
+                key={currentPage}
                 className={styles.pageInput}
                 min="1"
                 max={totalPages}

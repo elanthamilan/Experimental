@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockPrograms } from '../../data/mockPrograms';
 import { Pagination } from 'react-bootstrap';
@@ -67,7 +66,7 @@ const ProgramListPage = () => {
     setItemsPerPage(Number(event.target.value));
     setCurrentPage(1);
   };
-  
+
   const paginationItems = [];
   if (totalPages > 0) {
     if (totalPages <= 7) {
@@ -95,7 +94,7 @@ const ProgramListPage = () => {
         <StyledCard.Header>
           <StyledCard.Title className={styles.cardTitle}>Program Management</StyledCard.Title>
         </StyledCard.Header>
-        
+
         <div className={styles.tableControls}>
           <div className={styles.filterSection}>
             <div className={styles.searchFilterItem}>
@@ -198,7 +197,7 @@ const ProgramListPage = () => {
                 type="number"
                 name="pageInput"
                 defaultValue={currentPage}
-                key={currentPage} 
+                key={currentPage}
                 className={styles.pageInput}
                 min="1"
                 max={totalPages}

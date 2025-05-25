@@ -184,12 +184,13 @@
     border: 1px solid var(--theme-outline);
     /* background-color will be applied inline via JS */
   }
-  .colorValueSwatch {
-    composes: previewSwatch;
-    /* background-color will be applied inline via JS */
-  }
   .colorName { min-width: 180px; color: var(--theme-on-surface-variant); }
   .colorValue { font-family: monospace; color: var(--theme-on-surface); }
+}
+
+.colorValueSwatch {
+  composes: previewSwatch;
+  /* background-color will be applied inline via JS */
 }
 
 // Styles for Custom Font Selection
