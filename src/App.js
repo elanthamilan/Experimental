@@ -51,6 +51,11 @@ import ExamScheduleListPage from './pages/academic/ExamScheduleListPage';
 import AddEditExamSchedulePage from './pages/academic/AddEditExamSchedulePage';
 // Course Detail Page Import
 import CourseDetailPage from './pages/academic/CourseDetailPage';
+// Component Preview Page Import
+import ComponentPreviewPage from './pages/ComponentPreviewPage';
+// Settings Page Import
+import SettingsPage from './pages/SettingsPage';
+import { fontWeightOptions } from './data/fonts'; // Import fontWeightOptions
 
 import styles from './App.module.scss';
 import './App.css';
@@ -66,13 +71,6 @@ const USER_ROLES = {
   TEACHER: 'Teacher',
   STUDENT: 'Student',
 };
-
-// Font weight options
-const fontWeightOptions = [
-  { label: 'Normal', value: 'normal', cssValue: '400' },
-  { label: 'Bold', value: 'bold', cssValue: '700' },
-  { label: 'Extra Bold', value: 'xbold', cssValue: '800' }, // Common value for extra-bold
-];
 
 // Custom hook to detect clicks outside an element - No longer needed for theme modal
 // function useOutsideAlerter(ref, callback) {
@@ -90,7 +88,7 @@ const fontWeightOptions = [
 // }
 
 const UtilitySidebar = () => {
-  const { currentTheme, setTheme, globalFontWeight, setGlobalFontWeight, currentUserRole, setCurrentUserRole, USER_ROLES } = useTheme();
+  const { currentTheme, setTheme, globalFontWeight, setGlobalFontWeight, currentUserRole, setCurrentUserRole, USER_ROLES, isDarkMode, setIsDarkMode } = useTheme(); // Added isDarkMode, setIsDarkMode
   const [showThemeModal, setShowThemeModal] = useState(false);
   // const themeMenuRef = useRef(null); // No longer needed
   // useOutsideAlerter(themeMenuRef, () => setShowThemeMenu(false)); // No longer needed
@@ -205,6 +203,19 @@ const UtilitySidebar = () => {
               />
             ))}
           </Form>
+
+          <hr className={styles.modalDivider} />
+          <Modal.Title as="h6" className={styles.modalSectionTitle}>Appearance</Modal.Title>
+          <Form>
+            <Form.Check
+              type="switch"
+              id="dark-mode-switch"
+              label="Dark Mode"
+              checked={isDarkMode}
+              onChange={() => setIsDarkMode(!isDarkMode)}
+              className={styles.themeRadioItem} // Re-use style for consistent appearance
+            />
+          </Form>
         </Modal.Body>
       </Modal>
 
@@ -252,10 +263,11 @@ function App() {
   const [currentTheme, setCurrentTheme] = useState(themes[0].id);
   const [globalFontWeight, setGlobalFontWeight] = useState(fontWeightOptions[0].value); // Default to 'normal'
   const [currentUserRole, setCurrentUserRole] = useState(USER_ROLES.ADMIN); // Default role
+  const [isDarkMode, setIsDarkMode] = useState(false); // Added isDarkMode state
 
   useEffect(() => {
-    applyTheme(currentTheme); // Applies color and font-family variables
-  }, [currentTheme]);
+    applyTheme(currentTheme, isDarkMode); // Applies color and font-family variables, now with isDarkMode
+  }, [currentTheme, isDarkMode]); // Added isDarkMode to dependency array
   
   useEffect(() => {
     const selectedWeight = fontWeightOptions.find(fw => fw.value === globalFontWeight);
@@ -276,7 +288,9 @@ function App() {
       setGlobalFontWeight,
       currentUserRole,
       setCurrentUserRole,
-      USER_ROLES // Expose USER_ROLES if needed by consumers
+      USER_ROLES, // Expose USER_ROLES if needed by consumers
+      isDarkMode, // Added isDarkMode to context
+      setIsDarkMode // Added setIsDarkMode to context
     }}>
       <div className={`${styles.appContainer} ${isMobile ? styles.mobile : ''}`}>
         {!isMobile ? (
@@ -330,6 +344,7 @@ function App() {
               <Route path="/billing" element={<BillingPage />} />
               <Route path="/reports" element={<ReportsPage />} />
               <Route path="/profile" element={<UserProfilePage />} />
+              <Route path="/settings" element={<SettingsPage />} />
 
               {/* Faculty Management Routes */}
               <Route path="/admin/faculty" element={<FacultyListPage />} />
@@ -375,6 +390,9 @@ function App() {
               <Route path="/academic/examschedules" element={<ExamScheduleListPage />} />
               <Route path="/academic/examschedules/new" element={<AddEditExamSchedulePage />} />
               <Route path="/academic/examschedules/edit/:scheduleId" element={<AddEditExamSchedulePage />} />
+
+              {/* Component Preview Page Route */}
+              <Route path="/component-preview" element={<ComponentPreviewPage />} />
             </Routes>
           </main>
         </div>

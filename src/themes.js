@@ -420,13 +420,12 @@ export const themes = [
   }
 ];
 
-export const applyTheme = (themeId) => {
+export const applyTheme = (themeId, isDark = false) => { // Added isDark parameter with a default
   const selectedTheme = themes.find(t => t.id === themeId) || themes[0];
 
   if (selectedTheme && selectedTheme.seedColors) {
     const { primary, secondary, tertiary } = selectedTheme.seedColors;
-    // Assuming isDark is false for all current themes as per problem description
-    const isDark = false;
+    // isDark is now passed as a parameter
     const fullPalette = generateThemeColors(primary, secondary, tertiary, isDark);
 
     for (const colorVar in fullPalette) {
