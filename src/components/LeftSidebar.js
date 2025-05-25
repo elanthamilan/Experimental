@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Nav, Collapse } from 'react-bootstrap';
 import StyledButton from './atoms/StyledButton'; // Restoring import
@@ -41,17 +41,18 @@ const LeftSidebar = () => {
   // Using Material Symbols
   const Icon = ({ name, className = '' }) => <span className={`material-symbols-outlined ${className}`}>{name}</span>;
 
-  // Grouping navigation items logically with paths
-  const navGroups = {
+  // Grouping navigation items logically with paths - memoized to prevent infinite re-renders
+  const navGroups = useMemo(() => ({
     topLevel: [
       { eventKey: 'dashboard', icon: 'dashboard', label: 'Dashboard', path: '/dashboard' },
       { eventKey: 'profile', icon: 'account_circle', label: 'User Profile', path: '/profile' },
+      { eventKey: 'settings', icon: 'settings', label: 'Settings', path: '/settings' },
     ],
     academics: {
       title: 'Academics',
       items: [
-        { 
-          eventKey: 'courses', icon: 'menu_book', label: 'Courses', path: '/courses', 
+        {
+          eventKey: 'courses', icon: 'menu_book', label: 'Courses', path: '/courses',
           // Assuming courses list is viewable by all, but management is admin/teacher
           children: [
             { eventKey: 'course_list', label: 'Course List', path: '/courses' }, // All users
@@ -72,8 +73,8 @@ const LeftSidebar = () => {
           path: '/admin/semesters',
           roles: [USER_ROLES.ADMIN]
         },
-        { 
-          eventKey: 'gradebook', icon: 'assessment', label: 'Gradebook', path: '/grades', 
+        {
+          eventKey: 'gradebook', icon: 'assessment', label: 'Gradebook', path: '/grades',
           roles: [USER_ROLES.TEACHER, USER_ROLES.STUDENT] // Teachers manage, Students view their own
         },
         { eventKey: 'assignment_student', icon: 'assignment', label: 'My Assignments', path: '/assignments', roles: [USER_ROLES.STUDENT] },
@@ -90,31 +91,31 @@ const LeftSidebar = () => {
     administration: {
       title: 'Administration',
       items: [
-         { 
+         {
            eventKey: 'admissions_group', // New eventKey for parent
-           icon: 'confirmation_number', 
-           label: 'Admissions', 
+           icon: 'confirmation_number',
+           label: 'Admissions',
            // path: '/admissions', // Optional: parent can still link to main admissions page
            roles: [USER_ROLES.ADMIN],
            children: [
              { eventKey: 'admissions_dashboard', label: 'Admissions Overview', path: '/admissions', roles: [USER_ROLES.ADMIN] }, // Link to existing page
              { eventKey: 'app_form_fields', label: 'Form Fields Config', path: '/admin/admissions/formfields', roles: [USER_ROLES.ADMIN] },
-             { 
-               eventKey: 'submitted_applications', 
-               label: 'Submitted Applications', 
-               path: '/admissions/applications', 
-               roles: [USER_ROLES.ADMIN] 
+             {
+               eventKey: 'submitted_applications',
+               label: 'Submitted Applications',
+               path: '/admissions/applications',
+               roles: [USER_ROLES.ADMIN]
              }
            ]
          },
-         { 
-           eventKey: 'students', icon: 'school', label: 'Students', path: '/students', roles: [USER_ROLES.ADMIN], 
+         {
+           eventKey: 'students', icon: 'school', label: 'Students', path: '/students', roles: [USER_ROLES.ADMIN],
            children: [
              { eventKey: 'student_list', label: 'Student List', path: '/students', roles: [USER_ROLES.ADMIN]},
              { eventKey: 'add_student', label: 'Add New Student', path: '/students/new', roles: [USER_ROLES.ADMIN]}
            ]
          },
-         { 
+         {
            eventKey: 'staff', icon: 'groups', label: 'Staff', path: '/staff', roles: [USER_ROLES.ADMIN],
            children: [
              { eventKey: 'staff_list', label: 'Staff List', path: '/staff', roles: [USER_ROLES.ADMIN]},
@@ -159,7 +160,7 @@ const LeftSidebar = () => {
       ]
     },
     // Removed facilities and studentServices for brevity in example, can be added back similarly
-  };
+  }), [USER_ROLES]); // Only recreate when USER_ROLES changes
 
   // Filter logic based on role and search term
   // Initialize openGroups based on all group keys to ensure new groups are considered
@@ -182,7 +183,7 @@ const LeftSidebar = () => {
 
   useEffect(() => {
     const lowerSearch = searchTerm.toLowerCase();
-    
+
     let newTopLevel = navGroups.topLevel.filter(item =>
       (!item.roles || item.roles.includes(currentUserRole)) &&
       item.label.toLowerCase().includes(lowerSearch)
@@ -256,7 +257,7 @@ const LeftSidebar = () => {
          {/* Icon can be kept or removed based on design preference with new logo style */}
          {/* <Icon name="unfold_more" className={styles.brandExpandIcon} /> */}
       </div>
-      
+
       {/* Search Functionality */}
       <div className={styles.sidebarSearchContainer}>
         <Icon name="search" className={styles.searchIcon} />
@@ -282,7 +283,7 @@ const LeftSidebar = () => {
             key={item.eventKey}
             className={`${styles.navLink} ${activeKey === item.eventKey ? styles.active : ''} d-flex align-items-center px-3 py-2`} // Basic styling, you might need to adjust
             onClick={() => setActiveKey(item.eventKey)} // Keep active state update
-            style={{ textDecoration: 'none' }} 
+            style={{ textDecoration: 'none' }}
           >
             <Icon name={item.icon} className={styles.navLinkIcon} /> <span className="ms-2">{item.label}</span>
           </Link>
@@ -304,7 +305,7 @@ const LeftSidebar = () => {
          );
       }
       // Fallback or non-navigational items (if any)
-      return null; 
+      return null;
     })}
 
         {groupedItems.length === 0 && searchTerm && topLevelItems.length > 0 ? (
@@ -389,7 +390,7 @@ const LeftSidebar = () => {
                         </div>
                       );
                     } else if (hasChildren) { // Purely a toggle, not a link itself (item.path is false)
-                        return ( 
+                        return (
                           <div key={item.eventKey} className={styles.level2Wrapper}>
                             <StyledButton // This is a toggle-only button
                               variant="link"
@@ -435,7 +436,7 @@ const LeftSidebar = () => {
                         );
                     }
                     // Fallback for items that don't fit above criteria (e.g. no path, no children)
-                    return null; 
+                    return null;
                   })}
                 </div>
               </Collapse>

@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockDepartments } from '../../data/mockDepartments';
 import { mockFaculty } from '../../data/mockFaculty';
-import { Button, Table, Card } from 'react-bootstrap';
+// Import custom styled components from centralized design system
+import { StyledContainer, StyledTable, StyledCard, StyledButton } from '../../components';
 import styles from './AdminPages.module.scss';
 
 const DepartmentListPage = () => {
@@ -15,23 +16,23 @@ const DepartmentListPage = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>Department Management</Card.Title>
-        </Card.Header>
-        <Card.Body>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title>Department Management</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
           <div className="d-flex justify-content-end mb-3">
-            <Button variant="primary" onClick={() => navigate('/admin/masterdata/departments/new')}>
+            <StyledButton variant="primary" onClick={() => navigate('/admin/masterdata/departments/new')}>
               <span className="material-symbols-outlined me-2" style={{ verticalAlign: 'middle' }}>add</span>
               Add New Department
-            </Button>
+            </StyledButton>
           </div>
 
           {mockDepartments.length === 0 ? (
             <p>No departments found.</p>
           ) : (
-            <Table striped bordered hover responsive className={styles.table}>
+            <StyledTable striped bordered hover responsive className={styles.table}>
               <thead>
                 <tr>
                   <th>Department ID</th>
@@ -51,23 +52,23 @@ const DepartmentListPage = () => {
                     <td>{dept.description}</td>
                     <td>{dept.officeLocation}</td>
                     <td>
-                      <Button
+                      <StyledButton
                         variant="outline-primary"
                         size="sm"
                         onClick={() => navigate(`/admin/masterdata/departments/edit/${dept.id}`)}
                         title="Edit Department"
                       >
                         <span className="material-symbols-outlined">edit</span>
-                      </Button>
+                      </StyledButton>
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </Table>
+            </StyledTable>
           )}
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

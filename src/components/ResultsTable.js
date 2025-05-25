@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-// Removed unused Form, BootstrapButton
-import { Container, Table, Pagination, InputGroup, DropdownButton, Dropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom'; // Import Link
-import StyledButton from './atoms/StyledButton'; // Import atom
-import StyledFormCheck from './atoms/StyledFormCheck'; // Import atom
-import StyledFormControl from './atoms/StyledFormControl'; // Import atom
-import StyledFormSelect from './atoms/StyledFormSelect'; // Import atom
+import { Pagination, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import StyledContainer from './atoms/StyledContainer';
+import StyledTable from './atoms/StyledTable';
+import StyledButton from './atoms/StyledButton';
+import StyledFormCheck from './atoms/StyledFormCheck';
+import StyledBadge from './atoms/StyledBadge';
+import StyledFormControl from './atoms/StyledFormControl';
+import StyledFormSelect from './atoms/StyledFormSelect';
+import SearchInput from './molecules/SearchInput';
 import styles from './ResultsTable.module.scss';
 
 const ResultsTable = () => {
@@ -46,6 +49,7 @@ const ResultsTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const headerCheckboxRef = useRef(null); // Ref for indeterminate state
 
   // Filter/Tab state - Counts updated based on new data
@@ -134,7 +138,7 @@ const ResultsTable = () => {
   const numSelected = selectedRows.length;
 
   return (
-    <Container fluid className={styles.resultsTableContainer}>
+    <StyledContainer fluid className={styles.resultsTableContainer}>
       {/* Conditionally render controls or multi-select bar */}
       {numSelected === 0 ? (
         <div className={styles.tableControls}>
@@ -151,11 +155,12 @@ const ResultsTable = () => {
           ))}
         </div>
         <div className={styles.tableActions}>
-          <InputGroup className={styles.searchInput}>
-            <InputGroup.Text><span className="material-symbols-outlined">search</span></InputGroup.Text>
-            {/* Use StyledFormControl */}
-            <StyledFormControl placeholder="Search all" />
-          </InputGroup>
+          <SearchInput
+            placeholder="Search all"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className={styles.searchInput}
+          />
           {/* Re-adding Action Dropdown and adding Add Button */}
           {/* Using Bootstrap DropdownButton for now, ensure variant matches StyledButton */}
           <DropdownButton id="actions-dropdown" title="Action" variant="outline-secondary" className={styles.actionDropdown}>
@@ -190,7 +195,7 @@ const ResultsTable = () => {
       )}
 
 
-      <Table hover responsive className={styles.dataTable}>
+      <StyledTable variant="hover" responsive className={styles.dataTable}>
         <thead>
           <tr>
             <th>
@@ -244,11 +249,12 @@ const ResultsTable = () => {
                 </span>
               </td>
               <td>
-                 {/* Dynamically apply status class */}
-                <span className={`${styles.statusBadge} ${styles[item.status?.toLowerCase() || 'pending']}`}>
-                  <span className={styles.statusIcon}></span>
+                <StyledBadge
+                  variant={item.status === 'Published' ? 'success' : item.status === 'Draft' ? 'secondary' : 'warning'}
+                  size="sm"
+                >
                   {item.status}
-                </span>
+                </StyledBadge>
               </td>
               {/* Replace button with More Options dropdown */}
               <td>
@@ -268,7 +274,7 @@ const ResultsTable = () => {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </StyledTable>
 
       <div className={styles.paginationContainer}>
          {/* Update results text based on filtered data */}
@@ -332,7 +338,7 @@ const ResultsTable = () => {
           </StyledFormSelect> {/* Close the tag */}
         </div>
       </div>
-    </Container>
+    </StyledContainer>
   );
 };
 

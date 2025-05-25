@@ -1,8 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useTheme } from '../../src/App'; // Corrected path
-import { themes as predefinedThemes, generateThemeColors } from '../../src/themes';
-import { googleFonts, fontWeightOptions } from '../../src/data/fonts';
-import { Container, Row, Col, Card, Button, ListGroup, Form } from 'react-bootstrap';
+import { useTheme } from '../App'; // Corrected path
+import { themes as predefinedThemes, generateThemeColors } from '../themes';
+import { googleFonts, fontWeightOptions } from '../data/fonts';
+import { Row, Col, ListGroup, Form } from 'react-bootstrap';
+// Import custom styled components from centralized design system
+import {
+  StyledContainer,
+  StyledCard,
+  StyledButton,
+  StyledFormLabel,
+  StyledFormCheck,
+  FormField
+} from '../components';
 import styles from './SettingsPage.module.scss';
 
 const SettingsPage = () => {
@@ -149,10 +158,10 @@ const SettingsPage = () => {
     const bodyFontValue = googleFonts.find(f => f.name === themeToApply.fonts.body)?.value || themeToApply.fonts.body;
     setSelectedDisplayFont(displayFontValue);
     setSelectedBodyFont(bodyFontValue);
-    
+
     // Set base font size
     setBaseFontSize(themeToApply.baseFontSize);
-    
+
     // Set global font weight (this will trigger context update and App.js useEffect)
     setGlobalFontWeight(themeToApply.globalFontWeight);
 
@@ -169,14 +178,14 @@ const SettingsPage = () => {
 
 
   return (
-    <Container fluid className={styles.settingsPageContainer}>
+    <StyledContainer fluid className={styles.settingsPageContainer}>
       <h1 className={styles.pageTitle}>Settings</h1>
       <Row>
         <Col lg={8} md={12} className="mb-4">
           {/* Predefined Themes Section */}
-          <Card className={styles.settingsSectionCard}>
-            <Card.Header>Predefined Themes</Card.Header>
-            <Card.Body>
+          <StyledCard className={styles.settingsSectionCard}>
+            <StyledCard.Header>Predefined Themes</StyledCard.Header>
+            <StyledCard.Body>
               <ListGroup variant="flush" className={styles.themeListContainer}>
                 {predefinedThemes.map((theme) => (
                   <ListGroup.Item
@@ -193,7 +202,7 @@ const SettingsPage = () => {
                       <p>Display: {theme.fonts.display}, Body: {theme.fonts.body}</p>
                       {theme.vibe && <p><em>Vibe: {theme.vibe}</em></p>}
                     </div>
-                    <Button
+                    <StyledButton
                       variant={currentTheme === theme.id ? 'success' : 'primary'}
                       size="sm"
                       onClick={() => handleApplyPredefinedTheme(theme.id)}
@@ -201,18 +210,18 @@ const SettingsPage = () => {
                       className={styles.applyButton}
                     >
                       {currentTheme === theme.id && !savedCustomThemes.find(ct => ct.id === currentTheme) ? 'Applied' : 'Apply'}
-                    </Button>
+                    </StyledButton>
                   </ListGroup.Item>
                 ))}
               </ListGroup>
-            </Card.Body>
-          </Card>
+            </StyledCard.Body>
+          </StyledCard>
 
           {/* My Custom Themes Section */}
           {savedCustomThemes.length > 0 && (
-            <Card className={styles.settingsSectionCard}>
-              <Card.Header>My Custom Themes</Card.Header>
-              <Card.Body>
+            <StyledCard className={styles.settingsSectionCard}>
+              <StyledCard.Header>My Custom Themes</StyledCard.Header>
+              <StyledCard.Body>
                 <ListGroup variant="flush" className={styles.myThemesListContainer}>
                   {savedCustomThemes.map((theme) => (
                     <ListGroup.Item key={theme.id} className={styles.myThemeListItem}>
@@ -227,39 +236,53 @@ const SettingsPage = () => {
                         <p>Base Size: {theme.baseFontSize}px, Weight: {fontWeightOptions.find(fw => fw.value === theme.globalFontWeight)?.label || theme.globalFontWeight}</p>
                       </div>
                       <div className={styles.themeActions}>
-                        <Button variant="outline-primary" size="sm" onClick={() => handleApplySavedTheme(theme)} className={styles.applyButton}>Apply</Button>
-                        <Button variant="outline-danger" size="sm" onClick={() => handleDeleteSavedTheme(theme.id)} className={styles.deleteThemeButton}>Delete</Button>
+                        <StyledButton variant="outline-primary" size="sm" onClick={() => handleApplySavedTheme(theme)} className={styles.applyButton}>Apply</StyledButton>
+                        <StyledButton variant="outline-danger" size="sm" onClick={() => handleDeleteSavedTheme(theme.id)} className={styles.deleteThemeButton}>Delete</StyledButton>
                       </div>
                     </ListGroup.Item>
                   ))}
                 </ListGroup>
-              </Card.Body>
-            </Card>
+              </StyledCard.Body>
+            </StyledCard>
           )}
         </Col>
 
         {/* Customization Column */}
         <Col lg={4} md={12}>
-          <Card className={styles.settingsSectionCard}>
-            <Card.Header>Customize & Save Theme</Card.Header>
-            <Card.Body>
+          <StyledCard className={styles.settingsSectionCard}>
+            <StyledCard.Header>Customize & Save Theme</StyledCard.Header>
+            <StyledCard.Body>
               {/* Custom Color Builder */}
               <div className={styles.customThemeBuilderSection}>
                 <h5>Colors</h5>
                 <Form>
-                  <Form.Group controlId="customPrimaryColor" className={styles.colorPickerGroup}>
-                    <Form.Label>Primary</Form.Label>
-                    <Form.Control type="color" value={customPrimary} onChange={(e) => setCustomPrimary(e.target.value)} title="Primary Color" />
-                  </Form.Group>
-                  {/* ... Secondary and Tertiary color pickers ... */}
-                  <Form.Group controlId="customSecondaryColor" className={styles.colorPickerGroup}>
-                    <Form.Label>Secondary</Form.Label>
-                    <Form.Control type="color" value={customSecondary} onChange={(e) => setCustomSecondary(e.target.value)} title="Secondary Color" />
-                  </Form.Group>
-                  <Form.Group controlId="customTertiaryColor" className={styles.colorPickerGroup}>
-                    <Form.Label>Tertiary</Form.Label>
-                    <Form.Control type="color" value={customTertiary} onChange={(e) => setCustomTertiary(e.target.value)} title="Tertiary Color" />
-                  </Form.Group>
+                  <FormField
+                    controlId="customPrimaryColor"
+                    label="Primary"
+                    type="color"
+                    value={customPrimary}
+                    onChange={(e) => setCustomPrimary(e.target.value)}
+                    title="Primary Color"
+                    className={styles.colorPickerGroup}
+                  />
+                  <FormField
+                    controlId="customSecondaryColor"
+                    label="Secondary"
+                    type="color"
+                    value={customSecondary}
+                    onChange={(e) => setCustomSecondary(e.target.value)}
+                    title="Secondary Color"
+                    className={styles.colorPickerGroup}
+                  />
+                  <FormField
+                    controlId="customTertiaryColor"
+                    label="Tertiary"
+                    type="color"
+                    value={customTertiary}
+                    onChange={(e) => setCustomTertiary(e.target.value)}
+                    title="Tertiary Color"
+                    className={styles.colorPickerGroup}
+                  />
                 </Form>
                 {generatedCustomPalette && (
                   <div className={styles.generatedColorsPreview}>
@@ -284,18 +307,24 @@ const SettingsPage = () => {
               <div className={styles.customFontSelectorSection}>
                 <h5>Fonts</h5>
                 <Form>
-                  <Form.Group controlId="displayFontSelect" className={styles.fontSelectorGroup}>
-                    <Form.Label>Display Font</Form.Label>
-                    <Form.Select value={selectedDisplayFont} onChange={(e) => setSelectedDisplayFont(e.target.value)}>
-                      {googleFonts.map(font => (<option key={`display-${font.name}`} value={font.value}>{font.name}</option>))}
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group controlId="bodyFontSelect" className={styles.fontSelectorGroup}>
-                    <Form.Label>Body Font</Form.Label>
-                    <Form.Select value={selectedBodyFont} onChange={(e) => setSelectedBodyFont(e.target.value)}>
-                      {googleFonts.map(font => (<option key={`body-${font.name}`} value={font.value}>{font.name}</option>))}
-                    </Form.Select>
-                  </Form.Group>
+                  <FormField
+                    controlId="displayFontSelect"
+                    label="Display Font"
+                    as="select"
+                    value={selectedDisplayFont}
+                    onChange={(e) => setSelectedDisplayFont(e.target.value)}
+                    options={googleFonts.map(font => ({ value: font.value, label: font.name }))}
+                    className={styles.fontSelectorGroup}
+                  />
+                  <FormField
+                    controlId="bodyFontSelect"
+                    label="Body Font"
+                    as="select"
+                    value={selectedBodyFont}
+                    onChange={(e) => setSelectedBodyFont(e.target.value)}
+                    options={googleFonts.map(font => ({ value: font.value, label: font.name }))}
+                    className={styles.fontSelectorGroup}
+                  />
                 </Form>
               </div>
               <hr/>
@@ -303,31 +332,46 @@ const SettingsPage = () => {
               <div>
                 <h5>Global Typography</h5>
                 <Form>
-                  <Form.Group controlId="baseFontSize" className={styles.fontSizeControlGroup}>
-                    <Form.Label>Base Size (px)</Form.Label>
-                    <Form.Control type="number" value={baseFontSize} onChange={(e) => setBaseFontSize(Math.max(10, Math.min(24, Number(e.target.value))))} min="10" max="24" />
-                  </Form.Group>
+                  <FormField
+                    controlId="baseFontSize"
+                    label="Base Size (px)"
+                    type="number"
+                    value={baseFontSize}
+                    onChange={(e) => setBaseFontSize(Math.max(10, Math.min(24, Number(e.target.value))))}
+                    min="10"
+                    max="24"
+                    className={styles.fontSizeControlGroup}
+                  />
                   <Form.Group controlId="globalFontWeight" className={styles.fontWeightSelectorGroup}>
-                    <Form.Label>Font Weight</Form.Label>
+                    <StyledFormLabel>Font Weight</StyledFormLabel>
                     <div className={styles.fontWeightRadioGroup}>
                       {fontWeightOptions.map(fw => (
-                        <Form.Check type="radio" key={fw.value} id={`gfw-${fw.value}`} name="gfw" label={fw.label} value={fw.value} checked={globalFontWeight === fw.value} onChange={() => setGlobalFontWeight(fw.value)} />
+                        <StyledFormCheck
+                          type="radio"
+                          key={fw.value}
+                          id={`gfw-${fw.value}`}
+                          name="gfw"
+                          label={fw.label}
+                          value={fw.value}
+                          checked={globalFontWeight === fw.value}
+                          onChange={() => setGlobalFontWeight(fw.value)}
+                        />
                       ))}
                     </div>
                   </Form.Group>
                 </Form>
               </div>
-              <Button variant="success" onClick={handleSaveCustomTheme} className={styles.saveThemeButton}>
+              <StyledButton variant="success" onClick={handleSaveCustomTheme} className={styles.saveThemeButton}>
                 Save Current Custom Theme
-              </Button>
+              </StyledButton>
               <p className={styles.placeholderText} style={{marginTop: '1rem', fontSize: '0.8rem'}}>
                 Live previews are temporary. Save to persist your custom settings.
               </p>
-            </Card.Body>
-          </Card>
+            </StyledCard.Body>
+          </StyledCard>
         </Col>
       </Row>
-    </Container>
+    </StyledContainer>
   );
 };
 

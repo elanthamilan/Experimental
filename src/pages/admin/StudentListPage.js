@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockStudents } from '../../data/mockStudents';
-import { Button, Table, Form, Row, Col, Card } from 'react-bootstrap';
+import { Form, Row, Col } from 'react-bootstrap';
+// Import custom styled components from centralized design system
+import {
+  StyledContainer,
+  StyledTable,
+  StyledCard,
+  StyledButton,
+  FormField
+} from '../../components';
 import styles from './AdminPages.module.scss';
 
 const StudentListPage = () => {
@@ -32,56 +40,61 @@ const StudentListPage = () => {
   });
 
   return (
-    <div className={styles.pageContainer}>
+    <StyledContainer className={styles.pageContainer}>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1>Student Management</h1>
-        <Button variant="primary" onClick={() => navigate('/students/new')}>
+        <StyledButton variant="primary" onClick={() => navigate('/students/new')}>
           <span className="material-symbols-outlined me-2" style={{ verticalAlign: 'middle' }}>add</span>
           Add New Student
-        </Button>
+        </StyledButton>
       </div>
 
-      <Card className="mb-4">
-        <Card.Body>
+      <StyledCard className="mb-4">
+        <StyledCard.Body>
           <Form>
             <Row className="g-3">
               <Col md={4}>
-                <Form.Group controlId="searchTerm">
-                  <Form.Label>Search by Name/Email</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter name or email..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="searchTerm"
+                  label="Search by Name/Email"
+                  type="text"
+                  placeholder="Enter name or email..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </Col>
               <Col md={4}>
-                <Form.Group controlId="statusFilter">
-                  <Form.Label>Filter by Enrollment Status</Form.Label>
-                  <Form.Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                    {statusOptions.map(status => (
-                      <option key={status} value={status === 'All' ? '' : status}>{status}</option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
+                <FormField
+                  controlId="statusFilter"
+                  label="Filter by Enrollment Status"
+                  as="select"
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  options={statusOptions.map(status => ({
+                    value: status === 'All' ? '' : status,
+                    label: status
+                  }))}
+                />
               </Col>
               <Col md={4}>
-                <Form.Group controlId="majorFilter">
-                  <Form.Label>Filter by Major</Form.Label>
-                  <Form.Select value={majorFilter} onChange={(e) => setMajorFilter(e.target.value)}>
-                    {majorOptions.map(major => (
-                      <option key={major} value={major === 'All' ? '' : major}>{major}</option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
+                <FormField
+                  controlId="majorFilter"
+                  label="Filter by Major"
+                  as="select"
+                  value={majorFilter}
+                  onChange={(e) => setMajorFilter(e.target.value)}
+                  options={majorOptions.map(major => ({
+                    value: major === 'All' ? '' : major,
+                    label: major
+                  }))}
+                />
               </Col>
             </Row>
           </Form>
-        </Card.Body>
-      </Card>
+        </StyledCard.Body>
+      </StyledCard>
 
-      <Table striped bordered hover responsive="sm" className={styles.dataTable}>
+      <StyledTable striped bordered hover responsive="sm" className={styles.dataTable}>
         <thead>
           <tr>
             <th>Student ID</th>
@@ -105,28 +118,28 @@ const StudentListPage = () => {
               <td>{student.enrollmentStatus}</td>
               <td>{student.academicStanding}</td>
               <td>
-                <Button
+                <StyledButton
                   variant="outline-info"
                   size="sm"
                   className="me-2 mb-1 mb-md-0" // Added margin bottom for mobile
                   onClick={() => navigate(`/profile/${student.id}`)}
                 >
                   <span className="material-symbols-outlined" style={{ fontSize: '1rem', verticalAlign: 'middle' }}>visibility</span>
-                </Button>
-                <Button
+                </StyledButton>
+                <StyledButton
                   variant="outline-primary"
                   size="sm"
                   onClick={() => navigate(`/students/edit/${student.id}`)}
                 >
                   <span className="material-symbols-outlined" style={{ fontSize: '1rem', verticalAlign: 'middle' }}>edit</span>
-                </Button>
+                </StyledButton>
               </td>
             </tr>
           ))}
         </tbody>
-      </Table>
+      </StyledTable>
       {filteredStudents.length === 0 && <p className="text-center mt-3">No students match the current filters.</p>}
-    </div>
+    </StyledContainer>
   );
 };
 

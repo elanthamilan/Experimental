@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockApplicationFormFields } from '../../data/mockApplicationFormFields';
-import { Button, Form, Row, Col, Card, Alert } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
+import StyledButton from '../../components/atoms/StyledButton';
+import StyledCard from '../../components/atoms/StyledCard';
+import StyledContainer from '../../components/atoms/StyledContainer';
+import FormField from '../../components/molecules/FormField';
 import styles from './AdminPages.module.scss';
 
 const AddEditAppFormFieldPage = () => {
@@ -94,109 +98,119 @@ const AddEditAppFormFieldPage = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>{isEditMode ? 'Edit Application Form Field' : 'Add New Application Form Field'}</Card.Title>
-        </Card.Header>
-        <Card.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
-          {successMessage && <Alert variant="success">{successMessage}</Alert>}
-          <Form onSubmit={handleSubmit}>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title>{isEditMode ? 'Edit Application Form Field' : 'Add New Application Form Field'}</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+          {successMessage && (
+            <div className="alert alert-success" role="alert">
+              {successMessage}
+            </div>
+          )}
+          <form onSubmit={handleSubmit}>
             <Row>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="formFieldId">
-                  <Form.Label>Field ID</Form.Label>
-                  <Form.Control type="text" name="id" value={formData.id} readOnly />
-                </Form.Group>
+                <FormField
+                  controlId="formFieldId"
+                  label="Field ID"
+                  type="text"
+                  name="id"
+                  value={formData.id}
+                  onChange={handleChange}
+                  readOnly
+                />
               </Col>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="formFieldLabel">
-                  <Form.Label>Label</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="label"
-                    value={formData.label}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formFieldLabel"
+                  label="Label"
+                  type="text"
+                  name="label"
+                  value={formData.label}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
               <Col md={4}>
-                <Form.Group className="mb-3" controlId="formFieldOrder">
-                  <Form.Label>Order</Form.Label>
-                  <Form.Control
-                    type="number"
-                    name="order"
-                    value={formData.order}
-                    onChange={handleChange}
-                    required
-                    min="1"
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formFieldOrder"
+                  label="Order"
+                  type="number"
+                  name="order"
+                  value={formData.order}
+                  onChange={handleChange}
+                  required
+                  min="1"
+                />
               </Col>
             </Row>
-            
+
             <Row>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formFieldType">
-                  <Form.Label>Type</Form.Label>
-                  <Form.Select
-                    name="type"
-                    value={formData.type}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="text">Text</option>
-                    <option value="textarea">Textarea</option>
-                    <option value="dropdown">Dropdown</option>
-                    <option value="email">Email</option>
-                    <option value="number">Number</option>
-                    <option value="date">Date</option>
-                    <option value="file">File</option>
-                  </Form.Select>
-                </Form.Group>
+                <FormField
+                  controlId="formFieldType"
+                  label="Type"
+                  as="select"
+                  name="type"
+                  value={formData.type}
+                  onChange={handleChange}
+                  required
+                  options={[
+                    { value: 'text', label: 'Text' },
+                    { value: 'textarea', label: 'Textarea' },
+                    { value: 'dropdown', label: 'Dropdown' },
+                    { value: 'email', label: 'Email' },
+                    { value: 'number', label: 'Number' },
+                    { value: 'date', label: 'Date' },
+                    { value: 'file', label: 'File' }
+                  ]}
+                />
               </Col>
               <Col md={6} className="d-flex align-items-center">
-                <Form.Group className="mb-3 mt-3 form-check-group" controlId="formFieldRequired">
-                  <Form.Check
-                    type="checkbox"
-                    name="required"
-                    label="Required Field"
-                    checked={formData.required}
-                    onChange={handleChange}
-                    className={styles.formCheckInputLarge} // For larger checkbox if needed
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formFieldRequired"
+                  label="Required Field"
+                  type="checkbox"
+                  name="required"
+                  checked={formData.required}
+                  onChange={handleChange}
+                  className={styles.formCheckInputLarge}
+                />
               </Col>
             </Row>
 
             {formData.type === 'dropdown' && (
-              <Form.Group className="mb-3" controlId="formFieldOptions">
-                <Form.Label>Options (for Dropdown type)</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  name="options"
-                  value={formData.options}
-                  onChange={handleChange}
-                  placeholder="Comma-separated options, e.g., Option 1, Option 2, Option 3"
-                />
-              </Form.Group>
+              <FormField
+                controlId="formFieldOptions"
+                label="Options (for Dropdown type)"
+                as="textarea"
+                rows={3}
+                name="options"
+                value={formData.options}
+                onChange={handleChange}
+                placeholder="Comma-separated options, e.g., Option 1, Option 2, Option 3"
+              />
             )}
 
             <div className="d-flex justify-content-end mt-3">
-              <Button variant="secondary" onClick={() => navigate('/admin/admissions/formfields')} className="me-2">
+              <StyledButton variant="secondary" onClick={() => navigate('/admin/admissions/formfields')} className="me-2">
                 Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              </StyledButton>
+              <StyledButton variant="primary" type="submit">
                 {isEditMode ? 'Save Changes' : 'Add Field'}
-              </Button>
+              </StyledButton>
             </div>
-          </Form>
-        </Card.Body>
-      </Card>
-    </div>
+          </form>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

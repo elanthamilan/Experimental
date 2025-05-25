@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Form, Row, Col, Container } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
+import StyledContainer from './atoms/StyledContainer';
 import StyledButton from './atoms/StyledButton';
-import FormField from './molecules/FormField'; // Import molecule
+import FormField from './molecules/FormField';
 import styles from './SearchCriteria.module.scss';
 
 // Define options for label lookup
@@ -38,7 +39,7 @@ const SearchCriteria = () => {
       [id.replace('form', '').charAt(0).toLowerCase() + id.replace('form', '').slice(1)]: type === 'checkbox' ? checked : value,
     }));
   };
-  
+
   const handleSearch = (e) => {
     e.preventDefault(); // Prevent form submission if it's part of a Form
     // Actual search logic would go here
@@ -73,22 +74,22 @@ const SearchCriteria = () => {
 
   if (isCollapsed) {
     return (
-      <Container fluid className={styles.searchCriteriaContainer}>
+      <StyledContainer fluid className={styles.searchCriteriaContainer}>
         <div className={`${styles.formContainer} ${styles.previewContainer}`}>
           <span className={styles.previewText}>{getPreviewText()}</span>
           <StyledButton variant="link" onClick={handleEdit} className={styles.editButton}>
             <span className="material-symbols-outlined">edit</span> Edit
           </StyledButton>
         </div>
-      </Container>
+      </StyledContainer>
     );
   }
 
   return (
-    <Container fluid className={styles.searchCriteriaContainer}>
+    <StyledContainer fluid className={styles.searchCriteriaContainer}>
       <h4 className={styles.pageTitle}>Publish final results to portal</h4>
       <div className={styles.formContainer}>
-        <Form onSubmit={handleSearch}>
+        <form onSubmit={handleSearch}>
           {/* Row 1: Institution, Degree, Program */}
           <Row className="mb-3">
             <Col xs={12} sm={6} md={4}>
@@ -225,9 +226,9 @@ const SearchCriteria = () => {
               </div>
             </Col>
           </Row>
-        </Form>
+        </form>
       </div>
-    </Container>
+    </StyledContainer>
   );
 };
 

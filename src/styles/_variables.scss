@@ -52,6 +52,7 @@ $danger-bg-subdued-fixed: #f8d7da;
 $_font-family-lato: 'Lato', sans-serif;
 $_font-family-manrope: 'Manrope', sans-serif;
 $_font-size-base: 14px;
+$_font-size-small: 12px;
 $_font-weight-normal: 400;
 $_font-weight-semibold: 600;
 $_font-weight-bold: 700;
@@ -72,6 +73,7 @@ $base-border-radius: 8px;
 $input-border-radius: 4px;
 $base-border-width: 1px;
 $secondary-border-width: 2px;
+$border-radius-small: 4px; // Small border radius variable
 
 
 // --- CSS Custom Property Accessors (MD3 Aligned) ---
@@ -232,3 +234,6 @@ $surface-container-highest-color: var(--theme-surface-container-highest, #E6E0E9
 $surface-container-color: var(--theme-surface-container, #F3EDF7); // MD3 surface-container fallback
 $surface-container-lowest-color: var(--theme-surface-container-lowest, #FFFFFF); // MD3 surface-container-lowest fallback
 $surface-container-low-color: var(--theme-surface-container-low, #F7F2FA); // MD3 surface-container-low fallback
+
+// Export for SCSS modules
+$font-size-small: 12px;

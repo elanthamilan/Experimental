@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockDepartments } from '../../data/mockDepartments';
 import { mockFaculty } from '../../data/mockFaculty';
-import { Button, Form, Row, Col, Card, Alert } from 'react-bootstrap';
+import { Form, Row, Col, Alert } from 'react-bootstrap';
+// Import custom styled components from centralized design system
+import {
+  StyledContainer,
+  StyledCard,
+  StyledButton
+} from '../../components';
 import styles from './AdminPages.module.scss';
 
 const AddEditDepartmentPage = () => {
@@ -79,12 +85,12 @@ const AddEditDepartmentPage = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>{isEditMode ? 'Edit Department' : 'Add New Department'}</Card.Title>
-        </Card.Header>
-        <Card.Body>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title>{isEditMode ? 'Edit Department' : 'Add New Department'}</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
           {error && <Alert variant="danger">{error}</Alert>}
           {successMessage && <Alert variant="success">{successMessage}</Alert>}
           <Form onSubmit={handleSubmit}>
@@ -157,17 +163,17 @@ const AddEditDepartmentPage = () => {
             </Row>
 
             <div className="d-flex justify-content-end mt-3">
-              <Button variant="secondary" onClick={() => navigate('/admin/masterdata/departments')} className="me-2">
+              <StyledButton variant="secondary" onClick={() => navigate('/admin/masterdata/departments')} className="me-2">
                 Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              </StyledButton>
+              <StyledButton variant="primary" type="submit">
                 {isEditMode ? 'Save Changes' : 'Add Department'}
-              </Button>
+              </StyledButton>
             </div>
           </Form>
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

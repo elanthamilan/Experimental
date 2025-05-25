@@ -1,11 +1,14 @@
-import React, { useState, useEffect, createContext, useContext, useRef } from 'react';
-import { themes, applyTheme } from './themes'; 
+import React, { useState, useEffect, createContext, useContext } from 'react';
+import { themes, applyTheme } from './themes';
 import SearchCriteria from './components/SearchCriteria';
 import SummaryStats from './components/SummaryStats';
 import ResultsTable from './components/ResultsTable';
 import LeftSidebar from './components/LeftSidebar';
 import AddEditForm from './components/AddEditForm';
-import { Button, Offcanvas, OverlayTrigger, Tooltip, Modal, Form } from 'react-bootstrap';
+import { Offcanvas, OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
+import StyledButton from './components/atoms/StyledButton';
+import StyledFormSelect from './components/atoms/StyledFormSelect';
+import StyledFormCheck from './components/atoms/StyledFormCheck';
 import { Routes, Route } from 'react-router-dom';
 
 // Import SIS Page Placeholders
@@ -115,17 +118,17 @@ const UtilitySidebar = () => {
              <span className="material-symbols-outlined">admin_panel_settings</span>
           </div>
         </OverlayTrigger>
-        <Form.Select
+        <StyledFormSelect
           value={currentUserRole}
           onChange={(e) => setCurrentUserRole(e.target.value)}
           aria-label="Select User Role"
           className={styles.roleSelectorDropdown}
-          bsPrefix="form-select-sm" // Use Bootstrap's small select
+          size="sm"
         >
           <option value={USER_ROLES.ADMIN}>Admin</option>
           <option value={USER_ROLES.TEACHER}>Teacher</option>
           <option value={USER_ROLES.STUDENT}>Student</option>
-        </Form.Select>
+        </StyledFormSelect>
       </div>
 
       {/* Theme Switcher Icon - Triggers Modal */}
@@ -148,11 +151,11 @@ const UtilitySidebar = () => {
           <Modal.Title>Select Theme / Font Weight</Modal.Title> {/* Updated Title */}
         </Modal.Header>
         <Modal.Body className={styles.themeModalBody}>
-          <Form>
+          <div>
             {themes.map(theme => {
               const currentGlobalFontWeightValue = fontWeightOptions.find(fw => fw.value === globalFontWeight)?.cssValue || '400';
               return (
-                <Form.Check
+                <StyledFormCheck
                   type="radio"
                   key={theme.id}
                   id={`theme-radio-${theme.id}`}
@@ -180,13 +183,13 @@ const UtilitySidebar = () => {
                 />
               );
             })}
-          </Form>
+          </div>
 
           <hr className={styles.modalDivider} />
           <Modal.Title as="h6" className={styles.modalSectionTitle}>Global Font Weight</Modal.Title>
-          <Form>
+          <div>
             {fontWeightOptions.map(fw => (
-              <Form.Check
+              <StyledFormCheck
                 type="radio"
                 key={fw.value}
                 id={`fontweight-radio-${fw.value}`}
@@ -197,17 +200,17 @@ const UtilitySidebar = () => {
                 onChange={() => {
                   setGlobalFontWeight(fw.value);
                   // Optionally close modal, or keep it open for further changes
-                  // setShowThemeModal(false); 
+                  // setShowThemeModal(false);
                 }}
-                className={styles.themeRadioItem} 
+                className={styles.themeRadioItem}
               />
             ))}
-          </Form>
+          </div>
 
           <hr className={styles.modalDivider} />
           <Modal.Title as="h6" className={styles.modalSectionTitle}>Appearance</Modal.Title>
-          <Form>
-            <Form.Check
+          <div>
+            <StyledFormCheck
               type="switch"
               id="dark-mode-switch"
               label="Dark Mode"
@@ -215,30 +218,30 @@ const UtilitySidebar = () => {
               onChange={() => setIsDarkMode(!isDarkMode)}
               className={styles.themeRadioItem} // Re-use style for consistent appearance
             />
-          </Form>
+          </div>
         </Modal.Body>
       </Modal>
 
        <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Logout')}>
-        <div className={styles.circleIconButton}> 
+        <div className={styles.circleIconButton}>
           <span className="material-symbols-outlined">logout</span>
         </div>
       </OverlayTrigger>
 
-      <hr className={styles.divider} /> 
+      <hr className={styles.divider} />
 
       <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Calendar')}>
-        <div className={styles.circleIconButton}> 
+        <div className={styles.circleIconButton}>
            <span className="material-symbols-outlined">calendar_today</span>
         </div>
       </OverlayTrigger>
       <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Tasks')}>
-        <div className={styles.circleIconButton}> 
+        <div className={styles.circleIconButton}>
            <span className="material-symbols-outlined">task_alt</span>
         </div>
       </OverlayTrigger>
       <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Profile')}>
-        <div className={styles.circleIconButton}> 
+        <div className={styles.circleIconButton}>
            <span className="material-symbols-outlined">lab_profile</span>
         </div>
       </OverlayTrigger>
@@ -268,7 +271,7 @@ function App() {
   useEffect(() => {
     applyTheme(currentTheme, isDarkMode); // Applies color and font-family variables, now with isDarkMode
   }, [currentTheme, isDarkMode]); // Added isDarkMode to dependency array
-  
+
   useEffect(() => {
     const selectedWeight = fontWeightOptions.find(fw => fw.value === globalFontWeight);
     if (selectedWeight) {
@@ -300,8 +303,8 @@ function App() {
              <Offcanvas.Header closeButton>
                <Offcanvas.Title>Menu</Offcanvas.Title>
              </Offcanvas.Header>
-             <Offcanvas.Body className={styles.mobileOffcanvasBody}> 
-               <LeftSidebar /> 
+             <Offcanvas.Body className={styles.mobileOffcanvasBody}>
+               <LeftSidebar />
              </Offcanvas.Body>
            </Offcanvas>
         )}
@@ -309,10 +312,10 @@ function App() {
         <div className={styles.appPage}>
            {isMobile && (
              <div className={styles.mobileHeader}>
-               <Button variant="light" onClick={() => setShowMobileMenu(true)}>
+               <StyledButton variant="light" onClick={() => setShowMobileMenu(true)}>
                  <span className="material-symbols-outlined">menu</span>
-               </Button>
-               <span>App Title</span> 
+               </StyledButton>
+               <span>App Title</span>
              </div>
            )}
           <main className={styles.pageBody}>
@@ -393,10 +396,16 @@ function App() {
 
               {/* Component Preview Page Route */}
               <Route path="/component-preview" element={<ComponentPreviewPage />} />
+
+              {/* Additional utility routes */}
+              <Route path="/feedback" element={<div>Feedback Page - Coming Soon</div>} />
+              <Route path="/tutorial" element={<div>Tutorial Page - Coming Soon</div>} />
+              <Route path="/manual" element={<div>User Manual Page - Coming Soon</div>} />
+              <Route path="/logout" element={<div>Logout Page - Coming Soon</div>} />
             </Routes>
           </main>
         </div>
-        {!isMobile && <UtilitySidebar />} 
+        {!isMobile && <UtilitySidebar />}
       </div>
     </ThemeContext.Provider>
   );

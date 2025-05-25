@@ -1,7 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockStaff } from '../../data/mockStaff';
-import { Button, Table, Card, Badge } from 'react-bootstrap';
+import { Badge } from 'react-bootstrap';
+// Import custom styled components from centralized design system
+import {
+  StyledContainer,
+  StyledTable,
+  StyledCard,
+  StyledButton
+} from '../../components';
 import styles from './AdminPages.module.scss';
 
 const StaffListPage = () => {
@@ -21,23 +28,23 @@ const StaffListPage = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>Staff Management (Non-Academic)</Card.Title>
-        </Card.Header>
-        <Card.Body>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title>Staff Management (Non-Academic)</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
           <div className="d-flex justify-content-end mb-3">
-            <Button variant="primary" onClick={() => navigate('/staff/new')}>
+            <StyledButton variant="primary" onClick={() => navigate('/staff/new')}>
               <span className="material-symbols-outlined me-2" style={{ verticalAlign: 'middle' }}>add</span>
               Add New Staff
-            </Button>
+            </StyledButton>
           </div>
 
           {mockStaff.length === 0 ? (
             <p>No staff members found.</p>
           ) : (
-            <Table striped bordered hover responsive className={styles.table}>
+            <StyledTable striped bordered hover responsive className={styles.table}>
               <thead>
                 <tr>
                   <th>Staff ID</th>
@@ -61,23 +68,23 @@ const StaffListPage = () => {
                     <td>{staffMember.employmentDate}</td>
                     <td>{getStatusBadge(staffMember.status)}</td>
                     <td>
-                      <Button
+                      <StyledButton
                         variant="outline-primary"
                         size="sm"
                         onClick={() => navigate(`/staff/edit/${staffMember.id}`)}
                         title="Edit Staff Member"
                       >
                         <span className="material-symbols-outlined">edit</span>
-                      </Button>
+                      </StyledButton>
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </Table>
+            </StyledTable>
           )}
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

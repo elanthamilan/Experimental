@@ -1,7 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockApplications } from '../../data/mockApplications';
-import { Button, Table, Card, Badge } from 'react-bootstrap';
+// Import custom styled components from centralized design system
+import {
+  StyledContainer,
+  StyledTable,
+  StyledCard,
+  StyledButton,
+  StyledBadge
+} from '../../components';
 import styles from '../admin/AdminPages.module.scss'; // Reusing admin styles for consistency
 
 const ApplicationListPage = () => {
@@ -10,31 +17,31 @@ const ApplicationListPage = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Received':
-        return <Badge bg="secondary">{status}</Badge>;
+        return <StyledBadge variant="secondary">{status}</StyledBadge>;
       case 'Under Review':
-        return <Badge bg="info">{status}</Badge>;
+        return <StyledBadge variant="info">{status}</StyledBadge>;
       case 'Interview Scheduled':
-        return <Badge bg="warning" text="dark">{status}</Badge>;
+        return <StyledBadge variant="warning">{status}</StyledBadge>;
       case 'Accepted':
-        return <Badge bg="success">{status}</Badge>;
+        return <StyledBadge variant="success">{status}</StyledBadge>;
       case 'Rejected':
-        return <Badge bg="danger">{status}</Badge>;
+        return <StyledBadge variant="danger">{status}</StyledBadge>;
       default:
-        return <Badge bg="light" text="dark">{status}</Badge>;
+        return <StyledBadge variant="light">{status}</StyledBadge>;
     }
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>Application Submissions</Card.Title>
-        </Card.Header>
-        <Card.Body>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title>Application Submissions</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
           {mockApplications.length === 0 ? (
             <p>No applications found.</p>
           ) : (
-            <Table striped bordered hover responsive className={styles.table}>
+            <StyledTable striped bordered hover responsive className={styles.table}>
               <thead>
                 <tr>
                   <th>App ID</th>
@@ -54,23 +61,23 @@ const ApplicationListPage = () => {
                     <td>{app.submittedDate}</td>
                     <td>{getStatusBadge(app.status)}</td>
                     <td>
-                      <Button
+                      <StyledButton
                         variant="outline-primary"
                         size="sm"
                         onClick={() => navigate(`/admissions/applications/view/${app.id}`)}
                         title="View/Manage Application"
                       >
                         <span className="material-symbols-outlined">visibility</span> View/Manage
-                      </Button>
+                      </StyledButton>
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </Table>
+            </StyledTable>
           )}
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

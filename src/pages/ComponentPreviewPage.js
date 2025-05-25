@@ -1,17 +1,20 @@
 import React from 'react';
 import styles from './ComponentPreviewPage.module.scss';
 
-// Atom Components
-import StyledButton from '../components/atoms/StyledButton';
-import StyledFormCheck from '../components/atoms/StyledFormCheck';
-import StyledFormControl from '../components/atoms/StyledFormControl';
-import StyledFormLabel from '../components/atoms/StyledFormLabel';
-import StyledFormSelect from '../components/atoms/StyledFormSelect';
+// Import from centralized design system
+import {
+  StyledContainer,
+  StyledButton,
+  StyledFormCheck,
+  StyledFormControl,
+  StyledFormLabel,
+  StyledFormSelect,
+  FileUploadDropzone,
+  FormField
+} from '../components';
 
-// Molecule Components
-import FileUploadDropzone from '../components/molecules/FileUploadDropzone';
-import FormField from '../components/molecules/FormField';
-import ProductTableRow from '../components/molecules/ProductTableRow'; // Adjusted path if necessary
+// Import specific molecules that aren't in main export
+import ProductTableRow from '../components/molecules/ProductTableRow';
 
 const ComponentPreviewPage = () => {
   // Mock handlers for ProductTableRow
@@ -19,7 +22,7 @@ const ComponentPreviewPage = () => {
   const mockRemoveProduct = (id) => console.log(`Product ${id} removed`);
 
   return (
-    <div className={styles.pageContainer}>
+    <StyledContainer className={styles.pageContainer}>
       <h1>Component Preview</h1>
 
       {/* Atom Components Section */}
@@ -181,7 +184,7 @@ const ComponentPreviewPage = () => {
           </div>
         </div>
       </section>
-    </div>
+    </StyledContainer>
   );
 };
 

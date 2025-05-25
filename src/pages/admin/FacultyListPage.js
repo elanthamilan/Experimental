@@ -1,30 +1,36 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockFaculty } from '../../data/mockFaculty';
-import { Button, Table, Card } from 'react-bootstrap';
+// Import custom styled components from centralized design system
+import {
+  StyledContainer,
+  StyledTable,
+  StyledCard,
+  StyledButton
+} from '../../components';
 import styles from './AdminPages.module.scss';
 
 const FacultyListPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>Faculty Management</Card.Title>
-        </Card.Header>
-        <Card.Body>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title>Faculty Management</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
           <div className="d-flex justify-content-end mb-3">
-            <Button variant="primary" onClick={() => navigate('/admin/faculty/new')}>
+            <StyledButton variant="primary" onClick={() => navigate('/admin/faculty/new')}>
               <span className="material-symbols-outlined me-2" style={{ verticalAlign: 'middle' }}>add</span>
               Add New Faculty
-            </Button>
+            </StyledButton>
           </div>
 
           {mockFaculty.length === 0 ? (
             <p>No faculty members found.</p>
           ) : (
-            <Table striped bordered hover responsive className={styles.table}>
+            <StyledTable striped bordered hover responsive className={styles.table}>
               <thead>
                 <tr>
                   <th>Faculty ID</th>
@@ -44,23 +50,23 @@ const FacultyListPage = () => {
                     <td>{faculty.department}</td>
                     <td>{faculty.title}</td>
                     <td>
-                      <Button
+                      <StyledButton
                         variant="outline-primary"
                         size="sm"
                         onClick={() => navigate(`/admin/faculty/edit/${faculty.id}`)}
                         title="Edit Faculty"
                       >
                         <span className="material-symbols-outlined">edit</span>
-                      </Button>
+                      </StyledButton>
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </Table>
+            </StyledTable>
           )}
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

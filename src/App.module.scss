@@ -131,7 +131,7 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
         color: v.$on-primary-container-color;
         border-color: v.$primary-color;
         border-width: 2px;
-        
+
         // Ensure nested preview elements also adapt their colors for readability
         .themeOptionContainer span, .themeFontPreview {
            color: v.$on-primary-container-color;
@@ -148,7 +148,7 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
         margin-bottom: 0;
       }
     }
-    
+
     .themeOptionContainer {
       display: flex;
       flex-direction: column;
@@ -195,7 +195,7 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
       margin-bottom: v.$gap-medium;
       padding-left: v.$base-padding; // Align with radio item content padding
     }
-    
+
     .squareIconButton { // e.g., Frame 4412 (apps icon)
       @extend .iconButton;
       width: 48px; // From feedback
@@ -223,25 +223,25 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
 .mobileHeader {
   display: flex;
   align-items: center;
-  padding: v.$gap-small v.$base-padding; 
+  padding: v.$gap-small v.$base-padding;
   background-color: v.$surface-color; // MD3: Headers are typically Surface or Primary Container
   // Or use v.$primary-container-color for a colored header
   border-bottom: v.$base-border-width solid v.$outline-color; // MD3: Border uses outline
-  gap: v.$base-margin; 
+  gap: v.$base-margin;
 
   // Style the menu button if needed
-  :global(.btn-light) { 
+  :global(.btn-light) {
      background: none;
      border: none;
      color: v.$on-surface-variant-color; // MD3: Icons/text on surface
-     padding: math.div(v.$gap-small, 2); 
+     padding: math.div(v.$gap-small, 2);
      &:hover, &:focus {
         background-color: v.$background-hover; // MD3: Hover state
      }
   }
 
   span:not(.material-symbols-outlined) { // Target the title text
-    font-weight: v.$font-weight-semibold; 
+    font-weight: v.$font-weight-semibold;
     color: v.$on-surface-color;  // MD3: Title text on surface
   }
 }

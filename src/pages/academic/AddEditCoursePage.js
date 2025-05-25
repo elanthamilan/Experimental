@@ -2,7 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockCourses } from '../../data/mockCourses';
 import { mockUsers } from '../../data/mockUsers'; // For teacher selection
-import { Button, Form, Row, Col, Card } from 'react-bootstrap';
+import { Form, Row, Col } from 'react-bootstrap';
+// Import custom styled components from centralized design system
+import {
+  StyledContainer,
+  StyledCard,
+  StyledButton,
+  FormField
+} from '../../components';
 import styles from '../admin/AdminPages.module.scss'; // Using admin styles for consistency
 
 const AddEditCoursePage = () => {
@@ -49,7 +56,7 @@ const AddEditCoursePage = () => {
     e.preventDefault();
     console.log("Form Data Submitted:", formData);
     alert(`Course data for "${formData.name}" ${isEditMode ? 'updated' : 'added'} (mock).`);
-    
+
     if (isEditMode) {
       const index = mockCourses.findIndex(c => c.id === courseId);
       if (index !== -1) {
@@ -64,12 +71,12 @@ const AddEditCoursePage = () => {
   const teachers = mockUsers.filter(user => user.role === 'Teacher');
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header as="h4" className={styles.formCardHeader}>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header as="h4" className={styles.formCardHeader}>
           {isEditMode ? 'Edit Course Information' : 'Add New Course'}
-        </Card.Header>
-        <Card.Body>
+        </StyledCard.Header>
+        <StyledCard.Body>
           <Form onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Form.Group as={Col} md="2" controlId="formCourseId">
@@ -121,7 +128,7 @@ const AddEditCoursePage = () => {
                 <Form.Control type="text" name="semester" value={formData.semester} onChange={handleChange} />
               </Form.Group>
             </Row>
-            
+
             <Row className="mb-3">
               <Form.Group as={Col} md="12" controlId="formSchedule">
                 <Form.Label>Schedule</Form.Label>
@@ -137,17 +144,17 @@ const AddEditCoursePage = () => {
             </Row>
 
             <div className="mt-4 d-flex justify-content-end">
-              <Button variant="secondary" onClick={() => navigate('/courses')} className="me-2">
+              <StyledButton variant="secondary" onClick={() => navigate('/courses')} className="me-2">
                 Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              </StyledButton>
+              <StyledButton variant="primary" type="submit">
                 {isEditMode ? 'Update Course' : 'Add Course'}
-              </Button>
+              </StyledButton>
             </div>
           </Form>
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

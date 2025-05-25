@@ -1,30 +1,36 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockFinancialYears } from '../../data/mockFinancialYears';
-import { Button, Table, Card } from 'react-bootstrap';
+// Import custom styled components from centralized design system
+import {
+  StyledContainer,
+  StyledTable,
+  StyledCard,
+  StyledButton
+} from '../../components';
 import styles from './AdminPages.module.scss';
 
 const FinancialYearListPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>Financial Year Management</Card.Title>
-        </Card.Header>
-        <Card.Body>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title>Financial Year Management</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
           <div className="d-flex justify-content-end mb-3">
-            <Button variant="primary" onClick={() => navigate('/admin/financialyears/new')}>
+            <StyledButton variant="primary" onClick={() => navigate('/admin/financialyears/new')}>
               <span className="material-symbols-outlined me-2" style={{ verticalAlign: 'middle' }}>add</span>
               Add New Financial Year
-            </Button>
+            </StyledButton>
           </div>
 
           {mockFinancialYears.length === 0 ? (
             <p>No financial years found.</p>
           ) : (
-            <Table striped bordered hover responsive className={styles.table}>
+            <StyledTable striped bordered hover responsive className={styles.table}>
               <thead>
                 <tr>
                   <th>ID</th>
@@ -44,23 +50,23 @@ const FinancialYearListPage = () => {
                     <td>{fy.endDate}</td>
                     <td>{fy.status}</td>
                     <td>
-                      <Button
+                      <StyledButton
                         variant="outline-primary"
                         size="sm"
                         onClick={() => navigate(`/admin/financialyears/edit/${fy.id}`)}
                         title="Edit Financial Year"
                       >
                         <span className="material-symbols-outlined">edit</span>
-                      </Button>
+                      </StyledButton>
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </Table>
+            </StyledTable>
           )}
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

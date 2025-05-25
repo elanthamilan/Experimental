@@ -1,7 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockApplicationFormFields } from '../../data/mockApplicationFormFields';
-import { Button, Table, Card, Badge } from 'react-bootstrap';
+import StyledTable from '../../components/atoms/StyledTable';
+import StyledCard from '../../components/atoms/StyledCard';
+import StyledBadge from '../../components/atoms/StyledBadge';
+import StyledContainer from '../../components/atoms/StyledContainer';
+import StyledButton from '../../components/atoms/StyledButton';
 import styles from './AdminPages.module.scss';
 
 const AppFormFieldListPage = () => {
@@ -11,23 +15,23 @@ const AppFormFieldListPage = () => {
   const sortedFields = [...mockApplicationFormFields].sort((a, b) => a.order - b.order);
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>Application Form Fields Management</Card.Title>
-        </Card.Header>
-        <Card.Body>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title>Application Form Fields Management</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
           <div className="d-flex justify-content-end mb-3">
-            <Button variant="primary" onClick={() => navigate('/admin/admissions/formfields/new')}>
+            <StyledButton variant="primary" onClick={() => navigate('/admin/admissions/formfields/new')}>
               <span className="material-symbols-outlined me-2" style={{ verticalAlign: 'middle' }}>add</span>
               Add New Field
-            </Button>
+            </StyledButton>
           </div>
 
           {sortedFields.length === 0 ? (
             <p>No application form fields found.</p>
           ) : (
-            <Table striped bordered hover responsive className={styles.table}>
+            <StyledTable striped bordered hover responsive className={styles.table}>
               <thead>
                 <tr>
                   <th>Order</th>
@@ -45,33 +49,33 @@ const AppFormFieldListPage = () => {
                     <td>{field.label}</td>
                     <td>{field.type}</td>
                     <td>
-                      <Badge bg={field.required ? 'success' : 'secondary'}>
+                      <StyledBadge variant={field.required ? 'success' : 'secondary'}>
                         {field.required ? 'Yes' : 'No'}
-                      </Badge>
+                      </StyledBadge>
                     </td>
                     <td>
-                      {field.options && Array.isArray(field.options) && field.options.length > 0 
-                        ? field.options.join(', ') 
+                      {field.options && Array.isArray(field.options) && field.options.length > 0
+                        ? field.options.join(', ')
                         : 'N/A'}
                     </td>
                     <td>
-                      <Button
+                      <StyledButton
                         variant="outline-primary"
                         size="sm"
                         onClick={() => navigate(`/admin/admissions/formfields/edit/${field.id}`)}
                         title="Edit Field"
                       >
                         <span className="material-symbols-outlined">edit</span>
-                      </Button>
+                      </StyledButton>
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </Table>
+            </StyledTable>
           )}
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

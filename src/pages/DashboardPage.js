@@ -1,12 +1,14 @@
 import React from 'react';
+import { StyledContainer } from '../components';
 
 const DashboardPage = () => {
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome to the Student Information System Dashboard.</p>
+    <StyledContainer fluid style={{backgroundColor: '#e3f2fd', padding: '2rem', border: '3px solid #1976d2'}}>
+      <h1 style={{color: '#1976d2', fontSize: '3rem'}}>🏠 DASHBOARD PAGE</h1>
+      <p style={{fontSize: '1.5rem', color: '#1976d2'}}>✅ You are now on the DASHBOARD page! Navigation is working!</p>
+      <p style={{fontSize: '1.2rem'}}>Current time: {new Date().toLocaleTimeString()}</p>
 
-      {/* 
+      {/*
         Conceptual Admin Dashboard Widget Ideas (Student Data Focused):
 
         1.  **Total Enrolled Students Widget:**
@@ -32,14 +34,14 @@ const DashboardPage = () => {
             *   **Data Source:** Group and count students by `academicStanding` from `mockStudents`.
             *   **Interaction:** Clicking a segment could navigate to `StudentListPage` pre-filtered for that academic standing.
             *   **Visualization:** Donut Chart or Bar Chart.
-        
+
         5.  **Recent Admissions Widget (Optional Bonus):**
             *   **Display:** A small list showing the names and admission dates of the 5 most recently admitted students.
             *   **Data Source:** `mockStudents` sorted by `admissionDate` descending.
             *   **Interaction:** Clicking a student name could navigate to their profile.
             *   **Visualization:** List Group or small Table.
       */}
-    </div>
+    </StyledContainer>
   );
 };
 

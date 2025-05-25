@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockStudents } from '../../data/mockStudents';
-import { Button, Form, Row, Col, Card } from 'react-bootstrap';
+import { Form, Row, Col } from 'react-bootstrap';
+// Import custom styled components from centralized design system
+import {
+  StyledContainer,
+  StyledCard,
+  StyledButton,
+  FormField
+} from '../../components';
 import styles from './AdminPages.module.scss';
 
 const AddEditStudentPage = () => {
@@ -96,7 +103,7 @@ const AddEditStudentPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Construct the student data to be saved, including structured contacts
     const studentDataToSave = {
       ...formData,
@@ -127,7 +134,7 @@ const AddEditStudentPage = () => {
 
     console.log("Form Data Submitted (structured):", studentDataToSave);
     alert(`Student data for "${studentDataToSave.firstName} ${studentDataToSave.lastName}" ${isEditMode ? 'updated' : 'added'} (mock).`);
-    
+
     if (isEditMode) {
       const index = mockStudents.findIndex(s => s.id === studentId);
       if (index !== -1) {
@@ -140,12 +147,12 @@ const AddEditStudentPage = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header as="h4" className={styles.formCardHeader}>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header as="h4" className={styles.formCardHeader}>
           {isEditMode ? 'Edit Student Information' : 'Add New Student'}
-        </Card.Header>
-        <Card.Body>
+        </StyledCard.Header>
+        <StyledCard.Body>
           <Form onSubmit={handleSubmit}>
             <h5 className="mt-3 mb-3">Personal Details</h5>
             <Row className="mb-3">
@@ -192,7 +199,7 @@ const AddEditStudentPage = () => {
                 <Form.Control type="url" name="profileImageUrl" value={formData.profileImageUrl} onChange={handleChange} placeholder="https://example.com/image.jpg" />
               </Form.Group>
             </Row>
-            
+
             <h5 className="mt-4 mb-3">Address</h5>
             <Row className="mb-3">
               <Form.Group as={Col} md="12" controlId="formStreet">
@@ -280,7 +287,7 @@ const AddEditStudentPage = () => {
                 <Form.Control type="email" name="emergencyContactEmail" value={formData.emergencyContactEmail} onChange={handleChange} />
               </Form.Group>
             </Row>
-            
+
             <h5 className="mt-4 mb-3">Parent/Guardian Information</h5>
             <Row className="mb-3">
               <Form.Group as={Col} md="4" controlId="formParentGuardianName">
@@ -302,17 +309,17 @@ const AddEditStudentPage = () => {
             </Row>
 
             <div className="mt-4 d-flex justify-content-end">
-              <Button variant="secondary" onClick={() => navigate('/students')} className="me-2">
+              <StyledButton variant="secondary" onClick={() => navigate('/students')} className="me-2">
                 Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              </StyledButton>
+              <StyledButton variant="primary" type="submit">
                 {isEditMode ? 'Update Student' : 'Add Student'}
-              </Button>
+              </StyledButton>
             </div>
           </Form>
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

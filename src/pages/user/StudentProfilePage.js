@@ -5,7 +5,13 @@ import { mockCourses } from '../../data/mockCourses';
 import { mockEnrollments } from '../../data/mockEnrollments';
 import { mockHealthRecords } from '../../data/mockHealthRecords'; // New import
 import { mockDisciplinaryRecords } from '../../data/mockDisciplinaryRecords'; // New import
-import { Card, Row, Col, Image, Table, Alert, Badge } from 'react-bootstrap';
+import { Row, Col, Image, Alert, Badge } from 'react-bootstrap';
+// Import custom styled components from centralized design system
+import {
+  StyledContainer,
+  StyledTable,
+  StyledCard
+} from '../../components';
 import styles from './UserPages.module.scss';
 
 const StudentProfilePage = () => {
@@ -34,12 +40,12 @@ const StudentProfilePage = () => {
   const disciplinaryRecords = mockDisciplinaryRecords.filter(dr => dr.studentId === student.id);
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.profileCard}>
-        <Card.Header as="h4" className={styles.profileCardHeader}>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.profileCard}>
+        <StyledCard.Header as="h4" className={styles.profileCardHeader}>
           Student Profile
-        </Card.Header>
-        <Card.Body>
+        </StyledCard.Header>
+        <StyledCard.Body>
           <Row className="mb-4">
             <Col md={4} className="text-center">
               {student.profileImageUrl ? (
@@ -56,7 +62,7 @@ const StudentProfilePage = () => {
             </Col>
             <Col md={8}>
               <h5>Personal & Contact Information</h5>
-              <Table borderless hover size="sm" className={styles.detailsTable}>
+              <StyledTable borderless hover size="sm" className={styles.detailsTable}>
                 <tbody>
                   <tr><td><strong>Student ID:</strong></td><td>{student.id}</td></tr>
                   <tr><td><strong>Email:</strong></td><td>{student.email}</td></tr>
@@ -64,10 +70,10 @@ const StudentProfilePage = () => {
                   <tr><td><strong>Gender:</strong></td><td>{student.gender}</td></tr>
                   <tr><td><strong>Nationality:</strong></td><td>{student.nationality}</td></tr>
                 </tbody>
-              </Table>
+              </StyledTable>
 
               <h5 className="mt-3">Address</h5>
-              <Table borderless hover size="sm" className={styles.detailsTable}>
+              <StyledTable borderless hover size="sm" className={styles.detailsTable}>
                 <tbody>
                   <tr><td style={{ width: '100px' }}>Street:</td><td>{student.address.street}</td></tr>
                   <tr><td>City:</td><td>{student.address.city}</td></tr>
@@ -75,16 +81,16 @@ const StudentProfilePage = () => {
                   <tr><td>Zip Code:</td><td>{student.address.zipCode}</td></tr>
                   <tr><td>Country:</td><td>{student.address.country}</td></tr>
                 </tbody>
-              </Table>
-              
+              </StyledTable>
+
               <h5 className="mt-3">Academic Details</h5>
-              <Table borderless hover size="sm" className={styles.detailsTable}>
+              <StyledTable borderless hover size="sm" className={styles.detailsTable}>
                 <tbody>
                   <tr><td style={{ width: '150px' }}><strong>Admission Date:</strong></td><td>{student.admissionDate}</td></tr>
                   <tr><td><strong>Enrollment Date:</strong></td><td>{student.enrollmentDate}</td></tr>
                   {student.withdrawalDate && <tr><td><strong>Withdrawal Date:</strong></td><td>{student.withdrawalDate}</td></tr>}
                 </tbody>
-              </Table>
+              </StyledTable>
             </Col>
           </Row>
 
@@ -92,13 +98,13 @@ const StudentProfilePage = () => {
             <>
               <h5 className="mt-4">Emergency Contact(s)</h5>
               {student.emergencyContacts.map((contact, index) => (
-                <Card key={index} className="mb-2">
-                  <Card.Body className="p-2">
+                <StyledCard key={index} className="mb-2">
+                  <StyledCard.Body className="p-2">
                     <strong>{contact.name}</strong> ({contact.relationship})<br />
                     Phone: {contact.phone || 'N/A'}<br />
                     Email: {contact.email || 'N/A'}
-                  </Card.Body>
-                </Card>
+                  </StyledCard.Body>
+                </StyledCard>
               ))}
             </>
           )}
@@ -107,32 +113,32 @@ const StudentProfilePage = () => {
             <>
               <h5 className="mt-4">Parent/Guardian Information</h5>
               {student.parentGuardianInfo.map((info, index) => (
-                 <Card key={index} className="mb-2">
-                  <Card.Body className="p-2">
+                 <StyledCard key={index} className="mb-2">
+                  <StyledCard.Body className="p-2">
                     <strong>{info.name}</strong> ({info.relationship})<br />
                     Phone: {info.phone || 'N/A'}<br />
                     Email: {info.email || 'N/A'}
-                  </Card.Body>
-                </Card>
+                  </StyledCard.Body>
+                </StyledCard>
               ))}
             </>
           )}
 
           <h5 className="mt-4">Enrolled Courses</h5>
           {enrolledCoursesDetails.length > 0 ? (
-            <Table striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
+            <StyledTable striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
               <thead><tr><th>Course Code</th><th>Name</th><th>Department</th><th>Credits</th><th>Grade</th></tr></thead>
               <tbody>
                 {enrolledCoursesDetails.map(course => (
                   <tr key={course.id}><td>{course.courseCode}</td><td>{course.name}</td><td>{course.department}</td><td>{course.credits}</td><td>{course.grade}</td></tr>
                 ))}
               </tbody>
-            </Table>
+            </StyledTable>
           ) : <p>No courses currently enrolled.</p>}
 
           <h5 className="mt-4">Health Records</h5>
           {healthRecords.length > 0 ? (
-            <Table striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
+            <StyledTable striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
               <thead><tr><th>Record ID</th><th>Conditions</th><th>Allergies</th><th>Immunizations</th><th>Last Updated</th></tr></thead>
               <tbody>
                 {healthRecords.map(record => (
@@ -145,12 +151,12 @@ const StudentProfilePage = () => {
                   </tr>
                 ))}
               </tbody>
-            </Table>
+            </StyledTable>
           ) : <p>No health records found for this student.</p>}
 
           <h5 className="mt-4">Disciplinary Records</h5>
           {disciplinaryRecords.length > 0 ? (
-            <Table striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
+            <StyledTable striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
               <thead><tr><th>Record ID</th><th>Incident Date</th><th>Description</th><th>Action Taken</th><th>Reported By</th></tr></thead>
               <tbody>
                 {disciplinaryRecords.map(record => (
@@ -163,12 +169,12 @@ const StudentProfilePage = () => {
                   </tr>
                 ))}
               </tbody>
-            </Table>
+            </StyledTable>
           ) : <p>No disciplinary records found for this student.</p>}
 
-        </Card.Body>
-      </Card>
-    </div>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

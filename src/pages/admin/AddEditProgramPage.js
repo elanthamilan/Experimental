@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockPrograms } from '../../data/mockPrograms'; // Assuming mockPrograms is an array that can be mutated
-import { Button, Form, Row, Col, Card, Alert } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
+import StyledButton from '../../components/atoms/StyledButton';
+import StyledCard from '../../components/atoms/StyledCard';
+import StyledContainer from '../../components/atoms/StyledContainer';
+import FormField from '../../components/molecules/FormField';
 import styles from './AdminPages.module.scss';
 
 const AddEditProgramPage = () => {
@@ -85,118 +89,114 @@ const AddEditProgramPage = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <Card className={styles.formCard}>
-        <Card.Header>
-          <Card.Title>{isEditMode ? 'Edit Program' : 'Add New Program'}</Card.Title>
-        </Card.Header>
-        <Card.Body>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <Form onSubmit={handleSubmit}>
+    <StyledContainer className={styles.pageContainer}>
+      <StyledCard className={styles.formCard}>
+        <StyledCard.Header>
+          <StyledCard.Title>{isEditMode ? 'Edit Program' : 'Add New Program'}</StyledCard.Title>
+        </StyledCard.Header>
+        <StyledCard.Body>
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
+          <form onSubmit={handleSubmit}>
             <Row>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formProgramId">
-                  <Form.Label>Program ID</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="id"
-                    value={formData.id}
-                    readOnly
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formProgramId"
+                  label="Program ID"
+                  type="text"
+                  name="id"
+                  value={formData.id}
+                  onChange={handleChange}
+                  readOnly
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formProgramName">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formProgramName"
+                  label="Name"
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
               </Col>
             </Row>
 
-            <Form.Group className="mb-3" controlId="formProgramDescription">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-              />
-            </Form.Group>
+            <FormField
+              controlId="formProgramDescription"
+              label="Description"
+              as="textarea"
+              rows={3}
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            />
 
             <Row>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formProgramDepartment">
-                  <Form.Label>Department</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="department"
-                    value={formData.department}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
+                <FormField
+                  controlId="formProgramDepartment"
+                  label="Department"
+                  type="text"
+                  name="department"
+                  value={formData.department}
+                  onChange={handleChange}
+                />
               </Col>
               <Col md={6}>
-                <Form.Group className="mb-3" controlId="formProgramDegreeLevel">
-                  <Form.Label>Degree Level</Form.Label>
-                  <Form.Control // Or Form.Select for predefined options
-                    type="text"
-                    name="degreeLevel"
-                    value={formData.degreeLevel}
-                    onChange={handleChange}
-                  />
-                  {/* Example for Form.Select:
-                  <Form.Select name="degreeLevel" value={formData.degreeLevel} onChange={handleChange}>
-                    <option value="">Select Degree Level</option>
-                    <option value="Associate Degree">Associate Degree</option>
-                    <option value="Bachelor's">Bachelor's</option>
-                    <option value="Master's">Master's</option>
-                    <option value="PhD">PhD</option>
-                  </Form.Select>
-                  */}
-                </Form.Group>
+                <FormField
+                  controlId="formProgramDegreeLevel"
+                  label="Degree Level"
+                  as="select"
+                  name="degreeLevel"
+                  value={formData.degreeLevel}
+                  onChange={handleChange}
+                  options={[
+                    { value: '', label: 'Select Degree Level' },
+                    { value: 'Associate Degree', label: 'Associate Degree' },
+                    { value: "Bachelor's", label: "Bachelor's" },
+                    { value: "Master's", label: "Master's" },
+                    { value: 'PhD', label: 'PhD' }
+                  ]}
+                />
               </Col>
             </Row>
 
-            <Form.Group className="mb-3" controlId="formProgramRequiredCourses">
-              <Form.Label>Required Courses (comma-separated)</Form.Label>
-              <Form.Control
-                type="text"
-                name="requiredCourses"
-                value={formData.requiredCourses}
-                onChange={handleChange}
-                placeholder="Enter course IDs, comma-separated"
-              />
-            </Form.Group>
+            <FormField
+              controlId="formProgramRequiredCourses"
+              label="Required Courses (comma-separated)"
+              type="text"
+              name="requiredCourses"
+              value={formData.requiredCourses}
+              onChange={handleChange}
+              placeholder="Enter course IDs, comma-separated"
+            />
 
-            <Form.Group className="mb-3" controlId="formProgramDuration">
-              <Form.Label>Duration</Form.Label>
-              <Form.Control
-                type="text"
-                name="duration"
-                value={formData.duration}
-                onChange={handleChange}
-              />
-            </Form.Group>
+            <FormField
+              controlId="formProgramDuration"
+              label="Duration"
+              type="text"
+              name="duration"
+              value={formData.duration}
+              onChange={handleChange}
+            />
 
             <div className="d-flex justify-content-end">
-              <Button variant="secondary" onClick={() => navigate('/admin/programs')} className="me-2">
+              <StyledButton variant="secondary" onClick={() => navigate('/admin/programs')} className="me-2">
                 Cancel
-              </Button>
-              <Button variant="primary" type="submit">
+              </StyledButton>
+              <StyledButton variant="primary" type="submit">
                 {isEditMode ? 'Save Changes' : 'Add Program'}
-              </Button>
+              </StyledButton>
             </div>
-          </Form>
-        </Card.Body>
-      </Card>
-    </div>
+          </form>
+        </StyledCard.Body>
+      </StyledCard>
+    </StyledContainer>
   );
 };
 

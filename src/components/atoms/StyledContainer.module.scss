@@ -1,0 +1,80 @@
+// StyledContainer.module.scss
+// Centralized container styling following design system principles
+
+.containerBase {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+// Container variants
+.container-default {
+  // Default container styling
+}
+
+.container-fluid {
+  max-width: none;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.container-page {
+  min-height: calc(100vh - 60px); // Adjust based on header height
+  display: flex;
+  flex-direction: column;
+}
+
+.container-section {
+  background: var(--section-bg, #ffffff);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+// Spacing variants
+.spacing-none {
+  padding: 0;
+}
+
+.spacing-sm {
+  padding: 0.5rem 1rem;
+}
+
+.spacing-md {
+  padding: 1rem 1.5rem;
+}
+
+.spacing-lg {
+  padding: 1.5rem 2rem;
+}
+
+.spacing-xl {
+  padding: 2rem 3rem;
+}
+
+// Responsive spacing adjustments
+@media (max-width: 768px) {
+  .spacing-sm {
+    padding: 0.5rem;
+  }
+  
+  .spacing-md {
+    padding: 1rem;
+  }
+  
+  .spacing-lg {
+    padding: 1rem 1.5rem;
+  }
+  
+  .spacing-xl {
+    padding: 1.5rem 2rem;
+  }
+}
+
+// Dark mode support
+[data-theme="dark"] {
+  .container-section {
+    background: var(--section-bg-dark, #2d3748);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}
