@@ -1,0 +1,32 @@
+@use 'src/styles/_variables.scss' as v;
+
+.styledImage {
+  vertical-align: middle; // Consistent alignment
+  border-style: none; // Remove border from linked images in some browsers
+}
+
+.imgFluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.imgThumbnail {
+  padding: 0.25rem; // Or use a variable: calc(#{v.$base-padding} / 4);
+  background-color: v.$surface-color;
+  border: v.$base-border-width solid v.$outline-variant-color;
+  border-radius: v.$border-radius-small; // Using a smaller radius for thumbnails usually looks better
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); // A light shadow, can be themed with v.$shadow-sm if defined
+  // To make it strictly responsive within its container if it's also fluid
+  max-width: 100%; 
+  height: auto;
+}
+
+.rounded {
+  // Uses a general border-radius. If v.$base-border-radius is too large, 
+  // consider a more specific one like v.$border-radius-md or just 0.25rem.
+  border-radius: v.$base-border-radius !important; 
+}
+
+.roundedCircle {
+  border-radius: 50% !important;
+}

@@ -1,7 +1,10 @@
 import React from 'react';
-import { Form as BootstrapForm, InputGroup } from 'react-bootstrap';
+// import { Form as BootstrapForm, InputGroup } from 'react-bootstrap'; // Removed
 import StyledFormLabel from '../atoms/StyledFormLabel';
 import StyledFormControl from '../atoms/StyledFormControl';
+import StyledFormGroup from '../atoms/StyledFormGroup'; // Added
+import StyledInputGroup from '../atoms/StyledInputGroup'; // Added
+import StyledFormControlFeedback from '../atoms/StyledFormControlFeedback'; // Added
 import StyledFormSelect from '../atoms/StyledFormSelect';
 import StyledFormCheck from '../atoms/StyledFormCheck';
 
@@ -24,8 +27,8 @@ const FormField = ({
   defaultChecked, // For checkbox/radio
   inputGroupPrepend, // Text/element to prepend in an InputGroup
   inputGroupAppend, // Text/element to append in an InputGroup
-  className, // Additional classes for the Form.Group
-  style, // Inline styles for the Form.Group
+  className, // Additional classes for the StyledFormGroup
+  style, // Inline styles for the StyledFormGroup
   isInvalid, // For validation state
   feedback, // Validation feedback message
   feedbackType = 'invalid', // 'valid' or 'invalid'
@@ -85,19 +88,22 @@ const FormField = ({
     // Wrap with InputGroup if needed
     if (inputGroupPrepend || inputGroupAppend) {
       return (
-        <InputGroup hasValidation>
-          {inputGroupPrepend && <InputGroup.Text>{inputGroupPrepend}</InputGroup.Text>}
-          {controlElement}
-          {inputGroupAppend && <InputGroup.Text>{inputGroupAppend}</InputGroup.Text>}
-          {feedback && <BootstrapForm.Control.Feedback type={feedbackType}>{feedback}</BootstrapForm.Control.Feedback>}
-        </InputGroup>
+        <>
+          <StyledInputGroup prepend={inputGroupPrepend} append={inputGroupAppend}>
+            {controlElement}
+          </StyledInputGroup>
+          {/* Feedback for input groups is now outside */}
+          {feedback && <StyledFormControlFeedback type={feedbackType}>{feedback}</StyledFormControlFeedback>}
+        </>
       );
     }
 
+    // For controls NOT in an input group
     return (
       <>
         {controlElement}
-        {feedback && !(inputGroupPrepend || inputGroupAppend) && <BootstrapForm.Control.Feedback type={feedbackType}>{feedback}</BootstrapForm.Control.Feedback>}
+        {/* Feedback for non-grouped, non-check/radio controls */}
+        {!(type === 'checkbox' || type === 'radio') && feedback && <StyledFormControlFeedback type={feedbackType}>{feedback}</StyledFormControlFeedback>}
       </>
     );
   };
@@ -106,10 +112,10 @@ const FormField = ({
   const showExternalLabel = type !== 'checkbox' && type !== 'radio';
 
   return (
-    <BootstrapForm.Group className={className} controlId={controlId} style={style}>
-      {showExternalLabel && label && <StyledFormLabel>{label}</StyledFormLabel>}
+    <StyledFormGroup className={className} controlId={controlId} style={style}>
+      {showExternalLabel && label && <StyledFormLabel htmlFor={controlId}>{label}</StyledFormLabel>}
       {renderControl()}
-    </BootstrapForm.Group>
+    </StyledFormGroup>
   );
 };
 

@@ -17,6 +17,10 @@ export { default as StyledFormControl } from './atoms/StyledFormControl';
 export { default as StyledFormSelect } from './atoms/StyledFormSelect';
 export { default as StyledFormLabel } from './atoms/StyledFormLabel';
 export { default as StyledFormCheck } from './atoms/StyledFormCheck';
+export { default as StyledFormGroup } from './atoms/StyledFormGroup';
+export { default as StyledInputGroup } from './atoms/StyledInputGroup';
+// StyledInputGroupText is not created as a separate component.
+export { default as StyledFormControlFeedback } from './atoms/StyledFormControlFeedback';
 
 // Layout Components
 export { default as StyledCard } from './atoms/StyledCard';
@@ -31,6 +35,7 @@ export { default as StyledPagination } from './atoms/StyledPagination';
 export { default as StyledListGroup } from './atoms/StyledListGroup';
 export { default as StyledListGroupItem } from './atoms/StyledListGroupItem';
 export { default as StyledAlert } from './atoms/StyledAlert';
+export { default as StyledImage } from './atoms/StyledImage';
 
 // ===== MOLECULES =====
 // Combinations of atoms that function together as a unit

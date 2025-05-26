@@ -2,10 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../App'; // Corrected path
 import { themes as predefinedThemes, generateThemeColors } from '../themes';
 import { googleFonts, fontWeightOptions } from '../data/fonts';
-import { Form } from 'react-bootstrap'; // Row, Col, ListGroup removed
+// import { Form } from 'react-bootstrap'; // Form removed
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
+  StyledFormGroup, // Added for Form.Group replacement
   StyledCard,
   StyledButton,
   StyledFormLabel,
@@ -279,7 +280,7 @@ const SettingsPage = () => {
               {/* Custom Color Builder */}
               <div className={styles.customThemeBuilderSection}>
                 <h5>Colors</h5>
-                <Form>
+                <form> {/* Replaced Form with form */}
                   <FormField
                     controlId="customPrimaryColor"
                     label="Primary"
@@ -307,7 +308,7 @@ const SettingsPage = () => {
                     title="Tertiary Color"
                     className={styles.colorPickerGroup}
                   />
-                </Form>
+                </form>
                 {generatedCustomPalette && (
                   <div className={styles.generatedColorsPreview}>
                     <h6>Live Color Palette Preview:</h6>
@@ -330,7 +331,7 @@ const SettingsPage = () => {
               {/* Custom Font Selection */}
               <div className={styles.customFontSelectorSection}>
                 <h5>Fonts</h5>
-                <Form>
+                <form> {/* Replaced Form with form */}
                   <FormField
                     controlId="headerFontSelect"
                     label="Header Font"
@@ -349,13 +350,13 @@ const SettingsPage = () => {
                     options={googleFonts.map(font => ({ value: font.value, label: font.name }))}
                     className={styles.fontSelectorGroup}
                   />
-                </Form>
+                </form>
               </div>
               <hr/>
               {/* Global Typography Settings */}
               <div>
                 <h5>Global Typography</h5>
-                <Form>
+                <form> {/* Replaced Form with form */}
                   <FormField
                     controlId="baseFontSize"
                     label="Base Size (px)"
@@ -366,7 +367,7 @@ const SettingsPage = () => {
                     max="24"
                     className={styles.fontSizeControlGroup}
                   />
-                  <Form.Group controlId="globalFontWeight" className={styles.fontWeightSelectorGroup}>
+                  <StyledFormGroup controlId="globalFontWeight" className={styles.fontWeightSelectorGroup}> {/* Replaced Form.Group */}
                     <StyledFormLabel>Font Weight</StyledFormLabel>
                     <div className={styles.fontWeightRadioGroup}>
                       {fontWeightOptions.map(fw => (
@@ -382,8 +383,8 @@ const SettingsPage = () => {
                         />
                       ))}
                     </div>
-                  </Form.Group>
-                </Form>
+                  </StyledFormGroup>
+                </form>
               </div>
               <div className={styles.saveThemeSection}>
                 <StyledButton variant="success" onClick={handleSaveCustomTheme} className={styles.saveThemeButton}>

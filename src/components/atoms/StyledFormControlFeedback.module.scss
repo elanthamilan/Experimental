@@ -1,0 +1,23 @@
+@use 'src/styles/_variables.scss' as v;
+
+.formControlFeedback {
+  width: 100%;
+  margin-top: 0.25rem; // Consider using v.$spacing-xs or a specific form feedback margin variable
+  font-size: v.$font-size-small;
+  display: block; // Ensure it takes up its own line if not already
+}
+
+.invalidFeedback {
+  color: v.$error-color;
+}
+
+.validFeedback {
+  // Assuming v.$success-color exists. If not, use a specific variable or fallback.
+  // For text, on-success-container-color or a similar high-contrast color against the form background is often better.
+  // For simplicity, using a direct success color, but this should be reviewed for accessibility.
+  color: var(--theme-success-text, #198754); // Example using CSS var with fallback. Define --theme-success-text in themes.js
+  // Or, if using a success container color for background, this text should contrast with that.
+  // If it's just text on the default form background:
+  // color: v.$on-success-container-color; // (if $success-container-color is used for something else)
+  // color: v.$success-color; // If $success-color is suitable for text
+}

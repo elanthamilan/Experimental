@@ -5,10 +5,11 @@ import { mockCourses } from '../../data/mockCourses';
 import { mockEnrollments } from '../../data/mockEnrollments';
 import { mockHealthRecords } from '../../data/mockHealthRecords'; // New import
 import { mockDisciplinaryRecords } from '../../data/mockDisciplinaryRecords'; // New import
-import { Image } from 'react-bootstrap'; // Row, Col, Alert, Badge removed
+// import { Image } from 'react-bootstrap'; // Image removed
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
+  StyledImage, // Added
   StyledTable,
   StyledCard,
   StyledBadge, // Added StyledBadge import
@@ -54,7 +55,14 @@ const StudentProfilePage = () => {
           <StyledRow className="mb-4">
             <StyledCol className="col-md-4 text-center">
               {student.profileImageUrl ? (
-                <Image src={student.profileImageUrl} roundedCircle fluid thumbnail className={styles.profileImage} />
+                <StyledImage 
+                  src={student.profileImageUrl} 
+                  alt={`${student.firstName} ${student.lastName}'s profile`} 
+                  roundedCircle 
+                  fluid 
+                  thumbnail 
+                  className={styles.profileImage} 
+                />
               ) : (
                 <div className={styles.profileImagePlaceholder}>
                   <span className={`material-symbols-outlined ${styles.placeholderIcon}`}>person</span>

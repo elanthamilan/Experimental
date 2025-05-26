@@ -1,0 +1,164 @@
+@use 'src/styles/_variables.scss' as v;
+
+.styledInputGroup {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap; // Changed from nowrap to wrap to allow multiple addons/inputs if necessary
+  align-items: stretch;
+  width: 100%;
+
+  // Direct descendant StyledFormControl or elements acting as input group text
+  // This is a general approach. Specificity might be needed if children are deeply nested.
+  // Using :global to target classes that might be applied to children like StyledFormControl.
+  // This is tricky because StyledFormControl has its own module.
+  // A better approach might be for StyledFormControl to have variants when used within an input group.
+  // For now, we'll assume direct children or specific classes passed via `className`.
+
+  // --- Child Element Styling ---
+  // These styles are intended for elements *inside* .styledInputGroup.
+  // This includes the main input (likely a StyledFormControl) and any prepend/append elements.
+
+  // Common styling for prepend/append text elements.
+  // The .inputGroupText class will be applied to the span inside .inputGroupPrepend/.inputGroupAppend divs.
+  .inputGroupText {
+    display: flex;
+    align-items: center;
+    padding: v.$input-padding; // Use input padding by default
+    margin-bottom: 0; // Reset default margin for some elements
+    font-size: v.$font-size-base;
+    font-weight: v.$font-weight-normal;
+    line-height: v.$line-height-base;
+    color: v.$input-label-color; // Or a specific text color for addons
+    text-align: center;
+    white-space: nowrap;
+    background-color: var(--theme-surface-container-lowest, lighten(v.$outline-color, 35%)); // Slightly off-white, or a specific variable
+    border: v.$base-border-width solid v.$outline-color;
+    border-radius: v.$input-border-radius; // Default radius, will be adjusted
+  }
+
+  // Styling for the main input element (e.g., StyledFormControl) when inside an input group.
+  // We assume children will handle their own styling, but input groups need to override border-radius.
+  // This is a common pattern in Bootstrap.
+  // :global(.styledFormControl) would be one way if StyledFormControl.module.scss doesn't account for this.
+  // For now, we'll focus on prepend/append and assume the form control adapts or is styled by FormField.
+
+  // --- Prepend/Append Specifics ---
+  .inputGroupPrepend,
+  .inputGroupAppend {
+    display: flex;
+    // margin-left: -1px; // For collapsing borders, if not handled by child directly
+  }
+  
+  .inputGroupPrepend {
+    margin-right: -#{v.$base-border-width}; // Overlap border
+  }
+  .inputGroupAppend {
+    margin-left: -#{v.$base-border-width}; // Overlap border
+  }
+
+
+  // --- Border Radius Adjustments ---
+  // When an element is prepended
+  .inputGroupPrepend + :global(.form-control), // Targeting StyledFormControl via its global class if FormField passes it
+  .inputGroupPrepend + .form-control { // Fallback for direct form-control if not using StyledFormControl
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  // When an element is appended
+  :global(.form-control) + .inputGroupAppend,
+  .form-control + .inputGroupAppend {
+    // The .form-control itself needs its right border radius removed
+    // This is typically handled by applying a class to the input,
+    // or by the input itself knowing it's followed by an append.
+    // This SCSS alone cannot easily style a sibling like that without specific HTML structure
+    // or parent class indicating an append exists.
+    // For simplicity, we'll assume the input will have its radius adjusted if needed.
+  }
+  
+  // Text addon in prepend
+  .inputGroupPrepend > .inputGroupText {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  // Text addon in append
+  .inputGroupAppend > .inputGroupText {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  
+  // If the input group contains only one form control and one prepend/append
+  // the form control also needs its respective border radius adjusted.
+  // Example: Prepend only
+  .inputGroupPrepend ~ :global(.form-control):last-child,
+  .inputGroupPrepend ~ .form-control:last-child {
+     // border-top-left-radius: 0;
+     // border-bottom-left-radius: 0;
+     // This is already handled by the general rule above for prepend + form-control
+  }
+
+  // Example: Append only
+  :global(.form-control):first-child + .inputGroupAppend,
+  .form-control:first-child + .inputGroupAppend {
+    // The form-control here needs its right radius removed.
+    // This is complex with pure CSS if the form-control doesn't have a special class.
+    // The JS for StyledInputGroup or FormField might need to pass a specific class to StyledFormControl.
+  }
+  
+  // --- Sizing ---
+  // Assumes $input-padding-y-sm, $input-padding-x-sm, $font-size-sm etc. are defined in _variables.scss
+  // For simplicity, we'll use padding as an example. Font size should also be adjusted.
+  
+  &.inputGroup-sm {
+    .inputGroupText {
+      padding: v.$input-padding-y-sm v.$input-padding-x-sm; // Example, ensure these vars exist
+      font-size: v.$font-size-small; // Example
+    }
+    // :global(.form-control), .form-control within .inputGroup-sm should also adapt,
+    // typically handled by the form control's own sizing variants.
+  }
+
+  &.inputGroup-lg {
+    .inputGroupText {
+      padding: v.$input-padding-y-lg v.$input-padding-x-lg; // Example
+      font-size: v.$font-size-large; // Example
+    }
+  }
+}
+
+// This is a simplified version. Bootstrap's full SASS for input groups is more complex
+// and handles many edge cases, especially around focus states, validation states,
+// and multiple addons or multiple form controls within a single group.
+// For the `StyledFormControl` to correctly adapt its borders when used with
+// `StyledInputGroup`, `StyledFormControl` might need:
+// 1. To accept props like `isFirstInGroup`, `isLastInGroup`.
+// 2. Or `StyledInputGroup` (or `FormField`) could wrap `StyledFormControl` and apply
+//    additional classes that `StyledFormControl.module.scss` can use to adjust borders/radii.
+// The current SCSS for `.styledInputGroup` primarily styles the `inputGroupText` part.
+// The border radius adjustments for the actual input control (`StyledFormControl`)
+// might need to be handled within `StyledFormControl.module.scss` based on classes
+// passed to it when it's part of an input group (e.g., by `FormField`).
+
+// A common pattern to make this work without complex JS logic:
+// If StyledInputGroup has a prepend, it adds a class like `has-prepend` to itself.
+// If it has an append, it adds `has-append`.
+// Then, StyledFormControl.module.scss could have:
+// :global(.has-prepend) & { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+// :global(.has-append) & { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+// This is more robust. The current solution relies on direct sibling selectors which can be fragile.
+// The provided JS for StyledInputGroup doesn't add these parent classes.
+// The current SCSS will style the .inputGroupText correctly.
+// The main input control's border radius is the more complex part.
+// The :global(.form-control) selectors are an attempt to target a form control that might
+// be rendered by FormField, assuming FormField passes down 'form-control' class.
+// If FormField renders StyledFormControl, then StyledFormControl itself needs to be aware.
+// Let's assume FormField passes 'form-control' to StyledFormControl's className for now.
+// Or, that StyledFormControl has a base class that can be targeted globally if needed.
+// For the purpose of this task, the focus is on the .inputGroupText styling.`StyledInputGroup.js` and `StyledInputGroup.module.scss` have been created.
+The decision was made to handle `prepend` and `append` content internally within `StyledInputGroup` using styled divs/spans, so `StyledInputGroupText.js` and its module will not be created separately.
+
+Now I'll create `StyledFormControlFeedback.js` and `StyledFormControlFeedback.module.scss`.
+
+**Step 5: Create `src/components/atoms/StyledFormControlFeedback.js`** (Skipping StyledInputGroupText.js as per note)
+**Step 6: Create `src/components/atoms/StyledFormControlFeedback.module.scss`** (Skipping StyledInputGroupText.module.scss)
