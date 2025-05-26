@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import { Nav, Collapse } from 'react-bootstrap'; // Removed unused InputGroup
-// import StyledFormControl from './atoms/StyledFormControl'; // Removed unused atom
-import StyledButton from './atoms/StyledButton'; // Import atom
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { Nav, Collapse, OverlayTrigger, Tooltip } from 'react-bootstrap'; // Added OverlayTrigger, Tooltip
+import StyledButton from './atoms/StyledButton';
+import StyledFormSelect from './atoms/StyledFormSelect'; // Added StyledFormSelect
 import styles from './LeftSidebar.module.scss';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../App';
 
 const LeftSidebar = () => {
-  const [activeKey, setActiveKey] = useState('dashboard'); // Default active item
-  const [searchTerm, setSearchTerm] = useState(''); // State for search term
+  const navigate = useNavigate();
+  const { currentUserRole, setCurrentUserRole, USER_ROLES } = useTheme(); // Added setCurrentUserRole
+  const [activeKey, setActiveKey] = useState('dashboard');
+  const [searchTerm, setSearchTerm] = useState('');
 
   // State for collapsible Level 1 groups
   const [openGroups, setOpenGroups] = useState({
@@ -15,6 +20,7 @@ const LeftSidebar = () => {
     finance: false,
     facilities: false,
     studentServices: false,
+    helpAndResources: false, // Add new group here, default to closed
   });
   // State for collapsible Level 2 submenus
   const [openSubmenus, setOpenSubmenus] = useState({}); // Track expanded L2 items by eventKey
@@ -37,132 +43,225 @@ const LeftSidebar = () => {
   // Using Material Symbols
   const Icon = ({ name, className = '' }) => <span className={`material-symbols-outlined ${className}`}>{name}</span>;
 
-  // Grouping navigation items logically
-  const navGroups = {
-    // Top Level Items (if any, like Home, Dashboard)
+  // Grouping navigation items logically with paths - memoized to prevent infinite re-renders
+  const navGroups = useMemo(() => ({
     topLevel: [
-      { eventKey: 'dashboard', icon: 'dashboard', label: 'Dashboard' },
-      // Add Home, Favorites, Notifications if they belong here based on original design
-      // { eventKey: 'home', icon: 'home', label: 'Home' },
-      // { eventKey: 'favorites', icon: 'favorite', label: 'Favorites' },
-      // { eventKey: 'notifications', icon: 'notifications', label: 'Notifications' },
+      { eventKey: 'dashboard', icon: 'dashboard', label: 'Dashboard', path: '/dashboard' },
     ],
-    // Grouped Items
     academics: {
       title: 'Academics',
       items: [
-        { eventKey: 'academic_plan', icon: 'schedule', label: 'Academic Plan', children: [{eventKey: 'ap_1', label: 'View Plans'}, {eventKey: 'ap_2', label: 'Create Plan'}] },
-        { eventKey: 'assignment', icon: 'assignment', label: 'Assignment', children: [{eventKey: 'as_1', label: 'View Assignments'}, {eventKey: 'as_2', label: 'Submit Assignment'}] },
-        { eventKey: 'exam_mgmt', icon: 'person_check', label: 'Exam Mgmt.', children: [{eventKey: 'em_1', label: 'Schedule Exam'}, {eventKey: 'em_2', label: 'View Results'}] },
         {
-          eventKey: 'assessment', icon: 'quiz', label: 'Assessment', children: [ 
-            { eventKey: 'assessment_list', label: 'List' }, 
-            { eventKey: 'assessment_types', label: 'Types' },
-            { eventKey: 'assessment_grades', label: 'Grades' } 
+          eventKey: 'courses', icon: 'menu_book', label: 'Courses', path: '/courses',
+          // Assuming courses list is viewable by all, but management is admin/teacher
+          children: [
+            { eventKey: 'course_list', label: 'Course List', path: '/courses' }, // All users
+            { eventKey: 'add_course', label: 'Add New Course', path: '/courses/new', roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER] }
           ]
         },
-        { eventKey: 'obe', icon: 'menu_book', label: 'OBE', children: [{eventKey: 'obe_1', label: 'Dashboard'}, {eventKey: 'obe_2', label: 'Reports'}] },
-        { eventKey: 'rubrics', icon: 'grid_view', label: 'Rubrics', children: [{eventKey: 'rb_1', label: 'Manage Rubrics'}, {eventKey: 'rb_2', label: 'Templates'}] },
-        { eventKey: 'accreditation', icon: 'flag', label: 'Accreditation', children: [{eventKey: 'ac_1', label: 'Status'}, {eventKey: 'ac_2', label: 'Documents'}] },
-        { eventKey: 'leap', icon: 'rocket_launch', label: 'LEAP', children: [{eventKey: 'lp_1', label: 'My LEAP'}, {eventKey: 'lp_2', label: 'Programs'}] },
+        {
+          eventKey: 'program_mgmt',
+          icon: 'article',
+          label: 'Programs',
+          path: '/admin/programs',
+          roles: [USER_ROLES.ADMIN]
+        },
+        {
+          eventKey: 'semester_mgmt',
+          icon: 'date_range',
+          label: 'Semesters',
+          path: '/admin/semesters',
+          roles: [USER_ROLES.ADMIN]
+        },
+        {
+          eventKey: 'gradebook', icon: 'assessment', label: 'Gradebook', path: '/grades',
+          roles: [USER_ROLES.TEACHER, USER_ROLES.STUDENT] // Teachers manage, Students view their own
+        },
+        // { eventKey: 'assignment_student', icon: 'assignment', label: 'My Assignments', path: '/assignments', roles: [USER_ROLES.STUDENT] }, // Removed
+        // { eventKey: 'assignment_teacher', icon: 'assignment_turned_in', label: 'Manage Assignments', path: '/assignments/manage', roles: [USER_ROLES.TEACHER] }, // Removed
+        {
+          eventKey: 'exam_schedules',
+          icon: 'event_note', // Example icon
+          label: 'Exam Schedules',
+          path: '/academic/examschedules',
+          roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER]
+        }
       ]
     },
     administration: {
       title: 'Administration',
       items: [
-         { eventKey: 'enterprise', icon: 'domain', label: 'Enterprise', children: [{eventKey: 'en_1', label: 'Settings'}, {eventKey: 'en_2', label: 'Branches'}] },
-         { eventKey: 'admissions', icon: 'confirmation_number', label: 'Admissions', children: [{eventKey: 'adm_1', label: 'Applications'}, {eventKey: 'adm_2', label: 'Process'}] },
-         { eventKey: 'students', icon: 'school', label: 'Students', children: [{eventKey: 'std_1', label: 'View All'}, {eventKey: 'std_2', label: 'Add Student'}] },
-         { eventKey: 'staff', icon: 'groups', label: 'Staff', children: [{eventKey: 'stf_1', label: 'View All'}, {eventKey: 'stf_2', label: 'Add Staff'}] },
-         { eventKey: 'security_group', icon: 'security', label: 'Security Group', children: [{eventKey: 'sg_1', label: 'Manage Roles'}, {eventKey: 'sg_2', label: 'Permissions'}] },
-         { eventKey: 'leave_mgmt', icon: 'person_alert', label: 'Leave Mgmt.', children: [{eventKey: 'lm_1', label: 'Apply Leave'}, {eventKey: 'lm_2', label: 'Approve Leave'}] },
-         { eventKey: 'log_book', icon: 'book', label: 'Log Book', children: [{eventKey: 'lb_1', label: 'View Logs'}, {eventKey: 'lb_2', label: 'Entry'}] },
-         { eventKey: 'visitor_mgmt', icon: 'badge', label: 'Visitor Mgmt.', children: [{eventKey: 'vm_1', label: 'Check-in'}, {eventKey: 'vm_2', label: 'History'}] },
-         { eventKey: 'communication', icon: 'hub', label: 'Communication', children: [{eventKey: 'cm_1', label: 'Notices'}, {eventKey: 'cm_2', label: 'Messages'}] },
-         { eventKey: 'enquiry', icon: 'support_agent', label: 'Enquiry', children: [{eventKey: 'eq_1', label: 'View Enquiries'}, {eventKey: 'eq_2', label: 'New Enquiry'}] },
-         { eventKey: 'reports', icon: 'analytics', label: 'Reports', children: [{eventKey: 'rp_1', label: 'Generate'}, {eventKey: 'rp_2', label: 'View Saved'}] },
-         { eventKey: 'system', icon: 'lan', label: 'System', children: [{eventKey: 'sys_1', label: 'Settings'}, {eventKey: 'sys_2', label: 'Backup'}] },
-         { eventKey: 'migration', icon: 'transfer_within_a_station', label: 'Migration', children: [{eventKey: 'mg_1', label: 'Import'}, {eventKey: 'mg_2', label: 'Export'}] },
+         {
+           eventKey: 'admissions_group', // New eventKey for parent
+           icon: 'confirmation_number',
+           label: 'Admissions',
+           // path: '/admissions', // Optional: parent can still link to main admissions page
+           roles: [USER_ROLES.ADMIN],
+           children: [
+             { eventKey: 'admissions_dashboard', label: 'Admissions Overview', path: '/admissions', roles: [USER_ROLES.ADMIN] }, // Link to existing page
+             { eventKey: 'app_form_fields', label: 'Form Fields Config', path: '/admin/admissions/formfields', roles: [USER_ROLES.ADMIN] },
+             {
+               eventKey: 'submitted_applications',
+               label: 'Submitted Applications',
+               path: '/admissions/applications',
+               roles: [USER_ROLES.ADMIN]
+             }
+           ]
+         },
+         {
+           eventKey: 'students', icon: 'school', label: 'Students', path: '/students', roles: [USER_ROLES.ADMIN],
+           children: [
+             { eventKey: 'student_list', label: 'Student List', path: '/students', roles: [USER_ROLES.ADMIN]},
+             { eventKey: 'add_student', label: 'Add New Student', path: '/students/new', roles: [USER_ROLES.ADMIN]}
+           ]
+         },
+         {
+           eventKey: 'staff', icon: 'groups', label: 'Staff', path: '/staff', roles: [USER_ROLES.ADMIN],
+           children: [
+             { eventKey: 'staff_list', label: 'Staff List', path: '/staff', roles: [USER_ROLES.ADMIN]},
+             { eventKey: 'add_staff', label: 'Add New Staff', path: '/staff/new', roles: [USER_ROLES.ADMIN]}
+           ]
+         },
+         {
+           eventKey: 'faculty_mgmt',
+           icon: 'supervisor_account',
+           label: 'Faculty',
+           path: '/admin/faculty',
+           roles: [USER_ROLES.ADMIN]
+         },
+         { eventKey: 'reports', icon: 'analytics', label: 'Reports', path: '/reports', roles: [USER_ROLES.ADMIN] },
+         {
+           eventKey: 'department_mgmt',
+           icon: 'corporate_fare', // Example icon
+           label: 'Departments',
+           path: '/admin/masterdata/departments',
+           roles: [USER_ROLES.ADMIN] // Assuming Admin role
+         },
+         {
+           eventKey: 'org_hierarchy',
+           icon: 'account_tree', // Example icon
+           label: 'Org Hierarchy',
+           path: '/admin/organisation/hierarchy',
+           roles: [USER_ROLES.ADMIN]
+         },
+         {
+           eventKey: 'component_preview',
+           icon: 'science',
+           label: 'Component Preview',
+           path: '/component-preview',
+           roles: [USER_ROLES.ADMIN]
+         } // Added Component Preview link
       ]
     },
      finance: {
       title: 'Finance',
       items: [
-        { eventKey: 'billing', icon: 'payments', label: 'Billing', children: [{eventKey: 'bl_1', label: 'Invoices'}, {eventKey: 'bl_2', label: 'Statements'}] },
-        { eventKey: 'payments', icon: 'credit_card', label: 'Payments', children: [{eventKey: 'py_1', label: 'Record Payment'}, {eventKey: 'py_2', label: 'History'}] },
-        { eventKey: 'scholarship', icon: 'workspace_premium', label: 'Scholarship', children: [{eventKey: 'sc_1', label: 'Manage'}, {eventKey: 'sc_2', label: 'Applications'}] },
-        { eventKey: 'voluntary_deposits', icon: 'savings', label: 'Voluntary Deposits', children: [{eventKey: 'vd_1', label: 'View'}, {eventKey: 'vd_2', label: 'New Deposit'}] },
+        { eventKey: 'billing', icon: 'payments', label: 'Billing', path: '/billing', roles: [USER_ROLES.ADMIN, USER_ROLES.STUDENT] }, // Admin manages, Student views own
+        {
+          eventKey: 'financial_year_mgmt',
+          icon: 'account_balance_wallet', // Example icon
+          label: 'Financial Years',
+          path: '/admin/financialyears',
+          roles: [USER_ROLES.ADMIN]
+        }
       ]
     },
-     facilities: {
-       title: 'Facilities',
-       items: [
-         { eventKey: 'cafeteria', icon: 'restaurant', label: 'Cafeteria', children: [{eventKey: 'cf_1', label: 'Menu'}, {eventKey: 'cf_2', label: 'Orders'}] },
-         { eventKey: 'assets', icon: 'database', label: 'Assets', children: [{eventKey: 'as_f_1', label: 'View Assets'}, {eventKey: 'as_f_2', label: 'Manage'}] },
-         { eventKey: 'transportation', icon: 'directions_bus', label: 'Transportation', children: [{eventKey: 'tr_1', label: 'Routes'}, {eventKey: 'tr_2', label: 'Vehicles'}] },
-         { eventKey: 'room_mgmt', icon: 'meeting_room', label: 'Room Mgmt.', children: [{eventKey: 'rm_1', label: 'Bookings'}, {eventKey: 'rm_2', label: 'Availability'}] },
-         { eventKey: 'library', icon: 'local_library', label: 'Library', children: [{eventKey: 'lb_lib_1', label: 'Search Books'}, {eventKey: 'lb_lib_2', label: 'Issue/Return'}] },
-         { eventKey: 'courier_system', icon: 'local_shipping', label: 'Courier System', children: [{eventKey: 'cs_1', label: 'Track'}, {eventKey: 'cs_2', label: 'Dispatch'}] },
-       ]
-     },
-     studentServices: {
-       title: 'Student Services',
-       items: [
-          { eventKey: 'project', icon: 'integration_instructions', label: 'Project', children: [{eventKey: 'prj_1', label: 'My Projects'}, {eventKey: 'prj_2', label: 'Submit'}] },
-          { eventKey: 'placement', icon: 'work', label: 'Placement', children: [{eventKey: 'plc_1', label: 'Companies'}, {eventKey: 'plc_2', label: 'Applications'}] },
-          { eventKey: 'services', icon: 'construction', label: 'Services', children: [{eventKey: 'srv_1', label: 'Request Service'}, {eventKey: 'srv_2', label: 'Status'}] },
-          { eventKey: 'engage', icon: 'spatial_tracking', label: 'Engage', children: [{eventKey: 'eng_1', label: 'Events'}, {eventKey: 'eng_2', label: 'Clubs'}] },
-          { eventKey: 'gate_pass', icon: 'door_back', label: 'Gate Pass', children: [{eventKey: 'gp_1', label: 'Apply'}, {eventKey: 'gp_2', label: 'History'}] },
-          { eventKey: 'clearance', icon: 'do_not_disturb_on', label: 'Clearance', children: [{eventKey: 'clr_1', label: 'Status'}, {eventKey: 'clr_2', label: 'Apply'}] },
-       ]
-     }
-  };
+    // Removed facilities and studentServices for brevity in example, can be added back similarly
+    helpAndResources: { // Added Help & Resources group
+      title: 'Help & Resources',
+      items: [
+        { eventKey: 'feedback', icon: 'feedback', label: 'Feedback', path: '/feedback' },
+        { eventKey: 'tutorial', icon: 'integration_instructions', label: 'Tutorial', path: '/tutorial' },
+        { eventKey: 'manual', icon: 'library_books', label: 'User Manual', path: '/manual' },
+      ]
+    }
+  }), [USER_ROLES]); // Only recreate when USER_ROLES changes
 
-  // Filter logic
-  let topLevelItems = navGroups.topLevel || [];
-  let groupedItems = Object.entries(navGroups).filter(([key]) => key !== 'topLevel');
+  // Filter logic based on role and search term
+  // Initialize openGroups based on all group keys to ensure new groups are considered
+  useEffect(() => {
+    const initialOpenGroupsState = { ...openGroups }; // Start with current open groups
+    let changed = false;
+    Object.keys(navGroups).forEach(key => {
+      if (key !== 'topLevel' && initialOpenGroupsState[key] === undefined) {
+        // Default new groups to false, keep existing or default 'academics' to true
+        initialOpenGroupsState[key] = (key === 'academics'); // Default academics to open, others to closed
+        changed = true;
+      }
+    });
+    if (changed) {
+      setOpenGroups(initialOpenGroupsState);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navGroups]); // Rerun if navGroups structure changes (e.g. new group added)
+  // Removed openGroups from dependency array to prevent loop, as we are setting it here.
+  // This hook's purpose is to initialize open state for *newly added* groups.
+
+
+  const [filteredNavGroups, setFilteredNavGroups] = useState({ topLevel: [], grouped: [] });
+
+  useEffect(() => {
+    const lowerSearch = searchTerm.toLowerCase();
+
+    let newTopLevel = navGroups.topLevel.filter(item =>
+      (!item.roles || item.roles.includes(currentUserRole)) &&
+      item.label.toLowerCase().includes(lowerSearch)
+    );
+
+    let newGrouped = Object.entries(navGroups)
+      .filter(([key]) => key !== 'topLevel')
+      .map(([groupKey, groupData]) => {
+        if (groupData.roles && !groupData.roles.includes(currentUserRole)) {
+          return null; // Filter out group if role doesn't match
+        }
+        const filteredItems = groupData.items.reduce((acc, item) => {
+          if (item.roles && !item.roles.includes(currentUserRole)) {
+            return acc; // Filter out item if role doesn't match
+          }
+          if (item.label.toLowerCase().includes(lowerSearch)) {
+            acc.push(item);
+          } else if (item.children) {
+            const filteredChildren = item.children.filter(child =>
+              (!child.roles || child.roles.includes(currentUserRole)) &&
+              child.label.toLowerCase().includes(lowerSearch)
+            );
+            if (filteredChildren.length > 0) {
+              acc.push({ ...item, children: filteredChildren });
+            }
+          }
+          return acc;
+        }, []);
+        return filteredItems.length > 0 ? [groupKey, { ...groupData, items: filteredItems }] : null;
+      })
+      .filter(Boolean);
+
+    setFilteredNavGroups({ topLevel: newTopLevel, grouped: newGrouped });
+
+    // Auto-expand groups when searching
+    if (searchTerm) {
+      const allOpen = {};
+      newGrouped.forEach(([key]) => allOpen[key] = true);
+      setOpenGroups(prev => ({ ...prev, ...allOpen }));
+      // Auto-expand submenus with children if they contain search results
+      const openSubs = {};
+      newGrouped.forEach(([, groupData]) => {
+        groupData.items.forEach(item => {
+          if (item.children && item.children.length > 0) { // Check if item has children after filtering
+            openSubs[item.eventKey] = true;
+          }
+        });
+      });
+      setOpenSubmenus(prev => ({ ...prev, ...openSubs }));
+    }
+
+  }, [currentUserRole, searchTerm, navGroups]); // Rerun on role or search term change
+
 
   // Filter logic
   const lowerSearchTerm = searchTerm.toLowerCase();
 
-  if (lowerSearchTerm) {
-    topLevelItems = topLevelItems.filter(item => 
-      item.label.toLowerCase().includes(lowerSearchTerm)
-    );
-
-    groupedItems = groupedItems.map(([groupKey, groupData]) => {
-      const filteredItems = groupData.items.reduce((acc, item) => {
-        if (item.label.toLowerCase().includes(lowerSearchTerm)) {
-          acc.push(item); // Keep item if it matches
-        } else if (item.children) {
-          // If item itself doesn't match, check its children
-          const filteredChildren = item.children.filter(child => 
-            child.label.toLowerCase().includes(lowerSearchTerm)
-          );
-          if (filteredChildren.length > 0) {
-            // If children match, include the parent item with only matched children
-            acc.push({ ...item, children: filteredChildren });
-          }
-        }
-        return acc;
-      }, []);
-      
-      // If after filtering, the group has items, return it, otherwise filter out the group
-      return filteredItems.length > 0 ? [groupKey, { ...groupData, items: filteredItems }] : null;
-    }).filter(Boolean); // Remove null entries (groups with no matching items)
-
-    // Optionally, expand all groups when searching
-    // This is a simple approach; more sophisticated would be to expand only groups with matches
-    if (searchTerm && !Object.values(openGroups).every(Boolean)) {
-      const allOpen = {};
-      groupedItems.forEach(([key]) => allOpen[key] = true);
-      // Consider if L2/L3 should also auto-expand. For now, only L1.
-      // setOpenGroups(allOpen); // This might cause issues if called directly in render.
-                               // Better to manage this effect-fully or by user action.
-                               // For now, user has to manually expand.
-    }
-  }
-
+  // No longer need to re-declare topLevelItems and groupedItems here, use from state
+  const { topLevel: topLevelItems, grouped: groupedItems } = filteredNavGroups;
 
   return (
     <div className={styles.sidebarContainer}>
@@ -177,7 +276,7 @@ const LeftSidebar = () => {
          {/* Icon can be kept or removed based on design preference with new logo style */}
          {/* <Icon name="unfold_more" className={styles.brandExpandIcon} /> */}
       </div>
-      
+
       {/* Search Functionality */}
       <div className={styles.sidebarSearchContainer}>
         <Icon name="search" className={styles.searchIcon} />
@@ -190,36 +289,73 @@ const LeftSidebar = () => {
         />
       </div>
 
+      {/* Role Selector Added Here */}
+      <div className={styles.roleSelectorContainer}>
+        <div className={styles.roleSelectorLabel}>
+          <Icon name="admin_panel_settings" className={styles.roleSelectorIcon} />
+          <span>Current Role</span>
+        </div>
+        <StyledFormSelect
+          value={currentUserRole}
+          onChange={(e) => setCurrentUserRole(e.target.value)}
+          aria-label="Select User Role"
+          className={styles.roleSelectorDropdown}
+          size="sm"
+        >
+          <option value={USER_ROLES.ADMIN}>Admin</option>
+          <option value={USER_ROLES.TEACHER}>Teacher</option>
+          {/* Student option intentionally excluded */}
+        </StyledFormSelect>
+      </div>
+
       {/* Updated Nav section */}
       <Nav className={`flex-column ${styles.sidebarNav}`} activeKey={activeKey} onSelect={(k) => setActiveKey(k)}>
         {/* Render top-level items first */}
         {topLevelItems.length === 0 && searchTerm ? (
           <div className={styles.noResults}>No top-level items found.</div>
-        ) : topLevelItems.map(item => (
-          // Use StyledButton, apply existing classes for sidebar-specific style
-          <StyledButton
+        ) : topLevelItems.map(item => {
+      if (item.eventKey === 'dashboard') { // Specifically target the dashboard link
+        return (
+          <Link
+            to={item.path} // Should be '/dashboard'
             key={item.eventKey}
-            variant="link" // Base variant
-            eventKey={item.eventKey} // Pass eventKey for Nav onSelect
-            active={activeKey === item.eventKey} // Pass active state
-            onClick={() => setActiveKey(item.eventKey)} // Handle click for active state
-            className={`${styles.navLink} ${activeKey === item.eventKey ? styles.active : ''}`} // Apply sidebar styles
+            className={`${styles.navLink} ${activeKey === item.eventKey ? styles.active : ''} d-flex align-items-center px-3 py-2`} // Basic styling, you might need to adjust
+            onClick={() => setActiveKey(item.eventKey)} // Keep active state update
+            style={{ textDecoration: 'none' }}
           >
-            <Icon name={item.icon} className={styles.navLinkIcon} /> {item.label}
-          </StyledButton>
-        ))}
+            <Icon name={item.icon} className={styles.navLinkIcon} /> <span className="ms-2">{item.label}</span>
+          </Link>
+        );
+      }
+      // For other top-level items, use the existing StyledButton
+      // Convert other top-level items (e.g., User Profile)
+      if (item.path) { // Ensure it's a navigation item
+         return (
+           <Link
+             to={item.path}
+             key={item.eventKey}
+             className={`${styles.navLink} ${activeKey === item.eventKey ? styles.active : ''} d-flex align-items-center px-3 py-2`}
+             onClick={() => setActiveKey(item.eventKey)}
+             style={{ textDecoration: 'none' }}
+           >
+             <Icon name={item.icon} className={styles.navLinkIcon} /> <span className="ms-2">{item.label}</span>
+           </Link>
+         );
+      }
+      // Fallback or non-navigational items (if any)
+      return null;
+    })}
 
-        {/* Render grouped items */}
-        {groupedItems.length === 0 && searchTerm && topLevelItems.length > 0 ? ( // Show if top-level items exist but no grouped items
+        {groupedItems.length === 0 && searchTerm && topLevelItems.length > 0 ? (
           <div className={styles.noResults}>No grouped items found.</div>
-        ) : groupedItems.length === 0 && searchTerm && topLevelItems.length === 0 ? ( // Show if no items at all
+        ) : groupedItems.length === 0 && searchTerm && topLevelItems.length === 0 ? (
            <div className={styles.noResults}>No navigation items found.</div>
         ) : (
           groupedItems.map(([groupKey, groupData]) => (
             <div key={groupKey} className={styles.navGroup}>
               {(() => {
-                const isGroupActivePath = !searchTerm && groupData.items.some(item => 
-                  activeKey === item.eventKey || 
+                const isGroupActivePath = !searchTerm && groupData.items.some(item =>
+                  activeKey === item.eventKey ||
                   (item.children && item.children.some(child => activeKey === child.eventKey))
                 );
                 return (
@@ -232,76 +368,117 @@ const LeftSidebar = () => {
                 <div id={`collapse-${groupKey}`} className={styles.groupItemsContainer}>
                   {groupData.items.map(item => {
                     const hasChildren = item.children && item.children.length > 0;
-                    // If searching, L2 submenus with children should also be open to show matched L3 items
-                    const isSubmenuOpen = searchTerm && hasChildren ? true : openSubmenus[item.eventKey]; 
+                    const isSubmenuOpen = searchTerm && hasChildren ? true : openSubmenus[item.eventKey];
 
-                    return (
-                      <div key={item.eventKey} className={styles.level2Wrapper}>
-                        <StyledButton
-                          variant="link" // Keep link variant for base styling
-                        onClick={() => {
-                          if (hasChildren) {
-                            toggleSubmenu(item.eventKey);
-                          } else {
-                            // For leaf nodes, Nav's onSelect (if eventKey is passed) or this direct setActiveKey will handle it.
-                            // console.log(`L2 Leaf StyledButton Clicked: ${item.label}, eventKey: ${item.eventKey}, hasChildren: ${hasChildren}`);
-                            setActiveKey(item.eventKey);
-                          }
-                        }}
-                        // Pass eventKey ONLY if it's a leaf node, to allow Nav's onSelect to work for selection.
-                        // For parent nodes, we don't want Nav's onSelect to interfere with our toggle.
-                        eventKey={!hasChildren ? item.eventKey : undefined}
-                        active={!hasChildren && activeKey === item.eventKey} // Active state only for leaf nodes
-                        className={`${styles.navLink} ${styles.level2Link} ${(!hasChildren && activeKey === item.eventKey) ? styles.active : ''} ${(!searchTerm && hasChildren && item.children.some(child => activeKey === child.eventKey)) ? styles.activePathParent : ''}`}
-                        aria-controls={hasChildren ? `submenu-${item.eventKey}` : undefined}
-                        aria-expanded={hasChildren ? isSubmenuOpen : undefined}
-                        // Ensure the button itself is focusable if it's interactive
-                        tabIndex={0}
-                      >
-                        <Icon name={item.icon} className={styles.navLinkIcon} />
-                        <span className={styles.linkLabel}>{item.label}</span>
-                        {hasChildren && (
-                          <Icon 
-                            name={isSubmenuOpen ? 'expand_more' : 'chevron_right'} 
-                            className={`${styles.expandIconSubmenu} ${!searchTerm && item.children.some(child => activeKey === child.eventKey) ? styles.activePathIcon : ''}`} 
-                          />
-                        )}
-                      </StyledButton>
-
-                      {/* Render Level 3 items */}
-                      {hasChildren && (
-                        <Collapse in={isSubmenuOpen}>
-                          <div id={`submenu-${item.eventKey}`} className={styles.level3Container}>
-                            {item.children.map(childItem => {
-                              // L3 items do not have further children in this simplified search logic
-                              // const hasGrandChildren = childItem.children && childItem.children.length > 0;
-                              // const isSubSubmenuOpen = openSubSubmenus[childItem.eventKey];
-
-                              return (
-                                <div key={childItem.eventKey} className={styles.level3Wrapper}>
-                                  <StyledButton
-                                    variant="link"
-                                    eventKey={childItem.eventKey}
-                                    active={activeKey === childItem.eventKey}
-                                    onClick={() => setActiveKey(childItem.eventKey)}
-                                    className={`${styles.navLink} ${activeKey === childItem.eventKey ? styles.active : ''} ${styles.level3Link}`}
-                                  >
-                                    {childItem.icon && <Icon name={childItem.icon} className={styles.navLinkIcon} />}
-                                    <span className={styles.linkLabel}>{childItem.label}</span>
-                                    {/* L3 items are leaves, no expand icon */}
-                                  </StyledButton>
-                                </div>
-                              );
-                            })}
+                    // Refactored Level 2 items based on detailed instructions
+                    if (item.path) { // If it's meant to be a link
+                      return (
+                        <div key={item.eventKey} className={styles.level2Wrapper}>
+                          <Link
+                            to={item.path}
+                            key={item.eventKey}
+                            onClick={() => {
+                              setActiveKey(item.eventKey);
+                              if (hasChildren) {
+                                toggleSubmenu(item.eventKey);
+                              }
+                            }}
+                            className={`${styles.navLink} ${styles.level2Link} ${(!hasChildren && activeKey === item.eventKey) ? styles.active : ''} ${(!searchTerm && hasChildren && item.children && item.children.some(child => activeKey === child.eventKey)) ? styles.activePathParent : ''} d-flex justify-content-between align-items-center w-100`}
+                            aria-controls={hasChildren ? `submenu-${item.eventKey}` : undefined}
+                            aria-expanded={hasChildren ? isSubmenuOpen : undefined}
+                            style={{ textDecoration: 'none' }}
+                          >
+                            <div className="d-flex align-items-center">
+                              <Icon name={item.icon} className={styles.navLinkIcon} />
+                              <span className={`${styles.linkLabel} ms-2`}>{item.label}</span>
+                            </div>
+                            {hasChildren && (
+                              <Icon
+                                name={isSubmenuOpen ? 'expand_more' : 'chevron_right'}
+                                className={`${styles.expandIconSubmenu} ${!searchTerm && item.children.some(child => activeKey === child.eventKey) ? styles.activePathIcon : ''}`}
+                              />
+                            )}
+                          </Link>
+                          {hasChildren && (
+                            <Collapse in={isSubmenuOpen}>
+                              <div id={`submenu-${item.eventKey}`} className={styles.level3Container}>
+                                {/* Refactored Level 3 items */}
+                                {item.children.map(childItem => {
+                                  if (childItem.path) { // Ensure it's a navigational item
+                                    return (
+                                      <div key={childItem.eventKey} className={styles.level3Wrapper}>
+                                        <Link
+                                          to={childItem.path}
+                                          key={childItem.eventKey}
+                                          className={`${styles.navLink} ${activeKey === childItem.eventKey ? styles.active : ''} ${styles.level3Link} d-flex align-items-center w-100`}
+                                          onClick={() => setActiveKey(childItem.eventKey)}
+                                          style={{ textDecoration: 'none' }}
+                                        >
+                                          {childItem.icon && <Icon name={childItem.icon} className={styles.navLinkIcon} />}
+                                          <span className={`${styles.linkLabel} ms-2`}>{childItem.label}</span>
+                                        </Link>
+                                      </div>
+                                    );
+                                  }
+                                  return null;
+                                })}
+                              </div>
+                            </Collapse>
+                          )}
+                        </div>
+                      );
+                    } else if (hasChildren) { // Purely a toggle, not a link itself (item.path is false)
+                        return (
+                          <div key={item.eventKey} className={styles.level2Wrapper}>
+                            <StyledButton // This is a toggle-only button
+                              variant="link"
+                              onClick={() => toggleSubmenu(item.eventKey)}
+                              className={`${styles.navButton} ${styles.level2Link} ${(!searchTerm && item.children && item.children.some(child => activeKey === child.eventKey)) ? styles.activePathParent : ''} d-flex justify-content-between align-items-center w-100`}
+                              aria-controls={`submenu-${item.eventKey}`}
+                              aria-expanded={isSubmenuOpen}
+                            >
+                              <div className="d-flex align-items-center">
+                                <Icon name={item.icon} className={styles.navLinkIcon} />
+                                <span className={`${styles.linkLabel} ms-2`}>{item.label}</span>
+                              </div>
+                              <Icon
+                                name={isSubmenuOpen ? 'expand_more' : 'chevron_right'}
+                                className={styles.expandIconSubmenu}
+                              />
+                            </StyledButton>
+                            <Collapse in={isSubmenuOpen}>
+                              <div id={`submenu-${item.eventKey}`} className={styles.level3Container}>
+                                {/* Level 3 items under a toggle-only parent */}
+                                {item.children.map(childItem => { // These children should still be Links
+                                  if (childItem.path) {
+                                    return (
+                                      <div key={childItem.eventKey} className={styles.level3Wrapper}>
+                                        <Link
+                                          to={childItem.path}
+                                          key={childItem.eventKey}
+                                          className={`${styles.navLink} ${activeKey === childItem.eventKey ? styles.active : ''} ${styles.level3Link} d-flex align-items-center w-100`}
+                                          onClick={() => setActiveKey(childItem.eventKey)}
+                                          style={{ textDecoration: 'none' }}
+                                        >
+                                          {childItem.icon && <Icon name={childItem.icon} className={styles.navLinkIcon} />}
+                                          <span className={`${styles.linkLabel} ms-2`}>{childItem.label}</span>
+                                        </Link>
+                                      </div>
+                                    );
+                                  }
+                                  return null;
+                                })}
+                              </div>
+                            </Collapse>
                           </div>
-                        </Collapse>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </Collapse>
-          </div>
+                        );
+                    }
+                    // Fallback for items that don't fit above criteria (e.g. no path, no children)
+                    return null;
+                  })}
+                </div>
+              </Collapse>
+            </div>
         )))}
       </Nav>
     </div>

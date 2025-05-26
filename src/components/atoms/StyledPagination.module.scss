@@ -1,0 +1,105 @@
+@use 'src/styles/_variables.scss' as v;
+
+.styledPagination {
+  // Overall container styling (e.g., margins)
+  margin-top: v.$spacing-md;
+  margin-bottom: v.$spacing-md;
+
+  // Target list items directly, as Pagination.Item renders as <li>
+  :global(.page-item) {
+    margin: 0 2px;
+
+    // Target links within list items
+    :global(a.page-link) {
+      background-color: v.$surface-color;
+      color: v.$on-surface-color;
+      border: 1px solid v.$outline-color;
+      border-radius: v.$base-border-radius;
+      box-shadow: none; // Remove default Bootstrap focus shadow
+
+      &:hover {
+        background-color: v.$background-hover;
+        color: v.$primary-color; // Or a specific hover text color
+        border-color: v.$primary-color;
+      }
+
+      &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(v.$primary-color, 0.25); // Custom focus style
+        border-color: v.$primary-color;
+      }
+    }
+
+    // Active state
+    &.active :global(a.page-link) {
+      background-color: v.$primary-color;
+      color: v.$on-primary-color;
+      border-color: v.$primary-color;
+      z-index: 3; // Ensure active item is above others
+    }
+
+    // Disabled state
+    &.disabled {
+      :global(a.page-link),
+      :global(span.page-link) { // Bootstrap uses <span> for disabled First/Prev/Next/Last text
+        background-color: lighten(v.$outline-color, 20%);
+        color: v.$outline-color;
+        border-color: lighten(v.$outline-color, 10%);
+        cursor: not-allowed;
+        pointer-events: none; // Ensure no interaction
+      }
+    }
+  }
+
+  // Specific styling for Ellipsis, First, Prev, Next, Last if needed
+  :global(.page-item.disabled .page-link), // For items that are actual links but disabled
+  :global(.page-item .page-link.disabled) { // If the link itself has a disabled class
+    // Ensure disabled styles apply correctly
+  }
+
+  // Ellipsis specific styling - often a span
+  :global(.page-item:has(span.page-link-ellipsis)) { // Assuming ellipsis might have a specific class or structure
+     :global(span.page-link-ellipsis) { // Or target Pagination.Ellipsis's rendered element
+        color: v.$on-surface-color;
+        // No border or background needed for ellipsis, or make it minimal
+        border: none;
+        background-color: transparent;
+        padding-left: v.$spacing-sm;
+        padding-right: v.$spacing-sm;
+     }
+     &:hover :global(span.page-link-ellipsis) {
+        background-color: v.$background-hover; // Optional: subtle hover for ellipsis
+        color: v.$primary-color;
+     }
+  }
+}
+
+// Size Variants
+.paginationSm {
+  :global(.page-item) {
+    :global(a.page-link),
+    :global(span.page-link) { // Also for disabled items using spans
+      padding: v.$pagination-padding-y-sm v.$pagination-padding-x-sm;
+      font-size: v.$pagination-font-size-sm;
+      line-height: v.$pagination-line-height-sm;
+    }
+  }
+   :global(.page-item:has(span.page-link-ellipsis) span.page-link-ellipsis) {
+      padding-left: v.$pagination-padding-x-sm;
+      padding-right: v.$pagination-padding-x-sm;
+   }
+}
+
+.paginationLg {
+  :global(.page-item) {
+    :global(a.page-link),
+    :global(span.page-link) {
+      padding: v.$pagination-padding-y-lg v.$pagination-padding-x-lg;
+      font-size: v.$pagination-font-size-lg;
+      line-height: v.$pagination-line-height-lg;
+    }
+  }
+  :global(.page-item:has(span.page-link-ellipsis) span.page-link-ellipsis) {
+      padding-left: v.$pagination-padding-x-lg;
+      padding-right: v.$pagination-padding-x-lg;
+   }
+}

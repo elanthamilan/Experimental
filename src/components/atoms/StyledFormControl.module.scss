@@ -2,25 +2,25 @@
 @use '../../styles/variables' as v;
 
 .formControl {
-  background-color: v.$input-bg;
-  border: v.$input-border;
+  background-color: v.$input-bg; // This is v.$surface-color
+  border: v.$base-border-width solid v.$outline-color; // Changed to M3 style
   border-radius: v.$input-border-radius;
   height: v.$input-height;
   padding: v.$input-padding;
-  font-family: v.$font-family-primary; // Themed
+  font-family: v.$font-family-body; // Changed to body font
   font-weight: v.$font-weight-normal;
   font-size: v.$input-font-size;
   line-height: v.$line-height-base;
-  color: v.$input-text-color; 
-  box-shadow: none !important; 
+  color: v.$on-surface-color; // Text on surface
+  box-shadow: none !important;
 
   &:focus {
-    border-color: v.$input-focus-border-color;
-    box-shadow: v.$input-focus-box-shadow !important;
-    color: v.$text-color-primary; // Themed
+    border-color: v.$primary-color; // Focus with primary color
+    // box-shadow: v.$input-focus-box-shadow !important; // Removed for cleaner M3 look
+    color: v.$on-surface-color; // Keep text color on surface
   }
   &::placeholder {
-     color: v.$input-text-color; // Should this be a specific placeholder color variable?
+     color: v.$on-surface-variant-color; // Placeholder uses on-surface-variant
   }
 
   &[as="textarea"] {

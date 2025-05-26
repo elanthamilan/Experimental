@@ -1,19 +1,21 @@
 import React from 'react';
-import { Table, Container, Button } from 'react-bootstrap';
+import StyledTable from './atoms/StyledTable';
+import StyledContainer from './atoms/StyledContainer';
+import StyledButton from './atoms/StyledButton';
 
 const DataTable = ({ data, onEdit, onDelete }) => {
   if (!data || data.length === 0) {
     return (
-      <Container className="mt-4">
+      <StyledContainer className="mt-4">
         <p>No student data to display.</p>
-      </Container>
+      </StyledContainer>
     );
   }
 
   return (
-    <Container className="mt-4">
+    <StyledContainer className="mt-4">
       <h2>Student Data Table</h2>
-      <Table striped bordered hover responsive>
+      <StyledTable striped bordered hover responsive>
         <thead>
           <tr>
             <th>#</th>
@@ -33,18 +35,18 @@ const DataTable = ({ data, onEdit, onDelete }) => {
               <td>{item.program}</td>
               <td>{item.semesters}</td>
               <td>
-                <Button variant="outline-primary" size="sm" onClick={() => onEdit(item)} className="me-2">
+                <StyledButton variant="outline-primary" size="sm" onClick={() => onEdit(item)} className="me-2">
                   Edit
-                </Button>
-                <Button variant="outline-danger" size="sm" onClick={() => onDelete(item.id)}>
+                </StyledButton>
+                <StyledButton variant="outline-danger" size="sm" onClick={() => onDelete(item.id)}>
                   Delete
-                </Button>
+                </StyledButton>
               </td>
             </tr>
           ))}
         </tbody>
-      </Table>
-    </Container>
+      </StyledTable>
+    </StyledContainer>
   );
 };
 

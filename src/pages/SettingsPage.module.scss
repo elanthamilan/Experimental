@@ -1,0 +1,329 @@
+.settingsPageContainer {
+  padding: 20px;
+}
+
+.pageHeader {
+  margin-bottom: 2.5rem;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    text-align: left;
+  }
+}
+
+.pageTitle {
+  margin-bottom: 0.5rem;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--theme-on-background);
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pageDescription {
+  font-size: 1.1rem;
+  color: var(--theme-on-surface-variant);
+  margin-bottom: 0;
+  max-width: 600px;
+}
+
+.settingsSectionCard {
+  margin-bottom: 2rem;
+  background-color: var(--theme-surface-container-low, var(--theme-surface)); // Use new M3 variables, fallback to surface
+  border: 1px solid var(--theme-outline-variant);
+  border-radius: 0.75rem; // Slightly larger radius
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05); // Subtle shadow
+
+  :global(.card-header) { // Targeting React-Bootstrap's Card.Header
+    background-color: var(--theme-surface-container, var(--theme-surface-variant)); // Slightly different from card body
+    border-bottom: 1px solid var(--theme-outline-variant);
+    padding: 1rem 1.25rem;
+  }
+
+  :global(.card-body) {
+    padding: 1.25rem;
+    color: var(--theme-on-surface);
+  }
+}
+
+.themeListContainer, .myThemesListContainer { // Shared style for theme lists
+  // This class can be used on ListGroup if needed, but direct styling of ListGroup.Item is often enough
+}
+
+.themeListItem, .myThemeListItem { // Shared style for theme list items
+  display: flex;
+  flex-direction: column; // Stack content vertically initially
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.5rem; // Space between items
+  border: 1px solid var(--theme-outline);
+  border-radius: 0.5rem;
+  background-color: var(--theme-surface);
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--theme-surface-container-low, var(--theme-surface-variant)); // Hover effect
+    box-shadow: 0 4px 8px rgba(0,0,0,0.07);
+  }
+
+  h4 { // Theme name
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: var(--theme-on-surface);
+  }
+
+  p { // Font info, base size info
+    font-size: 0.9rem;
+    color: var(--theme-on-surface-variant);
+    margin-bottom: 0.5rem;
+  }
+
+  // For larger screens, allow button to sit next to content
+  @media (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.themeInfo, .myThemeInfo { // Shared style for info wrapper
+  flex-grow: 1;
+  margin-bottom: 0.5rem; // Space before button on small screens
+  @media (min-width: 768px) {
+    margin-bottom: 0;
+    margin-right: 1rem; // Space between info and button
+  }
+}
+
+.colorSwatches {
+  display: flex;
+  margin-bottom: 0.5rem;
+
+  .swatch {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--theme-outline-variant); // Add a border to swatches
+  }
+}
+
+.primarySwatch {
+  composes: swatch;
+  /* background-color will be applied inline via JS */
+}
+.secondarySwatch {
+  composes: swatch;
+  /* background-color will be applied inline via JS */
+}
+.tertiarySwatch {
+  composes: swatch;
+  /* background-color will be applied inline via JS */
+}
+
+.activeTheme { // For predefined themes
+  border-left: 5px solid var(--theme-primary);
+  background-color: var(--theme-surface-container-low, var(--theme-surface-variant)); // Highlight active theme
+
+  h4 {
+    color: var(--theme-primary); // Highlight title of active theme
+  }
+}
+
+.applyButton, .saveThemeButton, .deleteThemeButton {
+  // Using Bootstrap Button variants, so specific styling might not be needed
+  // Add margin if buttons are grouped and need spacing
+  margin-top: 0.5rem; // For small screens when buttons stack
+  @media (min-width: 768px) {
+    margin-top: 0; // Reset for larger screens
+    margin-left: 0.5rem; // Space between buttons if they are next to each other
+  }
+}
+.saveThemeButton {
+  width: 100%; // Make save button full width in its container
+  margin-top: 1rem; // Space above the save button
+}
+
+
+.sectionHeaderContent {
+  h3 {
+    margin-bottom: 0.25rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--theme-on-surface);
+  }
+
+  p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    color: var(--theme-on-surface-variant);
+    font-style: italic;
+  }
+}
+
+.saveThemeSection {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--theme-outline-variant);
+  text-align: center;
+}
+
+.saveThemeNote {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--theme-on-surface-variant);
+  font-style: italic;
+
+  strong {
+    color: var(--theme-primary);
+  }
+}
+
+.placeholderText {
+  color: var(--theme-on-surface-variant);
+  font-style: italic;
+}
+
+// Styles for Custom Theme Builder (Colors)
+.customThemeBuilderSection {
+  // margin-top: 1rem; // Keep consistent with font selector section if they are separate
+}
+
+.colorPickerGroup {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+
+  label {
+    min-width: 120px; // Ensure labels align
+    margin-right: 1rem;
+    font-weight: 500;
+    color: var(--theme-on-surface-variant);
+  }
+
+  input[type="color"] {
+    width: 50px;
+    height: 30px;
+    border: 1px solid var(--theme-outline);
+    border-radius: 4px;
+    padding: 2px;
+    cursor: pointer;
+    &:hover { border-color: var(--theme-primary); }
+  }
+}
+
+.generatedColorsPreview {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--theme-outline-variant);
+  h5 { font-size: 1rem; font-weight: bold; margin-bottom: 0.75rem; color: var(--theme-on-surface); }
+}
+
+.colorPreviewItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  .previewSwatch {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--theme-outline);
+    /* background-color will be applied inline via JS */
+  }
+  .colorName { min-width: 180px; color: var(--theme-on-surface-variant); }
+  .colorValue { font-family: monospace; color: var(--theme-on-surface); }
+}
+
+.colorValueSwatch {
+  composes: previewSwatch;
+  /* background-color will be applied inline via JS */
+}
+
+// Styles for Custom Font Selection
+.customFontSelectorSection {
+  // margin-top: 1rem; // Keep consistent if sections are separate
+}
+
+.fontSelectorGroup, .fontSizeControlGroup, .fontWeightSelectorGroup { // Shared styling for form groups
+  display: flex;
+  flex-direction: column; // Stack label and control vertically
+  margin-bottom: 1rem;
+
+  label {
+    margin-bottom: 0.35rem; // Space between label and control
+    font-weight: 500;
+    color: var(--theme-on-surface-variant);
+  }
+
+  // For wider screens, label and control can be side-by-side
+  @media (min-width: 576px) { // sm breakpoint
+    flex-direction: row;
+    align-items: center;
+    label {
+      min-width: 120px; // Or specific width like colorPickerGroup
+      margin-right: 1rem;
+      margin-bottom: 0; // Reset bottom margin
+    }
+  }
+
+  :global(.form-select), :global(.form-control[type="number"]) { // Targeting React-Bootstrap components
+    max-width: 250px; // Limit width of select/number inputs
+    border-color: var(--theme-outline);
+    background-color: var(--theme-surface-container-lowest, var(--theme-surface)); // Ensure good contrast for input
+    color: var(--theme-on-surface);
+    &:focus {
+      border-color: var(--theme-primary);
+      box-shadow: 0 0 0 0.2rem var(--theme-primary-container); // M3 style focus ring
+    }
+  }
+}
+
+.fontWeightRadioGroup {
+  display: flex;
+  flex-direction: column; // Stack radio buttons by default
+  gap: 0.5rem; // Space between radio buttons
+
+  @media (min-width: 576px) {
+    flex-direction: row; // Radio buttons side-by-side on larger screens
+    flex-wrap: wrap; // Allow wrapping if too many options
+    gap: 1rem; // Space between radio buttons
+  }
+
+  :global(.form-check) { // Targeting React-Bootstrap Form.Check
+    color: var(--theme-on-surface); // Ensure label text is visible
+    :global(.form-check-input:checked) {
+      background-color: var(--theme-primary);
+      border-color: var(--theme-primary);
+    }
+     :global(.form-check-input) {
+        border-color: var(--theme-outline);
+     }
+  }
+}
+
+.myThemeListItem { // Specific styling for saved custom themes if needed
+  // Example: slightly different border or background to distinguish from predefined
+  // border-left: 5px solid var(--theme-secondary); // Example: use secondary color for custom themes
+  .themeActions {
+    display: flex;
+    flex-direction: column; // Stack buttons on small screens
+    align-items: flex-start;
+     @media (min-width: 768px) {
+      flex-direction: row; // Side by side on larger screens
+      align-items: center;
+    }
+    // Apply button is already styled by .applyButton
+    // Delete button needs specific styling if not using Bootstrap variant="danger"
+    .deleteThemeButton {
+       margin-left: 0; // Reset margin for stacked layout
+       @media (min-width: 768px) {
+          margin-left: 0.5rem;
+       }
+    }
+  }
+}

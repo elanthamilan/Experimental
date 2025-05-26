@@ -1,29 +1,49 @@
 import React from 'react';
-import { Row, Col, Card, Container } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
+import StatsCard from './molecules/StatsCard';
 import styles from './SummaryStats.module.scss';
 
 const SummaryStats = () => {
   const stats = [
-    { title: 'TOTAL SUBJECTS', value: 123, id: 'total' },
-    { title: 'SUBJECTS DONE', value: 3, id: 'done' },
-    { title: 'SUBJECTS NOT DONE', value: 120, id: 'notDone' },
+    {
+      title: 'TOTAL SUBJECTS',
+      value: 123,
+      id: 'total',
+      variant: 'primary',
+      icon: 'school'
+    },
+    {
+      title: 'SUBJECTS DONE',
+      value: 3,
+      id: 'done',
+      variant: 'success',
+      icon: 'check_circle'
+    },
+    {
+      title: 'SUBJECTS NOT DONE',
+      value: 120,
+      id: 'notDone',
+      variant: 'warning',
+      icon: 'pending'
+    },
   ];
 
   return (
-    <Container fluid className={styles.summaryContainer}>
-      <Row>
+    <div className={styles.summaryContainer}>
+      <Row className="g-4">
         {stats.map((stat) => (
-          <Col md={4} key={stat.id} className="mb-3 mb-md-0">
-            <Card className={`${styles.statCard} ${styles[stat.id]}`}>
-              <Card.Body className="text-center">
-                <div className={styles.statValue}>{stat.value}</div>
-                <div className={styles.statTitle}>{stat.title}</div>
-              </Card.Body>
-            </Card>
+          <Col md={4} key={stat.id}>
+            <StatsCard
+              title={stat.title}
+              value={stat.value}
+              variant={stat.variant}
+              icon={stat.icon}
+              className={styles[stat.id]}
+            />
           </Col>
         ))}
       </Row>
-    </Container>
+    </div>
   );
 };
 

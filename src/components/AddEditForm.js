@@ -1,15 +1,15 @@
-import React, { useState } from 'react'; // Import useState
-// Renamed Button to avoid conflict with our StyledButton
-// Removed unused InputGroup, StyledFormControl, StyledFormSelect, StyledFormCheck
-import { Container, Row, Col, Form as BootstrapForm, Button as BootstrapButton, Breadcrumb, Alert, Card } from 'react-bootstrap'; // Renamed Form
+import React, { useState } from 'react';
+import { Row, Col, Form as BootstrapForm, Breadcrumb, Alert, Card, Button as BootstrapButton } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
+import StyledContainer from './atoms/StyledContainer';
+import StyledCard from './atoms/StyledCard';
 import StyledButton from './atoms/StyledButton';
-import StyledFormLabel from './atoms/StyledFormLabel'; // Import atom
+import StyledFormLabel from './atoms/StyledFormLabel';
+import FormField from './molecules/FormField';
 // Atoms below are used via FormField molecule
 // import StyledFormControl from './atoms/StyledFormControl';
 // import StyledFormSelect from './atoms/StyledFormSelect';
 // import StyledFormCheck from './atoms/StyledFormCheck';
-import FormField from './molecules/FormField'; // Import molecule
 import ProductTableRow from './molecules/ProductTableRow'; // Import molecule
 import FileUploadDropzone from './molecules/FileUploadDropzone'; // Import molecule
 import styles from './AddEditForm.module.scss';
@@ -101,7 +101,7 @@ const AddEditForm = () => {
   const showErrors = true; // Control visibility based on validation state
 
   return (
-    <Container fluid className={styles.formPageContainer}> {/* Apply container class */}
+    <StyledContainer fluid className={styles.formPageContainer}> {/* Apply container class */}
       {/* 1. Breadcrumbs & Top Actions */}
       <Row className="align-items-center mb-3">
         <Col>
@@ -169,7 +169,7 @@ const AddEditForm = () => {
       <BootstrapForm onSubmit={() => {/* TODO: handleSubmit */}}> {/* Use BootstrapForm */}
 
         {/* 2.1 Section: Basics (First Instance) */}
-        <Card className={`${styles.formSectionCard} mb-3`}>
+        <StyledCard variant="default" className={`${styles.formSectionCard} mb-3`}>
           <Card.Body>
             {/* Card Title and Description */}
             <Row>
@@ -260,7 +260,7 @@ const AddEditForm = () => {
               </Col>
             </Row>
           </Card.Body>
-        </Card>
+        </StyledCard>
 
         {/* 2.1.5 User Info / Transportation Dept Section */}
         {/* This section seems misplaced in the screenshot, combining user info and transportation? */}
@@ -487,7 +487,7 @@ const AddEditForm = () => {
         </div>
 
       </BootstrapForm> {/* Use BootstrapForm */}
-    </Container>
+    </StyledContainer>
   );
 };
 

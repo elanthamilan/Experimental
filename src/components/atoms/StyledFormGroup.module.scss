@@ -1,0 +1,5 @@
+@use 'src/styles/_variables.scss' as v;
+
+.styledFormGroup {
+  margin-bottom: v.$base-margin; // Or a more specific variable like v.$form-group-margin-bottom if defined
+}

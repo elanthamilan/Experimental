@@ -44,393 +44,469 @@ const getContrast = (hex1, hex2) => {
 // Helper to get an accessible "On" color
 const getAccessibleOnColor = (backgroundHex, darkColorOption = '#1C1B1F', lightColorOption = '#FFFFFF', minContrast = 4.5) => {
   if (!backgroundHex || typeof backgroundHex !== 'string' || !backgroundHex.startsWith('#')) {
-    return lightColorOption; 
+    // Default to lightColorOption if backgroundHex is invalid, as it's safer on unknown backgrounds
+    return lightColorOption;
   }
   const contrastWithDark = getContrast(backgroundHex, darkColorOption);
   const contrastWithLight = getContrast(backgroundHex, lightColorOption);
 
+  // If both options meet minimum contrast
   if (contrastWithLight >= minContrast && contrastWithDark >= minContrast) {
     const bgLuminance = getLuminance(backgroundHex);
-    if (bgLuminance < 0.5) { 
+    // Prefer light text on dark backgrounds and dark text on light backgrounds
+    // If background is dark (lower luminance), light text is generally preferred if contrast is similar
+    if (bgLuminance < 0.5) {
       return contrastWithLight >= contrastWithDark ? lightColorOption : darkColorOption;
-    } else { 
+    } else { // If background is light (higher luminance), dark text is generally preferred
       return contrastWithDark >= contrastWithLight ? darkColorOption : lightColorOption;
     }
   }
+  // If only one option meets minimum contrast
   if (contrastWithLight >= minContrast) return lightColorOption;
   if (contrastWithDark >= minContrast) return darkColorOption;
-  
+
+  // If neither meets minimum contrast, fallback based on background luminance
+  // This is a less ideal scenario, aiming for the better of two poor options or a safe default
   const bgLuminance = getLuminance(backgroundHex);
-    if (bgLuminance < 0.5) {
-      return lightColorOption; 
-    } else {
-      return darkColorOption; 
+    if (bgLuminance < 0.5) { // Dark background
+      return lightColorOption; // Default to light text
+    } else { // Light background
+      return darkColorOption; // Default to dark text
     }
 };
 
-// Helper function to adjust hex color brightness
+// Helper function to adjust hex color brightness (simulates M3 tones by approximation)
+// Positive factor makes it lighter, negative factor makes it darker.
+// Factor of 0.6 aims for a very light shade (like M3 tone 90 from tone 40)
+// Factor of -0.1 makes it slightly darker.
 const adjustHexBrightness = (hex, factor) => {
-    if (!hex || typeof hex !== 'string' || !hex.startsWith('#')) return hex; 
+    if (!hex || typeof hex !== 'string' || !hex.startsWith('#')) return hex;
     let [r, g, b] = hexToRgbArray(hex);
-    r = Math.min(255, Math.max(0, Math.round(r * (1 + factor))));
-    g = Math.min(255, Math.max(0, Math.round(g * (1 + factor))));
-    b = Math.min(255, Math.max(0, Math.round(b * (1 + factor))));
+
+    // For making colors lighter (positive factor), we approach white (255)
+    // For making colors darker (negative factor), we approach black (0)
+    if (factor > 0) {
+        r = Math.min(255, Math.max(0, Math.round(r + (255 - r) * factor)));
+        g = Math.min(255, Math.max(0, Math.round(g + (255 - g) * factor)));
+        b = Math.min(255, Math.max(0, Math.round(b + (255 - b) * factor)));
+    } else {
+        r = Math.min(255, Math.max(0, Math.round(r * (1 + factor)))); // factor is negative
+        g = Math.min(255, Math.max(0, Math.round(g * (1 + factor))));
+        b = Math.min(255, Math.max(0, Math.round(b * (1 + factor))));
+    }
     const toHex = c => ('0'+c.toString(16)).slice(-2);
     return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
-const baseProperties = {
-  '--theme-error': '#B3261E',
-  '--theme-on-error': '#FFFFFF',
-  '--theme-text-color-primary': 'var(--theme-on-surface)',
-  '--theme-text-color-secondary': 'var(--theme-on-surface-variant)',
+// Mix two colors together with a given ratio
+const mixColors = (color1, color2, ratio) => {
+    const hex1 = color1.replace('#', '');
+    const hex2 = color2.replace('#', '');
+
+    const r1 = parseInt(hex1.substr(0, 2), 16);
+    const g1 = parseInt(hex1.substr(2, 2), 16);
+    const b1 = parseInt(hex1.substr(4, 2), 16);
+
+    const r2 = parseInt(hex2.substr(0, 2), 16);
+    const g2 = parseInt(hex2.substr(2, 2), 16);
+    const b2 = parseInt(hex2.substr(4, 2), 16);
+
+    const r = Math.round(r1 * (1 - ratio) + r2 * ratio);
+    const g = Math.round(g1 * (1 - ratio) + g2 * ratio);
+    const b = Math.round(b1 * (1 - ratio) + b2 * ratio);
+
+    const toHex = c => ('0'+c.toString(16)).slice(-2);
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
-const generateThemeColors = (
-  primary, secondary, tertiary, 
-  primaryContainer, onPrimaryContainer, 
-  secondaryContainer, onSecondaryContainer, 
-  tertiaryContainer, onTertiaryContainer, 
-  appBg, contentBg, sidebarBg, searchFormBg,
-  isDark = false,
-  customOutline = null, customOutlineVariant = null,
-  customErrorContainer = null, customOnErrorContainer = null,
-  customInputBg = null, customDropdownBg = null 
-) => {
-  const onPrimary = getAccessibleOnColor(primary, '#1C1B1F', '#FFFFFF', 7.0); 
+export const generateThemeColors = (primary, secondary, tertiary, isDark = false) => {
+  // Material 3 fixed values (Light Theme Defaults)
+  const m3Error = '#B3261E';
+  const m3OnError = '#FFFFFF';
+
+  // Generate theme-based background and surface colors instead of fixed MD3 values
+  // Create backgrounds that are tinted with the primary color for better theme integration
+  const baseBackground = isDark ? '#1C1B1F' : '#FFFBFE';
+  const baseSurface = isDark ? '#1C1B1F' : '#FFFBFE';
+
+  // Tint backgrounds with primary color for better theme integration
+  const m3Background = isDark
+    ? adjustHexBrightness(mixColors(baseBackground, primary, 0.05), 0) // Subtle primary tint in dark mode
+    : adjustHexBrightness(mixColors(baseBackground, primary, 0.02), 0); // Very subtle primary tint in light mode
+
+  const m3Surface = isDark
+    ? adjustHexBrightness(mixColors(baseSurface, primary, 0.08), 0) // Slightly more primary tint for surfaces
+    : adjustHexBrightness(mixColors(baseSurface, primary, 0.03), 0);
+
+  const m3OnBackground = isDark ? '#E6E1E5' : '#1C1B1F';
+  const m3OnSurface = isDark ? '#E6E1E5' : '#1C1B1F';
+
+  // Create surface variants with more pronounced theme colors
+  const m3SurfaceVariant = isDark
+    ? adjustHexBrightness(mixColors(m3Surface, secondary, 0.1), 0.05)
+    : adjustHexBrightness(mixColors(m3Surface, secondary, 0.05), -0.02);
+
+  const m3OnSurfaceVariant = isDark ? '#CAC4D0' : '#49454F';
+  const m3Outline = isDark ? '#938F99' : '#79747E';
+  const m3OutlineVariant = isDark ? '#49454F' : '#CAC4D0';
+  // Inverse colors for light theme (dark on light)
+  const m3InverseSurface = isDark ? '#E6E1E5' : '#313033'; // Darker for light theme
+  const m3InverseOnSurface = isDark ? '#313033' : '#F4EFF4'; // Lighter for light theme
+  const m3InversePrimarySeed = primary; // Use primary seed for inverse primary generation
+
+  // Calculate "On" colors
+  const onPrimary = getAccessibleOnColor(primary);
   const onSecondary = getAccessibleOnColor(secondary);
   const onTertiary = getAccessibleOnColor(tertiary);
 
-  const defaultDarkText = '#1C1B1F';
-  const defaultLightText = '#FFFFFF';
-  const secondaryTextForLightBg = '#444746'; 
-  const secondaryTextForDarkBg = '#B0B0B0';
+  // Calculate Container colors (approximating M3 Tone 90 for light themes)
+  const primaryContainerFactor = isDark ? -0.6 : 0.75; // Darker for dark, much lighter for light
+  const secondaryContainerFactor = isDark ? -0.6 : 0.75;
+  const tertiaryContainerFactor = isDark ? -0.6 : 0.75;
+  const errorContainerFactor = isDark ? -0.6 : 0.85; // Error container is often very light (Tone 90)
 
-  const onAppBg = getAccessibleOnColor(appBg, defaultDarkText, defaultLightText, 7.0);
-  const onContentBg = getAccessibleOnColor(contentBg, defaultDarkText, defaultLightText, 7.0);
-  const onContentBgVariant = getAccessibleOnColor(
-    contentBg, 
-    isDark ? secondaryTextForDarkBg : secondaryTextForLightBg, 
-    isDark ? defaultDarkText : defaultLightText, 
-    4.5
-  );
-  
-  const sidebarTextColor = getAccessibleOnColor(sidebarBg, defaultDarkText, defaultLightText, 7.0);
-  const sidebarIconColor = getAccessibleOnColor(
-    sidebarBg, 
-    isDark ? secondaryTextForDarkBg : secondaryTextForLightBg, 
-    isDark ? defaultDarkText : defaultLightText, 
-    4.5
-  );
-  
-  const effectiveDropdownBg = customDropdownBg || contentBg;
-  const dropdownTextColor = getAccessibleOnColor(effectiveDropdownBg, defaultDarkText, defaultLightText, 4.5);
+  const primaryContainer = adjustHexBrightness(primary, primaryContainerFactor);
+  const onPrimaryContainer = getAccessibleOnColor(primaryContainer);
+  const secondaryContainer = adjustHexBrightness(secondary, secondaryContainerFactor);
+  const onSecondaryContainer = getAccessibleOnColor(secondaryContainer);
+  const tertiaryContainer = adjustHexBrightness(tertiary, tertiaryContainerFactor);
+  const onTertiaryContainer = getAccessibleOnColor(tertiaryContainer);
+  const errorContainer = adjustHexBrightness(m3Error, errorContainerFactor);
+  const onErrorContainer = getAccessibleOnColor(errorContainer, '#FFFFFF', '#141211'); // Specific dark option for error container
 
-  let surfaceContainerLowest, surfaceContainerLow, surfaceContainer, surfaceContainerHigh, surfaceContainerHighest;
-  if (isDark) { // This block will not be hit as all themes are light now
-    surfaceContainerLowest = adjustHexBrightness(contentBg, 0.05); 
-    surfaceContainerLow = adjustHexBrightness(contentBg, 0.08);    
-    surfaceContainer = adjustHexBrightness(contentBg, 0.11);       
-    surfaceContainerHigh = adjustHexBrightness(contentBg, 0.14);   
-    surfaceContainerHighest = adjustHexBrightness(contentBg, 0.17);
-  } else {
-    surfaceContainerLowest = '#FFFFFF'; 
-    if (contentBg && contentBg.toUpperCase() === '#FFFFFF') {
-        surfaceContainerLowest = '#F8F9FA'; 
-    } else if (contentBg) {
-        surfaceContainerLowest = adjustHexBrightness(contentBg, 0.02); 
-    } else {
-        surfaceContainerLowest = '#F8F9FA'; 
-    }
-    surfaceContainerLow = contentBg ? adjustHexBrightness(contentBg, -0.02) : '#F0F0F0'; 
-    surfaceContainer = contentBg ? adjustHexBrightness(contentBg, -0.04) : '#EAEAEA';    
-    surfaceContainerHigh = contentBg ? adjustHexBrightness(contentBg, -0.06) : '#E0E0E0';  
-    surfaceContainerHighest = contentBg ? adjustHexBrightness(contentBg, -0.08) : '#D9D9D9'; 
-  }
+  // Inverse Primary (approximating M3 Tone 80 for light themes on dark inverse surface)
+  const inversePrimary = adjustHexBrightness(m3InversePrimarySeed, isDark ? 0.6 : 0.3); // Lighter for light theme, even lighter for dark theme (as seed is darker)
+  const onInversePrimary = getAccessibleOnColor(inversePrimary);
+
 
   return {
-    ...baseProperties,
-    '--theme-background': appBg,
-    '--theme-on-background': onAppBg,
-    '--theme-surface': contentBg, 
-    '--theme-on-surface': onContentBg,
-    '--theme-on-surface-variant': onContentBgVariant,
-
-    '--theme-surface-container-lowest': surfaceContainerLowest,
-    '--theme-surface-container-low': surfaceContainerLow,
-    '--theme-surface-container': surfaceContainer,
-    '--theme-surface-container-high': surfaceContainerHigh,
-    '--theme-surface-container-highest': surfaceContainerHighest,
-    
     '--theme-primary': primary,
     '--theme-on-primary': onPrimary,
     '--theme-primary-container': primaryContainer,
     '--theme-on-primary-container': onPrimaryContainer,
+
     '--theme-secondary': secondary,
     '--theme-on-secondary': onSecondary,
     '--theme-secondary-container': secondaryContainer,
     '--theme-on-secondary-container': onSecondaryContainer,
+
     '--theme-tertiary': tertiary,
     '--theme-on-tertiary': onTertiary,
     '--theme-tertiary-container': tertiaryContainer,
     '--theme-on-tertiary-container': onTertiaryContainer,
-    
-    '--theme-primary-brand-color': primary,
-    '--theme-secondary-brand-color': secondary,
-    '--theme-accent-color': tertiary,
-    '--theme-text-color-on-primary': onPrimary,
-    '--theme-text-color-on-secondary': onSecondary,
-    '--theme-text-color-on-tertiary': onTertiary,
-    '--theme-text-color-link': primary,
-    '--theme-background-app': appBg,
-    '--theme-background-content': contentBg,
-    '--theme-background-hover': hexToRgba(primary, 0.08),
-    '--theme-background-active': hexToRgba(primary, 0.12),
-    
-    '--theme-sidebar-background': sidebarBg,
-    '--theme-sidebar-text-color': sidebarTextColor,
-    '--theme-sidebar-icon-color': sidebarIconColor,
-    
-    '--theme-sidebar-nav-item-hover-bg': hexToRgba(primary, 0.08),
-    '--theme-sidebar-nav-item-active-text-color': onPrimaryContainer,
-    '--theme-sidebar-nav-item-active-bg': primaryContainer,
-    '--theme-sidebar-nav-item-active-border-color': primary,
-    
-    '--theme-button-primary-bg': primary,
-    '--theme-button-primary-text': onPrimary,
-    '--theme-button-primary-hover-bg': hexToRgba(primary, 0.88), 
-    '--theme-button-secondary-bg': secondaryContainer,
-    '--theme-button-secondary-text': onSecondaryContainer,
-    '--theme-button-secondary-hover-bg': hexToRgba(secondaryContainer, 0.88),
-    '--theme-primary-container-hover-bg': adjustHexBrightness(primaryContainer, -0.05),
-    
-    '--theme-primary-brand-color-hover': hexToRgba(primary, 0.88),
-    '--theme-link-hover-color': hexToRgba(primary, 0.8),
-    '--theme-button-link-hover-bg': hexToRgba(primary, 0.08),
-    '--theme-selected-row-hover-bg': hexToRgba(primary, 0.07),
-    '--theme-dropzone-hover-border-color': hexToRgba(primary, 0.5),
-    '--theme-dropzone-accept-border-color': secondary,
-    '--theme-dropzone-accept-bg-color': hexToRgba(secondary, 0.1),
-    
-    '--theme-utility-sidebar-bg': sidebarBg, 
-    '--theme-search-criteria-form-bg': searchFormBg, 
-    '--theme-input-bg': customInputBg || '#FFFFFF',
-    '--theme-dropdown-bg': effectiveDropdownBg, 
-    '--theme-dropdown-text-color': dropdownTextColor,
 
-    '--theme-outline': customOutline || '#79747E',
-    '--theme-outline-variant': customOutlineVariant || '#CAC4D0',
-    '--theme-error-container': customErrorContainer || '#F9DEDC',
-    '--theme-on-error-container': customOnErrorContainer || '#410E0B',
+    '--theme-error': m3Error,
+    '--theme-on-error': m3OnError,
+    '--theme-error-container': errorContainer,
+    '--theme-on-error-container': onErrorContainer,
+
+    '--theme-background': m3Background,
+    '--theme-on-background': m3OnBackground,
+    '--theme-surface': m3Surface,
+    '--theme-on-surface': m3OnSurface,
+    '--theme-surface-variant': m3SurfaceVariant,
+    '--theme-on-surface-variant': m3OnSurfaceVariant,
+
+    '--theme-surface-tint': primary, // Surface tint is the same as primary
+
+    '--theme-outline': m3Outline,
+    '--theme-outline-variant': m3OutlineVariant,
+
+    '--theme-inverse-primary': inversePrimary,
+    '--theme-inverse-on-primary': onInversePrimary, // Placeholder, usually derived from inversePrimary
+    '--theme-inverse-surface': m3InverseSurface,
+    '--theme-inverse-on-surface': m3InverseOnSurface,
+
+    // Additional useful variables from previous setup, mapped to new M3 if possible or kept if distinct
+    '--theme-text-color-primary': m3OnSurface, // Usually onSurface
+    '--theme-text-color-secondary': m3OnSurfaceVariant, // Usually onSurfaceVariant
+    '--theme-text-color-link': primary, // Links are often primary color
+
+    // Specific UI element backgrounds - these might need more context or could use surface/background variants
+    // For simplicity, using surface variants or background. Re-evaluate if specific colors are needed.
+    '--theme-sidebar-background': adjustHexBrightness(mixColors(m3Surface, secondary, 0.03), isDark ? 0.02 : -0.01), // Slightly off from main surface with secondary tint
+    '--theme-search-criteria-form-bg': adjustHexBrightness(mixColors(m3Surface, tertiary, 0.02), isDark ? 0.03 : -0.02),
+    '--theme-input-bg': m3Surface, // Inputs on main surface
+    '--theme-dropdown-bg': adjustHexBrightness(mixColors(m3Surface, primary, 0.02), isDark ? 0.05 : -0.03), // Dropdowns slightly different with primary tint
+
+    // Additional theme variables for better coverage with enhanced theme integration
+    '--theme-app-background': m3Background, // Main app background (now theme-tinted)
+    '--theme-content-background': m3Surface, // Content area background (now theme-tinted)
+    '--theme-table-header-bg': adjustHexBrightness(mixColors(m3Surface, primary, 0.05), isDark ? 0.04 : -0.02), // Table headers with primary tint
+    '--theme-table-hover-bg': adjustHexBrightness(primary, isDark ? 0.85 : 0.95), // Table row hover
+    '--theme-table-stripe-bg': adjustHexBrightness(mixColors(m3Surface, secondary, 0.01), isDark ? 0.02 : -0.01), // Table striped rows with subtle secondary tint
+    '--theme-border-color': m3Outline, // General borders
+    '--theme-text-color': m3OnSurface, // General text
+    '--theme-text-muted': m3OnSurfaceVariant, // Muted text
+    '--theme-navbar-bg': adjustHexBrightness(mixColors(m3Surface, primary, 0.03), isDark ? 0.01 : -0.005), // Navigation bar background with primary tint
+    '--theme-toolbar-bg': adjustHexBrightness(mixColors(m3Surface, secondary, 0.02), isDark ? 0.015 : -0.008), // Toolbar background with secondary tint
+
+    // Hover and Active states - these should ideally use rgba over existing colors for subtlety
+    '--theme-background-hover': hexToRgba(primary, 0.08), // M3 state layer opacity for hover
+    '--theme-background-active': hexToRgba(primary, 0.12), // M3 state layer opacity for active/focus
   };
 };
 
 export const themes = [
+  // Category 1: Vibrant & Energetic
   {
-    name: 'Default (Sky Blue)', id: 'default',
-    colors: generateThemeColors('#0D9BE1', '#87CEEB', '#FFD700', '#D0EFFF', '#001D35', '#C3E6F9', '#001D35', '#FFF8E1', '#4B3C00', '#F0F4F8', '#FFFFFF', '#E4E9EF', '#F0F4F8'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Roboto', sans-serif" } // Pairing 1
+    id: "vibrant-electric-blue",
+    name: "Electric Blue",
+    seedColors: { primary: "#0066FF", secondary: "#FF6B35", tertiary: "#FFD23F" },
+    fonts: { display: "Inter", body: "Roboto" },
+    vibe: "Electric, modern, and high-energy."
   },
   {
-    name: 'Crimson Kiss (Light)', id: 'crimson-light',
-    colors: generateThemeColors('#B3261E', '#E91E63', '#FFB547', '#F9DEDC', '#410E0B', '#FFD8E4', '#31111D', '#FFECB3', '#251A00', '#FFFBFB', '#FFFFFF', '#FFEBEA', '#FFF0F0'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Montserrat', sans-serif" } // Pairing 2
+    id: "vibrant-sunset-orange",
+    name: "Sunset Orange",
+    seedColors: { primary: "#FF4500", secondary: "#8A2BE2", tertiary: "#00CED1" },
+    fonts: { display: "Raleway", body: "Open Sans" },
+    vibe: "Warm, energetic, and creative."
   },
   {
-    name: 'Minty Fresh (Light)', id: 'minty-green',
-    colors: generateThemeColors('#006A60', '#386A20', '#A8C87B', '#DCEFEA', '#00201D', '#D9E7CB', '#102008', '#F1F8E9', '#1A230F', '#F0FFF4', '#FBFFF8', '#E6F5E9', '#F0FAF0'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Lato', sans-serif" } // Pairing 3
+    id: "vibrant-emerald-green",
+    name: "Emerald Green",
+    seedColors: { primary: "#00C851", secondary: "#FF3547", tertiary: "#007BFF" },
+    fonts: { display: "IBM Plex Sans", body: "IBM Plex Serif" },
+    vibe: "Fresh, natural, and vibrant."
   },
   {
-    name: 'Azure Day (Light)', id: 'azure-sky',
-    colors: generateThemeColors('#0061A4', '#5DB32A', '#869DFF', '#D0E6FF', '#001D36', '#DCEDC8', '#1B360A', '#E0E0FF', '#1B1262', '#F0F8FF', '#FFFFFF', '#E1F0FF', '#EBF4FF'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Poppins', sans-serif" } // Pairing 4
+    id: "vibrant-royal-purple",
+    name: "Royal Purple",
+    seedColors: { primary: "#6A1B9A", secondary: "#FF9800", tertiary: "#4CAF50" },
+    fonts: { display: "Source Sans Pro", body: "Source Serif Pro" },
+    vibe: "Regal, luxurious, and bold."
   },
   {
-    name: 'Lavender Dream (Light)', id: 'lavender-bliss',
-    colors: generateThemeColors('#6750A4', '#958DA5', '#E8DEF8', '#EADDFF', '#21005D', '#EFEEF5', '#292630', '#F6F3FE', '#1E1B2C', '#F8F0FF', '#FFFFFF', '#F3E8FF', '#F5F0FD'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Raleway', sans-serif" } // Pairing 5
-  },
-  {
-    name: 'Peachy Keen (Light)', id: 'warm-peach',
-    colors: generateThemeColors('#B75D00', '#FFB547', '#7D5260', '#FFDCC0', '#3E091F', '#FFE0B2', '#2A1800', '#FCE4EC', '#300D1A', '#FFF8F2', '#FFFFFF', '#FFEFE2', '#FFF5EC'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Merriweather', serif" } // Pairing 6
-  },
-  {
-    name: 'Aqua Splash (Light)', id: 'aqua-marine',
-    colors: generateThemeColors('#006A6A', '#4FD8EB', '#B1C5D0', '#AFEEEE', '#002020', '#B2EBF2', '#00363A', '#E1F5FE', '#0C1D24', '#E6FEFE', '#F0FFFF', '#D9F7F7', '#E0F7FA'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Playfair Display', serif" } // Pairing 7
-  },
-  {
-    name: 'Modern Stone (Light)', id: 'cool-gray',
-    colors: generateThemeColors('#606060', '#A0A0A0', '#007BFF', '#E0E0E0', '#1F1F1F', '#F5F5F5', '#333333', '#D0E6FF', '#001D36', '#F8F9FA', '#FFFFFF', '#EDEDED', '#F5F5F5'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Work Sans', sans-serif" } // Pairing 8
-  },
-  {
-    name: 'Sapphire Sky (Light)', id: 'sapphire-sky',
-    colors: generateThemeColors('#0F52BA', '#7CB9E8', '#FFC0CB', '#D6EAF8', '#082E6C', '#C1E0F7', '#001E36', '#FFE0E6', '#3E000A', '#F0F4FF', '#FFFFFF', '#E2ECF8', '#EAF2FA'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Cabin', sans-serif" } // Pairing 9
-  },
-  {
-    name: 'Emerald Isle (Light)', id: 'emerald-isle',
-    colors: generateThemeColors('#50C878', '#90EE90', '#FFDB58', '#D4EFDF', '#1E4620', '#E2F7E2', '#285C2A', '#FFF8E1', '#2A1B00', '#F0FDF5', '#F8FFF8', '#E3F5E9', '#EBF9F0'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Source Sans Pro', sans-serif" } // Pairing 10
-  },
-  {
-    name: 'Amethyst Haze (Light)', id: 'amethyst-haze',
-    colors: generateThemeColors('#9966CC', '#B19CD9', '#F0E68C', '#EADDFC', '#4D2F6F', '#E2D9F2', '#3A2A5C', '#FFF9C4', '#2C2507', '#F8F5FD', '#FFFFFF', '#F1EBF9', '#F5F0FA'),
-    fonts: { '--theme-font-primary': "'Roboto Slab', serif", '--theme-font-secondary': "'Roboto', sans-serif" } // Pairing 11 (Roboto Slab for headings)
-  },
-  {
-    name: 'Ruby Glow (Light)', id: 'ruby-glow',
-    colors: generateThemeColors('#E0115F', '#F08080', '#FFDEAD', '#FADADD', '#730932', '#FFD1D1', '#5B0000', '#FFF0E1', '#301F00', '#FFF5F7', '#FFFFFF', '#FFE9ED', '#FFF0F3'),
-    fonts: { '--theme-font-primary': "'Lora', serif", '--theme-font-secondary': "'Montserrat', sans-serif" } // Pairing 12
-  },
-  {
-    name: 'Topaz Shine (Light)', id: 'topaz-shine',
-    colors: generateThemeColors('#FFC87C', '#FFDAB9', '#87CEEB', '#FFF0E1', '#805B32', '#FFE8CC', '#4D3300', '#D1EFFF', '#002030', '#FFF8F0', '#FFFFFF', '#FFF5E8', '#FFF9F0'),
-    fonts: { '--theme-font-primary': "'Merriweather', serif", '--theme-font-secondary': "'Lato', sans-serif" } // Pairing 13
-  },
-  {
-    name: 'Rose Quartz (Light)', id: 'rose-quartz',
-    colors: generateThemeColors('#F7CAC9', '#FADADD', '#B0E0E6', '#FFF0F1', '#7C5A56', '#FFF5F5', '#5D4037', '#E1F5FE', '#0C1D24', '#FEFBFB', '#FFFFFF', '#FFF5F5', '#FFF8F8'),
-    fonts: { '--theme-font-primary': "'Lora', serif", '--theme-font-secondary': "'Poppins', sans-serif" } // Pairing 14
-  },
-  {
-    name: 'Silver Lining (Light)', id: 'silver-lining',
-    colors: generateThemeColors('#B0BEC5', '#CFD8DC', '#81D4FA', '#ECEFF1', '#37474F', '#F5F5F5', '#455A64', '#D0E6FF', '#001D36', '#F8F9FA', '#FFFFFF', '#EFF1F2', '#F5F6F7'),
-    fonts: { '--theme-font-primary': "'Merriweather', serif", '--theme-font-secondary': "'Raleway', sans-serif" } // Pairing 15
-  },
-  {
-    name: 'Lime Zest (Light)', id: 'lime-zest',
-    colors: generateThemeColors('#AEF359', '#DFFF00', '#FF8C00', '#F1FDE3', '#42600F', '#F7FFDB', '#5E6600', '#FFF3E0', '#4D2B00', '#F8FFF0', '#FDFFFA', '#F0FEE6', '#F5FFE0'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Oswald', sans-serif" } // Pairing 16
-  },
-  // --- Design System Themes (Light - Kept as requested) ---
-  {
-    name: 'Apple HIG (Light)', id: 'apple-hig-light',
-    colors: generateThemeColors(
-      '#007AFF', '#86868B', '#FF9500', 
-      '#D1E8FF', '#001E40',
-      '#E5E5E5', '#1C1C1E',
-      '#FFEBCF', '#593600',
-      '#F2F2F7', '#FFFFFF', '#EAEAEB', '#FFFFFF'
-    ),
-    fonts: { '--theme-font-primary': "'PT Serif', serif", '--theme-font-secondary': "'PT Sans', sans-serif" } // Pairing 17
-  },
-  {
-    name: 'Shopify Polaris (Light)', id: 'shopify-polaris-light',
-    colors: generateThemeColors(
-      '#008060', '#5C6AC4', '#FFC453', 
-      '#D4F3E9', '#003E2D',
-      '#D9DFF9', '#202E78',
-      '#FFF4CC', '#543800',
-      '#F6F6F7', '#FFFFFF', '#F1F2F3', '#FFFFFF'
-    ),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Arvo', serif" } // Pairing 18
+    id: "vibrant-hot-pink",
+    name: "Hot Pink",
+    seedColors: { primary: "#E91E63", secondary: "#00BCD4", tertiary: "#8BC34A" },
+    fonts: { display: "Merriweather", body: "Lato" },
+    vibe: "Playful, modern, and attention-grabbing."
   },
 
-  // --- 8 Additional New Themes (Light) ---
+  // Category 2: Ocean & Sky
   {
-    name: 'Oceanic Deep', id: 'oceanic-deep',
-    colors: generateThemeColors('#006994', '#008080', '#F0E68C', '#BEE3F8', '#002A3A', '#B2DFDB', '#00363A', '#FAFAD2', '#4B4B00', '#E0F7FA', '#FFFFFF', '#C0E0E8', '#F0F8FF'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Ubuntu', sans-serif" } // Pairing 19
+    id: "ocean-deep-blue",
+    name: "Ocean Deep",
+    seedColors: { primary: "#003F7F", secondary: "#00D4AA", tertiary: "#FFB74D" },
+    fonts: { display: "Montserrat", body: "Noto Sans" },
+    vibe: "Deep, calming, and professional."
   },
   {
-    name: 'Forest Canopy', id: 'forest-canopy',
-    colors: generateThemeColors('#228B22', '#8B4513', '#FFD700', '#C8E6C9', '#0A2E0B', '#D7CCC8', '#3E2723', '#FFF9C4', '#4D4000', '#F1F8E9', '#FFFFFF', '#E8F5E9', '#FAFFF2'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Nunito', sans-serif" } // Pairing 20
+    id: "ocean-turquoise",
+    name: "Turquoise Wave",
+    seedColors: { primary: "#00ACC1", secondary: "#FF7043", tertiary: "#9C27B0" },
+    fonts: { display: "Quicksand", body: "Roboto" },
+    vibe: "Refreshing, tropical, and modern."
   },
   {
-    name: 'Sunset Glow', id: 'sunset-glow',
-    colors: generateThemeColors('#FF4500', '#8A2BE2', '#FFD700', '#FFDAB9', '#5C1A00', '#E0B0FF', '#30005C', '#FFF0B3', '#4D4000', '#FFF2E6', '#FFFFFF', '#FFE5D9', '#FFF8F0'),
-    fonts: { '--theme-font-primary': "'IBM Plex Serif', serif", '--theme-font-secondary': "'IBM Plex Sans', sans-serif" } // Pairing 21
+    id: "ocean-navy-coral",
+    name: "Navy & Coral",
+    seedColors: { primary: "#1A237E", secondary: "#FF5722", tertiary: "#FFEB3B" },
+    fonts: { display: "Work Sans", body: "Open Sans" },
+    vibe: "Classic nautical with warm accents."
   },
   {
-    name: 'Tech Noir (Light)', id: 'tech-noir-light',
-    colors: generateThemeColors('#3F51B5', '#00BCD4', '#E91E63', '#D1D9FF', '#1A237E', '#B2EBF2', '#006064', '#F8BBD0', '#880E4F', '#ECEFF1', '#FFFFFF', '#CFD8DC', '#E8EAF6'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Inter', sans-serif" } // Pairing 22
+    id: "sky-azure",
+    name: "Azure Sky",
+    seedColors: { primary: "#2196F3", secondary: "#FF9800", tertiary: "#E91E63" },
+    fonts: { display: "Nunito Sans", body: "Lora" },
+    vibe: "Bright, optimistic, and airy."
   },
   {
-    name: 'Desert Mirage', id: 'desert-mirage',
-    colors: generateThemeColors('#D2B48C', '#E77200', '#87CEEB', '#F5E8D5', '#5D4037', '#FFDCC2', '#793000', '#D1EFFF', '#002030', '#FAF0E6', '#FFFBF5', '#F0E6DB', '#FFF8EF'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'DM Sans', sans-serif" } // Pairing 23
+    id: "sky-sunset",
+    name: "Sunset Sky",
+    seedColors: { primary: "#FF5722", secondary: "#673AB7", tertiary: "#00BCD4" },
+    fonts: { display: "Rubik", body: "PT Sans" },
+    vibe: "Warm, dramatic, and inspiring."
+  },
+
+  // Category 3: Nature & Earth
+  {
+    id: "nature-forest-green",
+    name: "Forest Green",
+    seedColors: { primary: "#2E7D32", secondary: "#D84315", tertiary: "#F57C00" },
+    fonts: { display: "Playfair Display", body: "Libre Baskerville" },
+    vibe: "Natural, grounded, and organic."
   },
   {
-    name: 'Spring Bloom', id: 'spring-bloom',
-    colors: generateThemeColors('#FFB6C1', '#98FB98', '#E6E6FA', '#FFECF0', '#7A3C45', '#E0FFE0', '#2E5C2E', '#F0F0FF', '#36366D', '#FFF5FD', '#FFFFFF', '#F5FFF5', '#FAF5FF'),
-    fonts: { '--theme-font-primary': "'Merriweather', serif", '--theme-font-secondary': "'Work Sans', sans-serif" } // Pairing 24
+    id: "nature-autumn-red",
+    name: "Autumn Red",
+    seedColors: { primary: "#C62828", secondary: "#FF8F00", tertiary: "#388E3C" },
+    fonts: { display: "Cinzel", body: "Crimson Pro" },
+    vibe: "Warm, seasonal, and rich."
   },
   {
-    name: 'Urban Modern', id: 'urban-modern',
-    colors: generateThemeColors('#4A90E2', '#7F8C8D', '#F1C40F', '#D4E6FB', '#1A3C5E', '#E4E7E7', '#2C3E50', '#FCF3CF', '#795500', '#ECF0F1', '#FFFFFF', '#BDC3C7', '#FFFFFF'),
-    fonts: { '--theme-font-primary': "'Merriweather', serif", '--theme-font-secondary': "'Fira Sans', sans-serif" } // Pairing 25
+    id: "nature-earth-brown",
+    name: "Earth Brown",
+    seedColors: { primary: "#5D4037", secondary: "#FF6F00", tertiary: "#1976D2" },
+    fonts: { display: "Cormorant Garamond", body: "Lato" },
+    vibe: "Earthy, stable, and natural."
   },
   {
-    name: 'Vintage Charm', id: 'vintage-charm',
-    colors: generateThemeColors('#BDB76B', '#BC8F8F', '#F5F5DC', '#E9E7C8', '#4A4721', '#EAD7D7', '#5C3C3C', '#FFFEEF', '#4D4D40', '#FAF0E6', '#FFFDF5', '#F5EFE6', '#FFFBF0'),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Barlow', sans-serif" } // Pairing 26
-  },
-  // --- New Stylistic Themes ---
-  {
-    name: 'Cyberpunk Neon', id: 'cyberpunk-neon', // Will render as light theme due to isDark=false default
-    colors: generateThemeColors(
-      '#00F0FF', '#FF00FF', '#7FFF00', 
-      '#B3FCFF', '#004C52', 
-      '#FFB3FF', '#520052', 
-      '#D9FFB3', '#295400', 
-      '#F0F0F8', '#FFFFFF', '#E0E0E8', '#F5F5FA',
-      false, null, null, null, null, '#FFFFFF', '#FDFBFF'
-    ),
-    fonts: { '--theme-font-primary': "'Libre Baskerville', serif", '--theme-font-secondary': "'Libre Franklin', sans-serif" } // Pairing 27
+    id: "nature-sage-green",
+    name: "Sage Green",
+    seedColors: { primary: "#689F38", secondary: "#E65100", tertiary: "#7B1FA2" },
+    fonts: { display: "Source Serif Pro", body: "Source Sans Pro" },
+    vibe: "Calming, herbal, and peaceful."
   },
   {
-    name: 'Rose Garden', id: 'rose-garden', 
-    colors: generateThemeColors(
-      '#D94E67', '#FF8FAB', '#558B2F', 
-      '#FFDDE2', '#5C1A25', 
-      '#FFEBF0', '#7A3C45', 
-      '#DCECCB', '#1E3A0F', 
-      '#F0FFF0', '#FFF8F0', '#E8F5E9', '#FFF8F0'
-    ),
-    fonts: { '--theme-font-primary': "'Source Serif Pro', serif", '--theme-font-secondary': "'Source Sans Pro', sans-serif" } // Pairing 28
+    id: "nature-golden-yellow",
+    name: "Golden Yellow",
+    seedColors: { primary: "#F57F17", secondary: "#1565C0", tertiary: "#C2185B" },
+    fonts: { display: "Fira Sans", body: "Roboto Serif" },
+    vibe: "Sunny, optimistic, and energizing."
+  },
+
+  // Category 4: Neon & Tech
+  {
+    id: "neon-cyber-green",
+    name: "Cyber Green",
+    seedColors: { primary: "#00FF41", secondary: "#FF0080", tertiary: "#0080FF" },
+    fonts: { display: "Oswald", body: "Roboto Condensed" },
+    vibe: "Futuristic, high-tech, and electric."
   },
   {
-    name: 'Heartfelt Hues', id: 'heartfelt-hues', 
-    colors: generateThemeColors(
-      '#FF69B4', '#FF1493', '#E6E6FA', 
-      '#FFDDF4', '#7A2153', 
-      '#FFC0DB', '#7A0A48', 
-      '#F0F0FF', '#36366D', 
-      '#FFF0F5', '#FFFFFF', '#FCEFF5', '#FFFFFF'
-    ),
-    fonts: { '--theme-font-primary': "'Lora', serif", '--theme-font-secondary': "'Cabin', sans-serif" } // Pairing 29
+    id: "neon-electric-purple",
+    name: "Electric Purple",
+    seedColors: { primary: "#8A2BE2", secondary: "#00FFFF", tertiary: "#FF4500" },
+    fonts: { display: "Anton", body: "Montserrat" },
+    vibe: "Bold, digital, and striking."
   },
   {
-    name: 'Tech Interface', id: 'tech-interface', 
-    colors: generateThemeColors(
-      '#007BFF', '#17A2B8', '#6C757D', 
-      '#CCE5FF', '#002752', 
-      '#C7EEF5', '#083C44', 
-      '#E2E3E5', '#292D30', 
-      '#F8F9FA', '#FFFFFF', '#E9ECEF', '#FFFFFF'
-    ),
-    fonts: { '--theme-font-primary': "'Open Sans', sans-serif", '--theme-font-secondary': "'Josefin Sans', sans-serif" } // Pairing 30
+    id: "neon-laser-red",
+    name: "Laser Red",
+    seedColors: { primary: "#FF073A", secondary: "#39FF14", tertiary: "#1B03A3" },
+    fonts: { display: "Poppins", body: "Open Sans" },
+    vibe: "Intense, gaming, and energetic."
+  },
+  {
+    id: "neon-matrix-blue",
+    name: "Matrix Blue",
+    seedColors: { primary: "#0099FF", secondary: "#FF6600", tertiary: "#CC00FF" },
+    fonts: { display: "Raleway", body: "Inter" },
+    vibe: "Digital, modern, and sleek."
+  },
+  {
+    id: "neon-synthwave",
+    name: "Synthwave",
+    seedColors: { primary: "#FF00FF", secondary: "#00FFFF", tertiary: "#FFFF00" },
+    fonts: { display: "Fredoka", body: "Nunito Sans" },
+    vibe: "Retro-futuristic, vibrant, and nostalgic."
+  },
+
+  // Category 5: Pastel & Soft
+  {
+    id: "pastel-lavender",
+    name: "Lavender Dreams",
+    seedColors: { primary: "#9C88FF", secondary: "#FFB3BA", tertiary: "#BAFFC9" },
+    fonts: { display: "Noto Serif Display", body: "Noto Sans" },
+    vibe: "Soft, dreamy, and gentle."
+  },
+  {
+    id: "pastel-mint",
+    name: "Mint Fresh",
+    seedColors: { primary: "#98FB98", secondary: "#FFB6C1", tertiary: "#DDA0DD" },
+    fonts: { display: "Lora", body: "Open Sans" },
+    vibe: "Fresh, clean, and soothing."
+  },
+  {
+    id: "pastel-peach",
+    name: "Peach Sunset",
+    seedColors: { primary: "#FFCBA4", secondary: "#B4A7D6", tertiary: "#A8E6CF" },
+    fonts: { display: "Arvo", body: "Cabin" },
+    vibe: "Warm, comforting, and peaceful."
+  },
+  {
+    id: "pastel-sky",
+    name: "Sky Blue",
+    seedColors: { primary: "#87CEEB", secondary: "#F0E68C", tertiary: "#DDA0DD" },
+    fonts: { display: "Bitter", body: "EB Garamond" },
+    vibe: "Airy, light, and calming."
+  },
+  {
+    id: "pastel-rose",
+    name: "Rose Garden",
+    seedColors: { primary: "#FFB6C1", secondary: "#98FB98", tertiary: "#F0E68C" },
+    fonts: { display: "Comfortaa", body: "Lato" },
+    vibe: "Romantic, soft, and elegant."
+  },
+
+  // Category 6: Dark & Dramatic
+  {
+    id: "dark-midnight",
+    name: "Midnight Black",
+    seedColors: { primary: "#000000", secondary: "#FF6B35", tertiary: "#00D4AA" },
+    fonts: { display: "Inter", body: "Source Sans Pro" },
+    vibe: "Bold, dramatic, and sophisticated."
+  },
+  {
+    id: "dark-charcoal",
+    name: "Charcoal Storm",
+    seedColors: { primary: "#36454F", secondary: "#FF4081", tertiary: "#FFD700" },
+    fonts: { display: "Lora", body: "Open Sans" },
+    vibe: "Strong, modern, and impactful."
+  },
+  {
+    id: "dark-burgundy",
+    name: "Burgundy Wine",
+    seedColors: { primary: "#800020", secondary: "#FFD700", tertiary: "#00CED1" },
+    fonts: { display: "Roboto", body: "Noto Sans" },
+    vibe: "Rich, luxurious, and elegant."
+  },
+  {
+    id: "dark-forest",
+    name: "Dark Forest",
+    seedColors: { primary: "#013220", secondary: "#FF8C00", tertiary: "#DA70D6" },
+    fonts: { display: "Merriweather Sans", body: "Merriweather" },
+    vibe: "Mysterious, natural, and deep."
+  },
+  {
+    id: "dark-royal",
+    name: "Royal Navy",
+    seedColors: { primary: "#002147", secondary: "#FFD700", tertiary: "#DC143C" },
+    fonts: { display: "Raleway", body: "Montserrat" },
+    vibe: "Regal, authoritative, and classic."
   }
 ];
 
-export const applyTheme = (themeId) => {
-  const theme = themes.find(t => t.id === themeId) || themes[0]; 
+// Font weight options for theme customization
+export const fontWeightOptions = [
+  { value: 'light', label: 'Light', cssValue: '300' },
+  { value: 'normal', label: 'Normal', cssValue: '400' },
+  { value: 'medium', label: 'Medium', cssValue: '500' },
+  { value: 'semibold', label: 'Semi Bold', cssValue: '600' },
+  { value: 'bold', label: 'Bold', cssValue: '700' },
+  { value: 'extrabold', label: 'Extra Bold', cssValue: '800' }
+];
 
-  if (theme && theme.colors) {
-    for (const colorVar in theme.colors) {
-      document.documentElement.style.setProperty(colorVar, theme.colors[colorVar]);
+// Font size options for header and body text
+export const fontSizeOptions = [
+  { value: 'xs', label: 'Extra Small', cssValue: '0.75rem' },
+  { value: 'sm', label: 'Small', cssValue: '0.875rem' },
+  { value: 'base', label: 'Base', cssValue: '1rem' },
+  { value: 'lg', label: 'Large', cssValue: '1.125rem' },
+  { value: 'xl', label: 'Extra Large', cssValue: '1.25rem' },
+  { value: '2xl', label: '2X Large', cssValue: '1.5rem' },
+  { value: '3xl', label: '3X Large', cssValue: '1.875rem' }
+];
+
+export const applyTheme = (themeId, isDark = false) => { // Added isDark parameter with a default
+  const selectedTheme = themes.find(t => t.id === themeId) || themes[0];
+
+  if (selectedTheme && selectedTheme.seedColors) {
+    const { primary, secondary, tertiary } = selectedTheme.seedColors;
+    // isDark is now passed as a parameter
+    const fullPalette = generateThemeColors(primary, secondary, tertiary, isDark);
+
+    for (const colorVar in fullPalette) {
+      document.documentElement.style.setProperty(colorVar, fullPalette[colorVar]);
     }
   }
 
-  if (theme && theme.fonts) {
-    for (const fontVar in theme.fonts) {
-      document.documentElement.style.setProperty(fontVar, theme.fonts[fontVar]);
-    }
+  if (selectedTheme && selectedTheme.fonts) {
+    document.documentElement.style.setProperty('--theme-font-display', `"${selectedTheme.fonts.display}", sans-serif`);
+    document.documentElement.style.setProperty('--theme-font-body', `"${selectedTheme.fonts.body}", sans-serif`);
   }
 };

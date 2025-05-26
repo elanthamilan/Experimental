@@ -1,0 +1,25 @@
+@use 'src/styles/_variables.scss' as v;
+
+.styledListGroup {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0; // Remove default UL padding
+  margin-bottom: 0;
+  border-radius: v.$base-border-radius;
+
+  // Remove default list styling if rendered as <ul>
+  list-style: none; // Add this line
+}
+
+.listGroupFlush {
+  border-width: 0;
+  border-radius: 0;
+
+  // Styling for items within a flush group will be handled by StyledListGroupItem.module.scss
+  // This ensures that items correctly adjust their borders when inside a flush list.
+  // For example, StyledListGroupItem might have:
+  // :global(.#{styles.listGroupFlush}) & { /* specific styles for items in flush */ }
+  // However, a more direct approach is to check for parent class in the item's SCSS.
+  // For this iteration, we'll rely on StyledListGroupItem to adjust its own borders
+  // if its parent has .listGroupFlush. A common pattern is for the item to only have a bottom border.
+}

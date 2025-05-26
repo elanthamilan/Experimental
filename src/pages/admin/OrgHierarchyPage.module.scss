@@ -1,0 +1,83 @@
+.pageContainer {
+  padding: var(--spacing-medium) var(--spacing-large);
+  background-color: var(--theme-background);
+  min-height: 100vh;
+}
+
+.contentCard { // General card for content sections
+  background-color: var(--theme-surface);
+  border: 1px solid var(--theme-outline-variant);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-elevation-2);
+  margin-bottom: var(--spacing-large);
+
+  :global(.card-header) { // For StyledCard.Header
+    background-color: var(--theme-surface-container);
+    color: var(--theme-on-surface-variant);
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-semibold);
+    border-bottom: 1px solid var(--theme-outline-variant);
+    padding: var(--spacing-medium) var(--spacing-large);
+  }
+
+  :global(.card-body) { // For StyledCard.Body
+    padding: var(--spacing-large);
+    color: var(--theme-on-surface);
+  }
+}
+
+.cardTitle { // For StyledCard.Title if specific styling is needed
+  font-family: var(--theme-font-display);
+}
+
+.headerActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-medium); // Replaces mb-3
+}
+
+.addButton {
+  // Styling for the button itself is handled by StyledButton variant="primary"
+  .buttonIcon {
+    vertical-align: middle;
+    margin-right: var(--spacing-xsmall); // Replaces me-2 on span
+  }
+}
+
+.actionButtonIcon {
+  vertical-align: middle; // Ensures icon aligns well if button has text
+  font-size: 1.1rem; // Default icon size for actions
+}
+
+.dataTable { // Styling for StyledTable (or react-bootstrap Table if StyledTable is not used)
+  margin-top: var(--spacing-small);
+  font-size: var(--font-size-small);
+
+  :global(th) {
+    background-color: var(--theme-surface-container-low);
+    color: var(--theme-on-surface-variant);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  :global(td) {
+    color: var(--theme-on-surface);
+    vertical-align: middle;
+  }
+
+  :global(.table-striped tbody tr:nth-of-type(odd)) {
+    background-color: var(--theme-surface-container-lowest);
+  }
+  :global(.table-bordered th, .table-bordered td) {
+    border: 1px solid var(--theme-outline-variant);
+  }
+  :global(.table-hover tbody tr:hover) {
+    background-color: var(--theme-surface-container-hover);
+  }
+}
+
+.noDataText {
+  color: var(--theme-on-surface-variant);
+  margin-top: var(--spacing-medium);
+  font-style: italic;
+  text-align: center;
+}

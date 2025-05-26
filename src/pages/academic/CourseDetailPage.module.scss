@@ -1,0 +1,95 @@
+.pageContainer {
+  padding: var(--spacing-medium) var(--spacing-large);
+  background-color: var(--theme-background);
+  min-height: 100vh;
+  color: var(--theme-on-background);
+}
+
+.contentCard { // Renamed from formCard for more general use
+  background-color: var(--theme-surface);
+  border: 1px solid var(--theme-outline-variant);
+  border-radius: var(--border-radius-large);
+  box-shadow: var(--shadow-elevation-2);
+  margin-bottom: var(--spacing-large);
+
+  :global(.card-header) { // For StyledCard.Header
+    background-color: var(--theme-surface-container);
+    color: var(--theme-on-surface-variant);
+    font-size: var(--font-size-large);
+    font-weight: var(--font-weight-semibold);
+    border-bottom: 1px solid var(--theme-outline-variant);
+    padding: var(--spacing-medium) var(--spacing-large);
+  }
+
+  :global(.card-body) { // For StyledCard.Body
+    padding: var(--spacing-large);
+    color: var(--theme-on-surface);
+  }
+}
+
+.cardHeaderTitle {
+  font-size: var(--font-size-xlarge);
+  color: var(--theme-primary);
+}
+
+.detailText {
+  margin-bottom: var(--spacing-small);
+  strong {
+    color: var(--theme-on-surface-variant); // Make labels distinct
+  }
+}
+
+.syllabusCard {
+  margin-top: var(--spacing-small);
+  background-color: var(--theme-surface-container-lowest); // Slightly different background
+  border: 1px solid var(--theme-outline);
+  :global(.card-body) { // For StyledCard.Body within syllabusCard
+    white-space: pre-wrap;
+    font-family: var(--theme-font-monospace, monospace);
+    font-size: var(--font-size-small);
+    color: var(--theme-on-surface);
+    padding: var(--spacing-medium);
+  }
+}
+
+.sectionTitle {
+  margin-top: var(--spacing-large);
+  margin-bottom: var(--spacing-medium);
+  font-size: var(--font-size-large);
+  font-weight: var(--font-weight-medium);
+  color: var(--theme-primary);
+}
+
+.dataTable { // Basic styling for react-bootstrap Table
+  margin-top: var(--spacing-small);
+  font-size: var(--font-size-small);
+
+  :global(th) {
+    background-color: var(--theme-surface-container-low);
+    color: var(--theme-on-surface-variant);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  :global(td) {
+    color: var(--theme-on-surface);
+    vertical-align: middle;
+  }
+
+  :global(&.table-striped tbody tr:nth-of-type(odd)) {
+    background-color: var(--theme-surface-container-lowest);
+  }
+  :global(&.table-bordered th, &.table-bordered td) {
+    border: 1px solid var(--theme-outline-variant);
+  }
+  :global(&.table-hover tbody tr:hover) {
+    background-color: var(--theme-surface-container-hover);
+  }
+}
+
+.alertDanger { // Styling for react-bootstrap Alert
+  background-color: var(--theme-error-container);
+  color: var(--theme-on-error-container);
+  border: 1px solid var(--theme-error);
+  padding: var(--spacing-medium);
+  border-radius: var(--border-radius-medium);
+}

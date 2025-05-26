@@ -5,39 +5,38 @@
 // (None needed for now, using shared variables)
 
 .summaryContainer {
-  padding: v.$base-padding * 1.5 v.$base-padding * 1.5 math.div(v.$base-padding, 2) v.$base-padding * 1.5; // Use math.div
+  margin-bottom: v.$base-margin * 2;
+  padding: 0; // Remove padding to avoid double containers
 }
 
 .statCard {
-  border: v.$base-border-width solid v.$border-color; // Themed
-  border-radius: v.$base-border-radius; // SCSS
-  background-color: v.$background-content; // Themed
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04); 
-  // The design shows a very subtle or no shadow, adjust as needed.
-  // The cards in the design also have a slightly thicker top border or a colored one.
-  // This can be added with a pseudo-element or border-top property.
-  // For example:
-  // border-top: 3px solid transparent; // Base for all cards
+  // Remove borders and use Material Design 3 styling from StatsCard component
+  border: none;
+  border-radius: v.$base-border-radius;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
 
-  // Specific top border colors (if needed, or use a common color)
-  // &.total { border-top-color: v.$primary-brand-color; }
-  // &.done { border-top-color: #28a745; } // Define success color in shared vars
-  // &.notDone { border-top-color: #ffc107; } // Define warning color in shared vars
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transform: translateY(-4px);
+  }
 
   .statValue {
-    font-size: 2.5rem; 
-    font-weight: 300; 
-    color: v.$text-color-primary; // Themed
-    margin-bottom: math.div(v.$gap-small, 2); 
-    line-height: v.$line-height-heading; 
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--theme-text-color, v.$on-surface-color); // Themed
+    margin-bottom: math.div(v.$gap-small, 2);
+    line-height: v.$line-height-heading;
+    font-family: v.$font-family-display; // Use display font for numbers
   }
 
   .statTitle {
-    font-size: 0.8rem; 
-    font-weight: v.$font-weight-semibold; 
-    color: v.$text-color-secondary; // Themed
-    text-transform: uppercase; 
+    font-size: 0.8rem;
+    font-weight: v.$font-weight-semibold;
+    color: var(--theme-text-muted, v.$on-surface-variant-color); // Themed
+    text-transform: uppercase;
     letter-spacing: 0.5px;
+    font-family: v.$font-family-body; // Use body font for labels
   }
 
   :global(.card-body) {

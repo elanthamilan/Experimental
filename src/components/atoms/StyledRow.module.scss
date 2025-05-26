@@ -1,0 +1,11 @@
+@use 'src/styles/_variables.scss' as v;
+
+.styledRow {
+  display: flex;
+  flex-wrap: wrap;
+  // Using a common default gutter of 15px for each side (30px total)
+  // This can be later replaced with CSS variables for theming if needed.
+  // Example: margin-right: calc(var(--theme-grid-gutter-width, #{v.$grid-gutter-width}) / -2);
+  margin-right: calc(#{v.$grid-gutter-width} / -2);
+  margin-left: calc(#{v.$grid-gutter-width} / -2);
+}

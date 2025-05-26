@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
-import { Form, Row, Col, Container } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import StyledButton from './atoms/StyledButton';
-import FormField from './molecules/FormField'; // Import molecule
+import FormField from './molecules/FormField';
 import styles from './SearchCriteria.module.scss';
+
+// Define options for label lookup
+const degreeOptions = [
+  { value: '', label: 'Select' },
+  { value: 'BE CSE', label: 'B.E CSE' },
+  { value: 'BTech IT', label: 'B.Tech IT' },
+];
+const programOptions = [
+  { value: '', label: 'Select' },
+  { value: 'CS', label: 'Computer Science' },
+  { value: 'ECE', label: 'Electronics' },
+];
 
 const initialFormState = {
   institution: 'SSM University',
@@ -26,7 +38,7 @@ const SearchCriteria = () => {
       [id.replace('form', '').charAt(0).toLowerCase() + id.replace('form', '').slice(1)]: type === 'checkbox' ? checked : value,
     }));
   };
-  
+
   const handleSearch = (e) => {
     e.preventDefault(); // Prevent form submission if it's part of a Form
     // Actual search logic would go here
@@ -45,12 +57,12 @@ const SearchCriteria = () => {
   const getPreviewText = () => {
     const parts = [];
     if (formData.institution) parts.push(formData.institution);
-    if (formData.degree) { // Find label for degree
-      const degreeOption = FormField.propTypes.options.find(opt => opt.value === formData.degree);
+    if (formData.degree) {
+      const degreeOption = degreeOptions.find(opt => opt.value === formData.degree);
       parts.push(degreeOption ? degreeOption.label : formData.degree);
     }
     if (formData.program) {
-      const programOption = FormField.propTypes.options.find(opt => opt.value === formData.program);
+      const programOption = programOptions.find(opt => opt.value === formData.program);
       parts.push(programOption ? programOption.label : formData.program);
     }
     if (formData.academicYear) parts.push(formData.academicYear);
@@ -61,22 +73,21 @@ const SearchCriteria = () => {
 
   if (isCollapsed) {
     return (
-      <Container fluid className={styles.searchCriteriaContainer}>
+      <div className={styles.searchCriteriaContainer}>
         <div className={`${styles.formContainer} ${styles.previewContainer}`}>
           <span className={styles.previewText}>{getPreviewText()}</span>
           <StyledButton variant="link" onClick={handleEdit} className={styles.editButton}>
             <span className="material-symbols-outlined">edit</span> Edit
           </StyledButton>
         </div>
-      </Container>
+      </div>
     );
   }
 
   return (
-    <Container fluid className={styles.searchCriteriaContainer}>
-      <h4 className={styles.pageTitle}>Publish final results to portal</h4>
+    <div className={styles.searchCriteriaContainer}>
       <div className={styles.formContainer}>
-        <Form onSubmit={handleSearch}>
+        <form onSubmit={handleSearch}>
           {/* Row 1: Institution, Degree, Program */}
           <Row className="mb-3">
             <Col xs={12} sm={6} md={4}>
@@ -101,11 +112,7 @@ const SearchCriteria = () => {
                 placeholder="Select"
                 value={formData.degree}
                 onChange={handleChange}
-                options={[
-                  { value: '', label: 'Select' },
-                  { value: 'BE CSE', label: 'B.E CSE' },
-                  { value: 'BTech IT', label: 'B.Tech IT' },
-                ]}
+                options={degreeOptions}
               />
             </Col>
             <Col xs={12} sm={6} md={4}>
@@ -116,11 +123,7 @@ const SearchCriteria = () => {
                 placeholder="Select"
                 value={formData.program}
                 onChange={handleChange}
-                options={[
-                  { value: '', label: 'Select' },
-                  { value: 'CS', label: 'Computer Science' },
-                  { value: 'ECE', label: 'Electronics' },
-                ]}
+                options={programOptions}
               />
             </Col>
           </Row>
@@ -221,9 +224,9 @@ const SearchCriteria = () => {
               </div>
             </Col>
           </Row>
-        </Form>
+        </form>
       </div>
-    </Container>
+    </div>
   );
 };
 

@@ -52,6 +52,8 @@ $danger-bg-subdued-fixed: #f8d7da;
 $_font-family-lato: 'Lato', sans-serif;
 $_font-family-manrope: 'Manrope', sans-serif;
 $_font-size-base: 14px;
+$_font-size-small: 12px;
+$_font-size-large: 16px;
 $_font-weight-normal: 400;
 $_font-weight-semibold: 600;
 $_font-weight-bold: 700;
@@ -69,9 +71,14 @@ $gap-large: 1rem;    // 16px
 
 // Borders (Radii and widths are generally not themed, colors are)
 $base-border-radius: 8px;
+$border-radius-small: 4px;
 $input-border-radius: 4px;
 $base-border-width: 1px;
 $secondary-border-width: 2px;
+
+// Grid system
+$_grid-gutter-width-fallback: 30px; // Default gutter width (e.g., 15px on each side of a col)
+$grid-gutter-width: var(--theme-grid-gutter-width, $_grid-gutter-width-fallback);
 
 
 // --- CSS Custom Property Accessors (MD3 Aligned) ---
@@ -152,9 +159,11 @@ $border-color: $outline-color;          // General borders should use outline co
 $primary-brand-color: $primary-color; // Legacy name for primary color
 
 // Typography Accessors (pointing to SCSS fallbacks, as fonts are less themed by color themes)
-$font-family-primary: var(--theme-font-primary, $_font-family-lato);
-$font-family-secondary: var(--theme-font-secondary, $_font-family-manrope);
+$font-family-display: var(--theme-font-display, $_font-family-lato); // Changed from primary to display
+$font-family-body: var(--theme-font-body, $_font-family-manrope);    // Changed from secondary to body
 $font-size-base: $_font-size-base;
+$font-size-small: $_font-size-small;
+$font-size-large: $_font-size-large;
 $font-weight-normal: var(--theme-global-body-font-weight, $_font-weight-normal); // Use global CSS var
 $font-weight-semibold: $_font-weight-semibold; // Keep semibold and bold fixed unless also globalized
 $font-weight-bold: $_font-weight-bold;
@@ -177,7 +186,7 @@ $input-label-font-weight: $font-weight-semibold;
 $input-label-font-size: $font-size-base;
 
 // Buttons
-$button-font-family: $font-family-primary;
+$button-font-family: $font-family-body; // Buttons typically use the body font
 $button-font-weight: $font-weight-semibold;
 $button-font-size: $font-size-base;
 $button-line-height: 22px; // Adjust if needed for $button-height
@@ -227,3 +236,8 @@ $dropzone-accept-bg-color: var(--theme-dropzone-accept-bg-color, rgba($_secondar
 
 // Dropdown Menu
 // $dropdown-bg, $dropdown-text-color already defined
+$surface-variant-color: var(--theme-surface-variant, #E7E0EC); // MD3 surface-variant fallback
+$surface-container-highest-color: var(--theme-surface-container-highest, #E6E0E9); // MD3 surface-container-highest fallback
+$surface-container-color: var(--theme-surface-container, #F3EDF7); // MD3 surface-container fallback
+$surface-container-lowest-color: var(--theme-surface-container-lowest, #FFFFFF); // MD3 surface-container-lowest fallback
+$surface-container-low-color: var(--theme-surface-container-low, #F7F2FA); // MD3 surface-container-low fallback

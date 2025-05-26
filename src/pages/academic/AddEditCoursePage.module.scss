@@ -1,0 +1,49 @@
+.pageContainer {
+  padding: var(--spacing-medium) var(--spacing-large); // Example using theme variables for spacing
+  background-color: var(--theme-background);
+  min-height: 100vh;
+}
+
+.formCard {
+  background-color: var(--theme-surface);
+  border: 1px solid var(--theme-outline-variant);
+  border-radius: var(--border-radius-large); // Example theme variable
+  box-shadow: var(--shadow-elevation-2); // Example theme variable
+  margin-bottom: var(--spacing-large);
+
+  :global(.card-header) {
+    background-color: var(--theme-surface-container);
+    color: var(--theme-on-surface-variant);
+    font-size: var(--font-size-large); // Example theme variable
+    font-weight: var(--font-weight-semibold); // Example theme variable
+    border-bottom: 1px solid var(--theme-outline-variant);
+    padding: var(--spacing-medium) var(--spacing-large);
+  }
+
+  :global(.card-body) {
+    padding: var(--spacing-large);
+    color: var(--theme-on-surface);
+  }
+}
+
+.formCardHeader { // This class was referenced in the JS, ensure it's defined or integrated
+  // Styles from :global(.card-header) should cover this if StyledCard.Header is used correctly.
+  // If specific overrides are needed, they can go here.
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-medium);
+  margin-top: var(--spacing-large);
+}
+
+// Add more specific styles if needed for form elements, rows, columns etc.
+// For now, FormField and Styled components will handle most of this.
+// .formRow {
+//   margin-bottom: var(--spacing-medium);
+// }
+
+// .formFieldColumn {
+//   // Specific column styling if needed beyond bootstrap grid
+// }

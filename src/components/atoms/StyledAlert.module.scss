@@ -1,0 +1,119 @@
+@use 'sass:color';
+@use 'src/styles/_variables.scss' as v;
+
+.styledAlert {
+  position: relative;
+  padding: v.$base-padding;
+  margin-bottom: v.$base-margin;
+  border: v.$base-border-width solid transparent;
+  border-radius: v.$base-border-radius;
+}
+
+.alertHeading {
+  font-weight: v.$font-weight-bold;
+  margin-bottom: v.$gap-small;
+  // The color will be inherited from the parent .styledAlert variant by default.
+  // If specific heading color is needed per variant, it can be set within each variant class.
+}
+
+.closeButton {
+  background-color: transparent;
+  border: 0;
+  padding: 0; // Reset padding
+  cursor: pointer;
+  position: absolute;
+  top: calc(#{v.$base-padding} / 2); // Align with content padding
+  right: calc(#{v.$base-padding} / 2); // Align with content padding
+  font-size: 1.25rem; // Make it a bit larger for easier clicking
+  font-weight: v.$font-weight-bold;
+  line-height: 1;
+  color: inherit; // Inherits color from parent .styledAlert variant
+  opacity: 0.7;
+  text-shadow: none; // Remove any default text shadow from buttons
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+    text-decoration: none; // Ensure no underline on hover/focus
+  }
+}
+
+// Mixin for alert variants
+@mixin alert-variant($name, $bg, $text, $border-color: null, $heading-color: null, $close-color: null) {
+  &.alert-#{$name} {
+    color: $text;
+    background-color: $bg;
+    border-color: if($border-color, $border-color, color.adjust($bg, $blackness: 10%));
+
+    .alertHeading {
+      color: if($heading-color, $heading-color, $text);
+    }
+
+    .closeButton {
+      color: if($close-color, $close-color, $text);
+    }
+
+    // Optional: if links are used within alerts, style them appropriately
+    // a {
+    //   color: color.adjust($text, $lightness: -10%); // Darken the text color for links
+    //   font-weight: v.$font-weight-bold;
+    //   &:hover {
+    //     color: color.adjust($text, $lightness: -20%);
+    //   }
+    // }
+  }
+}
+
+// Apply variants using the mixin and theme variables from _variables.scss
+// Ensure these variables ($*-container-color and $on-*-container-color) are defined in _variables.scss
+// and map to your CSS custom properties with appropriate fallbacks.
+
+@include alert-variant('primary', v.$primary-container-color, v.$on-primary-container-color);
+@include alert-variant('secondary', v.$secondary-container-color, v.$on-secondary-container-color);
+
+// For semantic colors, it's common to use the direct color as background for more emphasis,
+// or a container color if available. Here, using container colors for consistency.
+// Fallbacks are used here as an example if specific container vars aren't in _variables.scss
+// It's better to define them in _variables.scss (e.g., $success-container-color: var(--theme-success-container, $_success-container-fallback);)
+
+@include alert-variant(
+  'success',
+  var(--theme-success-container, #d1e7dd), 
+  var(--theme-on-success-container, #0a3622),
+  var(--theme-success-outline, color.adjust(#d1e7dd, $blackness: 15%))
+);
+@include alert-variant(
+  'danger',
+  var(--theme-error-container, #f8d7da),
+  var(--theme-on-error-container, #58151c),
+  var(--theme-error-outline, color.adjust(#f8d7da, $blackness: 15%))
+);
+@include alert-variant(
+  'warning',
+  var(--theme-warning-container, #fff3cd), // Assuming this variable exists or define it
+  var(--theme-on-warning-container, #664d03), // Assuming this variable exists
+  var(--theme-warning-outline, color.adjust(#fff3cd, $blackness: 15%))
+);
+@include alert-variant(
+  'info',
+  var(--theme-info-container, #cff4fc), // Assuming this variable exists
+  var(--theme-on-info-container, #055160), // Assuming this variable exists
+  var(--theme-info-outline, color.adjust(#cff4fc, $blackness: 15%))
+);
+
+// Light and Dark variants are special.
+// 'light' usually means light background, dark text.
+// 'dark' usually means dark background, light text.
+// These might need more specific variables if the standard surface/on-surface isn't desired.
+@include alert-variant(
+  'light',
+  var(--theme-surface-container-lowest, v.$white), // Very light background
+  var(--theme-on-surface, #1C1B1F), // Standard text on light surface
+  var(--theme-outline-variant, #CAC4D0) // Softer border
+);
+@include alert-variant(
+  'dark',
+  var(--theme-surface-container-highest, #343a40), // Dark background
+  var(--theme-on-surface-inverted, v.$white), // Light text on dark background (ensure --theme-on-surface-inverted exists)
+  var(--theme-outline, #79747E)
+);
