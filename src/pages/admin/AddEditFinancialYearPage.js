@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockFinancialYears } from '../../data/mockFinancialYears';
-import { Form, Row, Col } from 'react-bootstrap'; // Alert & Button will be replaced
+// import { Form } from 'react-bootstrap'; // Form removed
 import {
   StyledContainer,
   StyledCard,
   StyledButton,
   FormField,
+  StyledRow, // Added
+  StyledCol,  // Added
 } from '../../components';
 import styles from './AddEditFinancialYearPage.module.scss'; // Use new SCSS module
 
@@ -96,9 +98,9 @@ const AddEditFinancialYearPage = () => {
         <StyledCard.Body>
           {error && <div className={styles.alertDanger} role="alert">{error}</div>}
           {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
-          <Form onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Col md={6}>
+          <form onSubmit={handleSubmit}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formFinancialYearId"
                   label="ID"
@@ -107,8 +109,8 @@ const AddEditFinancialYearPage = () => {
                   value={formData.id}
                   readOnly
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formFinancialYearName"
                   label="Name"
@@ -118,11 +120,11 @@ const AddEditFinancialYearPage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md={6}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formFinancialYearStartDate"
                   label="Start Date"
@@ -132,8 +134,8 @@ const AddEditFinancialYearPage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formFinancialYearEndDate"
                   label="End Date"
@@ -143,8 +145,8 @@ const AddEditFinancialYearPage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
             
             <FormField
               controlId="formFinancialYearStatus"
@@ -170,7 +172,7 @@ const AddEditFinancialYearPage = () => {
                 {isEditMode ? 'Save Changes' : 'Add Financial Year'}
               </StyledButton>
             </div>
-          </Form>
+          </form>
         </StyledCard.Body>
       </StyledCard>
     </StyledContainer>

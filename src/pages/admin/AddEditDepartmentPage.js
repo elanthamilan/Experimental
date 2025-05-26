@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockDepartments } from '../../data/mockDepartments';
 import { mockFaculty } from '../../data/mockFaculty';
-import { Form, Row, Col } from 'react-bootstrap'; // Alert will be replaced by styled divs
+// import { Form } from 'react-bootstrap'; // Form removed
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
   StyledCard,
   StyledButton,
-  FormField // Import FormField
+  FormField, // Import FormField
+  StyledRow, // Added
+  StyledCol,  // Added
 } from '../../components';
 import styles from './AddEditDepartmentPage.module.scss'; // Use new SCSS module
 
@@ -94,9 +96,9 @@ const AddEditDepartmentPage = () => {
         <StyledCard.Body>
           {error && <div className={styles.alertDanger} role="alert">{error}</div>}
           {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
-          <Form onSubmit={handleSubmit}> {/* Keep react-bootstrap Form for now as FormField is used within */}
-            <Row className="mb-3">
-              <Col md={6}>
+          <form onSubmit={handleSubmit}> {/* Keep react-bootstrap Form for now as FormField is used within */}
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formDepartmentId"
                   label="Department ID"
@@ -105,8 +107,8 @@ const AddEditDepartmentPage = () => {
                   value={formData.id}
                   readOnly
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formDepartmentName"
                   label="Name"
@@ -116,8 +118,8 @@ const AddEditDepartmentPage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <FormField
               controlId="formDepartmentDescription"
@@ -130,8 +132,8 @@ const AddEditDepartmentPage = () => {
               className={styles.formFieldMarginBottom} // Add margin if not in Col/Row with mb-3
             />
 
-            <Row className="mb-3">
-              <Col md={6}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formDepartmentHead"
                   label="Head of Department"
@@ -147,8 +149,8 @@ const AddEditDepartmentPage = () => {
                     }))
                   ]}
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formDepartmentOfficeLocation"
                   label="Office Location"
@@ -157,8 +159,8 @@ const AddEditDepartmentPage = () => {
                   value={formData.officeLocation}
                   onChange={handleChange}
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <div className={styles.formActions}>
               <StyledButton variant="secondary" onClick={() => navigate('/admin/masterdata/departments')}>
@@ -168,7 +170,7 @@ const AddEditDepartmentPage = () => {
                 {isEditMode ? 'Save Changes' : 'Add Department'}
               </StyledButton>
             </div>
-          </Form>
+          </form>
         </StyledCard.Body>
       </StyledCard>
     </StyledContainer>

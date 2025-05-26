@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockStaff } from '../../data/mockStaff';
 import { mockDepartments } from '../../data/mockDepartments'; // Using this for department dropdown
-import { Form, Row, Col } from 'react-bootstrap'; // Alert & Button will be replaced
+// import { Form } from 'react-bootstrap'; // Form removed
 import {
   StyledContainer,
   StyledCard,
   StyledButton,
   FormField,
+  StyledRow, // Added
+  StyledCol,  // Added
 } from '../../components';
 import styles from './AddEditStaffPage.module.scss'; // Use new SCSS module
 
@@ -110,24 +112,24 @@ const AddEditStaffPage = () => {
         <StyledCard.Body>
           {error && <div className={styles.alertDanger} role="alert">{error}</div>}
           {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
-          <Form onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Col md={4}>
+          <form onSubmit={handleSubmit}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-4">
                 <FormField controlId="formStaffId" label="Staff ID" type="text" name="id" value={formData.id} readOnly />
-              </Col>
-              <Col md={4}>
+              </StyledCol>
+              <StyledCol className="col-md-4">
                 <FormField controlId="formFirstName" label="First Name" type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
-              </Col>
-              <Col md={4}>
+              </StyledCol>
+              <StyledCol className="col-md-4">
                 <FormField controlId="formLastName" label="Last Name" type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md={6}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField controlId="formEmail" label="Email" type="email" name="email" value={formData.email} onChange={handleChange} required />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formDepartment"
                   label="Department"
@@ -146,26 +148,26 @@ const AddEditStaffPage = () => {
                     { value: 'Maintenance', label: 'Maintenance' },
                   ]}
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
             
-            <Row className="mb-3">
-              <Col md={6}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField controlId="formRole" label="Role/Title" type="text" name="role" value={formData.role} onChange={handleChange} required />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField controlId="formEmploymentDate" label="Employment Date" type="date" name="employmentDate" value={formData.employmentDate} onChange={handleChange} required />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md={6}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField controlId="formPhone" label="Phone" type="tel" name="phone" value={formData.phone} onChange={handleChange} />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField controlId="formOfficeLocation" label="Office Location" type="text" name="officeLocation" value={formData.officeLocation} onChange={handleChange} />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <FormField
               controlId="formStatus"
@@ -191,7 +193,7 @@ const AddEditStaffPage = () => {
                 {isEditMode ? 'Save Changes' : 'Add Staff Member'}
               </StyledButton>
             </div>
-          </Form>
+          </form>
         </StyledCard.Body>
       </StyledCard>
     </StyledContainer>

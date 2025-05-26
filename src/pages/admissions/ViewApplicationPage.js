@@ -2,14 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockApplications } from '../../data/mockApplications';
 // import { mockApplicationFormFields } from '../../data/mockApplicationFormFields'; // Can be used for a more robust display
-import { Row, Col, ListGroup } from 'react-bootstrap';
+// import { ListGroup } from 'react-bootstrap'; // Row, Col removed // ListGroup removed
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
   StyledCard,
   StyledButton,
   StyledBadge,
-  FormField
+  FormField,
+  StyledRow, 
+  StyledCol,  
+  StyledListGroup,      // Added
+  StyledListGroupItem,  // Added
 } from '../../components';
 import styles from './ViewApplicationPage.module.scss'; // Use new SCSS module
 
@@ -111,36 +115,36 @@ const ViewApplicationPage = () => {
             </div>
           )}
 
-          <Row className={styles.detailRow}>
-            <Col md={6}><strong className={styles.detailLabel}>Applicant:</strong> {application.applicantName}</Col>
-            <Col md={6}><strong className={styles.detailLabel}>Email:</strong> {application.email}</Col>
-          </Row>
-          <Row className={styles.detailRow}>
-            <Col md={6}><strong className={styles.detailLabel}>Date of Birth:</strong> {application.dateOfBirth}</Col>
-            <Col md={6}><strong className={styles.detailLabel}>Submitted:</strong> {application.submittedDate}</Col>
-          </Row>
-          <Row className={styles.detailRow}>
-            <Col md={6}><strong className={styles.detailLabel}>Applying for:</strong> {application.programName}</Col>
-            <Col md={6}><strong className={styles.detailLabel}>Current Status:</strong> {getStatusBadge(application.status)}</Col>
-          </Row>
+          <StyledRow className={styles.detailRow}>
+            <StyledCol className="col-md-6"><strong className={styles.detailLabel}>Applicant:</strong> {application.applicantName}</StyledCol>
+            <StyledCol className="col-md-6"><strong className={styles.detailLabel}>Email:</strong> {application.email}</StyledCol>
+          </StyledRow>
+          <StyledRow className={styles.detailRow}>
+            <StyledCol className="col-md-6"><strong className={styles.detailLabel}>Date of Birth:</strong> {application.dateOfBirth}</StyledCol>
+            <StyledCol className="col-md-6"><strong className={styles.detailLabel}>Submitted:</strong> {application.submittedDate}</StyledCol>
+          </StyledRow>
+          <StyledRow className={styles.detailRow}>
+            <StyledCol className="col-md-6"><strong className={styles.detailLabel}>Applying for:</strong> {application.programName}</StyledCol>
+            <StyledCol className="col-md-6"><strong className={styles.detailLabel}>Current Status:</strong> {getStatusBadge(application.status)}</StyledCol>
+          </StyledRow>
 
           <hr />
           <h5 className={styles.sectionTitle}>Application Responses</h5>
           {application.fieldResponses && application.fieldResponses.length > 0 ? (
-            <ListGroup variant="flush" className={styles.applicationResponsesList}>
+            <StyledListGroup variant="flush" className={styles.applicationResponsesList}>
               {application.fieldResponses.map(response => (
-                <ListGroup.Item key={response.fieldId}>
+                <StyledListGroupItem key={response.fieldId}>
                   <strong className={styles.detailLabel}>{response.label}:</strong> {response.response}
-                </ListGroup.Item>
+                </StyledListGroupItem>
               ))}
-            </ListGroup>
+            </StyledListGroup>
           ) : <p className={styles.loadingText}>No specific field responses recorded.</p>}
 
           <hr />
           <h5 className={styles.sectionTitle}>Update Status</h5>
-          <Row className={`${styles.statusUpdateSection} align-items-center`}> {/* Keep align-items-center from bootstrap */}
-            <Col sm={3}><strong className={styles.detailLabel}>New Status:</strong></Col>
-            <Col sm={6}>
+          <StyledRow className={`${styles.statusUpdateSection} align-items-center`}> {/* Keep align-items-center from bootstrap */}
+            <StyledCol className="col-sm-3"><strong className={styles.detailLabel}>New Status:</strong></StyledCol>
+            <StyledCol className="col-sm-6">
               <FormField
                 as="select"
                 value={newStatus}
@@ -153,29 +157,29 @@ const ViewApplicationPage = () => {
                   { value: 'Rejected', label: 'Rejected' }
                 ]}
               />
-            </Col>
-            <Col sm={3}> {/* This button might need margin adjustment via a specific class if not fitting well */}
+            </StyledCol>
+            <StyledCol className="col-sm-3"> {/* This button might need margin adjustment via a specific class if not fitting well */}
               <StyledButton variant="info" onClick={handleStatusUpdate}>Update Status</StyledButton>
-            </Col>
-          </Row>
+            </StyledCol>
+          </StyledRow>
 
           {showInterviewFields && (
             <>
               <hr />
               <h5 className={styles.sectionTitle}>Interview Details</h5>
-              <Row className={styles.detailRow}>
-                <Col sm={3}><strong className={styles.detailLabel}>Interview Date:</strong></Col>
-                <Col sm={9}>
+              <StyledRow className={styles.detailRow}>
+                <StyledCol className="col-sm-3"><strong className={styles.detailLabel}>Interview Date:</strong></StyledCol>
+                <StyledCol className="col-sm-9">
                   <FormField
                     type="date"
                     value={interviewDate}
                     onChange={(e) => setInterviewDate(e.target.value)}
                   />
-                </Col>
-              </Row>
-              <Row className={styles.detailRow}>
-                <Col sm={3}><strong className={styles.detailLabel}>Interview Notes:</strong></Col>
-                <Col sm={9}>
+                </StyledCol>
+              </StyledRow>
+              <StyledRow className={styles.detailRow}>
+                <StyledCol className="col-sm-3"><strong className={styles.detailLabel}>Interview Notes:</strong></StyledCol>
+                <StyledCol className="col-sm-9">
                   <FormField
                     as="textarea"
                     rows={3}
@@ -183,8 +187,8 @@ const ViewApplicationPage = () => {
                     onChange={(e) => setInterviewNotes(e.target.value)}
                     placeholder="Enter notes about the interview"
                   />
-                </Col>
-              </Row>
+                </StyledCol>
+              </StyledRow>
               <div className={styles.formActionsEnd}>
                  <StyledButton variant="primary" onClick={handleInterviewDetailsSave}>Save Interview Details</StyledButton>
               </div>

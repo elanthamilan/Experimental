@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockPrograms } from '../../data/mockPrograms'; // Assuming mockPrograms is an array that can be mutated
-import { Row, Col } from 'react-bootstrap';
+// import { Row, Col } from 'react-bootstrap'; // Removed
 import StyledButton from '../../components/atoms/StyledButton';
 import StyledCard from '../../components/atoms/StyledCard';
 import StyledContainer from '../../components/atoms/StyledContainer';
 import FormField from '../../components/molecules/FormField';
+import { StyledRow, StyledCol } from '../../components'; // Added
 import styles from './AddEditProgramPage.module.scss'; // Use new SCSS module
 
 const AddEditProgramPage = () => {
@@ -101,8 +102,8 @@ const AddEditProgramPage = () => {
             </div>
           )}
           <form onSubmit={handleSubmit}>
-            <Row className="mb-3"> {/* Ensure Row has margin if FormFields within don't */}
-              <Col md={6}>
+            <StyledRow className="mb-3"> {/* Ensure Row has margin if FormFields within don't */}
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formProgramId"
                   label="Program ID"
@@ -112,8 +113,8 @@ const AddEditProgramPage = () => {
                   onChange={handleChange}
                   readOnly
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formProgramName"
                   label="Name"
@@ -123,8 +124,8 @@ const AddEditProgramPage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <FormField
               controlId="formProgramDescription"
@@ -137,8 +138,8 @@ const AddEditProgramPage = () => {
               className={styles.formFieldMarginBottom}
             />
 
-            <Row className="mb-3"> {/* Ensure Row has margin */}
-              <Col md={6}>
+            <StyledRow className="mb-3"> {/* Ensure Row has margin */}
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formProgramDepartment"
                   label="Department"
@@ -147,8 +148,8 @@ const AddEditProgramPage = () => {
                   value={formData.department}
                   onChange={handleChange}
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formProgramDegreeLevel"
                   label="Degree Level"
@@ -164,8 +165,8 @@ const AddEditProgramPage = () => {
                     { value: 'PhD', label: 'PhD' }
                   ]}
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <FormField
               controlId="formProgramRequiredCourses"

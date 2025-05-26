@@ -4,10 +4,14 @@ import { mockCourses } from '../../data/mockCourses';
 import { mockUsers } from '../../data/mockUsers';
 import { mockStudents } from '../../data/mockStudents';
 import { mockEnrollments } from '../../data/mockEnrollments';
-import { Row, Col, Table, Alert } from 'react-bootstrap'; // Alert and Table are kept from react-bootstrap for now
+// import { Table } from 'react-bootstrap'; // Table removed
 import {
   StyledContainer,
   StyledCard,
+  StyledTable, // Added
+  StyledRow, 
+  StyledCol,  
+  StyledAlert, // Added
   // StyledButton, // Not used in this file
   // FormField, // Not used in this file
 } from '../../components';
@@ -21,7 +25,7 @@ const CourseDetailPage = () => {
     return (
       <StyledContainer className={styles.pageContainer}>
         {/* Using react-bootstrap Alert, styled via SCSS module */}
-        <Alert variant="danger" className={styles.alertDanger}>Course not found.</Alert>
+        <StyledAlert variant="danger" className={styles.alertDanger}>Course not found.</StyledAlert>
       </StyledContainer>
     );
   }
@@ -43,34 +47,34 @@ const CourseDetailPage = () => {
           Course Details: {course.name} ({course.courseCode})
         </StyledCard.Header>
         <StyledCard.Body>
-          <Row className="mb-3">
-            <Col md={6}>
+          <StyledRow className="mb-3">
+            <StyledCol className="col-md-6">
               <p className={styles.detailText}><strong>Description:</strong> {course.description}</p>
               <p className={styles.detailText}><strong>Department:</strong> {course.department}</p>
               <p className={styles.detailText}><strong>Credits:</strong> {course.credits}</p>
-            </Col>
-            <Col md={6}>
+            </StyledCol>
+            <StyledCol className="col-md-6">
               <p className={styles.detailText}><strong>Teacher:</strong> {teacher ? `${teacher.firstName} ${teacher.lastName}` : 'N/A'}</p>
               <p className={styles.detailText}><strong>Semester:</strong> {course.semester}</p>
               <p className={styles.detailText}><strong>Schedule:</strong> {course.schedule}</p>
-            </Col>
-          </Row>
+            </StyledCol>
+          </StyledRow>
           {course.syllabus && (
-            <Row className="mb-3">
-              <Col>
+            <StyledRow className="mb-3">
+              <StyledCol>
                 <h5 className={styles.sectionTitle}>Syllabus / Learning Objectives</h5>
                 <StyledCard className={styles.syllabusCard}>
                   <StyledCard.Body> {/* SCSS handles styling via .syllabusCard :global(.card-body) */}
                     {course.syllabus}
                   </StyledCard.Body>
                 </StyledCard>
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
           )}
 
           <h5 className={styles.sectionTitle}>Enrolled Students</h5>
           {enrolledStudentsDetails.length > 0 ? (
-            <Table striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
+            <StyledTable striped bordered hover responsive="sm" size="sm" className={styles.dataTable}>
               <thead>
                 <tr>
                   <th>Student ID</th>
@@ -89,7 +93,7 @@ const CourseDetailPage = () => {
                   </tr>
                 ))}
               </tbody>
-            </Table>
+            </StyledTable>
           ) : (
             <p className={styles.detailText}>No students currently enrolled in this course.</p>
           )}

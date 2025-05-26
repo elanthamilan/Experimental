@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockApplicationFormFields } from '../../data/mockApplicationFormFields';
-import { Row, Col } from 'react-bootstrap';
+// import { Row, Col } from 'react-bootstrap'; // Removed
 import StyledButton from '../../components/atoms/StyledButton';
 import StyledCard from '../../components/atoms/StyledCard';
 import StyledContainer from '../../components/atoms/StyledContainer';
 import FormField from '../../components/molecules/FormField';
+import { StyledRow, StyledCol } from '../../components'; // Added
 import styles from './AddEditAppFormFieldPage.module.scss'; // Using its own SCSS module
 
 const AddEditAppFormFieldPage = () => {
@@ -116,8 +117,8 @@ const AddEditAppFormFieldPage = () => {
             </div>
           )}
           <form onSubmit={handleSubmit}>
-            <Row className="mb-3"> {/* Ensure Rows have bottom margin if FormFields don't */}
-              <Col md={4}>
+            <StyledRow className="mb-3"> {/* Ensure Rows have bottom margin if FormFields don't */}
+              <StyledCol className="col-md-4">
                 <FormField
                   controlId="formFieldId"
                   label="Field ID"
@@ -127,8 +128,8 @@ const AddEditAppFormFieldPage = () => {
                   onChange={handleChange}
                   readOnly
                 />
-              </Col>
-              <Col md={4}>
+              </StyledCol>
+              <StyledCol className="col-md-4">
                 <FormField
                   controlId="formFieldLabel"
                   label="Label"
@@ -138,8 +139,8 @@ const AddEditAppFormFieldPage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-              <Col md={4}>
+              </StyledCol>
+              <StyledCol className="col-md-4">
                 <FormField
                   controlId="formFieldOrder"
                   label="Order"
@@ -150,11 +151,11 @@ const AddEditAppFormFieldPage = () => {
                   required
                   min="1"
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md={6}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formFieldType"
                   label="Type"
@@ -173,8 +174,8 @@ const AddEditAppFormFieldPage = () => {
                     { value: 'file', label: 'File' }
                   ]}
                 />
-              </Col>
-              <Col md={6} className="d-flex align-items-center">
+              </StyledCol>
+              <StyledCol className="col-md-6 d-flex align-items-center">
                 <FormField
                   controlId="formFieldRequired"
                   label="Required Field"
@@ -184,8 +185,8 @@ const AddEditAppFormFieldPage = () => {
                   onChange={handleChange}
                   className={styles.formCheckInputLarge} // This class styles the input inside FormField
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             {formData.type === 'dropdown' && (
               <FormField

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../App'; // Corrected path
 import { themes as predefinedThemes, generateThemeColors } from '../themes';
 import { googleFonts, fontWeightOptions } from '../data/fonts';
-import { Row, Col, ListGroup, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap'; // Row, Col, ListGroup removed
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
@@ -10,7 +10,11 @@ import {
   StyledButton,
   StyledFormLabel,
   StyledFormCheck,
-  FormField
+  FormField,
+  StyledRow, 
+  StyledCol,  
+  StyledListGroup,      // Added
+  StyledListGroupItem,  // Added
 } from '../components';
 import styles from './SettingsPage.module.scss';
 
@@ -185,8 +189,8 @@ const SettingsPage = () => {
           Customize your application's visual appearance with predefined themes or create your own custom theme.
         </p>
       </div>
-      <Row>
-        <Col lg={8} md={12} className="mb-4">
+      <StyledRow>
+        <StyledCol className="col-lg-8 col-md-12 mb-4">
           {/* Predefined Themes Section */}
           <StyledCard className={styles.settingsSectionCard}>
             <StyledCard.Header>
@@ -196,9 +200,9 @@ const SettingsPage = () => {
               </div>
             </StyledCard.Header>
             <StyledCard.Body>
-              <ListGroup variant="flush" className={styles.themeListContainer}>
+              <StyledListGroup variant="flush" className={styles.themeListContainer}>
                 {predefinedThemes.map((theme) => (
-                  <ListGroup.Item
+                  <StyledListGroupItem
                     key={theme.id}
                     className={`${styles.themeListItem} ${currentTheme === theme.id && !savedCustomThemes.find(ct => ct.id === currentTheme) ? styles.activeTheme : ''}`}
                   >
@@ -221,9 +225,9 @@ const SettingsPage = () => {
                     >
                       {currentTheme === theme.id && !savedCustomThemes.find(ct => ct.id === currentTheme) ? 'Applied' : 'Apply'}
                     </StyledButton>
-                  </ListGroup.Item>
+                  </StyledListGroupItem>
                 ))}
-              </ListGroup>
+              </StyledListGroup>
             </StyledCard.Body>
           </StyledCard>
 
@@ -237,9 +241,9 @@ const SettingsPage = () => {
                 </div>
               </StyledCard.Header>
               <StyledCard.Body>
-                <ListGroup variant="flush" className={styles.myThemesListContainer}>
+                <StyledListGroup variant="flush" className={styles.myThemesListContainer}>
                   {savedCustomThemes.map((theme) => (
-                    <ListGroup.Item key={theme.id} className={styles.myThemeListItem}>
+                    <StyledListGroupItem key={theme.id} className={styles.myThemeListItem}>
                       <div className={styles.myThemeInfo}>
                         <h4>{theme.name}</h4>
                         <div className={styles.colorSwatches}>
@@ -251,19 +255,19 @@ const SettingsPage = () => {
                         <p>Base Size: {theme.baseFontSize}px, Weight: {fontWeightOptions.find(fw => fw.value === theme.globalFontWeight)?.label || theme.globalFontWeight}</p>
                       </div>
                       <div className={styles.themeActions}>
-                        <StyledButton variant="outline-primary" size="sm" onClick={() => handleApplySavedTheme(theme)} className={styles.applyButton}>Apply</StyledButton>
-                        <StyledButton variant="outline-danger" size="sm" onClick={() => handleDeleteSavedTheme(theme.id)} className={styles.deleteThemeButton}>Delete</StyledButton>
+                        <StyledButton variant="outline-primary" size="sm" onClick={() => handleApplySavedTheme(theme)} className={styles.applyButton} action>Apply</StyledButton>
+                        <StyledButton variant="outline-danger" size="sm" onClick={() => handleDeleteSavedTheme(theme.id)} className={styles.deleteThemeButton} action>Delete</StyledButton>
                       </div>
-                    </ListGroup.Item>
+                    </StyledListGroupItem>
                   ))}
-                </ListGroup>
+                </StyledListGroup>
               </StyledCard.Body>
             </StyledCard>
           )}
-        </Col>
+        </StyledCol>
 
         {/* Customization Column */}
-        <Col lg={4} md={12}>
+        <StyledCol className="col-lg-4 col-md-12">
           <StyledCard className={styles.settingsSectionCard}>
             <StyledCard.Header>
               <div className={styles.sectionHeaderContent}>
@@ -391,8 +395,8 @@ const SettingsPage = () => {
               </div>
             </StyledCard.Body>
           </StyledCard>
-        </Col>
-      </Row>
+        </StyledCol>
+      </StyledRow>
     </StyledContainer>
   );
 };

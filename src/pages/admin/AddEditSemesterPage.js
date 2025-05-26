@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockSemesters } from '../../data/mockSemesters';
-import { Form, Row, Col } from 'react-bootstrap'; // Alert & Button will be replaced
+// import { Form } from 'react-bootstrap'; // Form removed
 import {
   StyledContainer,
   StyledCard,
   StyledButton,
   FormField,
+  StyledRow, // Added
+  StyledCol,  // Added
 } from '../../components';
 import styles from './AddEditSemesterPage.module.scss'; // Use new SCSS module
 
@@ -104,9 +106,9 @@ const AddEditSemesterPage = () => {
         <StyledCard.Body>
           {error && <div className={styles.alertDanger} role="alert">{error}</div>}
           {success && <div className={styles.alertSuccess} role="alert">{success}</div>}
-          <Form onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Col md={6}>
+          <form onSubmit={handleSubmit}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formSemesterId"
                   label="Semester ID"
@@ -115,8 +117,8 @@ const AddEditSemesterPage = () => {
                   value={formData.id}
                   readOnly
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formSemesterName"
                   label="Name"
@@ -126,11 +128,11 @@ const AddEditSemesterPage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md={6}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formSemesterStartDate"
                   label="Start Date"
@@ -140,8 +142,8 @@ const AddEditSemesterPage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formSemesterEndDate"
                   label="End Date"
@@ -151,11 +153,11 @@ const AddEditSemesterPage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-                <Col md={6}>
+            <StyledRow className="mb-3">
+                <StyledCol className="col-md-6">
                     <FormField
                         controlId="formSemesterRegistrationDeadline"
                         label="Registration Deadline"
@@ -164,8 +166,8 @@ const AddEditSemesterPage = () => {
                         value={formData.registrationDeadline}
                         onChange={handleChange}
                     />
-                </Col>
-                <Col md={6}>
+                </StyledCol>
+                <StyledCol className="col-md-6">
                     <FormField
                         controlId="formSemesterStatus"
                         label="Status"
@@ -182,8 +184,8 @@ const AddEditSemesterPage = () => {
                             { value: 'Archived', label: 'Archived' },
                         ]}
                     />
-                </Col>
-            </Row>
+                </StyledCol>
+            </StyledRow>
             
             <div className={styles.formActions}>
               <StyledButton variant="secondary" onClick={() => navigate('/admin/semesters')}>
@@ -193,7 +195,7 @@ const AddEditSemesterPage = () => {
                 {isEditMode ? 'Save Changes' : 'Add Semester'}
               </StyledButton>
             </div>
-          </Form>
+          </form>
         </StyledCard.Body>
       </StyledCard>
     </StyledContainer>

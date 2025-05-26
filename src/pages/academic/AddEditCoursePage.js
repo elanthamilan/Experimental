@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockCourses } from '../../data/mockCourses';
 import { mockUsers } from '../../data/mockUsers'; // For teacher selection
-import { Form, Row, Col } from 'react-bootstrap'; // Keeping Form, Row, Col for structure if FormField handles the rest
+// import { Form } from 'react-bootstrap'; // Form removed
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
   StyledCard,
   StyledButton,
-  FormField // FormField should replace Form.Group, Form.Label, Form.Control, Form.Select
+  FormField, // FormField should replace Form.Group, Form.Label, Form.Control, Form.Select
+  StyledRow, // Added
+  StyledCol,  // Added
 } from '../../components';
 import styles from './AddEditCoursePage.module.scss'; // Using its own SCSS module
 
@@ -77,9 +79,9 @@ const AddEditCoursePage = () => {
           {isEditMode ? 'Edit Course Information' : 'Add New Course'}
         </StyledCard.Header>
         <StyledCard.Body>
-          <Form onSubmit={handleSubmit}>
-            <Row className="mb-3"> {/* Using Bootstrap Row for now, can be replaced if StyledRow exists */}
-              <Col md="2">
+          <form onSubmit={handleSubmit}>
+            <StyledRow className="mb-3"> {/* Using Bootstrap Row for now, can be replaced if StyledRow exists */}
+              <StyledCol className="col-md-2">
                 <FormField
                   controlId="formCourseId"
                   label="Course ID"
@@ -88,8 +90,8 @@ const AddEditCoursePage = () => {
                   value={formData.id}
                   readOnly
                 />
-              </Col>
-              <Col md="5">
+              </StyledCol>
+              <StyledCol className="col-md-5">
                 <FormField
                   controlId="formCourseCode"
                   label="Course Code"
@@ -99,8 +101,8 @@ const AddEditCoursePage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-              <Col md="5">
+              </StyledCol>
+              <StyledCol className="col-md-5">
                 <FormField
                   controlId="formCourseName"
                   label="Course Name"
@@ -110,11 +112,11 @@ const AddEditCoursePage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md="12">
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-12">
                 <FormField
                   controlId="formDescription"
                   label="Description"
@@ -124,11 +126,11 @@ const AddEditCoursePage = () => {
                   value={formData.description}
                   onChange={handleChange}
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md="3">
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-3">
                 <FormField
                   controlId="formCredits"
                   label="Credits"
@@ -139,8 +141,8 @@ const AddEditCoursePage = () => {
                   required
                   min="0"
                 />
-              </Col>
-              <Col md="9">
+              </StyledCol>
+              <StyledCol className="col-md-9">
                 <FormField
                   controlId="formTeacherId"
                   label="Teacher"
@@ -157,11 +159,11 @@ const AddEditCoursePage = () => {
                     }))
                   ]}
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md="6">
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formDepartment"
                   label="Department"
@@ -170,8 +172,8 @@ const AddEditCoursePage = () => {
                   value={formData.department}
                   onChange={handleChange}
                 />
-              </Col>
-              <Col md="6">
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formSemester"
                   label="Semester"
@@ -180,11 +182,11 @@ const AddEditCoursePage = () => {
                   value={formData.semester}
                   onChange={handleChange}
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md="12">
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-12">
                 <FormField
                   controlId="formSchedule"
                   label="Schedule"
@@ -194,11 +196,11 @@ const AddEditCoursePage = () => {
                   onChange={handleChange}
                   placeholder="e.g., MWF 10:00-11:00 AM"
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md="12">
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-12">
                 <FormField
                   controlId="formSyllabus"
                   label="Syllabus"
@@ -220,7 +222,7 @@ const AddEditCoursePage = () => {
                 {isEditMode ? 'Update Course' : 'Add Course'}
               </StyledButton>
             </div>
-          </Form>
+          </form>
         </StyledCard.Body>
       </StyledCard>
     </StyledContainer>

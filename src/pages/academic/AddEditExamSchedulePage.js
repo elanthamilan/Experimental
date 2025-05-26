@@ -3,12 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { mockExamSchedules } from '../../data/mockExamSchedules';
 import { mockCourses } from '../../data/mockCourses';
 // import { mockFaculty } from '../../data/mockFaculty'; // For invigilator names (optional, or for a future multi-select) - Not directly used for selection options in this version
-import { Form, Row, Col, Alert } from 'react-bootstrap'; // Alert is kept, Form, Row, Col for structure
+// import { Alert } from 'react-bootstrap'; // Alert removed
 import {
   StyledContainer,
   StyledCard,
   StyledButton,
   FormField,
+  StyledRow, 
+  StyledCol,  
+  StyledAlert, // Added
 } from '../../components';
 import styles from './AddEditExamSchedulePage.module.scss'; // Using its own SCSS module
 
@@ -110,11 +113,11 @@ const AddEditExamSchedulePage = () => {
           {isEditMode ? 'Edit Exam Schedule' : 'Add New Exam Schedule'}
         </StyledCard.Header>
         <StyledCard.Body>
-          {error && <Alert variant="danger" className={styles.alert}>{error}</Alert>}
-          {successMessage && <Alert variant="success" className={styles.alert}>{successMessage}</Alert>}
-          <Form onSubmit={handleSubmit}>
-            <Row>
-              <Col md={4}>
+          {error && <StyledAlert variant="danger" className={styles.alert} dismissible onClose={() => setError('')}>{error}</StyledAlert>}
+          {successMessage && <StyledAlert variant="success" className={styles.alert} dismissible onClose={() => setSuccessMessage('')}>{successMessage}</StyledAlert>}
+          <form onSubmit={handleSubmit}>
+            <StyledRow>
+              <StyledCol className="col-md-4">
                 <FormField
                   controlId="formScheduleId"
                   label="Schedule ID"
@@ -123,8 +126,8 @@ const AddEditExamSchedulePage = () => {
                   value={formData.id}
                   readOnly
                 />
-              </Col>
-              <Col md={8}>
+              </StyledCol>
+              <StyledCol className="col-md-8">
                 <FormField
                   controlId="formCourseId"
                   label="Course"
@@ -141,8 +144,8 @@ const AddEditExamSchedulePage = () => {
                     }))
                   ]}
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <FormField
               controlId="formExamName"
@@ -155,8 +158,8 @@ const AddEditExamSchedulePage = () => {
               className="mb-3" // Adding margin bottom, can be handled by FormField wrapper if configured
             />
             
-            <Row>
-              <Col md={6}>
+            <StyledRow>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formDate"
                   label="Date"
@@ -166,8 +169,8 @@ const AddEditExamSchedulePage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formTime"
                   label="Time"
@@ -177,11 +180,11 @@ const AddEditExamSchedulePage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row>
-              <Col md={6}>
+            <StyledRow>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formRoom"
                   label="Room/Venue"
@@ -190,8 +193,8 @@ const AddEditExamSchedulePage = () => {
                   value={formData.room}
                   onChange={handleChange}
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formDuration"
                   label="Duration"
@@ -236,7 +239,7 @@ const AddEditExamSchedulePage = () => {
                 {isEditMode ? 'Save Changes' : 'Add Schedule'}
               </StyledButton>
             </div>
-          </Form>
+          </form>
         </StyledCard.Body>
       </StyledCard>
     </StyledContainer>

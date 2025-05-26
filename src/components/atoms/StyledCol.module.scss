@@ -1,0 +1,56 @@
+@use 'src/styles/_variables.scss' as v;
+
+.styledCol {
+  position: relative;
+  width: 100%; // Default for mobile-first approach
+  // Using a common default gutter of 15px for each side (30px total)
+  // Example: padding-right: calc(var(--theme-grid-gutter-width, #{v.$grid-gutter-width}) / 2);
+  padding-right: calc(#{v.$grid-gutter-width} / 2);
+  padding-left: calc(#{v.$grid-gutter-width} / 2);
+
+  // Basic flex behavior for columns within a flex row
+  // These allow columns to grow and shrink as needed.
+  // For explicit sizing (e.g., col-6), additional classes or props would be needed.
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%; // Ensures content doesn't overflow the column's flex-basis
+}
+
+// Optional: Predefined column size classes (example)
+// These are not automatically applied by the `cols` prop in the current JS.
+// To use these, you'd pass `className={styles.col6}` for example.
+// A more advanced JS component could map a `cols={6}` prop to `styles.col6`.
+
+// .col {
+//   flex-basis: 0;
+//   flex-grow: 1;
+//   max-width: 100%;
+// }
+
+// .col-auto {
+//   flex: 0 0 auto;
+//   width: auto;
+//   max-width: 100%; // Reset for auto
+// }
+
+// @for $i from 1 through 12 {
+//   .col-#{$i} {
+//     flex: 0 0 percentage($i / 12);
+//     max-width: percentage($i / 12);
+//   }
+// }
+
+// Example for responsive classes (can be expanded)
+// This would require more complex logic in the JS component to apply based on props like `md={6}`.
+// .col-md-6 {
+//   @media (min-width: v.$breakpoint-md) {
+//     flex: 0 0 50%;
+//     max-width: 50%;
+//   }
+// }
+// .col-lg-4 {
+//   @media (min-width: v.$breakpoint-lg) {
+//     flex: 0 0 33.333333%;
+//     max-width: 33.333333%;
+//   }
+// }

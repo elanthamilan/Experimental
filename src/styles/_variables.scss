@@ -76,6 +76,10 @@ $input-border-radius: 4px;
 $base-border-width: 1px;
 $secondary-border-width: 2px;
 
+// Grid system
+$_grid-gutter-width-fallback: 30px; // Default gutter width (e.g., 15px on each side of a col)
+$grid-gutter-width: var(--theme-grid-gutter-width, $_grid-gutter-width-fallback);
+
 
 // --- CSS Custom Property Accessors (MD3 Aligned) ---
 

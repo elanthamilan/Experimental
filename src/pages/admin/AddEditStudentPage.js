@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockStudents } from '../../data/mockStudents';
-import { Form, Row, Col } from 'react-bootstrap';
+// import { Form } from 'react-bootstrap'; // Form removed
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
   StyledCard,
   StyledButton,
-  FormField
+  FormField,
+  StyledRow, // Added
+  StyledCol,  // Added
 } from '../../components';
 import styles from './AddEditStudentPage.module.scss'; // Use new SCSS module
 
@@ -153,28 +155,28 @@ const AddEditStudentPage = () => {
           {isEditMode ? 'Edit Student Information' : 'Add New Student'}
         </StyledCard.Header>
         <StyledCard.Body>
-          <Form onSubmit={handleSubmit}> {/* Keep react-bootstrap Form as main wrapper for FormField */}
+          <form onSubmit={handleSubmit}> {/* Keep react-bootstrap Form as main wrapper for FormField */}
             <h5 className={styles.sectionTitle}>Personal Details</h5> {/* Styled section title */}
-            <Row className="mb-3">
-              <Col md="2">
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-2">
                 <FormField controlId="formStudentId" label="Student ID" type="text" name="id" value={formData.id} onChange={handleChange} readOnly required />
-              </Col>
-              <Col md="3">
+              </StyledCol>
+              <StyledCol className="col-md-3">
                 <FormField controlId="formFirstName" label="First Name" type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
-              </Col>
-              <Col md="3">
+              </StyledCol>
+              <StyledCol className="col-md-3">
                 <FormField controlId="formLastName" label="Last Name" type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
-              </Col>
-              <Col md="4">
+              </StyledCol>
+              <StyledCol className="col-md-4">
                 <FormField controlId="formEmail" label="Email" type="email" name="email" value={formData.email} onChange={handleChange} required />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md="3">
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-3">
                 <FormField controlId="formDateOfBirth" label="Date of Birth" type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
-              </Col>
-              <Col md="3">
+              </StyledCol>
+              <StyledCol className="col-md-3">
                 <FormField
                   controlId="formGender"
                   label="Gender"
@@ -191,50 +193,50 @@ const AddEditStudentPage = () => {
                     { value: 'Prefer not to say', label: 'Prefer not to say' },
                   ]}
                 />
-              </Col>
-              <Col md="3">
+              </StyledCol>
+              <StyledCol className="col-md-3">
                 <FormField controlId="formNationality" label="Nationality" type="text" name="nationality" value={formData.nationality} onChange={handleChange} />
-              </Col>
-              <Col md="3">
+              </StyledCol>
+              <StyledCol className="col-md-3">
                 <FormField controlId="formProfileImageUrl" label="Profile Image URL" type="url" name="profileImageUrl" value={formData.profileImageUrl} onChange={handleChange} placeholder="https://example.com/image.jpg" />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <h5 className={styles.sectionTitle}>Address</h5>
-            <Row className="mb-3">
-              <Col md="12">
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-12">
                 <FormField controlId="formStreet" label="Street" type="text" name="street" value={formData.address.street} onChange={handleAddressChange} />
-              </Col>
-            </Row>
-            <Row className="mb-3">
-              <Col md="4">
+              </StyledCol>
+            </StyledRow>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-4">
                 <FormField controlId="formCity" label="City" type="text" name="city" value={formData.address.city} onChange={handleAddressChange} />
-              </Col>
-              <Col md="3">
+              </StyledCol>
+              <StyledCol className="col-md-3">
                 <FormField controlId="formState" label="State" type="text" name="state" value={formData.address.state} onChange={handleAddressChange} />
-              </Col>
-              <Col md="2">
+              </StyledCol>
+              <StyledCol className="col-md-2">
                 <FormField controlId="formZipCode" label="Zip Code" type="text" name="zipCode" value={formData.address.zipCode} onChange={handleAddressChange} />
-              </Col>
-              <Col md="3">
+              </StyledCol>
+              <StyledCol className="col-md-3">
                 <FormField controlId="formCountry" label="Country" type="text" name="country" value={formData.address.country} onChange={handleAddressChange} />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <h5 className={styles.sectionTitle}>Academic Information</h5>
-            <Row className="mb-3">
-              <Col md="4">
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-4">
                 <FormField controlId="formMajor" label="Major" type="text" name="major" value={formData.major} onChange={handleChange} required />
-              </Col>
-              <Col md="4">
+              </StyledCol>
+              <StyledCol className="col-md-4">
                 <FormField controlId="formAdmissionDate" label="Admission Date" type="date" name="admissionDate" value={formData.admissionDate} onChange={handleChange} />
-              </Col>
-              <Col md="4">
+              </StyledCol>
+              <StyledCol className="col-md-4">
                 <FormField controlId="formEnrollmentDate" label="Enrollment Date" type="date" name="enrollmentDate" value={formData.enrollmentDate} onChange={handleChange} required />
-              </Col>
-            </Row>
-            <Row className="mb-3">
-              <Col md="4">
+              </StyledCol>
+            </StyledRow>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-4">
                 <FormField
                   controlId="formEnrollmentStatus"
                   label="Enrollment Status"
@@ -250,8 +252,8 @@ const AddEditStudentPage = () => {
                     { value: 'Graduated', label: 'Graduated' },
                   ]}
                 />
-              </Col>
-              <Col md="4">
+              </StyledCol>
+              <StyledCol className="col-md-4">
                 <FormField
                   controlId="formAcademicStanding"
                   label="Academic Standing"
@@ -267,43 +269,43 @@ const AddEditStudentPage = () => {
                     { value: 'Expelled', label: 'Expelled' },
                   ]}
                 />
-              </Col>
-              <Col md="4">
+              </StyledCol>
+              <StyledCol className="col-md-4">
                 <FormField controlId="formWithdrawalDate" label="Withdrawal Date (if any)" type="date" name="withdrawalDate" value={formData.withdrawalDate || ''} onChange={handleChange} />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <h5 className={styles.sectionTitle}>Emergency Contact</h5>
-            <Row className="mb-3">
-              <Col md="4">
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-4">
                 <FormField controlId="formEmergencyContactName" label="Name" type="text" name="emergencyContactName" value={formData.emergencyContactName} onChange={handleChange} />
-              </Col>
-              <Col md="3">
+              </StyledCol>
+              <StyledCol className="col-md-3">
                 <FormField controlId="formEmergencyContactRelationship" label="Relationship" type="text" name="emergencyContactRelationship" value={formData.emergencyContactRelationship} onChange={handleChange} />
-              </Col>
-              <Col md="3">
+              </StyledCol>
+              <StyledCol className="col-md-3">
                 <FormField controlId="formEmergencyContactPhone" label="Phone" type="tel" name="emergencyContactPhone" value={formData.emergencyContactPhone} onChange={handleChange} />
-              </Col>
-              <Col md="2">
+              </StyledCol>
+              <StyledCol className="col-md-2">
                 <FormField controlId="formEmergencyContactEmail" label="Email" type="email" name="emergencyContactEmail" value={formData.emergencyContactEmail} onChange={handleChange} />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <h5 className={styles.sectionTitle}>Parent/Guardian Information</h5>
-            <Row className="mb-3">
-              <Col md="4">
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-4">
                 <FormField controlId="formParentGuardianName" label="Name" type="text" name="parentGuardianName" value={formData.parentGuardianName} onChange={handleChange} />
-              </Col>
-              <Col md="3">
+              </StyledCol>
+              <StyledCol className="col-md-3">
                 <FormField controlId="formParentGuardianRelationship" label="Relationship" type="text" name="parentGuardianRelationship" value={formData.parentGuardianRelationship} onChange={handleChange} />
-              </Col>
-              <Col md="3">
+              </StyledCol>
+              <StyledCol className="col-md-3">
                 <FormField controlId="formParentGuardianPhone" label="Phone" type="tel" name="parentGuardianPhone" value={formData.parentGuardianPhone} onChange={handleChange} />
-              </Col>
-              <Col md="2">
+              </StyledCol>
+              <StyledCol className="col-md-2">
                 <FormField controlId="formParentGuardianEmail" label="Email" type="email" name="parentGuardianEmail" value={formData.parentGuardianEmail} onChange={handleChange} />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <div className={styles.formActions}> {/* Use formActions from SCSS */}
               <StyledButton variant="secondary" onClick={() => navigate('/students')}> {/* Remove me-2 */}
@@ -313,7 +315,7 @@ const AddEditStudentPage = () => {
                 {isEditMode ? 'Update Student' : 'Add Student'}
               </StyledButton>
             </div>
-          </Form>
+          </form>
         </StyledCard.Body>
       </StyledCard>
     </StyledContainer>

@@ -1,0 +1,96 @@
+@use 'src/styles/_variables.scss' as v;
+
+.styledListGroupItem {
+  position: relative;
+  display: block;
+  padding: calc(#{v.$base-padding} * 0.75) #{v.$base-padding};
+  color: v.$on-surface-color;
+  text-decoration: none;
+  background-color: v.$surface-color;
+  border: v.$base-border-width solid v.$outline-variant-color;
+
+  // Overlapping borders by default (Bootstrap style)
+  margin-bottom: -#{v.$base-border-width}; // Collapses borders
+
+  &:first-child {
+    border-top-left-radius: inherit; // Inherits from .styledListGroup
+    border-top-right-radius: inherit;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    margin-bottom: 0; // No border to collapse for the last item
+  }
+
+  // If the parent .styledListGroup has .listGroupFlush
+  :global(.listGroupFlush) & {
+    border-width: 0 0 v.$base-border-width; // Only bottom border
+
+    &:first-child {
+      border-top-width: 0; // No top border even for the first item in flush
+    }
+    
+    &:last-child {
+      border-bottom-width: 0; // No bottom border for the last item in flush
+    }
+  }
+}
+
+.action {
+  cursor: pointer;
+  width: 100%; // Ensure action items take full width for clickability
+
+  &:hover,
+  &:focus {
+    // z-index: 1; // Bring item to front on hover/focus, useful if borders overlap
+    color: v.$on-surface-color; // Or could be v.$primary-color for more emphasis
+    background-color: v.$background-hover;
+  }
+}
+
+.active {
+  z-index: 2; // Higher than hover to ensure active state is prominent
+  color: v.$on-primary-color;
+  background-color: v.$primary-color;
+  border-color: v.$primary-color;
+}
+
+.disabled,
+&.disabled { // Allow applying .disabled class directly or via prop
+  color: v.$outline-color; // Or a specific disabled text variable if available
+  pointer-events: none;
+  background-color: v.$surface-color; // Or a more distinct disabled background
+  // Consider adding opacity: 0.65; if desired
+}
+
+// Contextual variants
+// Assuming existence of theme variables like $success-container-color, $on-success-container-color etc.
+// If not, use suitable fallbacks or generate them. For now, using placeholder logic.
+
+// Helper mixin for item variants
+@mixin list-group-item-variant($state, $background, $color) {
+  &.item-#{$state} {
+    color: $color;
+    background-color: $background;
+
+    &.action {
+      &:hover,
+      &:focus {
+        background-color: color.adjust($background, $blackness: 5%); // Darken background slightly on hover
+      }
+    }
+  }
+}
+
+// Apply variants using the mixin
+// Ensure these variables exist in _variables.scss or are properly defined with fallbacks
+// For example, $_success-container-fallback, $_on-success-container-fallback
+@include list-group-item-variant('primary', v.$primary-container-color, v.$on-primary-container-color);
+@include list-group-item-variant('secondary', v.$secondary-container-color, v.$on-secondary-container-color);
+@include list-group-item-variant('success', var(--theme-success-container, #d1e7dd), var(--theme-on-success-container, #0a3622)); // Example with direct var() and fallbacks
+@include list-group-item-variant('danger', var(--theme-error-container, #f8d7da), var(--theme-on-error-container, #58151c));
+@include list-group-item-variant('warning', var(--theme-warning-container, #fff3cd), var(--theme-on-warning-container, #664d03)); // Assuming warning-container exists or using fallbacks
+@include list-group-item-variant('info', var(--theme-info-container, #cff4fc), var(--theme-on-info-container, #055160));       // Assuming info-container exists or using fallbacks
+@include list-group-item-variant('light', var(--theme-surface-container-lowest, #FFFFFF), var(--theme-on-surface, #1C1B1F)); // Light variant on very light surface
+@include list-group-item-variant('dark', var(--theme-surface-container-highest, #343a40), var(--theme-on-surface-inverted, #FFFFFF)); // Dark variant on very dark surface (ensure on-surface-inverted exists)

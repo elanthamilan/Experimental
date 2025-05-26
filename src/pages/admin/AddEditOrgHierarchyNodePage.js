@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockOrgHierarchyNodes } from '../../data/mockOrgHierarchy';
-import { Form, Row, Col } from 'react-bootstrap'; // Alert & Button will be replaced
+// import { Form } from 'react-bootstrap'; // Form removed
 import {
   StyledContainer,
   StyledCard,
   StyledButton,
   FormField,
+  StyledRow, // Added
+  StyledCol,  // Added
 } from '../../components';
 import styles from './AddEditOrgHierarchyNodePage.module.scss'; // Use new SCSS module
 
@@ -104,9 +106,9 @@ const AddEditOrgHierarchyNodePage = () => {
         <StyledCard.Body>
           {error && <div className={styles.alertDanger} role="alert">{error}</div>}
           {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
-          <Form onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Col md={6}>
+          <form onSubmit={handleSubmit}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formNodeId"
                   label="Node ID"
@@ -115,8 +117,8 @@ const AddEditOrgHierarchyNodePage = () => {
                   value={formData.id}
                   readOnly
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formNodeName"
                   label="Name"
@@ -126,11 +128,11 @@ const AddEditOrgHierarchyNodePage = () => {
                   onChange={handleChange}
                   required
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
-            <Row className="mb-3">
-              <Col md={6}>
+            <StyledRow className="mb-3">
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formNodeType"
                   label="Type"
@@ -141,8 +143,8 @@ const AddEditOrgHierarchyNodePage = () => {
                   required
                   placeholder="e.g., Faculty, Department, Office"
                 />
-              </Col>
-              <Col md={6}>
+              </StyledCol>
+              <StyledCol className="col-md-6">
                 <FormField
                   controlId="formNodeParentId"
                   label="Parent Node"
@@ -158,8 +160,8 @@ const AddEditOrgHierarchyNodePage = () => {
                     }))
                   ]}
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <div className={styles.formActions}>
               <StyledButton variant="secondary" onClick={() => navigate('/admin/organisation/hierarchy')}>
@@ -169,7 +171,7 @@ const AddEditOrgHierarchyNodePage = () => {
                 {isEditMode ? 'Save Changes' : 'Add Node'}
               </StyledButton>
             </div>
-          </Form>
+          </form>
         </StyledCard.Body>
       </StyledCard>
     </StyledContainer>

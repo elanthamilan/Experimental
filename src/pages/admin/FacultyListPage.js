@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockFaculty } from '../../data/mockFaculty';
-import { Pagination } from 'react-bootstrap';
+// import { Pagination } from 'react-bootstrap'; // Removed
 import {
   StyledContainer,
   StyledTable,
@@ -10,6 +10,7 @@ import {
   FormField, // Added FormField
   StyledFormControl, // Added StyledFormControl
   StyledFormSelect,  // Added StyledFormSelect
+  StyledPagination, // Added
   // StyledBadge, // Not used in this version of FacultyList as no status is shown
 } from '../../components';
 import styles from './FacultyListPage.module.scss';
@@ -66,26 +67,26 @@ const FacultyListPage = () => {
     setCurrentPage(1);
   };
 
-  const paginationItems = [];
-  if (totalPages > 0) {
-    if (totalPages <= 7) {
-      for (let number = 1; number <= totalPages; number++) {
-        paginationItems.push(<Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>{number}</Pagination.Item>);
-      }
-    } else {
-      paginationItems.push(<Pagination.Item key={1} active={1 === currentPage} onClick={() => handlePageChange(1)}>1</Pagination.Item>);
-      if (currentPage > 3) paginationItems.push(<Pagination.Ellipsis key="ellipsis-start" disabled />);
-      let startPage = Math.max(2, currentPage - 1);
-      let endPage = Math.min(totalPages - 1, currentPage + 1);
-      if (currentPage <= 2) endPage = Math.min(totalPages - 1, 3);
-      if (currentPage >= totalPages - 1) startPage = Math.max(2, totalPages - 2);
-      for (let number = startPage; number <= endPage; number++) {
-        paginationItems.push(<Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>{number}</Pagination.Item>);
-      }
-      if (currentPage < totalPages - 2) paginationItems.push(<Pagination.Ellipsis key="ellipsis-end" disabled />);
-      paginationItems.push(<Pagination.Item key={totalPages} active={totalPages === currentPage} onClick={() => handlePageChange(totalPages)}>{totalPages}</Pagination.Item>);
-    }
-  }
+  // const paginationItems = []; // Removed
+  // if (totalPages > 0) { // Removed
+  //   if (totalPages <= 7) { // Removed
+  //     for (let number = 1; number <= totalPages; number++) { // Removed
+  //       paginationItems.push(<Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>{number}</Pagination.Item>); // Removed
+  //     } // Removed
+  //   } else { // Removed
+  //     paginationItems.push(<Pagination.Item key={1} active={1 === currentPage} onClick={() => handlePageChange(1)}>1</Pagination.Item>); // Removed
+  //     if (currentPage > 3) paginationItems.push(<Pagination.Ellipsis key="ellipsis-start" disabled />); // Removed
+  //     let startPage = Math.max(2, currentPage - 1); // Removed
+  //     let endPage = Math.min(totalPages - 1, currentPage + 1); // Removed
+  //     if (currentPage <= 2) endPage = Math.min(totalPages - 1, 3); // Removed
+  //     if (currentPage >= totalPages - 1) startPage = Math.max(2, totalPages - 2); // Removed
+  //     for (let number = startPage; number <= endPage; number++) { // Removed
+  //       paginationItems.push(<Pagination.Item key={number} active={number === currentPage} onClick={() => handlePageChange(number)}>{number}</Pagination.Item>); // Removed
+  //     } // Removed
+  //     if (currentPage < totalPages - 2) paginationItems.push(<Pagination.Ellipsis key="ellipsis-end" disabled />); // Removed
+  //     paginationItems.push(<Pagination.Item key={totalPages} active={totalPages === currentPage} onClick={() => handlePageChange(totalPages)}>{totalPages}</Pagination.Item>); // Removed
+  //   } // Removed
+  // } // Removed
 
   return (
     <StyledContainer className={styles.pageContainer}>
@@ -182,13 +183,14 @@ const FacultyListPage = () => {
           <span className={styles.resultsText}>
             Showing {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredFaculty.length)} of {filteredFaculty.length} results
           </span>
-          <Pagination className={styles.paginationControls}>
-            <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-            <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-            {paginationItems}
-            <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
-            <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
-          </Pagination>
+          <StyledPagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+            maxVisiblePages={7}
+            className={styles.paginationControls}
+            size="sm"
+          />
           <div className={styles.pageInputControls}>
             <span>Page</span>
             <form onSubmit={handlePageInputSubmit} style={{display: 'inline-flex', alignItems: 'center', gap: '0.5rem'}}>

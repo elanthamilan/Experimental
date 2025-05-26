@@ -5,13 +5,16 @@ import { mockCourses } from '../../data/mockCourses';
 import { mockEnrollments } from '../../data/mockEnrollments';
 import { mockHealthRecords } from '../../data/mockHealthRecords'; // New import
 import { mockDisciplinaryRecords } from '../../data/mockDisciplinaryRecords'; // New import
-import { Row, Col, Image, Alert, Badge } from 'react-bootstrap';
+import { Image } from 'react-bootstrap'; // Row, Col, Alert, Badge removed
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
   StyledTable,
   StyledCard,
-  StyledBadge // Added StyledBadge import
+  StyledBadge, // Added StyledBadge import
+  StyledRow,  
+  StyledCol,   
+  StyledAlert, // Added
 } from '../../components';
 import styles from './StudentProfilePage.module.scss'; // Use new SCSS module
 
@@ -23,7 +26,7 @@ const StudentProfilePage = () => {
     return (
       // Assuming StyledContainer is already imported and used as pageContainer
       <StyledContainer className={styles.pageContainer}> 
-        <div className={styles.alertDanger}>Student not found.</div> {/* Use styled div for alert */}
+        <StyledAlert variant="danger" className={styles.alertDanger}>Student not found.</StyledAlert> {/* Use styled div for alert */}
       </StyledContainer>
     );
   }
@@ -48,8 +51,8 @@ const StudentProfilePage = () => {
           Student Profile
         </StyledCard.Header>
         <StyledCard.Body>
-          <Row className="mb-4">
-            <Col md={4} className="text-center">
+          <StyledRow className="mb-4">
+            <StyledCol className="col-md-4 text-center">
               {student.profileImageUrl ? (
                 <Image src={student.profileImageUrl} roundedCircle fluid thumbnail className={styles.profileImage} />
               ) : (
@@ -61,8 +64,8 @@ const StudentProfilePage = () => {
               <p className={styles.studentMajor}>{student.major}</p>
               <p className={styles.statusBadgeContainer}><StyledBadge variant={student.enrollmentStatus === 'Enrolled' ? 'success' : 'secondary'}>{student.enrollmentStatus}</StyledBadge></p>
               <p className={styles.detailText}><strong className={styles.detailLabel}>Academic Standing:</strong> {student.academicStanding}</p>
-            </Col>
-            <Col md={8}>
+            </StyledCol>
+            <StyledCol className="col-md-8">
               <h5 className={styles.sectionTitle}>Personal & Contact Information</h5>
               <StyledTable borderless hover size="sm" className={styles.detailsTable}>
                 <tbody>
@@ -93,8 +96,8 @@ const StudentProfilePage = () => {
                   {student.withdrawalDate && <tr><td className={styles.labelColumn}>Withdrawal Date:</td><td>{student.withdrawalDate}</td></tr>}
                 </tbody>
               </StyledTable>
-            </Col>
-          </Row>
+            </StyledCol>
+          </StyledRow>
 
           {student.emergencyContacts && student.emergencyContacts.length > 0 && (
             <>

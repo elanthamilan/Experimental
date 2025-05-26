@@ -22,9 +22,15 @@ export { default as StyledFormCheck } from './atoms/StyledFormCheck';
 export { default as StyledCard } from './atoms/StyledCard';
 export { default as StyledTable } from './atoms/StyledTable';
 export { default as StyledContainer } from './atoms/StyledContainer';
+export { default as StyledRow } from './atoms/StyledRow';
+export { default as StyledCol } from './atoms/StyledCol';
 
 // Display Components
 export { default as StyledBadge } from './atoms/StyledBadge';
+export { default as StyledPagination } from './atoms/StyledPagination';
+export { default as StyledListGroup } from './atoms/StyledListGroup';
+export { default as StyledListGroupItem } from './atoms/StyledListGroupItem';
+export { default as StyledAlert } from './atoms/StyledAlert';
 
 // ===== MOLECULES =====
 // Combinations of atoms that function together as a unit
