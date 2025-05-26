@@ -4,7 +4,7 @@
 .statsCard {
   height: 100%;
   transition: transform 0.2s ease-in-out;
-  
+
   &:hover {
     transform: translateY(-2px);
   }
@@ -25,7 +25,7 @@
   justify-content: center;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
-  
+
   .material-symbols-outlined {
     font-size: 24px;
     color: currentColor;
@@ -60,7 +60,7 @@
   gap: 0.25rem;
   font-size: 0.75rem;
   font-weight: 600;
-  
+
   .material-symbols-outlined {
     font-size: 16px;
   }
@@ -71,15 +71,15 @@
   .statsValue {
     font-size: 1.5rem;
   }
-  
+
   .statsTitle {
     font-size: 0.75rem;
   }
-  
+
   .statsIcon {
     width: 36px;
     height: 36px;
-    
+
     .material-symbols-outlined {
       font-size: 18px;
     }
@@ -94,45 +94,75 @@
   .statsValue {
     font-size: 2.5rem;
   }
-  
+
   .statsTitle {
     font-size: 1rem;
   }
-  
+
   .statsIcon {
     width: 56px;
     height: 56px;
-    
+
     .material-symbols-outlined {
       font-size: 28px;
     }
   }
 }
 
-// Color variants
+// Material Design 3 inspired color variants with pastel colors
 .stats-default {
-  background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #6c757d) 100%);
-  color: white;
+  background: linear-gradient(135deg, #E8F5E8 0%, #F0F4FF 100%);
+  color: #1A1C1E;
+  border: 1px solid #E3E3E3;
+
+  .statsIcon {
+    background: rgba(103, 80, 164, 0.12);
+    color: #6750A4;
+  }
 }
 
 .stats-primary {
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-  color: white;
+  background: linear-gradient(135deg, #F0F4FF 0%, #E8F5E8 100%);
+  color: #1A1C1E;
+  border: 1px solid #E3E3E3;
+
+  .statsIcon {
+    background: rgba(103, 80, 164, 0.12);
+    color: #6750A4;
+  }
 }
 
 .stats-success {
-  background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
-  color: white;
+  background: linear-gradient(135deg, #E8F5E8 0%, #F0FFF4 100%);
+  color: #1A1C1E;
+  border: 1px solid #E3E3E3;
+
+  .statsIcon {
+    background: rgba(25, 135, 84, 0.12);
+    color: #198754;
+  }
 }
 
 .stats-warning {
-  background: linear-gradient(135deg, #ffc107 0%, #d39e00 100%);
-  color: #212529;
+  background: linear-gradient(135deg, #FFF8E1 0%, #FFFBF0 100%);
+  color: #1A1C1E;
+  border: 1px solid #E3E3E3;
+
+  .statsIcon {
+    background: rgba(255, 193, 7, 0.12);
+    color: #FF8F00;
+  }
 }
 
 .stats-danger {
-  background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%);
-  color: white;
+  background: linear-gradient(135deg, #FFEBEE 0%, #FFF5F5 100%);
+  color: #1A1C1E;
+  border: 1px solid #E3E3E3;
+
+  .statsIcon {
+    background: rgba(220, 53, 69, 0.12);
+    color: #DC3545;
+  }
 }
 
 // Trend styling

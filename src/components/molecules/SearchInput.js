@@ -1,5 +1,4 @@
 import React from 'react';
-import { InputGroup } from 'react-bootstrap';
 import StyledFormControl from '../atoms/StyledFormControl';
 import styles from './SearchInput.module.scss';
 
@@ -43,11 +42,9 @@ const SearchInput = ({
 
   return (
     <div className={`${styles.searchContainer} ${inputClass} ${sizeClass} ${className}`}>
-      <InputGroup>
-        <InputGroup.Text className={styles.searchIcon}>
-          <span className="material-symbols-outlined">{icon}</span>
-        </InputGroup.Text>
-        
+      <div className={styles.inputWrapper}>
+        <span className={`material-symbols-outlined ${styles.searchIcon}`}>{icon}</span>
+
         <StyledFormControl
           type="text"
           placeholder={placeholder}
@@ -57,23 +54,18 @@ const SearchInput = ({
           className={styles.searchInput}
           {...props}
         />
-        
+
         {value && (
-          <InputGroup.Text 
+          <button
+            type="button"
             className={styles.clearButton}
             onClick={handleClear}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                handleClear();
-              }
-            }}
+            aria-label="Clear search"
           >
             <span className="material-symbols-outlined">close</span>
-          </InputGroup.Text>
+          </button>
         )}
-      </InputGroup>
+      </div>
     </div>
   );
 };

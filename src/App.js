@@ -1,14 +1,10 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { themes, applyTheme } from './themes';
-import SearchCriteria from './components/SearchCriteria';
-import SummaryStats from './components/SummaryStats';
-import ResultsTable from './components/ResultsTable';
+
 import LeftSidebar from './components/LeftSidebar';
 import AddEditForm from './components/AddEditForm';
-import { Offcanvas, OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
+import { Offcanvas, OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
 import StyledButton from './components/atoms/StyledButton';
-import StyledFormSelect from './components/atoms/StyledFormSelect';
-import StyledFormCheck from './components/atoms/StyledFormCheck';
 import { Routes, Route } from 'react-router-dom';
 
 // Import SIS Page Placeholders
@@ -59,12 +55,15 @@ import ComponentPreviewPage from './pages/ComponentPreviewPage';
 // Settings Page Import
 import SettingsPage from './pages/SettingsPage';
 import { fontWeightOptions } from './data/fonts'; // Import fontWeightOptions
+import { fontSizeOptions } from './themes'; // Import fontSizeOptions from themes
+import { Link } from 'react-router-dom';
 
 import styles from './App.module.scss';
 import './App.css';
 
 // Create Theme Context
 const ThemeContext = createContext();
+export { ThemeContext }; // Export ThemeContext for use in other components
 // Updated useTheme to include role management - this export might be better placed where ThemeContext is defined if it were in a separate file.
 export const useTheme = () => useContext(ThemeContext);
 
@@ -91,11 +90,51 @@ const USER_ROLES = {
 // }
 
 const UtilitySidebar = () => {
-  const { currentTheme, setTheme, globalFontWeight, setGlobalFontWeight, currentUserRole, setCurrentUserRole, USER_ROLES, isDarkMode, setIsDarkMode } = useTheme(); // Added isDarkMode, setIsDarkMode
-  const [showThemeModal, setShowThemeModal] = useState(false);
-  // const themeMenuRef = useRef(null); // No longer needed
-  // useOutsideAlerter(themeMenuRef, () => setShowThemeMenu(false)); // No longer needed
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
 
+  const {
+    setTheme,
+    isDarkMode,
+    setIsDarkMode,
+    // Font customization from context
+    headerFontSize,
+    setHeaderFontSize,
+    setBodyFontSize
+  } = useContext(ThemeContext);
+
+  // Mock user data - replace with actual user context
+  const currentUser = {
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    avatar: null, // URL to avatar image
+    role: 'Administrator'
+  };
+
+  const handleLogout = () => {
+    // Implement logout logic
+    console.log('Logout clicked');
+  };
+
+  // Theme cycling function
+  const handleThemeChange = () => {
+    const availableThemes = themes.slice(0, 6); // Use first 6 themes
+    const nextIndex = (currentThemeIndex + 1) % availableThemes.length;
+    setCurrentThemeIndex(nextIndex);
+    setTheme(availableThemes[nextIndex].id);
+  };
+
+  // Font size cycling function
+  const handleFontSizeChange = () => {
+    const currentHeaderIndex = fontSizeOptions.findIndex(option => option.value === headerFontSize);
+
+    // If current font size is not found, start from the beginning
+    const startIndex = currentHeaderIndex === -1 ? 0 : currentHeaderIndex;
+    const nextIndex = (startIndex + 1) % fontSizeOptions.length;
+
+    setHeaderFontSize(fontSizeOptions[nextIndex].value);
+    setBodyFontSize(fontSizeOptions[nextIndex].value);
+  };
 
   const renderTooltip = (props, text) => (
     <Tooltip id={`tooltip-${text.toLowerCase().replace(' ', '-')}`} {...props}>
@@ -111,104 +150,114 @@ const UtilitySidebar = () => {
         </div>
       </OverlayTrigger>
 
-      {/* Role Selector Removed from UtilitySidebar */}
+      <hr className={styles.divider} />
 
-      {/* Theme Switcher Icon - Triggers Modal */}
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Change Theme')}>
+      {/* Theme Settings - Direct Controls */}
+      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Cycle Themes')}>
         <div
           className={styles.circleIconButton}
-          onClick={() => setShowThemeModal(true)}
-          role="button"
-          tabIndex={0}
-          aria-haspopup="dialog"
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setShowThemeModal(true);}}
+          onClick={handleThemeChange}
         >
           <span className="material-symbols-outlined">palette</span>
         </div>
       </OverlayTrigger>
 
-      {/* Theme Selection Modal */}
-      <Modal show={showThemeModal} onHide={() => setShowThemeModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Select Theme / Font Weight</Modal.Title> {/* Updated Title */}
-        </Modal.Header>
-        <Modal.Body className={styles.themeModalBody}>
-          <div>
-            {themes.map(theme => {
-              const currentGlobalFontWeightValue = fontWeightOptions.find(fw => fw.value === globalFontWeight)?.cssValue || '400';
-              return (
-                <StyledFormCheck
-                  type="radio"
-                  key={theme.id}
-                  id={`theme-radio-${theme.id}`}
-                  name="themeSelection"
-                  value={theme.id}
-                  checked={currentTheme === theme.id}
-                  onChange={() => {
-                    setTheme(theme.id);
-                    // setShowThemeModal(false); // Keep modal open to see changes
-                  }}
-                  className={styles.themeRadioItem}
-                  label={
-                    <div className={styles.themeOptionContainer}>
-                      <span>{theme.name}</span>
-                      <div className={styles.themePreviewPalette}>
-                        <div className={styles.themeColorSwatch} style={{ backgroundColor: theme.seedColors.primary }}></div>
-                        <div className={styles.themeColorSwatch} style={{ backgroundColor: theme.seedColors.secondary }}></div>
-                        <div className={styles.themeColorSwatch} style={{ backgroundColor: theme.seedColors.tertiary }}></div>
-                      </div>
-                      <div className={styles.themeFontPreview} style={{ fontFamily: `"${theme.fonts.body}", sans-serif`, fontWeight: currentGlobalFontWeightValue }}>
-                        Aa Bb Cc
-                      </div>
-                    </div>
-                  }
-                />
-              );
-            })}
-          </div>
-
-          <hr className={styles.modalDivider} />
-          <Modal.Title as="h6" className={styles.modalSectionTitle}>Global Font Weight</Modal.Title>
-          <div>
-            {fontWeightOptions.map(fw => (
-              <StyledFormCheck
-                type="radio"
-                key={fw.value}
-                id={`fontweight-radio-${fw.value}`}
-                name="fontWeightSelection"
-                label={fw.label}
-                value={fw.value}
-                checked={globalFontWeight === fw.value}
-                onChange={() => {
-                  setGlobalFontWeight(fw.value);
-                  // Optionally close modal, or keep it open for further changes
-                  // setShowThemeModal(false);
-                }}
-                className={styles.themeRadioItem}
-              />
-            ))}
-          </div>
-
-          <hr className={styles.modalDivider} />
-          <Modal.Title as="h6" className={styles.modalSectionTitle}>Appearance</Modal.Title>
-          <div>
-            <StyledFormCheck
-              type="switch"
-              id="dark-mode-switch"
-              label="Dark Mode"
-              checked={isDarkMode}
-              onChange={() => setIsDarkMode(!isDarkMode)}
-              className={styles.themeRadioItem} // Re-use style for consistent appearance
-            />
-          </div>
-        </Modal.Body>
-      </Modal>
-
-       <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Logout')}>
-        <div className={styles.circleIconButton}>
-          <span className="material-symbols-outlined">logout</span>
+      {/* Font Size Controls */}
+      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Cycle Font Size')}>
+        <div
+          className={styles.circleIconButton}
+          onClick={handleFontSizeChange}
+        >
+          <span className="material-symbols-outlined">text_fields</span>
         </div>
       </OverlayTrigger>
+
+      {/* Dark Mode Toggle */}
+      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Toggle Dark Mode')}>
+        <div
+          className={styles.circleIconButton}
+          onClick={() => setIsDarkMode(!isDarkMode)}
+        >
+          <span className="material-symbols-outlined">
+            {isDarkMode ? 'light_mode' : 'dark_mode'}
+          </span>
+        </div>
+      </OverlayTrigger>
+
+      {/* Settings Page Link */}
+      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Settings')}>
+        <Link to="/settings" className={styles.circleIconButton}>
+          <span className="material-symbols-outlined">settings</span>
+        </Link>
+      </OverlayTrigger>
+
+      {/* User Profile Dropdown */}
+      <Dropdown
+        show={showUserDropdown}
+        onToggle={setShowUserDropdown}
+        align="start"
+        drop="start"
+        style={{ position: 'static' }}
+      >
+        <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'User Profile')}>
+          <Dropdown.Toggle
+            as="div"
+            className={styles.circleIconButton}
+            onClick={() => setShowUserDropdown(!showUserDropdown)}
+          >
+            <span className="material-symbols-outlined">account_circle</span>
+          </Dropdown.Toggle>
+        </OverlayTrigger>
+
+        <Dropdown.Menu
+          className={styles.utilityDropdownMenu}
+          style={{
+            position: 'fixed',
+            zIndex: 9999,
+            right: '80px',
+            top: '120px'
+          }}
+        >
+          <div className={styles.dropdownHeader}>
+            <div className={styles.userInfo}>
+              <div className={styles.userAvatar}>
+                {currentUser.avatar ? (
+                  <img src={currentUser.avatar} alt={currentUser.name} />
+                ) : (
+                  <span className="material-symbols-outlined">account_circle</span>
+                )}
+              </div>
+              <div className={styles.userDetails}>
+                <div className={styles.userName}>{currentUser.name}</div>
+                <div className={styles.userRole}>{currentUser.role}</div>
+                <div className={styles.userEmail}>{currentUser.email}</div>
+              </div>
+            </div>
+          </div>
+
+          <hr className={styles.dropdownDivider} />
+
+          <Dropdown.Item as={Link} to="/profile" className={styles.dropdownItem}>
+            <span className="material-symbols-outlined">account_circle</span>
+            User Profile
+          </Dropdown.Item>
+
+          <Dropdown.Item as={Link} to="/settings" className={styles.dropdownItem}>
+            <span className="material-symbols-outlined">settings</span>
+            Settings
+          </Dropdown.Item>
+
+          <hr className={styles.dropdownDivider} />
+
+          <Dropdown.Item
+            onClick={handleLogout}
+            className={`${styles.dropdownItem} ${styles.logoutItem}`}
+          >
+            <span className="material-symbols-outlined">logout</span>
+            Logout
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
 
       <hr className={styles.divider} />
 
@@ -222,9 +271,9 @@ const UtilitySidebar = () => {
            <span className="material-symbols-outlined">task_alt</span>
         </div>
       </OverlayTrigger>
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Profile')}>
+      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Notifications')}>
         <div className={styles.circleIconButton}>
-           <span className="material-symbols-outlined">lab_profile</span>
+           <span className="material-symbols-outlined">notifications</span>
         </div>
       </OverlayTrigger>
     </div>
@@ -246,9 +295,16 @@ function App() {
   const isMobile = width < 992;
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(themes[0].id);
-  const [globalFontWeight, setGlobalFontWeight] = useState(fontWeightOptions[0].value); // Default to 'normal'
+  const [globalFontWeight, setGlobalFontWeight] = useState(fontWeightOptions[1].value); // Default to 'normal'
   const [currentUserRole, setCurrentUserRole] = useState(USER_ROLES.ADMIN); // Default role
   const [isDarkMode, setIsDarkMode] = useState(false); // Added isDarkMode state
+  const [savedCustomThemes, setSavedCustomThemes] = useState([]); // Custom themes storage
+
+  // Font customization states
+  const [headerFontSize, setHeaderFontSize] = useState('xl');
+  const [bodyFontSize, setBodyFontSize] = useState('base');
+  const [headerFontWeight, setHeaderFontWeight] = useState('semibold');
+  const [bodyFontWeight, setBodyFontWeight] = useState('normal');
 
   useEffect(() => {
     applyTheme(currentTheme, isDarkMode); // Applies color and font-family variables, now with isDarkMode
@@ -261,8 +317,29 @@ function App() {
     }
   }, [globalFontWeight]);
 
+  // Apply font sizes to CSS custom properties
+  useEffect(() => {
+    const headerSizeOption = fontSizeOptions.find(option => option.value === headerFontSize);
+    const bodySizeOption = fontSizeOptions.find(option => option.value === bodyFontSize);
+
+    if (headerSizeOption) {
+      document.documentElement.style.setProperty('--theme-header-font-size', headerSizeOption.cssValue);
+    }
+    if (bodySizeOption) {
+      document.documentElement.style.setProperty('--theme-body-font-size', bodySizeOption.cssValue);
+    }
+  }, [headerFontSize, bodyFontSize]);
+
   const setTheme = (themeId) => {
     setCurrentTheme(themeId);
+  };
+
+  const deleteCustomTheme = (themeId) => {
+    setSavedCustomThemes(prev => prev.filter(theme => theme.id !== themeId));
+    // If the deleted theme was currently selected, switch to default
+    if (currentTheme === themeId) {
+      setCurrentTheme(themes[0].id);
+    }
   };
 
   return (
@@ -275,9 +352,23 @@ function App() {
       setCurrentUserRole,
       USER_ROLES, // Expose USER_ROLES if needed by consumers
       isDarkMode, // Added isDarkMode to context
-      setIsDarkMode // Added setIsDarkMode to context
+      setIsDarkMode, // Added setIsDarkMode to context
+      savedCustomThemes, // Added custom themes
+      deleteCustomTheme, // Added delete function
+      // Font customization
+      headerFontSize,
+      setHeaderFontSize,
+      bodyFontSize,
+      setBodyFontSize,
+      headerFontWeight,
+      setHeaderFontWeight,
+      bodyFontWeight,
+      setBodyFontWeight
     }}>
-      <div className={`${styles.appContainer} ${isMobile ? styles.mobile : ''}`}>
+      <div
+        className={`${styles.appContainer} ${isMobile ? styles.mobile : ''}`}
+        data-theme={isDarkMode ? 'dark' : 'light'}
+      >
         {!isMobile ? (
            <LeftSidebar />
         ) : (
@@ -292,6 +383,7 @@ function App() {
         )}
 
         <div className={styles.appPage}>
+           {/* Mobile header for mobile only */}
            {isMobile && (
              <div className={styles.mobileHeader}>
                <StyledButton variant="light" onClick={() => setShowMobileMenu(true)}>
@@ -302,18 +394,11 @@ function App() {
            )}
           <main className={styles.pageBody}>
             <Routes>
-              <Route path="/" element={
-                <>
-                  <SearchCriteria />
-                  <SummaryStats />
-                  <ResultsTable />
-                </>
-              } />
+              <Route path="/" element={<DashboardPage />} />
               {/* <Route path="/add" element={<AddEditForm />} /> */} {/* Removed orphaned route */}
               <Route path="/edit/:id" element={<AddEditForm />} />
 
               {/* SIS Page Routes */}
-              <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/students" element={<StudentListPage />} />
               <Route path="/students/new" element={<AddEditStudentPage />} />
               <Route path="/students/edit/:studentId" element={<AddEditStudentPage />} />

@@ -1,32 +1,49 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
-import StyledContainer from './atoms/StyledContainer';
 import StatsCard from './molecules/StatsCard';
 import styles from './SummaryStats.module.scss';
 
 const SummaryStats = () => {
   const stats = [
-    { title: 'TOTAL SUBJECTS', value: 123, id: 'total' },
-    { title: 'SUBJECTS DONE', value: 3, id: 'done' },
-    { title: 'SUBJECTS NOT DONE', value: 120, id: 'notDone' },
+    {
+      title: 'TOTAL SUBJECTS',
+      value: 123,
+      id: 'total',
+      variant: 'primary',
+      icon: 'school'
+    },
+    {
+      title: 'SUBJECTS DONE',
+      value: 3,
+      id: 'done',
+      variant: 'success',
+      icon: 'check_circle'
+    },
+    {
+      title: 'SUBJECTS NOT DONE',
+      value: 120,
+      id: 'notDone',
+      variant: 'warning',
+      icon: 'pending'
+    },
   ];
 
   return (
-    <StyledContainer fluid className={styles.summaryContainer}>
-      <Row>
+    <div className={styles.summaryContainer}>
+      <Row className="g-4">
         {stats.map((stat) => (
-          <Col md={4} key={stat.id} className="mb-3 mb-md-0">
+          <Col md={4} key={stat.id}>
             <StatsCard
               title={stat.title}
               value={stat.value}
-              variant={stat.id === 'total' ? 'primary' : stat.id === 'done' ? 'success' : 'warning'}
-              icon={stat.id === 'total' ? 'school' : stat.id === 'done' ? 'check_circle' : 'pending'}
+              variant={stat.variant}
+              icon={stat.icon}
               className={styles[stat.id]}
             />
           </Col>
         ))}
       </Row>
-    </StyledContainer>
+    </div>
   );
 };
 

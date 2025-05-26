@@ -52,6 +52,8 @@ $danger-bg-subdued-fixed: #f8d7da;
 $_font-family-lato: 'Lato', sans-serif;
 $_font-family-manrope: 'Manrope', sans-serif;
 $_font-size-base: 14px;
+$_font-size-small: 12px;
+$_font-size-large: 16px;
 $_font-weight-normal: 400;
 $_font-weight-semibold: 600;
 $_font-weight-bold: 700;
@@ -153,9 +155,11 @@ $border-color: $outline-color;          // General borders should use outline co
 $primary-brand-color: $primary-color; // Legacy name for primary color
 
 // Typography Accessors (pointing to SCSS fallbacks, as fonts are less themed by color themes)
-$font-family-display: var(--theme-font-display, $_font-family_lato); // Changed from primary to display
-$font-family-body: var(--theme-font-body, $_font-family_manrope);    // Changed from secondary to body
+$font-family-display: var(--theme-font-display, $_font-family-lato); // Changed from primary to display
+$font-family-body: var(--theme-font-body, $_font-family-manrope);    // Changed from secondary to body
 $font-size-base: $_font-size-base;
+$font-size-small: $_font-size-small;
+$font-size-large: $_font-size-large;
 $font-weight-normal: var(--theme-global-body-font-weight, $_font-weight-normal); // Use global CSS var
 $font-weight-semibold: $_font-weight-semibold; // Keep semibold and bold fixed unless also globalized
 $font-weight-bold: $_font-weight-bold;

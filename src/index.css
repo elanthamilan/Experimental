@@ -1,6 +1,7 @@
 body {
   margin: 0;
   font-family: var(--theme-font-body, 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif);
+  font-size: var(--theme-body-font-size, 1rem);
   background-color: var(--theme-background);
   color: var(--theme-on-background);
   -webkit-font-smoothing: antialiased;
@@ -16,6 +17,7 @@ code {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--theme-font-display, 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif);
+  font-size: var(--theme-header-font-size, 1.25rem);
   color: var(--theme-primary); /* Default heading color to primary */
   /* Add some default margin or other styling as needed */
   margin-top: 1.5rem;
@@ -32,4 +34,78 @@ h1, h2, h3, h4, h5, h6 {
   'opsz' 24; /* Adjust opsz (optical size) as needed */
   vertical-align: middle; /* Align icons better with text */
   color: var(--theme-on-surface-variant); /* Use a less prominent color for icons by default */
+}
+
+/* Global font size overrides for dynamic font sizing */
+body * {
+  font-size: var(--theme-body-font-size, 1rem) !important;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-size: var(--theme-header-font-size, 1.25rem) !important;
+}
+
+/* Page title overrides - maintain larger size */
+.pageTitle,
+[class*="pageTitle"] {
+  font-size: 2.5rem !important;
+}
+
+@media (max-width: 768px) {
+  .pageTitle,
+  [class*="pageTitle"] {
+    font-size: 2rem !important;
+  }
+}
+
+/* Section headings - maintain appropriate sizes */
+.sectionTitle,
+[class*="sectionTitle"] {
+  font-size: 1.5rem !important;
+}
+
+/* Card titles - maintain appropriate sizes */
+.cardTitle,
+[class*="cardTitle"] {
+  font-size: 1.25rem !important;
+}
+
+/* Navigation items - maintain readable size */
+.nav-link,
+[class*="navItem"],
+[class*="menuItem"] {
+  font-size: 0.95rem !important;
+}
+
+/* Table specific font size overrides */
+.table th,
+.table td {
+  font-size: var(--theme-body-font-size, 1rem) !important;
+}
+
+/* Dark mode table overrides for StyledTable */
+[data-theme="dark"] .table,
+[data-theme="dark"] .table th,
+[data-theme="dark"] .table td,
+[data-theme="dark"] .table tbody tr {
+  background-color: var(--theme-surface, #1e293b) !important;
+  color: var(--theme-on-surface, #e2e8f0) !important;
+  border-color: var(--theme-outline-variant, #475569) !important;
+}
+
+[data-theme="dark"] .table thead th {
+  background-color: var(--theme-surface-container, #334155) !important;
+  color: var(--theme-on-surface, #e2e8f0) !important;
+}
+
+[data-theme="dark"] .table tbody tr:hover {
+  background-color: var(--theme-surface-container-low, #2d3748) !important;
+}
+
+/* Form elements */
+.form-control,
+.form-select,
+.btn {
+  font-size: var(--theme-body-font-size, 1rem) !important;
 }

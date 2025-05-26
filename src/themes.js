@@ -98,15 +98,54 @@ const adjustHexBrightness = (hex, factor) => {
     return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
+// Mix two colors together with a given ratio
+const mixColors = (color1, color2, ratio) => {
+    const hex1 = color1.replace('#', '');
+    const hex2 = color2.replace('#', '');
+
+    const r1 = parseInt(hex1.substr(0, 2), 16);
+    const g1 = parseInt(hex1.substr(2, 2), 16);
+    const b1 = parseInt(hex1.substr(4, 2), 16);
+
+    const r2 = parseInt(hex2.substr(0, 2), 16);
+    const g2 = parseInt(hex2.substr(2, 2), 16);
+    const b2 = parseInt(hex2.substr(4, 2), 16);
+
+    const r = Math.round(r1 * (1 - ratio) + r2 * ratio);
+    const g = Math.round(g1 * (1 - ratio) + g2 * ratio);
+    const b = Math.round(b1 * (1 - ratio) + b2 * ratio);
+
+    const toHex = c => ('0'+c.toString(16)).slice(-2);
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+};
+
 export const generateThemeColors = (primary, secondary, tertiary, isDark = false) => {
   // Material 3 fixed values (Light Theme Defaults)
   const m3Error = '#B3261E';
   const m3OnError = '#FFFFFF';
-  const m3Background = isDark ? '#1C1B1F' : '#FFFBFE'; // Example dark mode background
+
+  // Generate theme-based background and surface colors instead of fixed MD3 values
+  // Create backgrounds that are tinted with the primary color for better theme integration
+  const baseBackground = isDark ? '#1C1B1F' : '#FFFBFE';
+  const baseSurface = isDark ? '#1C1B1F' : '#FFFBFE';
+
+  // Tint backgrounds with primary color for better theme integration
+  const m3Background = isDark
+    ? adjustHexBrightness(mixColors(baseBackground, primary, 0.05), 0) // Subtle primary tint in dark mode
+    : adjustHexBrightness(mixColors(baseBackground, primary, 0.02), 0); // Very subtle primary tint in light mode
+
+  const m3Surface = isDark
+    ? adjustHexBrightness(mixColors(baseSurface, primary, 0.08), 0) // Slightly more primary tint for surfaces
+    : adjustHexBrightness(mixColors(baseSurface, primary, 0.03), 0);
+
   const m3OnBackground = isDark ? '#E6E1E5' : '#1C1B1F';
-  const m3Surface = isDark ? '#1C1B1F' : '#FFFBFE'; // Example dark mode surface
   const m3OnSurface = isDark ? '#E6E1E5' : '#1C1B1F';
-  const m3SurfaceVariant = isDark ? '#49454F' : '#E7E0EC';
+
+  // Create surface variants with more pronounced theme colors
+  const m3SurfaceVariant = isDark
+    ? adjustHexBrightness(mixColors(m3Surface, secondary, 0.1), 0.05)
+    : adjustHexBrightness(mixColors(m3Surface, secondary, 0.05), -0.02);
+
   const m3OnSurfaceVariant = isDark ? '#CAC4D0' : '#49454F';
   const m3Outline = isDark ? '#938F99' : '#79747E';
   const m3OutlineVariant = isDark ? '#49454F' : '#CAC4D0';
@@ -185,10 +224,22 @@ export const generateThemeColors = (primary, secondary, tertiary, isDark = false
 
     // Specific UI element backgrounds - these might need more context or could use surface/background variants
     // For simplicity, using surface variants or background. Re-evaluate if specific colors are needed.
-    '--theme-sidebar-background': adjustHexBrightness(m3Surface, isDark ? 0.02 : -0.01), // Slightly off from main surface
-    '--theme-search-criteria-form-bg': adjustHexBrightness(m3Surface, isDark ? 0.03 : -0.02),
+    '--theme-sidebar-background': adjustHexBrightness(mixColors(m3Surface, secondary, 0.03), isDark ? 0.02 : -0.01), // Slightly off from main surface with secondary tint
+    '--theme-search-criteria-form-bg': adjustHexBrightness(mixColors(m3Surface, tertiary, 0.02), isDark ? 0.03 : -0.02),
     '--theme-input-bg': m3Surface, // Inputs on main surface
-    '--theme-dropdown-bg': adjustHexBrightness(m3Surface, isDark ? 0.05 : -0.03), // Dropdowns slightly different
+    '--theme-dropdown-bg': adjustHexBrightness(mixColors(m3Surface, primary, 0.02), isDark ? 0.05 : -0.03), // Dropdowns slightly different with primary tint
+
+    // Additional theme variables for better coverage with enhanced theme integration
+    '--theme-app-background': m3Background, // Main app background (now theme-tinted)
+    '--theme-content-background': m3Surface, // Content area background (now theme-tinted)
+    '--theme-table-header-bg': adjustHexBrightness(mixColors(m3Surface, primary, 0.05), isDark ? 0.04 : -0.02), // Table headers with primary tint
+    '--theme-table-hover-bg': adjustHexBrightness(primary, isDark ? 0.85 : 0.95), // Table row hover
+    '--theme-table-stripe-bg': adjustHexBrightness(mixColors(m3Surface, secondary, 0.01), isDark ? 0.02 : -0.01), // Table striped rows with subtle secondary tint
+    '--theme-border-color': m3Outline, // General borders
+    '--theme-text-color': m3OnSurface, // General text
+    '--theme-text-muted': m3OnSurfaceVariant, // Muted text
+    '--theme-navbar-bg': adjustHexBrightness(mixColors(m3Surface, primary, 0.03), isDark ? 0.01 : -0.005), // Navigation bar background with primary tint
+    '--theme-toolbar-bg': adjustHexBrightness(mixColors(m3Surface, secondary, 0.02), isDark ? 0.015 : -0.008), // Toolbar background with secondary tint
 
     // Hover and Active states - these should ideally use rgba over existing colors for subtlety
     '--theme-background-hover': hexToRgba(primary, 0.08), // M3 state layer opacity for hover
@@ -197,227 +248,248 @@ export const generateThemeColors = (primary, secondary, tertiary, isDark = false
 };
 
 export const themes = [
-  // Category 1: Corporate & Authoritative
+  // Category 1: Vibrant & Energetic
   {
-    id: "corporate-deep-teal",
-    name: "Corporate - Deep Teal",
-    seedColors: { primary: "#006C74", secondary: "#4C6268", tertiary: "#6A5C78" },
+    id: "vibrant-electric-blue",
+    name: "Electric Blue",
+    seedColors: { primary: "#0066FF", secondary: "#FF6B35", tertiary: "#FFD23F" },
     fonts: { display: "Inter", body: "Roboto" },
-    vibe: "Professional, trustworthy, and modern."
+    vibe: "Electric, modern, and high-energy."
   },
   {
-    id: "corporate-dark-cyan",
-    name: "Corporate - Dark Cyan",
-    seedColors: { primary: "#006874", secondary: "#516067", tertiary: "#7F5800" },
+    id: "vibrant-sunset-orange",
+    name: "Sunset Orange",
+    seedColors: { primary: "#FF4500", secondary: "#8A2BE2", tertiary: "#00CED1" },
     fonts: { display: "Raleway", body: "Open Sans" },
-    vibe: "Stable, dependable, and efficient."
+    vibe: "Warm, energetic, and creative."
   },
   {
-    id: "corporate-deep-navy",
-    name: "Corporate - Deep Navy",
-    seedColors: { primary: "#3C4A6B", secondary: "#6C5D6F", tertiary: "#5C7C7F" },
+    id: "vibrant-emerald-green",
+    name: "Emerald Green",
+    seedColors: { primary: "#00C851", secondary: "#FF3547", tertiary: "#007BFF" },
     fonts: { display: "IBM Plex Sans", body: "IBM Plex Serif" },
-    vibe: "Bold, structured, and high-tech."
+    vibe: "Fresh, natural, and vibrant."
   },
   {
-    id: "corporate-dark-slate-gray",
-    name: "Corporate - Dark Slate Gray",
-    seedColors: { primary: "#2E3D4F", secondary: "#6C5E50", tertiary: "#5C6B67" },
+    id: "vibrant-royal-purple",
+    name: "Royal Purple",
+    seedColors: { primary: "#6A1B9A", secondary: "#FF9800", tertiary: "#4CAF50" },
     fonts: { display: "Source Sans Pro", body: "Source Serif Pro" },
-    vibe: "Refined, strong, and composed."
+    vibe: "Regal, luxurious, and bold."
   },
   {
-    id: "corporate-forest-green",
-    name: "Corporate - Forest Green",
-    seedColors: { primary: "#006B5F", secondary: "#5F6260", tertiary: "#7C5700" },
+    id: "vibrant-hot-pink",
+    name: "Hot Pink",
+    seedColors: { primary: "#E91E63", secondary: "#00BCD4", tertiary: "#8BC34A" },
     fonts: { display: "Merriweather", body: "Lato" },
-    vibe: "Classic, formal, and highly readable."
+    vibe: "Playful, modern, and attention-grabbing."
   },
 
-  // Category 2: Modern & Accessible
+  // Category 2: Ocean & Sky
   {
-    id: "modern-vivid-blue",
-    name: "Modern - Vivid Blue",
-    seedColors: { primary: "#006E88", secondary: "#526066", tertiary: "#7C5700" },
+    id: "ocean-deep-blue",
+    name: "Ocean Deep",
+    seedColors: { primary: "#003F7F", secondary: "#00D4AA", tertiary: "#FFB74D" },
     fonts: { display: "Montserrat", body: "Noto Sans" },
-    vibe: "Clean, approachable, and user-friendly."
+    vibe: "Deep, calming, and professional."
   },
   {
-    id: "modern-deep-purple",
-    name: "Modern - Deep Purple",
-    seedColors: { primary: "#6750A4", secondary: "#6C5D4B", tertiary: "#006B5C" },
+    id: "ocean-turquoise",
+    name: "Turquoise Wave",
+    seedColors: { primary: "#00ACC1", secondary: "#FF7043", tertiary: "#9C27B0" },
     fonts: { display: "Quicksand", body: "Roboto" },
-    vibe: "Bright, optimistic, and clear."
+    vibe: "Refreshing, tropical, and modern."
   },
   {
-    id: "modern-emerald-green",
-    name: "Modern - Emerald Green",
-    seedColors: { primary: "#006D41", secondary: "#606259", tertiary: "#695E7C" },
+    id: "ocean-navy-coral",
+    name: "Navy & Coral",
+    seedColors: { primary: "#1A237E", secondary: "#FF5722", tertiary: "#FFEB3B" },
     fonts: { display: "Work Sans", body: "Open Sans" },
-    vibe: "Fresh, open, and efficient."
+    vibe: "Classic nautical with warm accents."
   },
   {
-    id: "modern-olive-green",
-    name: "Modern - Olive Green",
-    seedColors: { primary: "#7A7200", secondary: "#6E5C4E", tertiary: "#5C615F" },
+    id: "sky-azure",
+    name: "Azure Sky",
+    seedColors: { primary: "#2196F3", secondary: "#FF9800", tertiary: "#E91E63" },
     fonts: { display: "Nunito Sans", body: "Lora" },
-    vibe: "Soft, harmonious, and inviting."
+    vibe: "Bright, optimistic, and airy."
   },
   {
-    id: "modern-bright-orange",
-    name: "Modern - Bright Orange",
-    seedColors: { primary: "#C95200", secondary: "#6C615C", tertiary: "#006E5D" },
+    id: "sky-sunset",
+    name: "Sunset Sky",
+    seedColors: { primary: "#FF5722", secondary: "#673AB7", tertiary: "#00BCD4" },
     fonts: { display: "Rubik", body: "PT Sans" },
-    vibe: "Lively, modern, and engaging."
+    vibe: "Warm, dramatic, and inspiring."
   },
 
-  // Category 3: Elegant & Sophisticated
+  // Category 3: Nature & Earth
   {
-    id: "elegant-deep-lavender",
-    name: "Elegant - Deep Lavender",
-    seedColors: { primary: "#6750A4", secondary: "#6C5D4B", tertiary: "#5C6466" },
+    id: "nature-forest-green",
+    name: "Forest Green",
+    seedColors: { primary: "#2E7D32", secondary: "#D84315", tertiary: "#F57C00" },
     fonts: { display: "Playfair Display", body: "Libre Baskerville" },
-    vibe: "Luxurious, classic, and refined."
+    vibe: "Natural, grounded, and organic."
   },
   {
-    id: "elegant-deep-wine",
-    name: "Elegant - Deep Wine",
-    seedColors: { primary: "#6A0E3D", secondary: "#6C5D4B", tertiary: "#5C615D" },
+    id: "nature-autumn-red",
+    name: "Autumn Red",
+    seedColors: { primary: "#C62828", secondary: "#FF8F00", tertiary: "#388E3C" },
     fonts: { display: "Cinzel", body: "Crimson Pro" },
-    vibe: "Timeless, graceful, and artistic."
+    vibe: "Warm, seasonal, and rich."
   },
   {
-    id: "elegant-deep-cyan",
-    name: "Elegant - Deep Cyan",
-    seedColors: { primary: "#005C6B", secondary: "#665C59", tertiary: "#6C6A52" },
+    id: "nature-earth-brown",
+    name: "Earth Brown",
+    seedColors: { primary: "#5D4037", secondary: "#FF6F00", tertiary: "#1976D2" },
     fonts: { display: "Cormorant Garamond", body: "Lato" },
-    vibe: "Minimalistic chic, airy, and sharp."
+    vibe: "Earthy, stable, and natural."
   },
   {
-    id: "elegant-charcoal-gray",
-    name: "Elegant - Charcoal Gray",
-    seedColors: { primary: "#5B5B5B", secondary: "#6C5C50", tertiary: "#5C625A" },
+    id: "nature-sage-green",
+    name: "Sage Green",
+    seedColors: { primary: "#689F38", secondary: "#E65100", tertiary: "#7B1FA2" },
     fonts: { display: "Source Serif Pro", body: "Source Sans Pro" },
-    vibe: "Understated, poised, and professional."
+    vibe: "Calming, herbal, and peaceful."
   },
   {
-    id: "elegant-indigo",
-    name: "Elegant - Indigo",
-    seedColors: { primary: "#303F9F", secondary: "#6D5D4B", tertiary: "#6C5D6F" },
+    id: "nature-golden-yellow",
+    name: "Golden Yellow",
+    seedColors: { primary: "#F57F17", secondary: "#1565C0", tertiary: "#C2185B" },
     fonts: { display: "Fira Sans", body: "Roboto Serif" },
-    vibe: "Regal, deep, and subtly opulent."
+    vibe: "Sunny, optimistic, and energizing."
   },
 
-  // Category 4: Dynamic & Impactful
+  // Category 4: Neon & Tech
   {
-    id: "dynamic-vibrant-red",
-    name: "Dynamic - Vibrant Red",
-    seedColors: { primary: "#D32F2F", secondary: "#5E615D", tertiary: "#006C7A" },
+    id: "neon-cyber-green",
+    name: "Cyber Green",
+    seedColors: { primary: "#00FF41", secondary: "#FF0080", tertiary: "#0080FF" },
     fonts: { display: "Oswald", body: "Roboto Condensed" },
-    vibe: "Strong, energetic, and clear."
+    vibe: "Futuristic, high-tech, and electric."
   },
   {
-    id: "dynamic-dark-forest-green",
-    name: "Dynamic - Dark Forest Green",
-    seedColors: { primary: "#004D40", secondary: "#7C5200", tertiary: "#7F5E51" },
+    id: "neon-electric-purple",
+    name: "Electric Purple",
+    seedColors: { primary: "#8A2BE2", secondary: "#00FFFF", tertiary: "#FF4500" },
     fonts: { display: "Anton", body: "Montserrat" },
-    vibe: "Edgy, urban, and assertive."
+    vibe: "Bold, digital, and striking."
   },
   {
-    id: "dynamic-deep-amethyst",
-    name: "Dynamic - Deep Amethyst",
-    seedColors: { primary: "#673AB7", secondary: "#C95200", tertiary: "#006D6B" },
+    id: "neon-laser-red",
+    name: "Laser Red",
+    seedColors: { primary: "#FF073A", secondary: "#39FF14", tertiary: "#1B03A3" },
     fonts: { display: "Poppins", body: "Open Sans" },
-    vibe: "Expressive, vibrant, and engaging."
+    vibe: "Intense, gaming, and energetic."
   },
   {
-    id: "dynamic-off-black",
-    name: "Dynamic - Off-Black",
-    seedColors: { primary: "#212121", secondary: "#6C615C", tertiary: "#006C88" },
+    id: "neon-matrix-blue",
+    name: "Matrix Blue",
+    seedColors: { primary: "#0099FF", secondary: "#FF6600", tertiary: "#CC00FF" },
     fonts: { display: "Raleway", body: "Inter" },
-    vibe: "Powerful, architectural, and striking."
+    vibe: "Digital, modern, and sleek."
   },
   {
-    id: "dynamic-hot-pink",
-    name: "Dynamic - Hot Pink",
-    seedColors: { primary: "#FF4081", secondary: "#006C6A", tertiary: "#7C5200" },
+    id: "neon-synthwave",
+    name: "Synthwave",
+    seedColors: { primary: "#FF00FF", secondary: "#00FFFF", tertiary: "#FFFF00" },
     fonts: { display: "Fredoka", body: "Nunito Sans" },
-    vibe: "Youthful, lively, and engaging."
+    vibe: "Retro-futuristic, vibrant, and nostalgic."
   },
 
-  // Category 5: Earthy & Organic
+  // Category 5: Pastel & Soft
   {
-    id: "earthy-bright-green",
-    name: "Earthy - Bright Green",
-    seedColors: { primary: "#4CAF50", secondary: "#5E615D", tertiary: "#6C5D4B" },
+    id: "pastel-lavender",
+    name: "Lavender Dreams",
+    seedColors: { primary: "#9C88FF", secondary: "#FFB3BA", tertiary: "#BAFFC9" },
     fonts: { display: "Noto Serif Display", body: "Noto Sans" },
-    vibe: "Tranquil, natural, and inviting."
+    vibe: "Soft, dreamy, and gentle."
   },
   {
-    id: "earthy-sky-blue",
-    name: "Earthy - Sky Blue",
-    seedColors: { primary: "#2196F3", secondary: "#5E615D", tertiary: "#7A6A5E" },
+    id: "pastel-mint",
+    name: "Mint Fresh",
+    seedColors: { primary: "#98FB98", secondary: "#FFB6C1", tertiary: "#DDA0DD" },
     fonts: { display: "Lora", body: "Open Sans" },
-    vibe: "Calm, oceanic, and refreshing."
+    vibe: "Fresh, clean, and soothing."
   },
   {
-    id: "earthy-burnt-sienna",
-    name: "Earthy - Burnt Sienna",
-    seedColors: { primary: "#E64A19", secondary: "#6C5D4B", tertiary: "#5C625A" },
+    id: "pastel-peach",
+    name: "Peach Sunset",
+    seedColors: { primary: "#FFCBA4", secondary: "#B4A7D6", tertiary: "#A8E6CF" },
     fonts: { display: "Arvo", body: "Cabin" },
-    vibe: "Desert, warm, and grounded."
+    vibe: "Warm, comforting, and peaceful."
   },
   {
-    id: "earthy-pine-green",
-    name: "Earthy - Pine Green",
-    seedColors: { primary: "#388E3C", secondary: "#6C5D4B", tertiary: "#6C6A52" },
+    id: "pastel-sky",
+    name: "Sky Blue",
+    seedColors: { primary: "#87CEEB", secondary: "#F0E68C", tertiary: "#DDA0DD" },
     fonts: { display: "Bitter", body: "EB Garamond" },
-    vibe: "Forest, deep, and harmonious."
+    vibe: "Airy, light, and calming."
   },
   {
-    id: "earthy-cerulean-blue",
-    name: "Earthy - Cerulean Blue",
-    seedColors: { primary: "#0288D1", secondary: "#6C6A52", tertiary: "#7C5E00" },
+    id: "pastel-rose",
+    name: "Rose Garden",
+    seedColors: { primary: "#FFB6C1", secondary: "#98FB98", tertiary: "#F0E68C" },
     fonts: { display: "Comfortaa", body: "Lato" },
-    vibe: "Sky, expansive, and hopeful."
+    vibe: "Romantic, soft, and elegant."
   },
 
-  // Category 6: Subtle & Sophisticated Neutrals
+  // Category 6: Dark & Dramatic
   {
-    id: "neutral-muted-blue-gray",
-    name: "Neutral - Muted Blue Gray",
-    seedColors: { primary: "#5A6B70", secondary: "#6C5D4B", tertiary: "#7C5700" },
+    id: "dark-midnight",
+    name: "Midnight Black",
+    seedColors: { primary: "#000000", secondary: "#FF6B35", tertiary: "#00D4AA" },
     fonts: { display: "Inter", body: "Source Sans Pro" },
-    vibe: "Clean, minimalist, and adaptable."
+    vibe: "Bold, dramatic, and sophisticated."
   },
   {
-    id: "neutral-warm-gray-brown",
-    name: "Neutral - Warm Gray-Brown",
-    seedColors: { primary: "#6F6260", secondary: "#5C6B67", tertiary: "#6C5D7D" },
+    id: "dark-charcoal",
+    name: "Charcoal Storm",
+    seedColors: { primary: "#36454F", secondary: "#FF4081", tertiary: "#FFD700" },
     fonts: { display: "Lora", body: "Open Sans" },
-    vibe: "Warm, inviting, and understated."
+    vibe: "Strong, modern, and impactful."
   },
   {
-    id: "neutral-deep-cool-gray",
-    name: "Neutral - Deep Cool Gray",
-    seedColors: { primary: "#4D4F5A", secondary: "#6C615C", tertiary: "#006C74" },
+    id: "dark-burgundy",
+    name: "Burgundy Wine",
+    seedColors: { primary: "#800020", secondary: "#FFD700", tertiary: "#00CED1" },
     fonts: { display: "Roboto", body: "Noto Sans" },
-    vibe: "Crisp, professional, and versatile."
+    vibe: "Rich, luxurious, and elegant."
   },
   {
-    id: "neutral-olive-gray",
-    name: "Neutral - Olive Gray",
-    seedColors: { primary: "#625F56", secondary: "#526066", tertiary: "#7F5E00" },
+    id: "dark-forest",
+    name: "Dark Forest",
+    seedColors: { primary: "#013220", secondary: "#FF8C00", tertiary: "#DA70D6" },
     fonts: { display: "Merriweather Sans", body: "Merriweather" },
-    vibe: "Earthy, grounded, and clean."
+    vibe: "Mysterious, natural, and deep."
   },
   {
-    id: "neutral-warm-gray",
-    name: "Neutral - Warm Gray",
-    seedColors: { primary: "#7A6A5E", secondary: "#5C6B67", tertiary: "#6C5D7D" },
+    id: "dark-royal",
+    name: "Royal Navy",
+    seedColors: { primary: "#002147", secondary: "#FFD700", tertiary: "#DC143C" },
     fonts: { display: "Raleway", body: "Montserrat" },
-    vibe: "Muted, modern, and highly adaptable."
+    vibe: "Regal, authoritative, and classic."
   }
+];
+
+// Font weight options for theme customization
+export const fontWeightOptions = [
+  { value: 'light', label: 'Light', cssValue: '300' },
+  { value: 'normal', label: 'Normal', cssValue: '400' },
+  { value: 'medium', label: 'Medium', cssValue: '500' },
+  { value: 'semibold', label: 'Semi Bold', cssValue: '600' },
+  { value: 'bold', label: 'Bold', cssValue: '700' },
+  { value: 'extrabold', label: 'Extra Bold', cssValue: '800' }
+];
+
+// Font size options for header and body text
+export const fontSizeOptions = [
+  { value: 'xs', label: 'Extra Small', cssValue: '0.75rem' },
+  { value: 'sm', label: 'Small', cssValue: '0.875rem' },
+  { value: 'base', label: 'Base', cssValue: '1rem' },
+  { value: 'lg', label: 'Large', cssValue: '1.125rem' },
+  { value: 'xl', label: 'Extra Large', cssValue: '1.25rem' },
+  { value: '2xl', label: '2X Large', cssValue: '1.5rem' },
+  { value: '3xl', label: '3X Large', cssValue: '1.875rem' }
 ];
 
 export const applyTheme = (themeId, isDark = false) => { // Added isDark parameter with a default

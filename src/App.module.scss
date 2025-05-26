@@ -69,6 +69,23 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
     position: relative; // Needed for z-index to apply
     z-index: 1050; // Higher than typical content, similar to modals/offcanvas
 
+    // Ensure dropdown containers have proper z-index
+    :global(.dropdown) {
+      z-index: 9999 !important;
+      position: relative !important;
+    }
+
+    :global(.dropdown-menu) {
+      z-index: 9999 !important;
+      position: absolute !important;
+    }
+
+    // Ensure dropdown toggle buttons maintain proper positioning
+    :global(.dropdown-toggle) {
+      z-index: 1051 !important;
+      position: relative !important;
+    }
+
     .iconButton { // Common style for icon containers
       display: flex;
       align-items: center;
@@ -208,6 +225,17 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
        width: 39px; // From feedback
        height: 40px; // From feedback
        border-radius: $utility-icon-container-radius-circle;
+
+       // Style for Link components used as icon buttons
+       &:global(.circleIconButton) {
+         text-decoration: none;
+         color: inherit;
+
+         &:hover {
+           text-decoration: none;
+           color: inherit;
+         }
+       }
     }
 
     .divider {
@@ -216,6 +244,280 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
         border: none;
         border-top: v.$base-border-width solid $utility-divider-color;
         margin: 0; // Override default hr margin
+    }
+
+    // Utility Sidebar Dropdown Styles
+    .utilityDropdownMenu {
+      min-width: 400px;
+      max-width: 500px;
+      border: 1px solid var(--theme-border-color, v.$outline-variant-color) !important;
+      border-radius: v.$base-border-radius !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+      background: var(--theme-content-background, v.$surface-color) !important;
+      padding: 0 !important;
+      max-height: 80vh;
+      overflow-y: auto;
+      margin-right: v.$gap-small; // Space from sidebar edge
+      z-index: 9999 !important; // Ensure dropdown appears above everything
+      position: relative !important; // Ensure z-index takes effect
+    }
+
+    .dropdownHeader {
+      padding: v.$base-padding;
+      border-bottom: 1px solid var(--theme-border-color, v.$outline-variant-color);
+      background: var(--theme-primary, v.$primary-color);
+      color: var(--theme-on-primary, v.$on-primary-color);
+    }
+
+    .dropdownTitle {
+      display: flex;
+      align-items: center;
+      gap: v.$gap-small;
+      margin: 0;
+      font-size: 1rem;
+      font-weight: v.$font-weight-semibold;
+
+      .material-symbols-outlined {
+        font-size: 18px;
+      }
+    }
+
+    .dropdownSection {
+      margin: v.$gap-small;
+      border: 1px solid var(--theme-border-color, v.$outline-variant-color);
+      border-radius: v.$base-border-radius;
+
+      :global(.card-header) {
+        background: var(--theme-surface-variant, v.$surface-variant-color);
+        border-bottom: 1px solid var(--theme-border-color, v.$outline-variant-color);
+        padding: v.$gap-small v.$base-padding;
+      }
+
+      :global(.card-body) {
+        padding: v.$base-padding;
+      }
+    }
+
+    .sectionTitle {
+      display: flex;
+      align-items: center;
+      gap: v.$gap-small;
+      margin: 0;
+      font-size: 0.875rem;
+      font-weight: v.$font-weight-semibold;
+      color: var(--theme-text-color, v.$on-surface-color);
+
+      .material-symbols-outlined {
+        font-size: 16px;
+      }
+    }
+
+    .themeGrid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: v.$gap-small;
+    }
+
+    .themeCard {
+      position: relative;
+      padding: v.$gap-small;
+      border: 1px solid var(--theme-border-color, v.$outline-variant-color);
+      border-radius: v.$base-border-radius;
+      background: var(--theme-content-background, v.$surface-color);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+
+      &:hover {
+        border-color: var(--theme-primary, v.$primary-color);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transform: translateY(-1px);
+      }
+
+      &.activeTheme {
+        border-color: var(--theme-primary, v.$primary-color);
+        background: var(--theme-primary-container, v.$primary-container-color);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    .colorSwatches {
+      display: flex;
+      justify-content: center;
+      gap: 2px;
+      margin-bottom: v.$gap-small;
+    }
+
+    .colorSwatch {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .themeName {
+      font-size: 0.75rem;
+      font-weight: v.$font-weight-semibold;
+      color: var(--theme-text-color, v.$on-surface-color);
+    }
+
+    .activeIndicator {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      color: var(--theme-primary, v.$primary-color);
+
+      .material-symbols-outlined {
+        font-size: 14px;
+      }
+    }
+
+    .fontLabel {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: v.$font-weight-semibold;
+      color: var(--theme-text-color, v.$on-surface-color);
+      margin-bottom: 4px;
+    }
+
+    .darkModeToggle {
+      margin-top: v.$base-margin;
+      padding-top: v.$base-padding;
+      border-top: 1px solid var(--theme-border-color, v.$outline-variant-color);
+    }
+
+    .switchLabel {
+      display: flex;
+      align-items: center;
+      gap: v.$gap-small;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .switchInput {
+      display: none;
+    }
+
+    .switchSlider {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: var(--theme-surface-variant, v.$surface-variant-color);
+      border-radius: 12px;
+      transition: background-color 0.2s ease;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        transition: transform 0.2s ease;
+      }
+
+      .switchInput:checked + & {
+        background: var(--theme-primary, v.$primary-color);
+
+        &::before {
+          transform: translateX(20px);
+        }
+      }
+    }
+
+    .switchText {
+      font-size: 0.875rem;
+      font-weight: v.$font-weight-semibold;
+      color: var(--theme-text-color, v.$on-surface-color);
+    }
+
+    // User dropdown specific styles
+    .userInfo {
+      display: flex;
+      align-items: center;
+      gap: v.$gap-small;
+    }
+
+    .userAvatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--theme-surface-variant, v.$surface-variant-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .material-symbols-outlined {
+        font-size: 24px;
+        color: var(--theme-on-surface-variant, v.$on-surface-variant-color);
+      }
+    }
+
+    .userDetails {
+      flex: 1;
+    }
+
+    .userName {
+      font-size: 1rem;
+      font-weight: v.$font-weight-semibold;
+      color: var(--theme-on-primary, v.$on-primary-color);
+      margin: 0;
+    }
+
+    .userRole {
+      font-size: 0.875rem;
+      color: var(--theme-on-primary, v.$on-primary-color);
+      opacity: 0.8;
+      margin: 0;
+    }
+
+    .userEmail {
+      font-size: 0.75rem;
+      color: var(--theme-on-primary, v.$on-primary-color);
+      opacity: 0.7;
+      margin: 0;
+    }
+
+    .dropdownDivider {
+      margin: v.$gap-small 0;
+      border-color: var(--theme-border-color, v.$outline-variant-color);
+    }
+
+    .dropdownItem {
+      display: flex;
+      align-items: center;
+      gap: v.$gap-small;
+      padding: v.$gap-small v.$base-padding;
+      color: var(--theme-text-color, v.$on-surface-color);
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background: var(--theme-surface-variant, v.$surface-variant-color);
+        color: var(--theme-text-color, v.$on-surface-color);
+      }
+
+      .material-symbols-outlined {
+        font-size: 18px;
+      }
+
+      &.logoutItem {
+        color: var(--theme-error, #dc3545);
+
+        &:hover {
+          background: rgba(220, 53, 69, 0.1);
+          color: var(--theme-error, #dc3545);
+        }
+      }
     }
 }
 
@@ -249,6 +551,46 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
 // Style for Offcanvas body to remove padding
 .mobileOffcanvasBody {
   padding: 0 !important; // Override default Offcanvas padding
+}
+
+// Global dropdown z-index fix for utility sidebar
+:global(.dropdown-menu.show) {
+  z-index: 9999 !important;
+  position: absolute !important;
+}
+
+// Ensure the dropdown container itself has proper stacking
+:global(.dropdown.show) {
+  z-index: 9998 !important;
+}
+
+// More aggressive global fixes for Bootstrap dropdowns
+:global(.dropdown-menu) {
+  z-index: 9999 !important;
+}
+
+:global(.dropdown) {
+  z-index: 9998 !important;
+}
+
+// Ensure page content doesn't interfere
+.appPage {
+  z-index: 1 !important; // Keep page content below dropdowns
+}
+
+.pageBody {
+  z-index: 1 !important; // Keep page body below dropdowns
+}
+
+// Style Link components used as icon buttons
+:global(a.circleIconButton) {
+  text-decoration: none !important;
+  color: inherit !important;
+
+  &:hover, &:focus, &:active, &:visited {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
 }
 
 // --- Responsive Adjustments ---

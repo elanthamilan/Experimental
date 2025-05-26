@@ -1,12 +1,12 @@
 @use 'sass:color';
-@use 'sass:math'; 
-@use '../styles/variables' as v; 
+@use 'sass:math';
+@use '../styles/variables' as v;
 
 // --- Component Specific Variables ---
 $table-container-bg: v.$surface-color; // Use surface color for table container prominence
 $table-container-border: v.$base-border-width solid v.$outline-variant-color; // Add border for prominence
 $table-container-shadow: 0px 2px 4px rgba(0, 0, 0, 0.06), 0px 0px 2px rgba(0, 0, 0, 0.04); // Slightly adjusted shadow for prominence
-$table-container-radius: v.$base-border-radius; 
+$table-container-radius: v.$base-border-radius;
 
 $controls-padding: 20px 24px 12px;
 $controls-gap: v.$gap-medium;
@@ -164,36 +164,36 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
 
 
 .resultsTableContainer {
-  padding: 0; 
+  padding: 0;
   background-color: $table-container-bg;
   border: $table-container-border; // Added border
-  margin-top: v.$base-margin * 1.5; 
+  margin-top: v.$base-margin * 1.5;
   border-radius: $table-container-radius;
   box-shadow: $table-container-shadow;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .tableControls {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end; 
+  align-items: flex-end;
   padding: $controls-padding;
   gap: $controls-gap;
   flex-wrap: wrap;
 
-  @media (max-width: 767px) { 
+  @media (max-width: 767px) {
     flex-direction: column;
-    align-items: stretch; 
-    padding: math.div($controls-padding, 2); 
+    align-items: stretch;
+    padding: math.div($controls-padding, 2);
   }
 }
 
 .filterTabs {
   display: flex;
-  flex-wrap: wrap; 
-  align-items: center; 
-  gap: v.$gap-medium; 
-  margin-bottom: v.$base-margin; 
+  flex-wrap: wrap;
+  align-items: center;
+  gap: v.$gap-medium;
+  margin-bottom: v.$base-margin;
 
   .filterButton {
     display: flex;
@@ -210,8 +210,8 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
     line-height: $filter-btn-inactive-line-height;
     font-weight: $filter-btn-inactive-font-weight;
     cursor: pointer;
-    gap: v.$gap-small; 
-    white-space: nowrap; 
+    gap: v.$gap-small;
+    white-space: nowrap;
 
     .filterCount {
       display: inline-flex;
@@ -246,19 +246,19 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
       }
     }
      &:not(.active):hover {
-        background-color: v.$background-hover; 
+        background-color: v.$background-hover;
      }
   }
 }
 
 .tableActions {
   display: flex;
-  align-items: center; 
-  gap: v.$gap-medium; 
+  align-items: center;
+  gap: v.$gap-medium;
 
 
   .searchInput {
-    flex-grow: 1; 
+    flex-grow: 1;
     height: $search-input-height;
     border-radius: $search-input-radius;
     border: $search-input-border; // Uses transparent border
@@ -272,40 +272,7 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
       box-shadow: v.$input-focus-box-shadow;
     }
 
-    :global(.input-group-text) { // This seems to be for an addon, not directly for the icon
-      background-color: transparent;
-      border: none;
-      padding: 0;
-      margin-right: v.$gap-small;
-      color: $search-input-icon-color; // Uses themed var: v.$on-surface-variant-color
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: $action-btn-row-height; // This is v.$button-height (44px)
-  width: $action-btn-row-height;  // Make it square for icon buttons
-  padding: 0; // Remove padding if it's a pure icon button
-  background-color: $action-btn-row-bg !important; // This is v.$button-secondary-bg
-  border: v.$secondary-button-border !important; // Use the defined secondary button border (2px solid #6B778A)
-  border-radius: $action-btn-row-radius; // This is v.$base-border-radius (8px)
-  color: $action-btn-row-text-color !important; // This is v.$button-secondary-text
-  font-family: $action-btn-row-font-family;
-  font-weight: $action-btn-row-font-weight;
-  font-size: $action-btn-row-font-size; // This is v.$font-size-base
-  line-height: $action-btn-row-line-height; // This is v.$button-line-height
-  text-decoration: none;
-  white-space: nowrap;
-
-  :global(.material-symbols-outlined) { // Style for the icon inside
-    font-size: 20px; // Adjust icon size as needed
-    line-height: 1; // Ensure icon is centered if line-height affects it
-  }
-
-  &:hover {
-    background-color: v.$button-secondary-hover-bg !important; 
-    color: $action-btn-row-text-color !important;
-    border-color: v.$secondary-button-border !important; // Keep the same border color on hover, or use a hover-specific one
-  }
-}
+    // Search input styling is now handled by the SearchInput component
   }
 
   .groupBySwitch {
@@ -339,8 +306,8 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
       align-items: center;
       justify-content: space-between; // Changed to space-between
       width: 100%; // Ensure it takes available width if needed for space-between to work well
-      gap: v.$gap-small; 
-      background-color: $action-dropdown-bg; 
+      gap: v.$gap-small;
+      background-color: $action-dropdown-bg;
       border: $action-dropdown-border;
       border-radius: $action-dropdown-radius;
       height: $action-dropdown-height;
@@ -352,12 +319,12 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
       line-height: v.$button-line-height;
       white-space: nowrap;
 
-      &::after { 
+      &::after {
         border-top-color: $action-dropdown-chevron-color; // Chevron color matches text
-        border-width: v.$base-border-width; 
+        border-width: v.$base-border-width;
       }
        &:hover, &:focus, &:active {
-         background-color: v.$primary-container-hover-bg !important; 
+         background-color: v.$primary-container-hover-bg !important;
          border-color: v.$primary-color !important; // Ensure border color also uses !important if needed
          color: $action-dropdown-text-color !important;
          box-shadow: none !important;
@@ -365,7 +332,7 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
     }
   }
 
-  .addButton { 
+  .addButton {
     height: v.$button-height;
     background-color: v.$button-primary-bg;
     border: v.$primary-button-border;
@@ -381,17 +348,17 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
     gap: v.$button-icon-gap;
 
     :global(.material-symbols-outlined) {
-      font-size: 18px; 
+      font-size: 18px;
     }
 
     &:hover {
-      background-color: v.$button-primary-hover-bg; 
+      background-color: v.$button-primary-hover-bg;
     }
   }
 }
 
 .dataTable {
-  margin-bottom: 0; 
+  margin-bottom: 0;
 
   :global(thead th) {
     background-color: $table-header-bg !important; // Uses themed var: v.$surface-container-color
@@ -407,7 +374,7 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
     border-top: none !important;
     border-left: none !important;
     border-right: none !important;
-    padding: 0 v.$gap-small; 
+    padding: 0 v.$gap-small;
     white-space: nowrap;
   }
 
@@ -466,7 +433,7 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
 }
 
 .statusBadge {
-  display: inline-flex; 
+  display: inline-flex;
   align-items: center;
   gap: $status-icon-gap;
   padding: $status-padding;
@@ -481,7 +448,7 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
   .statusIcon {
     width: $status-icon-size;
     height: $status-icon-size;
-    border-radius: 50%; 
+    border-radius: 50%;
   }
 
   &.published {
@@ -497,7 +464,7 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
   }
 }
 
-.actionButton { 
+.actionButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -528,7 +495,7 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
 
 .paginationContainer {
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   align-items: center;
   padding: $pagination-padding;
   font-size: $pagination-font-size;
@@ -538,16 +505,16 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
 
   .resultsText {
     color: $pagination-text-color;
-    margin-right: auto; 
+    margin-right: auto;
   }
 
   .paginationControls {
     display: flex;
-    gap: v.$gap-medium; 
-    margin-bottom: 0; 
+    gap: v.$gap-medium;
+    margin-bottom: 0;
 
     :global(.page-item) {
-       margin: 0 !important; 
+       margin: 0 !important;
     }
 
     :global(.page-link) {
@@ -579,18 +546,18 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
         border-color: $pagination-active-btn-bg;
         color: $pagination-active-btn-text-color; // Uses themed var: v.$on-primary-color
      }
-     :global(.page-item:first-child .page-link), 
-     :global(.page-item:nth-child(2) .page-link), 
-     :global(.page-item:nth-last-child(2) .page-link), 
-     :global(.page-item:last-child .page-link) { 
-        padding: 0 v.$gap-small; 
+     :global(.page-item:first-child .page-link),
+     :global(.page-item:nth-child(2) .page-link),
+     :global(.page-item:nth-last-child(2) .page-link),
+     :global(.page-item:last-child .page-link) {
+        padding: 0 v.$gap-small;
      }
      :global(.page-item:first-child .page-link),
      :global(.page-item:last-child .page-link) {
      }
   }
 
-  .pageInputControls { 
+  .pageInputControls {
       display: flex;
       align-items: center;
       gap: v.$gap-small;
@@ -640,21 +607,21 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
   background: none !important;
   border: none !important;
   padding: v.$gap-small !important; // Increased padding for larger tap target (e.g., 8px)
-  color: v.$text-color-secondary !important; 
-  box-shadow: none !important; 
+  color: v.$text-color-secondary !important;
+  box-shadow: none !important;
   border-radius: 50%; // Make it circular for a common icon button feel
 
   &::after {
-    display: none; 
+    display: none;
   }
 
   &:hover, &:focus, &:active {
-    background-color: v.$background-hover !important; 
+    background-color: v.$background-hover !important;
     color: v.$text-color-secondary !important;
   }
 
    :global(.material-symbols-outlined) {
-      font-size: 20px; 
+      font-size: 20px;
       display: block; // Helps with consistent sizing if padding affects layout
    }
 }
@@ -744,5 +711,87 @@ $selected-row-bg: v.$primary-container-hover-bg; // Themed
   background-color: $selected-row-bg !important; // Ensure override
   &:hover {
      background-color: v.$selected-row-hover-bg !important; // Ensure themed hover for selected rows
+  }
+}
+
+// Dark mode support for results table
+[data-theme="dark"] {
+  .resultsTableContainer {
+    background-color: var(--theme-surface, #1e293b);
+    border-color: var(--theme-outline-variant, #475569);
+  }
+
+  .dataTable {
+    :global(thead th) {
+      background-color: var(--theme-surface-container, #334155) !important;
+      color: var(--theme-on-surface, #e2e8f0) !important;
+      border-color: var(--theme-outline-variant, #475569) !important;
+    }
+
+    :global(tbody tr) {
+      background-color: var(--theme-surface, #1e293b) !important;
+      color: var(--theme-on-surface, #e2e8f0) !important;
+      border-color: var(--theme-outline-variant, #475569) !important;
+
+      &:hover {
+        background-color: var(--theme-surface-container-low, #2d3748) !important;
+        color: var(--theme-on-surface, #e2e8f0) !important;
+      }
+    }
+
+    :global(tbody tr:nth-child(even)) {
+      background-color: var(--theme-surface-container-lowest, #0f172a) !important;
+      color: var(--theme-on-surface, #e2e8f0) !important;
+
+      &:hover {
+        background-color: var(--theme-surface-container-low, #2d3748) !important;
+        color: var(--theme-on-surface, #e2e8f0) !important;
+      }
+    }
+
+    :global(tbody td) {
+      color: var(--theme-on-surface, #e2e8f0) !important;
+      border-color: var(--theme-outline-variant, #475569) !important;
+    }
+
+    :global(.form-check-input) {
+      background-color: var(--theme-surface, #1e293b);
+      border-color: var(--theme-outline-variant, #475569);
+
+      &:checked {
+        background-color: var(--theme-primary, #3b82f6);
+        border-color: var(--theme-primary, #3b82f6);
+      }
+    }
+  }
+
+  .statusBadge {
+    &.disabled {
+      background-color: var(--theme-surface-variant, #475569);
+      color: var(--theme-on-surface-variant, #94a3b8);
+    }
+
+    &.published {
+      background-color: var(--theme-tertiary-container, #065f46);
+      color: var(--theme-on-tertiary-container, #a7f3d0);
+    }
+  }
+
+  .multiSelectBar {
+    background-color: var(--theme-primary-container, #1e40af);
+    border-color: var(--theme-primary, #3b82f6);
+    color: var(--theme-on-primary-container, #dbeafe);
+
+    .selectAllLink, .clearSelectionLink {
+      color: var(--theme-primary, #3b82f6);
+    }
+  }
+
+  .selectedRow {
+    background-color: var(--theme-primary-container, #1e40af) !important;
+
+    &:hover {
+      background-color: var(--theme-primary-container, #1d4ed8) !important;
+    }
   }
 }

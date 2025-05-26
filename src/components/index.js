@@ -36,6 +36,8 @@ export { default as FileUploadDropzone } from './molecules/FileUploadDropzone';
 
 // Display Molecules
 export { default as StatsCard } from './molecules/StatsCard';
+export { default as ThemeDrawer } from './molecules/ThemeDrawer';
+export { default as Toolbar } from './molecules/Toolbar';
 
 // ===== ORGANISMS =====
 // Complex components made of molecules and atoms

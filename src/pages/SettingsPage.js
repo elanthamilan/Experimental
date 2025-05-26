@@ -24,7 +24,7 @@ const SettingsPage = () => {
   const [generatedCustomPalette, setGeneratedCustomPalette] = useState(null);
 
   // State for custom font selection
-  const [selectedDisplayFont, setSelectedDisplayFont] = useState("Inter, sans-serif");
+  const [selectedHeaderFont, setSelectedHeaderFont] = useState("Inter, sans-serif");
   const [selectedBodyFont, setSelectedBodyFont] = useState("Roboto, sans-serif");
 
   // State for base font size
@@ -64,9 +64,9 @@ const SettingsPage = () => {
       setCustomPrimary(activeThemeData.seedColors.primary);
       setCustomSecondary(activeThemeData.seedColors.secondary);
       setCustomTertiary(activeThemeData.seedColors.tertiary);
-      const displayFont = googleFonts.find(f => f.name === activeThemeData.fonts.display)?.value || `"${activeThemeData.fonts.display}", sans-serif`;
+      const headerFont = googleFonts.find(f => f.name === activeThemeData.fonts.display)?.value || `"${activeThemeData.fonts.display}", sans-serif`;
       const bodyFont = googleFonts.find(f => f.name === activeThemeData.fonts.body)?.value || `"${activeThemeData.fonts.body}", sans-serif`;
-      setSelectedDisplayFont(displayFont);
+      setSelectedHeaderFont(headerFont);
       setSelectedBodyFont(bodyFont);
       // Base font size and global font weight are global, not reset by predefined theme selection here
       // but rather controlled by their own UI elements or initial context values.
@@ -96,13 +96,13 @@ const SettingsPage = () => {
 
   // Apply custom fonts live
   useEffect(() => {
-    if (selectedDisplayFont) {
-      document.documentElement.style.setProperty('--theme-font-display', selectedDisplayFont);
+    if (selectedHeaderFont) {
+      document.documentElement.style.setProperty('--theme-font-display', selectedHeaderFont);
     }
     if (selectedBodyFont) {
       document.documentElement.style.setProperty('--theme-font-body', selectedBodyFont);
     }
-  }, [selectedDisplayFont, selectedBodyFont]);
+  }, [selectedHeaderFont, selectedBodyFont]);
 
   // Apply base font size live
   useEffect(() => {
@@ -123,8 +123,8 @@ const SettingsPage = () => {
     const themeName = window.prompt("Enter a name for your custom theme:", "My Custom Theme");
     if (!themeName) return;
 
-    // Find display font name from googleFonts, fallback to the value itself
-    const displayFontName = googleFonts.find(f => f.value === selectedDisplayFont)?.name || selectedDisplayFont;
+    // Find header font name from googleFonts, fallback to the value itself
+    const headerFontName = googleFonts.find(f => f.value === selectedHeaderFont)?.name || selectedHeaderFont;
     // Find body font name from googleFonts, fallback to the value itself
     const bodyFontName = googleFonts.find(f => f.value === selectedBodyFont)?.name || selectedBodyFont;
 
@@ -137,7 +137,7 @@ const SettingsPage = () => {
         tertiary: customTertiary,
       },
       fonts: { // Storing the name, not the full CSS value, for display consistency
-        display: displayFontName,
+        display: headerFontName,
         body: bodyFontName,
       },
       baseFontSize: baseFontSize,
@@ -154,9 +154,9 @@ const SettingsPage = () => {
     setCustomTertiary(themeToApply.seedColors.tertiary);
 
     // Set font selectors - find the value from googleFonts list using the stored name
-    const displayFontValue = googleFonts.find(f => f.name === themeToApply.fonts.display)?.value || themeToApply.fonts.display;
+    const headerFontValue = googleFonts.find(f => f.name === themeToApply.fonts.display)?.value || themeToApply.fonts.display;
     const bodyFontValue = googleFonts.find(f => f.name === themeToApply.fonts.body)?.value || themeToApply.fonts.body;
-    setSelectedDisplayFont(displayFontValue);
+    setSelectedHeaderFont(headerFontValue);
     setSelectedBodyFont(bodyFontValue);
 
     // Set base font size
@@ -179,12 +179,22 @@ const SettingsPage = () => {
 
   return (
     <StyledContainer fluid className={styles.settingsPageContainer}>
-      <h1 className={styles.pageTitle}>Settings</h1>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Theme & Appearance Settings</h1>
+        <p className={styles.pageDescription}>
+          Customize your application's visual appearance with predefined themes or create your own custom theme.
+        </p>
+      </div>
       <Row>
         <Col lg={8} md={12} className="mb-4">
           {/* Predefined Themes Section */}
           <StyledCard className={styles.settingsSectionCard}>
-            <StyledCard.Header>Predefined Themes</StyledCard.Header>
+            <StyledCard.Header>
+              <div className={styles.sectionHeaderContent}>
+                <h3>Predefined Themes</h3>
+                <p>Choose from our curated collection of professionally designed themes</p>
+              </div>
+            </StyledCard.Header>
             <StyledCard.Body>
               <ListGroup variant="flush" className={styles.themeListContainer}>
                 {predefinedThemes.map((theme) => (
@@ -199,7 +209,7 @@ const SettingsPage = () => {
                         <div className={styles.secondarySwatch} style={{ backgroundColor: theme.seedColors.secondary }} title={`Secondary: ${theme.seedColors.secondary}`} />
                         <div className={styles.tertiarySwatch} style={{ backgroundColor: theme.seedColors.tertiary }} title={`Tertiary: ${theme.seedColors.tertiary}`} />
                       </div>
-                      <p>Display: {theme.fonts.display}, Body: {theme.fonts.body}</p>
+                      <p>Header: {theme.fonts.display}, Body: {theme.fonts.body}</p>
                       {theme.vibe && <p><em>Vibe: {theme.vibe}</em></p>}
                     </div>
                     <StyledButton
@@ -220,7 +230,12 @@ const SettingsPage = () => {
           {/* My Custom Themes Section */}
           {savedCustomThemes.length > 0 && (
             <StyledCard className={styles.settingsSectionCard}>
-              <StyledCard.Header>My Custom Themes</StyledCard.Header>
+              <StyledCard.Header>
+                <div className={styles.sectionHeaderContent}>
+                  <h3>My Custom Themes</h3>
+                  <p>Your saved custom theme configurations</p>
+                </div>
+              </StyledCard.Header>
               <StyledCard.Body>
                 <ListGroup variant="flush" className={styles.myThemesListContainer}>
                   {savedCustomThemes.map((theme) => (
@@ -232,7 +247,7 @@ const SettingsPage = () => {
                           <div className={styles.secondarySwatch} style={{ backgroundColor: theme.seedColors.secondary }} title={`Secondary: ${theme.seedColors.secondary}`} />
                           <div className={styles.tertiarySwatch} style={{ backgroundColor: theme.seedColors.tertiary }} title={`Tertiary: ${theme.seedColors.tertiary}`} />
                         </div>
-                        <p>Display: {theme.fonts.display}, Body: {theme.fonts.body}</p>
+                        <p>Header: {theme.fonts.display}, Body: {theme.fonts.body}</p>
                         <p>Base Size: {theme.baseFontSize}px, Weight: {fontWeightOptions.find(fw => fw.value === theme.globalFontWeight)?.label || theme.globalFontWeight}</p>
                       </div>
                       <div className={styles.themeActions}>
@@ -250,7 +265,12 @@ const SettingsPage = () => {
         {/* Customization Column */}
         <Col lg={4} md={12}>
           <StyledCard className={styles.settingsSectionCard}>
-            <StyledCard.Header>Customize & Save Theme</StyledCard.Header>
+            <StyledCard.Header>
+              <div className={styles.sectionHeaderContent}>
+                <h3>Theme Builder</h3>
+                <p>Create and customize your own theme</p>
+              </div>
+            </StyledCard.Header>
             <StyledCard.Body>
               {/* Custom Color Builder */}
               <div className={styles.customThemeBuilderSection}>
@@ -308,11 +328,11 @@ const SettingsPage = () => {
                 <h5>Fonts</h5>
                 <Form>
                   <FormField
-                    controlId="displayFontSelect"
-                    label="Display Font"
+                    controlId="headerFontSelect"
+                    label="Header Font"
                     as="select"
-                    value={selectedDisplayFont}
-                    onChange={(e) => setSelectedDisplayFont(e.target.value)}
+                    value={selectedHeaderFont}
+                    onChange={(e) => setSelectedHeaderFont(e.target.value)}
                     options={googleFonts.map(font => ({ value: font.value, label: font.name }))}
                     className={styles.fontSelectorGroup}
                   />
@@ -361,12 +381,14 @@ const SettingsPage = () => {
                   </Form.Group>
                 </Form>
               </div>
-              <StyledButton variant="success" onClick={handleSaveCustomTheme} className={styles.saveThemeButton}>
-                Save Current Custom Theme
-              </StyledButton>
-              <p className={styles.placeholderTextDetails}>
-                Live previews are temporary. Save to persist your custom settings.
-              </p>
+              <div className={styles.saveThemeSection}>
+                <StyledButton variant="success" onClick={handleSaveCustomTheme} className={styles.saveThemeButton}>
+                  💾 Save Custom Theme
+                </StyledButton>
+                <p className={styles.saveThemeNote}>
+                  <strong>Note:</strong> Live previews are temporary. Save your theme to persist these custom settings.
+                </p>
+              </div>
             </StyledCard.Body>
           </StyledCard>
         </Col>

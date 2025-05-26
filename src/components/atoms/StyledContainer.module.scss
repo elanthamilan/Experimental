@@ -1,80 +1,111 @@
 // StyledContainer.module.scss
 // Centralized container styling following design system principles
+@use '../../styles/variables' as v;
 
 .containerBase {
   width: 100%;
   margin-right: auto;
   margin-left: auto;
+  background-color: var(--theme-content-background, v.$surface-color);
+  color: var(--theme-text-color, v.$on-surface-color);
+  border-radius: v.$base-border-radius;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 // Container variants
 .container-default {
-  // Default container styling
+  background-color: var(--theme-content-background, v.$surface-color);
+  // border: 1px solid var(--theme-border-color, v.$outline-variant-color); // Removed border
 }
 
 .container-fluid {
   max-width: none;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: v.$base-padding;
+  padding-left: v.$base-padding;
+  background-color: var(--theme-app-background, v.$background-color);
 }
 
 .container-page {
   min-height: calc(100vh - 60px); // Adjust based on header height
   display: flex;
   flex-direction: column;
+  background-color: var(--theme-app-background, v.$background-color);
 }
 
 .container-section {
-  background: var(--section-bg, #ffffff);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
+  background-color: var(--theme-content-background, v.$surface-color);
+  border: 1px solid var(--theme-border-color, v.$outline-variant-color);
+  border-radius: v.$base-border-radius;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: v.$base-margin * 2;
+  transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    border-color: var(--theme-primary, v.$primary-color);
+  }
 }
 
-// Spacing variants
+// Spacing variants using design system variables
 .spacing-none {
   padding: 0;
 }
 
 .spacing-sm {
-  padding: 0.5rem 1rem;
+  padding: v.$gap-small v.$base-padding;
 }
 
 .spacing-md {
-  padding: 1rem 1.5rem;
+  padding: v.$base-padding v.$base-padding * 1.5;
 }
 
 .spacing-lg {
-  padding: 1.5rem 2rem;
+  padding: v.$base-padding * 1.5 v.$base-padding * 2;
 }
 
 .spacing-xl {
-  padding: 2rem 3rem;
+  padding: v.$base-padding * 2 v.$base-padding * 3;
 }
 
-// Responsive spacing adjustments
+// Responsive spacing adjustments using design system breakpoints
 @media (max-width: 768px) {
   .spacing-sm {
-    padding: 0.5rem;
+    padding: v.$gap-small;
   }
-  
+
   .spacing-md {
-    padding: 1rem;
+    padding: v.$base-padding;
   }
-  
+
   .spacing-lg {
-    padding: 1rem 1.5rem;
+    padding: v.$base-padding v.$base-padding * 1.5;
   }
-  
+
   .spacing-xl {
-    padding: 1.5rem 2rem;
+    padding: v.$base-padding * 1.5 v.$base-padding * 2;
+  }
+
+  .container-fluid {
+    padding-right: v.$gap-medium;
+    padding-left: v.$gap-medium;
   }
 }
 
-// Dark mode support
-[data-theme="dark"] {
-  .container-section {
-    background: var(--section-bg-dark, #2d3748);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+// Enhanced theme support with proper variables
+.containerBase {
+  // Additional theme-aware styling
+  &:focus-within {
+    outline: 2px solid var(--theme-primary, v.$primary-color);
+    outline-offset: 2px;
+  }
+}
+
+// Special styling for different container contexts
+.container-fluid.spacing-md {
+  // Better padding for fluid containers
+  padding: v.$base-padding * 1.5 v.$base-padding * 2;
+
+  @media (max-width: 768px) {
+    padding: v.$base-padding;
   }
 }

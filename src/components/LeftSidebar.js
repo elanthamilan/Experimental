@@ -47,9 +47,6 @@ const LeftSidebar = () => {
   const navGroups = useMemo(() => ({
     topLevel: [
       { eventKey: 'dashboard', icon: 'dashboard', label: 'Dashboard', path: '/dashboard' },
-      { eventKey: 'profile', icon: 'account_circle', label: 'User Profile', path: '/profile' },
-      { eventKey: 'settings', icon: 'settings', label: 'Settings', path: '/settings' },
-      { eventKey: 'logout', icon: 'logout', label: 'Logout', path: '/logout' }, // Added Logout link
     ],
     academics: {
       title: 'Academics',

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import StyledContainer from './atoms/StyledContainer';
 import StyledButton from './atoms/StyledButton';
 import FormField from './molecules/FormField';
 import styles from './SearchCriteria.module.scss';
@@ -74,20 +73,19 @@ const SearchCriteria = () => {
 
   if (isCollapsed) {
     return (
-      <StyledContainer fluid className={styles.searchCriteriaContainer}>
+      <div className={styles.searchCriteriaContainer}>
         <div className={`${styles.formContainer} ${styles.previewContainer}`}>
           <span className={styles.previewText}>{getPreviewText()}</span>
           <StyledButton variant="link" onClick={handleEdit} className={styles.editButton}>
             <span className="material-symbols-outlined">edit</span> Edit
           </StyledButton>
         </div>
-      </StyledContainer>
+      </div>
     );
   }
 
   return (
-    <StyledContainer fluid className={styles.searchCriteriaContainer}>
-      <h4 className={styles.pageTitle}>Publish final results to portal</h4>
+    <div className={styles.searchCriteriaContainer}>
       <div className={styles.formContainer}>
         <form onSubmit={handleSearch}>
           {/* Row 1: Institution, Degree, Program */}
@@ -228,7 +226,7 @@ const SearchCriteria = () => {
           </Row>
         </form>
       </div>
-    </StyledContainer>
+    </div>
   );
 };
 
