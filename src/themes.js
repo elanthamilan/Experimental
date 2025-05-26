@@ -98,7 +98,7 @@ const adjustHexBrightness = (hex, factor) => {
     return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 };
 
-const generateThemeColors = (primary, secondary, tertiary, isDark = false) => {
+export const generateThemeColors = (primary, secondary, tertiary, isDark = false) => {
   // Material 3 fixed values (Light Theme Defaults)
   const m3Error = '#B3261E';
   const m3OnError = '#FFFFFF';

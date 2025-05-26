@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTheme } from '../App'; // Corrected path
 import { themes as predefinedThemes, generateThemeColors } from '../themes';
 import { googleFonts, fontWeightOptions } from '../data/fonts';
