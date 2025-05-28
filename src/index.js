@@ -8,8 +8,9 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'; // Imp
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 if (process.env.NODE_ENV !== 'production') {
-  const axe = require('@axe-core/react');
-  axe(React, ReactDOM, 1000);
+  import('@axe-core/react').then(axe => {
+    axe.default(React, ReactDOM, 1000);
+  });
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
