@@ -1,7 +1,7 @@
 import React from 'react';
-import StyledTable from './atoms/StyledTable';
-import StyledContainer from './atoms/StyledContainer';
-import StyledButton from './atoms/StyledButton';
+import StyledTable from '../atoms/StyledTable';
+import StyledContainer from '../atoms/StyledContainer';
+import StyledButton from '../atoms/StyledButton';
 
 const DataTable = ({ data, onEdit, onDelete }) => {
   if (!data || data.length === 0) {

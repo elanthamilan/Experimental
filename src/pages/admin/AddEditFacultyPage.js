@@ -199,8 +199,8 @@ const AddEditFacultyPage = () => {
                   value={formData.officeLocation}
                   onChange={handleChange}
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <FormField
               controlId="formCoursesTaught"

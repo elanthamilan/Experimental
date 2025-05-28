@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
-import StatsCard from './molecules/StatsCard';
+import StatsCard from '../molecules/StatsCard';
 import styles from './SummaryStats.module.scss';
 
 const SummaryStats = () => {

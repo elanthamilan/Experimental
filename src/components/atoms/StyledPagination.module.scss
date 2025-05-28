@@ -2,8 +2,8 @@
 
 .styledPagination {
   // Overall container styling (e.g., margins)
-  margin-top: v.$spacing-md;
-  margin-bottom: v.$spacing-md;
+  margin-top: v.$base-margin; // Replaced v.$spacing-md
+  margin-bottom: v.$base-margin; // Replaced v.$spacing-md
 
   // Target list items directly, as Pagination.Item renders as <li>
   :global(.page-item) {
@@ -41,9 +41,9 @@
     &.disabled {
       :global(a.page-link),
       :global(span.page-link) { // Bootstrap uses <span> for disabled First/Prev/Next/Last text
-        background-color: lighten(v.$outline-color, 20%);
+        background-color: lighten(v.$outline-fallback, 20%); // Use SCSS fallback
         color: v.$outline-color;
-        border-color: lighten(v.$outline-color, 10%);
+        border-color: lighten(v.$outline-fallback, 10%); // Use SCSS fallback
         cursor: not-allowed;
         pointer-events: none; // Ensure no interaction
       }
@@ -63,8 +63,8 @@
         // No border or background needed for ellipsis, or make it minimal
         border: none;
         background-color: transparent;
-        padding-left: v.$spacing-sm;
-        padding-right: v.$spacing-sm;
+        padding-left: v.$gap-small; // Replaced v.$spacing-sm
+        padding-right: v.$gap-small; // Replaced v.$spacing-sm
      }
      &:hover :global(span.page-link-ellipsis) {
         background-color: v.$background-hover; // Optional: subtle hover for ellipsis

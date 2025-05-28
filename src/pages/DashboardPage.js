@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyledContainer } from '../components';
-import SearchCriteria from '../components/SearchCriteria';
-import ResultsTable from '../components/ResultsTable';
+import SearchCriteria from '../components/organisms/SearchCriteria';
+import ResultsTable from '../components/organisms/ResultsTable';
 import styles from './DashboardPage.module.scss';
 
 const DashboardPage = () => {

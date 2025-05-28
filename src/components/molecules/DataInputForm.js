@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Container, Row, Col } from 'react-bootstrap';
-import FormField from './molecules/FormField'; // Import FormField
-import StyledButton from './atoms/StyledButton';
+import FormField from './FormField'; // Import FormField
+import StyledButton from '../atoms/StyledButton';
 
 const DataInputForm = ({ onAddData, onUpdateData, editingItem, clearEditing }) => {
   const [name, setName] = useState('');

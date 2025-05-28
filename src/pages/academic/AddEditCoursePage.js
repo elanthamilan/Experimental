@@ -211,8 +211,8 @@ const AddEditCoursePage = () => {
                   onChange={handleChange}
                   placeholder="Enter course syllabus or learning objectives..."
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <div className={styles.formActions}>
               <StyledButton variant="secondary" onClick={() => navigate('/courses')}>

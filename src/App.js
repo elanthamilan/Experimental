@@ -1,8 +1,8 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { themes, applyTheme } from './themes';
 
-import LeftSidebar from './components/LeftSidebar';
-import AddEditForm from './components/AddEditForm';
+import LeftSidebar from './components/organisms/LeftSidebar';
+import AddEditForm from './components/organisms/AddEditForm';
 import { Offcanvas, OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
 import StyledButton from './components/atoms/StyledButton';
 import { Routes, Route } from 'react-router-dom';

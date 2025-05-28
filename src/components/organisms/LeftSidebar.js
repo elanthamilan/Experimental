@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Nav, Collapse, OverlayTrigger, Tooltip } from 'react-bootstrap'; // Added OverlayTrigger, Tooltip
-import StyledButton from './atoms/StyledButton';
-import StyledFormSelect from './atoms/StyledFormSelect'; // Added StyledFormSelect
+import StyledButton from '../atoms/StyledButton';
+import StyledFormSelect from '../atoms/StyledFormSelect'; // Added StyledFormSelect
 import styles from './LeftSidebar.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { useTheme } from '../App';
+import { useTheme } from '../../App';
 
 const LeftSidebar = () => {
   const navigate = useNavigate();

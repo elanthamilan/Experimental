@@ -1,6 +1,6 @@
 @use 'sass:color';
 @use 'sass:math';
-@use '../styles/variables' as v;
+@use '../../styles/variables' as v;
 
 // --- Component Specific Variables ---
 $table-container-bg: v.$surface-color; // Use surface color for table container prominence

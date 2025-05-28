@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import StyledButton from './atoms/StyledButton';
-import FormField from './molecules/FormField';
+import StyledButton from '../atoms/StyledButton';
+import FormField from '../molecules/FormField';
 import styles from './SearchCriteria.module.scss';
 
 // Define options for label lookup

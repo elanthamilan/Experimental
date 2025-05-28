@@ -24,7 +24,7 @@ $_on-background-fallback: #1C1B1F;    // MD3 On Background (text on general back
 $_surface-fallback: #FFFBFE;          // MD3 Surface (cards, sheets, menus)
 $_on-surface-fallback: #1C1B1F;       // MD3 On Surface (primary text on surfaces)
 $_on-surface-variant-fallback: #444746; // MD3 On Surface Variant (secondary text, icons)
-$_outline-fallback: #79747E;          // MD3 Outline (borders, dividers)
+$outline-fallback: #79747E;          // MD3 Outline (borders, dividers) // Made public
 $_outline-variant-fallback: #CAC4D0;  // MD3 Outline Variant (softer borders, e.g., card outlines)
 
 $_error-fallback: #B3261E;            // MD3 Error
@@ -76,6 +76,22 @@ $input-border-radius: 4px;
 $base-border-width: 1px;
 $secondary-border-width: 2px;
 
+// Input/Button specific padding for different sizes
+$input-padding-y-sm: 0.25rem;
+$input-padding-x-sm: 0.5rem;
+$input-padding-y-lg: 0.5rem;
+$input-padding-x-lg: 1rem;
+
+// Pagination specific padding and font sizes
+$pagination-padding-y-sm: 0.25rem;
+$pagination-padding-x-sm: 0.5rem;
+$pagination-font-size-sm: $_font-size-small; // Uses existing SCSS var
+$pagination-line-height-sm: $_line-height-base; // Uses existing SCSS var
+$pagination-padding-y-lg: 0.5rem;
+$pagination-padding-x-lg: 1rem;
+$pagination-font-size-lg: $_font-size-large; // Uses existing SCSS var
+$pagination-line-height-lg: $_line-height-base; // Uses existing SCSS var
+
 // Grid system
 $_grid-gutter-width-fallback: 30px; // Default gutter width (e.g., 15px on each side of a col)
 $grid-gutter-width: var(--theme-grid-gutter-width, $_grid-gutter-width-fallback);
@@ -105,7 +121,7 @@ $on-background-color: var(--theme-on-background, $_on-background-fallback);
 $surface-color: var(--theme-surface, $_surface-fallback); // Background for components like cards, dialogs
 $on-surface-color: var(--theme-on-surface, $_on-surface-fallback); // Primary text on surfaces
 $on-surface-variant-color: var(--theme-on-surface-variant, $_on-surface-variant-fallback); // Secondary text, icons on surfaces
-$outline-color: var(--theme-outline, $_outline-fallback); // For borders, dividers
+$outline-color: var(--theme-outline, $outline-fallback); // For borders, dividers // Updated to use public
 $outline-variant-color: var(--theme-outline-variant, $_outline-variant-fallback); // Softer borders (e.g., card outlines)
 
 // Error Colors

@@ -54,16 +54,16 @@ export { default as Toolbar } from './molecules/Toolbar';
 // Complex components made of molecules and atoms
 
 // Navigation
-export { default as LeftSidebar } from './LeftSidebar';
+export { default as LeftSidebar } from './organisms/LeftSidebar';
 
 // Data Display
-export { default as ResultsTable } from './ResultsTable';
-export { default as SummaryStats } from './SummaryStats';
+export { default as ResultsTable } from './organisms/ResultsTable';
+export { default as SummaryStats } from './organisms/SummaryStats';
 
 // Forms
-export { default as AddEditForm } from './AddEditForm';
-export { default as DataInputForm } from './DataInputForm';
-export { default as SearchCriteria } from './SearchCriteria';
+export { default as AddEditForm } from './organisms/AddEditForm';
+export { default as DataInputForm } from './molecules/DataInputForm';
+export { default as SearchCriteria } from './organisms/SearchCriteria';
 
 // ===== DESIGN TOKENS =====
 // Export design tokens and utilities

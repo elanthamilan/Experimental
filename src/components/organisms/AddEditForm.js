@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Row, Col, Form as BootstrapForm, Breadcrumb, Alert, Card, Button as BootstrapButton } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
-import StyledContainer from './atoms/StyledContainer';
-import StyledCard from './atoms/StyledCard';
-import StyledButton from './atoms/StyledButton';
-import StyledFormLabel from './atoms/StyledFormLabel';
-import FormField from './molecules/FormField';
+import StyledContainer from '../atoms/StyledContainer';
+import StyledCard from '../atoms/StyledCard';
+import StyledButton from '../atoms/StyledButton';
+import StyledFormLabel from '../atoms/StyledFormLabel';
+import FormField from '../molecules/FormField';
 // Atoms below are used via FormField molecule
-// import StyledFormControl from './atoms/StyledFormControl';
-// import StyledFormSelect from './atoms/StyledFormSelect';
-// import StyledFormCheck from './atoms/StyledFormCheck';
-import ProductTableRow from './molecules/ProductTableRow'; // Import molecule
-import FileUploadDropzone from './molecules/FileUploadDropzone'; // Import molecule
+// import StyledFormControl from '../atoms/StyledFormControl';
+// import StyledFormSelect from '../atoms/StyledFormSelect';
+// import StyledFormCheck from '../atoms/StyledFormCheck';
+import ProductTableRow from '../molecules/ProductTableRow'; // Import molecule
+import FileUploadDropzone from '../molecules/FileUploadDropzone'; // Import molecule
 import styles from './AddEditForm.module.scss';
 
 const AddEditForm = () => {

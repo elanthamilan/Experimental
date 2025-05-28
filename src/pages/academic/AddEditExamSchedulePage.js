@@ -204,8 +204,8 @@ const AddEditExamSchedulePage = () => {
                   onChange={handleChange}
                   placeholder="e.g., 2 hours"
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <FormField
               controlId="formInvigilators"

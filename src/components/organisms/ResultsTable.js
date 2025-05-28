@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Pagination, DropdownButton, Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import StyledContainer from './atoms/StyledContainer';
-import StyledTable from './atoms/StyledTable';
-import StyledButton from './atoms/StyledButton';
-import StyledFormCheck from './atoms/StyledFormCheck';
-import StyledBadge from './atoms/StyledBadge';
-import StyledFormControl from './atoms/StyledFormControl';
-import StyledFormSelect from './atoms/StyledFormSelect';
-import SearchInput from './molecules/SearchInput';
+import StyledContainer from '../atoms/StyledContainer';
+import StyledTable from '../atoms/StyledTable';
+import StyledButton from '../atoms/StyledButton';
+import StyledFormCheck from '../atoms/StyledFormCheck';
+import StyledBadge from '../atoms/StyledBadge';
+import StyledFormControl from '../atoms/StyledFormControl';
+import StyledFormSelect from '../atoms/StyledFormSelect';
+import SearchInput from '../molecules/SearchInput';
 import styles from './ResultsTable.module.scss';
 
 const ResultsTable = () => {

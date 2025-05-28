@@ -1,6 +1,6 @@
 @use 'sass:color';
 @use 'sass:math';
-@use '../styles/variables' as v;
+@use '../../styles/variables' as v;
 
 // --- Component Specific Variables (If any needed beyond shared) ---
 $form-background-color: v.$search-criteria-form-bg; // Themed
