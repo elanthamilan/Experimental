@@ -101,9 +101,12 @@ const AddEditOrgHierarchyNodePage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>{isEditMode ? 'Edit Hierarchy Node' : 'Add New Hierarchy Node'}</h1>
+      </div>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Hierarchy Node' : 'Add New Hierarchy Node'}</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Hierarchy Node' : 'Add New Hierarchy Node'}</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
           {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}

@@ -104,10 +104,13 @@ const AddEditAppFormFieldPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>{isEditMode ? 'Edit Application Form Field' : 'Add New Application Form Field'}</h1>
+      </div>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header>
           {/* Assuming StyledCard.Title can accept a className or is styled by parent .formCard :global(.card-header) */}
-          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Application Form Field' : 'Add New Application Form Field'}</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Application Form Field' : 'Add New Application Form Field'}</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
           {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}

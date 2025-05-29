@@ -25,7 +25,7 @@ const CourseDetailPage = () => {
     return (
       <StyledContainer className={styles.pageContainer}>
         {/* Using react-bootstrap Alert, styled via SCSS module */}
-        <StyledAlert variant="danger" className={styles.alertDanger}>Course not found.</StyledAlert>
+        <StyledAlert variant="danger">Course not found.</StyledAlert>
       </StyledContainer>
     );
   }

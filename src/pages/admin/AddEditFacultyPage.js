@@ -104,9 +104,12 @@ const AddEditFacultyPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>{isEditMode ? 'Edit Faculty Member' : 'Add New Faculty Member'}</h1>
+      </div>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Faculty Member' : 'Add New Faculty Member'}</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Faculty Member' : 'Add New Faculty Member'}</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
           {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}

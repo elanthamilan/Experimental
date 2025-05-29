@@ -97,9 +97,12 @@ const ExamScheduleListPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Examination Schedules</h1>
+      </div>
       <StyledCard className={styles.contentCard}>
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>Examination Schedules</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>Examination Schedules</StyledCard.Title> */}
         </StyledCard.Header>
 
         <div className={styles.tableControls}>

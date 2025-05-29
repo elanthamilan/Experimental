@@ -1,7 +1,7 @@
 @use '../../styles/variables' as v; 
 
 .pageContainer {
-  padding: var(--spacing-medium) var(--spacing-large);
+  padding: v.$base-padding calc(#{v.$base_padding} * 1.5); // var(--spacing-medium) var(--spacing-large)
   background-color: var(--theme-background);
   min-height: 100vh;
 }
@@ -9,20 +9,20 @@
 .contentCard { 
   background-color: var(--theme-surface);
   border: 1px solid var(--theme-outline-variant);
-  border-radius: var(--border-radius-large);
+  border-radius: v.$base_border_radius; // var(--border-radius-large)
   box-shadow: var(--shadow-elevation-2);
 
   :global(.card-header) { 
     background-color: var(--theme-surface-container);
     color: var(--theme-on-surface-variant);
-    font-size: var(--font-size-large);
-    font-weight: var(--font-weight-semibold);
+    font-size: v.$font-size-large; // var(--font-size-large)
+    font-weight: v.$font-weight-semibold;
     border-bottom: 1px solid var(--theme-outline-variant);
-    padding: var(--spacing-medium) var(--spacing-large);
+    padding: v.$base-padding calc(#{v.$base_padding} * 1.5); // var(--spacing-medium) var(--spacing-large)
   }
 
   :global(.card-body) { 
-    padding: var(--spacing-large); 
+    padding: calc(#{v.$base_padding} * 1.5); // var(--spacing-large)
     color: var(--theme-on-surface);
   }
 }
@@ -36,15 +36,15 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: var(--spacing-medium) var(--spacing-large); 
+  padding: v.$base-padding calc(#{v.$base_padding} * 1.5); // var(--spacing-medium) var(--spacing-large)
   border-bottom: 1px solid var(--theme-outline-variant); 
   background-color: var(--theme-surface-container-lowest); 
-  gap: var(--spacing-medium);
+  gap: v.$base-padding; // var(--spacing-medium)
   flex-wrap: wrap;
 
   .filterSection {
     display: flex;
-    gap: var(--spacing-medium);
+    gap: v.$base-padding; // var(--spacing-medium)
     align-items: flex-end;
     flex-wrap: wrap;
     flex-grow: 1;
@@ -66,7 +66,7 @@
   align-items: center;
   .buttonIcon {
     vertical-align: middle;
-    margin-right: var(--spacing-xsmall);
+    margin-right: v.$gap-small; // var(--spacing-xsmall)
   }
 }
 
@@ -75,12 +75,12 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: var(--spacing-medium) 0; 
-  font-size: var(--font-size-small);
+  padding: v.$base-padding 0; // var(--spacing-medium)
+  font-size: v.$font-size-small; // var(--font-size-small)
   color: var(--theme-on-surface-variant);
   flex-wrap: wrap;
-  gap: var(--spacing-large);
-  margin-top: var(--spacing-large); 
+  gap: calc(#{v.$base_padding} * 1.5); // var(--spacing-large)
+  margin-top: calc(#{v.$base_padding} * 1.5); // var(--spacing-large)
 }
 
 .resultsText {
@@ -90,7 +90,7 @@
 
 .paginationControls { 
   display: flex;
-  gap: var(--spacing-xsmall);
+  gap: v.$gap-small; // var(--spacing-xsmall)
   margin-bottom: 0;
 
   :global(.page-item) {
@@ -109,7 +109,7 @@
     color: var(--theme-on-surface-variant);
     font-weight: var(--font-weight-medium);
     box-shadow: none !important;
-    gap: var(--spacing-xxsmall);
+    gap: calc(#{v.$gap-small} / 2); // var(--spacing-xxsmall)
     white-space: nowrap;
 
     &:hover {
@@ -134,15 +134,15 @@
 .pageInputControls {
   display: flex;
   align-items: center;
-  gap: var(--spacing-small);
+  gap: v.$gap-medium; // var(--spacing-small)
   color: var(--theme-on-surface-variant);
 
   .pageInput { 
     width: 60px;
     height: calc(var(--input-height-small, 32px) + 2px);
     text-align: center;
-    font-size: var(--font-size-small);
-    border-radius: var(--border-radius-small);
+    font-size: v.$font-size-small; // var(--font-size-small)
+    border-radius: v.$border_radius_small; // var(--border-radius-small)
   }
   .totalPagesText {
      color: var(--theme-on-surface-variant);
@@ -152,13 +152,13 @@
 .itemsPerPageSelect { 
   width: auto;
   height: calc(var(--input-height-small, 32px) + 2px);
-  font-size: var(--font-size-small);
-  border-radius: var(--border-radius-small);
+  font-size: v.$font-size-small; // var(--font-size-small)
+  border-radius: v.$border_radius_small; // var(--border-radius-small)
 }
 
 .dataTable {
   // margin-top: 0; // No longer needed as control bar is part of card structure
-  font-size: var(--font-size-small);
+  font-size: v.$font-size-small; // var(--font-size-small)
 
   :global(th) {
     background-color: var(--theme-surface-container-low);
@@ -179,8 +179,8 @@
 
 .noDataText {
   color: var(--theme-on-surface-variant);
-  // margin-top: var(--spacing-medium); // No longer needed if card body has padding
-  padding: var(--spacing-large) 0; // Add padding if card body padding is removed for table
+  // margin-top: v.$base-padding; // var(--spacing-medium) // No longer needed if card body has padding
+  padding: calc(#{v.$base_padding} * 1.5) 0; // var(--spacing-large) // Add padding if card body padding is removed for table
   font-style: italic;
   text-align: center;
 }

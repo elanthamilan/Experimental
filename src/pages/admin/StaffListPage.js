@@ -121,10 +121,13 @@ const StaffListPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Staff Management (Non-Academic)</h1>
+      </div>
       <StyledCard className={styles.contentCard}>
         <StyledCard.Header>
           {/* The page title is part of the Card Header here, not a separate H1 */}
-          <StyledCard.Title className={styles.cardTitle}>Staff Management (Non-Academic)</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>Staff Management (Non-Academic)</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
           <div className={styles.tableControls}>

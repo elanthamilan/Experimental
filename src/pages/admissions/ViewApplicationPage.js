@@ -14,6 +14,7 @@ import {
   StyledCol,  
   StyledListGroup,      // Added
   StyledListGroupItem,  // Added
+  StyledAlert,          // Added StyledAlert
 } from '../../components';
 import styles from './ViewApplicationPage.module.scss'; // Use new SCSS module
 
@@ -83,7 +84,7 @@ const ViewApplicationPage = () => {
   if (error && !application) { // Show error prominently if app not found
     return (
       <StyledContainer className={styles.pageContainer}>
-        <div className={styles.alertDanger} role="alert">{error}</div>
+        <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>
         <StyledButton variant="primary" onClick={() => navigate('/admissions/applications')}>Back to List</StyledButton>
       </StyledContainer>
     );
@@ -97,23 +98,16 @@ const ViewApplicationPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>View Application: {application.applicantName} - {application.id}</h1>
+      </div>
       <StyledCard className={styles.contentCard}> {/* Use contentCard */}
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>View Application: {application.applicantName} - {application.id}</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>View Application: {application.applicantName} - {application.id}</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
-          {error && (
-            <div className={styles.alertDanger} role="alert">
-              {error}
-              <button type="button" className={styles.closeButton} onClick={() => setError('')} aria-label="Close">&times;</button>
-            </div>
-          )}
-          {success && (
-            <div className={styles.alertSuccess} role="alert">
-              {success}
-              <button type="button" className={styles.closeButton} onClick={() => setSuccess('')} aria-label="Close">&times;</button>
-            </div>
-          )}
+          {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
+          {success && <StyledAlert variant="success" dismissible onClose={() => setSuccess('')}>{success}</StyledAlert>}
 
           <StyledRow className={styles.detailRow}>
             <StyledCol className="col-md-6"><strong className={styles.detailLabel}>Applicant:</strong> {application.applicantName}</StyledCol>

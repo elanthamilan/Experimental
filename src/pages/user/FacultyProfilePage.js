@@ -11,8 +11,10 @@ const FacultyProfilePage = () => {
   return (
     <StyledContainer className={styles.pageContainer}>
       {/* <h1>Faculty Profile: {facultyMember?.firstName} {facultyMember?.lastName}</h1> */}
-      <h1 className={styles.pageTitle}>Faculty Profile</h1>
-      <p className={styles.pageText}>Detailed faculty information will be displayed here.</p>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Faculty Profile</h1>
+        <p className={styles.pageDescription}>Detailed faculty information will be displayed here.</p>
+      </div>
     </StyledContainer>
   );
 };

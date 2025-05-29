@@ -21,9 +21,12 @@ const OrgHierarchyPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Organizational Hierarchy Management</h1>
+      </div>
       <StyledCard className={styles.contentCard}> {/* Changed to contentCard */}
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>Organizational Hierarchy Management</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>Organizational Hierarchy Management</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
           <div className={styles.headerActions}> {/* Use headerActions class */}

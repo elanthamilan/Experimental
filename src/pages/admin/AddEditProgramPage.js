@@ -98,9 +98,12 @@ const AddEditProgramPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>{isEditMode ? 'Edit Program' : 'Add New Program'}</h1>
+      </div>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Program' : 'Add New Program'}</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Program' : 'Add New Program'}</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
           {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}

@@ -156,9 +156,12 @@ const AddEditStudentPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>{isEditMode ? 'Edit Student Information' : 'Add New Student'}</h1>
+      </div>
       <StyledCard className={styles.formCard}>
-        <StyledCard.Header as="h4" className={styles.cardTitle}> {/* Use cardTitle from SCSS */}
-          {isEditMode ? 'Edit Student Information' : 'Add New Student'}
+        <StyledCard.Header> {/* Use cardTitle from SCSS */}
+          {/* {isEditMode ? 'Edit Student Information' : 'Add New Student'} */}
         </StyledCard.Header>
         <StyledCard.Body>
           {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}

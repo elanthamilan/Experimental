@@ -105,9 +105,12 @@ const ApplicationListPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Application Submissions</h1>
+      </div>
       <StyledCard className={styles.contentCard}>
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>Application Submissions</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>Application Submissions</StyledCard.Title> */}
         </StyledCard.Header>
 
         <div className={styles.tableControls}>

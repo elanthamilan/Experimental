@@ -93,10 +93,15 @@ const AppFormFieldListPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Application Form Fields Management</h1>
+        {/* Optional: Add a page description if appropriate */}
+        {/* <p className={styles.pageDescription}>Manage and configure application form fields.</p> */}
+      </div>
       <StyledCard className={styles.contentCard}>
-        <StyledCard.Header>
+        {/* <StyledCard.Header>
           <StyledCard.Title className={styles.cardTitle}>Application Form Fields Management</StyledCard.Title>
-        </StyledCard.Header>
+        </StyledCard.Header> */} {/* Title moved to pageHeader */}
 
         <div className={styles.tableControls}>
           <div className={styles.filterSection}>
