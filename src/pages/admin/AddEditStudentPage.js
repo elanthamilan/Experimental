@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // Added useMemo
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockStudents } from '../../data/mockStudents';
 // import { Form } from 'react-bootstrap'; // Form removed
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
+  // StyledContainer, // Removed duplicate
   StyledCard,
   StyledButton,
   FormField,
   StyledRow, // Added
   StyledCol,  // Added
+  StyledAlert, // Added StyledAlert
 } from '../../components';
 import styles from './AddEditStudentPage.module.scss'; // Use new SCSS module
 
@@ -18,7 +20,7 @@ const AddEditStudentPage = () => {
   const navigate = useNavigate();
   const isEditMode = Boolean(studentId);
 
-  const initialFormData = {
+  const initialFormData = useMemo(() => ({ // Wrapped in useMemo
     id: '',
     firstName: '',
     lastName: '',
@@ -48,9 +50,11 @@ const AddEditStudentPage = () => {
     enrollmentStatus: 'Enrolled',   // Default
     admissionDate: '',
     withdrawalDate: '',
-  };
+  }), []); // Empty dependency array as it's static
 
   const [formData, setFormData] = useState(initialFormData);
+  const [error, setError] = useState(''); // For error messages
+  const [successMessage, setSuccessMessage] = useState(''); // For success messages
 
   useEffect(() => {
     if (isEditMode && studentId) {
@@ -81,7 +85,7 @@ const AddEditStudentPage = () => {
         id: `student${String(mockStudents.length + 1).padStart(3, '0')}`
       });
     }
-  }, [isEditMode, studentId, navigate]);
+  }, [isEditMode, studentId, navigate, initialFormData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -135,7 +139,9 @@ const AddEditStudentPage = () => {
 
 
     console.log("Form Data Submitted (structured):", studentDataToSave);
-    alert(`Student data for "${studentDataToSave.firstName} ${studentDataToSave.lastName}" ${isEditMode ? 'updated' : 'added'} (mock).`);
+    // alert(`Student data for "${studentDataToSave.firstName} ${studentDataToSave.lastName}" ${isEditMode ? 'updated' : 'added'} (mock).`);
+    setSuccessMessage(`Student data for "${studentDataToSave.firstName} ${studentDataToSave.lastName}" ${isEditMode ? 'updated' : 'added'} successfully (mock).`);
+    setError(''); // Clear any previous errors
 
     if (isEditMode) {
       const index = mockStudents.findIndex(s => s.id === studentId);
@@ -155,6 +161,8 @@ const AddEditStudentPage = () => {
           {isEditMode ? 'Edit Student Information' : 'Add New Student'}
         </StyledCard.Header>
         <StyledCard.Body>
+          {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
+          {successMessage && <StyledAlert variant="success" dismissible onClose={() => setSuccessMessage('')}>{successMessage}</StyledAlert>}
           <form onSubmit={handleSubmit}> {/* Keep react-bootstrap Form as main wrapper for FormField */}
             <h5 className={styles.sectionTitle}>Personal Details</h5> {/* Styled section title */}
             <StyledRow className="mb-3">

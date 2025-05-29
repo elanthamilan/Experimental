@@ -10,11 +10,12 @@ import {
   StyledFormLabel,
   StyledFormSelect,
   FileUploadDropzone,
-  FormField
+  FormField,
+  ProductTableRow, // Added ProductTableRow to main imports
 } from '../components';
 
 // Import specific molecules that aren't in main export
-import ProductTableRow from '../components/molecules/ProductTableRow';
+// import ProductTableRow from '../components/molecules/ProductTableRow'; // Removed direct import
 
 const ComponentPreviewPage = () => {
   // Mock handlers for ProductTableRow

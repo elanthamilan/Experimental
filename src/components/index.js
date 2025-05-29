@@ -49,6 +49,7 @@ export { default as FileUploadDropzone } from './molecules/FileUploadDropzone';
 export { default as StatsCard } from './molecules/StatsCard';
 export { default as ThemeDrawer } from './molecules/ThemeDrawer';
 export { default as Toolbar } from './molecules/Toolbar';
+export { default as ProductTableRow } from './molecules/ProductTableRow'; // Added ProductTableRow
 
 // ===== ORGANISMS =====
 // Complex components made of molecules and atoms

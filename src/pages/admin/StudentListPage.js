@@ -46,7 +46,7 @@ const StudentListPage = () => {
   const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentTableData = filteredStudents.slice(indexOfFirstItem, indexOfLastItem);
+  // const currentTableData = filteredStudents.slice(indexOfFirstItem, indexOfLastItem); // Removed unused variable
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -175,7 +175,8 @@ const StudentListPage = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredStudents.map((student) => (
+          {/* Map directly over the sliced array */}
+          {filteredStudents.slice(indexOfFirstItem, indexOfLastItem).map((student) => (
             <tr key={student.id}>
               <td>{student.id}</td>
               <td>{`${student.firstName} ${student.lastName}`}</td>

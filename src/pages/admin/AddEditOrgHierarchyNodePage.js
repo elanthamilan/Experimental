@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // Added useMemo
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockOrgHierarchyNodes } from '../../data/mockOrgHierarchy';
 // import { Form } from 'react-bootstrap'; // Form removed
 import {
   StyledContainer,
+  // StyledContainer, // Removed duplicate
   StyledCard,
   StyledButton,
   FormField,
   StyledRow, // Added
   StyledCol,  // Added
+  StyledAlert, // Added StyledAlert
 } from '../../components';
 import styles from './AddEditOrgHierarchyNodePage.module.scss'; // Use new SCSS module
 
@@ -17,12 +19,12 @@ const AddEditOrgHierarchyNodePage = () => {
   const navigate = useNavigate();
   const isEditMode = Boolean(nodeId);
 
-  const initialFormData = {
+  const initialFormData = useMemo(() => ({ // Wrapped in useMemo
     id: '',
     name: '',
     type: '',
     parentId: '', // Stores parent node ID
-  };
+  }), []); // Empty dependency array as it's static
 
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState('');
@@ -44,7 +46,7 @@ const AddEditOrgHierarchyNodePage = () => {
       const newId = `node${String(mockOrgHierarchyNodes.length + 1).padStart(3, '0')}`;
       setFormData({ ...initialFormData, id: newId });
     }
-  }, [nodeId, isEditMode, navigate]);
+  }, [nodeId, isEditMode, navigate, initialFormData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -104,8 +106,8 @@ const AddEditOrgHierarchyNodePage = () => {
           <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Hierarchy Node' : 'Add New Hierarchy Node'}</StyledCard.Title>
         </StyledCard.Header>
         <StyledCard.Body>
-          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
-          {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
+          {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
+          {successMessage && <StyledAlert variant="success" dismissible onClose={() => setSuccessMessage('')}>{successMessage}</StyledAlert>}
           <form onSubmit={handleSubmit}>
             <StyledRow className="mb-3">
               <StyledCol className="col-md-6">

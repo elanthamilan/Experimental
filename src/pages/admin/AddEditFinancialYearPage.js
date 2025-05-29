@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // Added useMemo
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockFinancialYears } from '../../data/mockFinancialYears';
 // import { Form } from 'react-bootstrap'; // Form removed
 import {
   StyledContainer,
+  // StyledContainer, // Removed duplicate
   StyledCard,
   StyledButton,
   FormField,
   StyledRow, // Added
   StyledCol,  // Added
+  StyledAlert, // Added StyledAlert
 } from '../../components';
 import styles from './AddEditFinancialYearPage.module.scss'; // Use new SCSS module
 
@@ -17,13 +19,13 @@ const AddEditFinancialYearPage = () => {
   const navigate = useNavigate();
   const isEditMode = Boolean(financialYearId);
 
-  const initialFormData = {
+  const initialFormData = useMemo(() => ({ // Wrapped in useMemo
     id: '',
     name: '',
     startDate: '',
     endDate: '',
     status: 'Upcoming', // Default status
-  };
+  }), []); // Empty dependency array as it's static
 
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState('');
@@ -42,7 +44,7 @@ const AddEditFinancialYearPage = () => {
       const newId = `fy${String(mockFinancialYears.length + 1).padStart(4, '0')}`; // e.g., fy0004
       setFormData({ ...initialFormData, id: newId });
     }
-  }, [financialYearId, isEditMode, navigate]);
+  }, [financialYearId, isEditMode, navigate, initialFormData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -96,8 +98,8 @@ const AddEditFinancialYearPage = () => {
           <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Financial Year' : 'Add New Financial Year'}</StyledCard.Title>
         </StyledCard.Header>
         <StyledCard.Body>
-          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
-          {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
+          {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
+          {successMessage && <StyledAlert variant="success" dismissible onClose={() => setSuccessMessage('')}>{successMessage}</StyledAlert>}
           <form onSubmit={handleSubmit}>
             <StyledRow className="mb-3">
               <StyledCol className="col-md-6">

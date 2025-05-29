@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // Added useMemo
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockStaff } from '../../data/mockStaff';
 import { mockDepartments } from '../../data/mockDepartments'; // Using this for department dropdown
 // import { Form } from 'react-bootstrap'; // Form removed
 import {
   StyledContainer,
+  // StyledContainer, // Removed duplicate
   StyledCard,
   StyledButton,
   FormField,
   StyledRow, // Added
   StyledCol,  // Added
+  StyledAlert, // Added StyledAlert
 } from '../../components';
 import styles from './AddEditStaffPage.module.scss'; // Use new SCSS module
 
@@ -18,7 +20,7 @@ const AddEditStaffPage = () => {
   const navigate = useNavigate();
   const isEditMode = Boolean(staffId);
 
-  const initialFormData = {
+  const initialFormData = useMemo(() => ({ // Wrapped in useMemo
     id: '',
     firstName: '',
     lastName: '',
@@ -29,7 +31,7 @@ const AddEditStaffPage = () => {
     phone: '',
     officeLocation: '',
     status: 'Active', // Default status
-  };
+  }), []); // Empty dependency array as it's static
 
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState('');
@@ -52,7 +54,7 @@ const AddEditStaffPage = () => {
         id: newId,
       });
     }
-  }, [staffId, isEditMode, navigate]);
+  }, [staffId, isEditMode, navigate, initialFormData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -110,8 +112,8 @@ const AddEditStaffPage = () => {
           <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Staff Member' : 'Add New Staff Member'}</StyledCard.Title>
         </StyledCard.Header>
         <StyledCard.Body>
-          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
-          {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
+          {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
+          {successMessage && <StyledAlert variant="success" dismissible onClose={() => setSuccessMessage('')}>{successMessage}</StyledAlert>}
           <form onSubmit={handleSubmit}>
             <StyledRow className="mb-3">
               <StyledCol className="col-md-4">

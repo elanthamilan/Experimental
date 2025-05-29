@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react'; // Removed useEffect
 import { useNavigate } from 'react-router-dom';
 import { mockDepartments } from '../../data/mockDepartments';
 import { mockFaculty } from '../../data/mockFaculty';

@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockPrograms } from '../../data/mockPrograms'; // Assuming mockPrograms is an array that can be mutated
 // import { Row, Col } from 'react-bootstrap'; // Removed
-import StyledButton from '../../components/atoms/StyledButton';
-import StyledCard from '../../components/atoms/StyledCard';
-import StyledContainer from '../../components/atoms/StyledContainer';
-import FormField from '../../components/molecules/FormField';
-import { StyledRow, StyledCol } from '../../components'; // Added
+import {
+  StyledButton,
+  StyledCard,
+  StyledContainer,
+  FormField,
+  StyledRow,
+  StyledCol,
+  StyledAlert, // Added StyledAlert
+} from '../../components';
 import styles from './AddEditProgramPage.module.scss'; // Use new SCSS module
 
 const AddEditProgramPage = () => {
@@ -24,6 +28,7 @@ const AddEditProgramPage = () => {
     duration: '',
   });
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); // Added for success messages
 
   useEffect(() => {
     if (isEditMode) {
@@ -76,17 +81,19 @@ const AddEditProgramPage = () => {
       const index = mockPrograms.findIndex(p => p.id === programId);
       if (index !== -1) {
         mockPrograms[index] = programData;
-        alert('Program data updated (mock).');
+        setSuccessMessage('Program data updated successfully (mock).');
       } else {
         // This case should ideally not happen if useEffect loaded data correctly
-        alert('Error: Program not found for update.');
+        setError('Error: Program not found for update.');
         return;
       }
     } else {
       mockPrograms.push(programData);
-      alert('Program added (mock).');
+      setSuccessMessage('Program added successfully (mock).');
     }
-    navigate('/admin/programs');
+    setTimeout(() => { // Added setTimeout for navigation after message
+      navigate('/admin/programs');
+    }, 1500);
   };
 
   return (
@@ -96,11 +103,8 @@ const AddEditProgramPage = () => {
           <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Program' : 'Add New Program'}</StyledCard.Title>
         </StyledCard.Header>
         <StyledCard.Body>
-          {error && (
-            <div className={styles.alertDanger} role="alert">
-              {error}
-            </div>
-          )}
+          {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
+          {successMessage && <StyledAlert variant="success" dismissible onClose={() => setSuccessMessage('')}>{successMessage}</StyledAlert>}
           <form onSubmit={handleSubmit}>
             <StyledRow className="mb-3"> {/* Ensure Row has margin if FormFields within don't */}
               <StyledCol className="col-md-6">

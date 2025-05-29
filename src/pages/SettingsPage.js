@@ -91,6 +91,8 @@ const SettingsPage = () => {
     },
     []
   );
+  // Debounce is stable, applyCustomColorsLive is memoized. ESLint may not understand the stability of debounce's return value.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedApplyCustomColors = useCallback(debounce(applyCustomColorsLive, 300), [applyCustomColorsLive]);
 
   useEffect(() => {

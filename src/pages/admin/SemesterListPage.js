@@ -11,7 +11,7 @@ import {
   StyledFormControl,
   StyledFormSelect,
   StyledPagination, // Added
-  // StyledBadge, // If status needs specific badge styling beyond text
+  StyledBadge, // Added StyledBadge
 } from '../../components';
 import styles from './SemesterListPage.module.scss';
 
@@ -27,8 +27,23 @@ const SemesterListPage = () => {
 
   useEffect(() => {
     const uniqueStatuses = ['All', ...new Set(mockSemesters.map(s => s.status).filter(Boolean))];
-    setStatusOptions(uniqueStatuses);
+    setStatusOptions(uniqueStatuses.map(status => ({ value: status === 'All' ? '' : status, label: status }))); // Ensure options are in {value, label} format
   }, []);
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'Active':
+      case 'Registration Open':
+        return <StyledBadge variant="success">{status}</StyledBadge>;
+      case 'Upcoming':
+        return <StyledBadge variant="warning">{status}</StyledBadge>;
+      case 'Completed':
+      case 'Archived':
+        return <StyledBadge variant="secondary">{status}</StyledBadge>;
+      default:
+        return <StyledBadge variant="light">{status}</StyledBadge>;
+    }
+  };
 
   const filteredSemesters = mockSemesters.filter(semester => {
     const nameMatch = semester.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -142,8 +157,7 @@ const SemesterListPage = () => {
                     <td>{semester.name}</td>
                     <td>{semester.startDate}</td>
                     <td>{semester.endDate}</td>
-                    <td>{semester.status}</td> 
-                    {/* If StyledBadge is needed for status, import and use it here */}
+                    <td>{getStatusBadge(semester.status)}</td> {/* Used getStatusBadge here */}
                     <td>
                       <StyledButton
                         variant="outline-primary"
