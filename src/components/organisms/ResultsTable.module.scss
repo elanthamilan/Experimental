@@ -62,16 +62,16 @@ $switch-thumb-bg: v.$outline-color; // Off-state thumb
 $switch-label-color: v.$on-surface-color; // Label text color
 $switch-label-font-size: v.$font-size-base;
 
-// Action Dropdown (already mostly M3 aligned)
-$action-dropdown-bg: v.$primary-container-color;
-$action-dropdown-border: v.$base-border-width solid v.$primary-color;
+// Action Dropdown
+$action-dropdown-bg: v.$surface-color; // Changed from v.$primary-container-color
+$action-dropdown-border: v.$base-border-width solid v.$outline-color; // Changed from v.$primary-color
 $action-dropdown-radius: v.$base-border-radius;
 $action-dropdown-padding: v.$button-padding;
 $action-dropdown-height: v.$button-height;
-$action-dropdown-text-color: v.$on-primary-container-color;
+$action-dropdown-text-color: v.$primary-color; // Changed from v.$on-primary-container-color
 $action-dropdown-font-weight: v.$font-weight-semibold;
 $action-dropdown-font-size: v.$font-size-base;
-$action-dropdown-chevron-color: v.$on-primary-container-color;
+$action-dropdown-chevron-color: v.$primary-color; // Changed from v.$on-primary-container-color
 
 // Table Header Variables
 $table-header-bg: v.$surface-container-color; // Use surface-container for header
@@ -324,8 +324,8 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
         border-width: v.$base-border-width;
       }
        &:hover, &:focus, &:active {
-         background-color: v.$primary-container-hover-bg !important;
-         border-color: v.$primary-color !important; // Ensure border color also uses !important if needed
+         background-color: color.adjust(v.$surface-fallback, $alpha: -0.05) !important; // Adjusted hover
+         border-color: v.$primary-color !important; 
          color: $action-dropdown-text-color !important;
          box-shadow: none !important;
        }
@@ -333,27 +333,27 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
   }
 
   .addButton {
-    height: v.$button-height;
-    background-color: v.$button-primary-bg;
-    border: v.$primary-button-border;
-    color: v.$button-primary-text;
-    padding: v.$button-padding;
-    border-radius: v.$base-border-radius;
-    font-family: v.$font-family-body; // Changed
-    font-weight: v.$font-weight-semibold;
-    font-size: v.$font-size-base;
-    line-height: v.$button-line-height;
+    // height: v.$button-height; // Covered by StyledButton
+    // background-color: v.$button-primary-bg; // Covered by StyledButton variant="primary"
+    // border: v.$primary-button-border; // Covered by StyledButton variant="primary"
+    // color: v.$button-primary-text; // Covered by StyledButton variant="primary"
+    // padding: v.$button-padding; // Covered by StyledButton
+    // border-radius: v.$base-border-radius; // Covered by StyledButton
+    // font-family: v.$font-family-body; // Covered by StyledButton
+    // font-weight: v.$font-weight-semibold; // Covered by StyledButton
+    // font-size: v.$font-size-base; // Covered by StyledButton
+    // line-height: v.$button-line-height; // Covered by StyledButton
     display: inline-flex;
     align-items: center;
-    gap: v.$button-icon-gap;
+    gap: v.$button-icon-gap; // Keep custom gap if needed, or let StyledButton handle it
 
     :global(.material-symbols-outlined) {
-      font-size: 18px;
+      font-size: 18px; // This can be specific if StyledButton doesn't handle icon size within it
     }
 
-    &:hover {
-      background-color: v.$button-primary-hover-bg;
-    }
+    // &:hover { // Covered by StyledButton variant="primary"
+    //   background-color: v.$button-primary-hover-bg;
+    // }
   }
 }
 

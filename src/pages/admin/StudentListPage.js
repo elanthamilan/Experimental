@@ -7,10 +7,11 @@ import {
   StyledContainer,
   StyledTable,
   StyledButton,
-  FormField,
+  // FormField, // No longer directly used
   StyledFormControl, // For page input
   StyledFormSelect,  // For items per page
   StyledPagination, // Added
+  ListControlsToolbar, // Added
 } from '../../components';
 import styles from './StudentListPage.module.scss';
 
@@ -114,52 +115,35 @@ const StudentListPage = () => {
         <h1 className={styles.pageTitle}>Student Management</h1>
       </div>
 
-      <div className={styles.tableControls}>
-        <div className={styles.filterSection}>
-          <div className={styles.searchFilterItem}>
-            <FormField
-              controlId="searchTerm"
-              label="Search by Name/Email"
-              type="text"
-              placeholder="Enter name or email..."
-              value={searchTerm}
-              onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1);}}
-            />
-          </div>
-          <div className={styles.dropdownFilterItem}>
-            <FormField
-              controlId="statusFilter"
-              label="Filter by Enrollment Status"
-              as="select"
-              value={statusFilter}
-              onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1);}}
-              options={statusOptions.map(status => ({
-                value: status === 'All' ? '' : status,
-                label: status
-              }))}
-            />
-          </div>
-          <div className={styles.dropdownFilterItem}>
-            <FormField
-              controlId="majorFilter"
-              label="Filter by Major"
-              as="select"
-              value={majorFilter}
-              onChange={(e) => { setMajorFilter(e.target.value); setCurrentPage(1);}}
-              options={majorOptions.map(major => ({
-                value: major === 'All' ? '' : major,
-                label: major
-              }))}
-            />
-          </div>
-        </div>
-        <div className={styles.actionsSection}>
-          <StyledButton variant="primary" onClick={() => navigate('/students/new')} className={styles.addButton}>
-            <span className={`material-symbols-outlined ${styles.buttonIcon}`}>add</span>
-            Add New Student
-          </StyledButton>
-        </div>
-      </div>
+      <ListControlsToolbar
+        searchTerm={searchTerm}
+        onSearchChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1);}}
+        searchPlaceholder="Enter name or email..."
+        searchLabel="Search by Name/Email"
+        filters={[
+          {
+            controlId: "statusFilter",
+            label: "Filter by Enrollment Status",
+            value: statusFilter,
+            onChange: (e) => { setStatusFilter(e.target.value); setCurrentPage(1);},
+            options: statusOptions.map(status => ({ value: status === 'All' ? '' : status, label: status })),
+            type: 'select',
+          },
+          {
+            controlId: "majorFilter",
+            label: "Filter by Major",
+            value: majorFilter,
+            onChange: (e) => { setMajorFilter(e.target.value); setCurrentPage(1);},
+            options: majorOptions.map(major => ({ value: major === 'All' ? '' : major, label: major })),
+            type: 'select',
+          }
+        ]}
+        addAction={{
+          label: "Add New Student",
+          onClick: () => navigate('/students/new'),
+          icon: "add",
+        }}
+      />
 
       <StyledTable striped bordered hover responsive="sm" className={styles.dataTable}>
         <thead>

@@ -8,10 +8,11 @@ import {
   StyledTable,
   StyledCard,
   StyledButton,
-  FormField,
+  // FormField, // No longer directly used
   StyledFormControl,
   StyledFormSelect,
   StyledPagination, // Added
+  ListControlsToolbar, // Added
 } from '../../components';
 import styles from './DepartmentListPage.module.scss';
 
@@ -103,38 +104,18 @@ const DepartmentListPage = () => {
           {/* <StyledCard.Title className={styles.cardTitle}>Department Management</StyledCard.Title> */}
         </StyledCard.Header>
 
-        <div className={styles.tableControls}>
-          <div className={styles.filterSection}>
-            <div className={styles.searchFilterItem}>
-              <FormField
-                controlId="searchTerm"
-                label="Search Department"
-                type="text"
-                placeholder="ID, Name, or Head..."
-                value={searchTerm}
-                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-              />
-            </div>
-            {/* Example for another filter if needed 
-            <div className={styles.dropdownFilterItem}>
-              <FormField
-                controlId="headFilter"
-                label="Filter by Head"
-                as="select"
-                value={headFilter}
-                onChange={(e) => { setHeadFilter(e.target.value); setCurrentPage(1); }}
-                options={headOptions.map(opt => ({ value: opt === 'All' ? '' : opt, label: opt }))}
-              />
-            </div>
-            */}
-          </div>
-          <div className={styles.actionsSection}>
-            <StyledButton variant="primary" onClick={() => navigate('/admin/masterdata/departments/new')} className={styles.addButton}>
-              <span className={`material-symbols-outlined ${styles.buttonIcon}`}>add</span>
-              Add New Department
-            </StyledButton>
-          </div>
-        </div>
+        <ListControlsToolbar
+          searchTerm={searchTerm}
+          onSearchChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+          searchPlaceholder="ID, Name, or Head..."
+          searchLabel="Search Department"
+          filters={[] /* No active dropdown filters for this page currently */}
+          addAction={{
+            label: "Add New Department",
+            onClick: () => navigate('/admin/masterdata/departments/new'),
+            icon: "add",
+          }}
+        />
         
         <StyledCard.Body>
           {/* Removed headerActions div */}

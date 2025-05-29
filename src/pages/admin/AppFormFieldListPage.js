@@ -8,10 +8,11 @@ import {
   StyledCard,
   StyledButton,
   StyledBadge,
-  FormField,
+  // FormField, // No longer directly used
   StyledFormControl,
   StyledFormSelect,
   StyledPagination, // Added
+  ListControlsToolbar, // Added
 } from '../../components';
 import styles from './AppFormFieldListPage.module.scss';
 
@@ -103,46 +104,35 @@ const AppFormFieldListPage = () => {
           <StyledCard.Title className={styles.cardTitle}>Application Form Fields Management</StyledCard.Title>
         </StyledCard.Header> */} {/* Title moved to pageHeader */}
 
-        <div className={styles.tableControls}>
-          <div className={styles.filterSection}>
-            <div className={styles.searchFilterItem}>
-              <FormField
-                controlId="searchTerm"
-                label="Search by Label"
-                type="text"
-                placeholder="Enter field label..."
-                value={searchTerm}
-                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-              />
-            </div>
-            <div className={styles.dropdownFilterItem}>
-              <FormField
-                controlId="typeFilter"
-                label="Field Type"
-                as="select"
-                value={typeFilter}
-                onChange={(e) => { setTypeFilter(e.target.value); setCurrentPage(1); }}
-                options={typeOptions}
-              />
-            </div>
-            <div className={styles.dropdownFilterItem}>
-              <FormField
-                controlId="requiredFilter"
-                label="Required"
-                as="select"
-                value={requiredFilter}
-                onChange={(e) => { setRequiredFilter(e.target.value); setCurrentPage(1); }}
-                options={requiredOptions}
-              />
-            </div>
-          </div>
-          <div className={styles.actionsSection}>
-            <StyledButton variant="primary" onClick={() => navigate('/admin/admissions/formfields/new')} className={styles.addButton}>
-              <span className={`material-symbols-outlined ${styles.buttonIcon}`}>add</span>
-              Add New Field
-            </StyledButton>
-          </div>
-        </div>
+        <ListControlsToolbar
+          searchTerm={searchTerm}
+          onSearchChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+          searchPlaceholder="Enter field label..."
+          searchLabel="Search by Label"
+          filters={[
+            {
+              controlId: "typeFilter",
+              label: "Field Type",
+              value: typeFilter,
+              onChange: (e) => { setTypeFilter(e.target.value); setCurrentPage(1); },
+              options: typeOptions,
+              type: 'select',
+            },
+            {
+              controlId: "requiredFilter",
+              label: "Required",
+              value: requiredFilter,
+              onChange: (e) => { setRequiredFilter(e.target.value); setCurrentPage(1); },
+              options: requiredOptions,
+              type: 'select',
+            }
+          ]}
+          addAction={{
+            label: "Add New Field",
+            onClick: () => navigate('/admin/admissions/formfields/new'),
+            icon: "add",
+          }}
+        />
         
         <StyledCard.Body>
           {/* Removed headerActions div */}

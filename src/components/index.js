@@ -50,6 +50,7 @@ export { default as StatsCard } from './molecules/StatsCard';
 export { default as ThemeDrawer } from './molecules/ThemeDrawer';
 export { default as Toolbar } from './molecules/Toolbar';
 export { default as ProductTableRow } from './molecules/ProductTableRow'; // Added ProductTableRow
+export { default as ListControlsToolbar } from './molecules/ListControlsToolbar'; // Added ListControlsToolbar
 
 // ===== ORGANISMS =====
 // Complex components made of molecules and atoms

@@ -8,10 +8,11 @@ import {
   StyledCard,
   StyledButton,
   StyledBadge,
-  FormField,
+  // FormField, // No longer directly used
   StyledFormControl,
   StyledFormSelect,
   StyledPagination, // Added
+  ListControlsToolbar, // Added
 } from '../../components';
 import styles from './ApplicationListPage.module.scss';
 
@@ -113,45 +114,23 @@ const ApplicationListPage = () => {
           {/* <StyledCard.Title className={styles.cardTitle}>Application Submissions</StyledCard.Title> */}
         </StyledCard.Header>
 
-        <div className={styles.tableControls}>
-          <div className={styles.filterSection}>
-            <div className={styles.searchFilterItem}>
-              <FormField
-                controlId="searchTerm"
-                label="Search Applications"
-                type="text"
-                placeholder="Applicant, Program, ID..."
-                value={searchTerm}
-                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-              />
-            </div>
-            <div className={styles.dropdownFilterItem}>
-              <FormField
-                controlId="statusFilter"
-                label="Status"
-                as="select"
-                value={statusFilter}
-                onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                options={statusOptions}
-              />
-            </div>
-            {/* Add Program Filter if needed
-            <div className={styles.dropdownFilterItem}>
-              <FormField
-                controlId="programFilter"
-                label="Program"
-                as="select"
-                value={programFilter}
-                onChange={(e) => { setProgramFilter(e.target.value); setCurrentPage(1); }}
-                options={programOptions}
-              />
-            </div>
-            */}
-          </div>
-          <div className={styles.actionsSection}>
-            {/* Add button can be placed here if needed in future */}
-          </div>
-        </div>
+        <ListControlsToolbar
+          searchTerm={searchTerm}
+          onSearchChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+          searchPlaceholder="Applicant, Program, ID..."
+          searchLabel="Search Applications"
+          filters={[
+            {
+              controlId: "statusFilter",
+              label: "Status",
+              value: statusFilter,
+              onChange: (e) => { setStatusFilter(e.target.value); setCurrentPage(1); },
+              options: statusOptions,
+              type: 'select',
+            }
+          ]}
+          // No addAction needed for this page as per current UI
+        />
         
         <StyledCard.Body>
           {filteredApplications.length === 0 ? (

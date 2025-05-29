@@ -8,10 +8,11 @@ import {
   StyledCard,
   StyledButton,
   StyledBadge, // Added StyledBadge
-  FormField,
+  // FormField, // No longer directly used
   StyledFormControl,
   StyledFormSelect,
   StyledPagination, // Added
+  ListControlsToolbar, // Added
 } from '../../components';
 import styles from './FinancialYearListPage.module.scss';
 
@@ -100,36 +101,27 @@ const FinancialYearListPage = () => {
           {/* <StyledCard.Title className={styles.cardTitle}>Financial Year Management</StyledCard.Title> */}
         </StyledCard.Header>
 
-        <div className={styles.tableControls}>
-          <div className={styles.filterSection}>
-            <div className={styles.searchFilterItem}>
-              <FormField
-                controlId="searchTerm"
-                label="Search Financial Year"
-                type="text"
-                placeholder="ID or Name..."
-                value={searchTerm}
-                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-              />
-            </div>
-            <div className={styles.dropdownFilterItem}>
-              <FormField
-                controlId="statusFilter"
-                label="Status"
-                as="select"
-                value={statusFilter}
-                onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                options={statusOptions.map(status => ({ value: status === 'All' ? '' : status, label: status }))}
-              />
-            </div>
-          </div>
-          <div className={styles.actionsSection}>
-            <StyledButton variant="primary" onClick={() => navigate('/admin/financialyears/new')} className={styles.addButton}>
-              <span className={`material-symbols-outlined ${styles.buttonIcon}`}>add</span>
-              Add New Financial Year
-            </StyledButton>
-          </div>
-        </div>
+        <ListControlsToolbar
+          searchTerm={searchTerm}
+          onSearchChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+          searchPlaceholder="ID or Name..."
+          searchLabel="Search Financial Year"
+          filters={[
+            {
+              controlId: "statusFilter",
+              label: "Status",
+              value: statusFilter,
+              onChange: (e) => { setStatusFilter(e.target.value); setCurrentPage(1); },
+              options: statusOptions.map(status => ({ value: status === 'All' ? '' : status, label: status })),
+              type: 'select',
+            }
+          ]}
+          addAction={{
+            label: "Add New Financial Year",
+            onClick: () => navigate('/admin/financialyears/new'),
+            icon: "add",
+          }}
+        />
         
         <StyledCard.Body>
           {/* Removed headerActions div */}

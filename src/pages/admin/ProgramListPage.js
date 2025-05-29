@@ -7,10 +7,11 @@ import {
   StyledTable,
   StyledCard,
   StyledButton,
-  FormField,
+  // FormField, // No longer directly used
   StyledFormControl,
   StyledFormSelect,
   StyledPagination, // Added
+  ListControlsToolbar, // Added
 } from '../../components';
 import styles from './ProgramListPage.module.scss';
 
@@ -99,46 +100,35 @@ const ProgramListPage = () => {
           {/* <StyledCard.Title className={styles.cardTitle}>Program Management</StyledCard.Title> */}
         </StyledCard.Header>
 
-        <div className={styles.tableControls}>
-          <div className={styles.filterSection}>
-            <div className={styles.searchFilterItem}>
-              <FormField
-                controlId="searchTerm"
-                label="Search Program"
-                type="text"
-                placeholder="ID or Name..."
-                value={searchTerm}
-                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-              />
-            </div>
-            <div className={styles.dropdownFilterItem}>
-              <FormField
-                controlId="departmentFilter"
-                label="Department"
-                as="select"
-                value={departmentFilter}
-                onChange={(e) => { setDepartmentFilter(e.target.value); setCurrentPage(1); }}
-                options={departmentOptions.map(dept => ({ value: dept === 'All' ? '' : dept, label: dept }))}
-              />
-            </div>
-            <div className={styles.dropdownFilterItem}>
-              <FormField
-                controlId="degreeLevelFilter"
-                label="Degree Level"
-                as="select"
-                value={degreeLevelFilter}
-                onChange={(e) => { setDegreeLevelFilter(e.target.value); setCurrentPage(1); }}
-                options={degreeLevelOptions.map(level => ({ value: level === 'All' ? '' : level, label: level }))}
-              />
-            </div>
-          </div>
-          <div className={styles.actionsSection}>
-            <StyledButton variant="primary" onClick={() => navigate('/admin/programs/new')} className={styles.addButton}>
-              <span className={`material-symbols-outlined ${styles.buttonIcon}`}>add</span>
-              Add New Program
-            </StyledButton>
-          </div>
-        </div>
+        <ListControlsToolbar
+          searchTerm={searchTerm}
+          onSearchChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+          searchPlaceholder="ID or Name..."
+          searchLabel="Search Program"
+          filters={[
+            {
+              controlId: "departmentFilter",
+              label: "Department",
+              value: departmentFilter,
+              onChange: (e) => { setDepartmentFilter(e.target.value); setCurrentPage(1); },
+              options: departmentOptions.map(dept => ({ value: dept === 'All' ? '' : dept, label: dept })),
+              type: 'select',
+            },
+            {
+              controlId: "degreeLevelFilter",
+              label: "Degree Level",
+              value: degreeLevelFilter,
+              onChange: (e) => { setDegreeLevelFilter(e.target.value); setCurrentPage(1); },
+              options: degreeLevelOptions.map(level => ({ value: level === 'All' ? '' : level, label: level })),
+              type: 'select',
+            }
+          ]}
+          addAction={{
+            label: "Add New Program",
+            onClick: () => navigate('/admin/programs/new'),
+            icon: "add",
+          }}
+        />
 
         <StyledCard.Body>
           {/* Removed headerActions div as button is now in tableControls */}

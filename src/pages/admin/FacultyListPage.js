@@ -7,10 +7,11 @@ import {
   StyledTable,
   StyledCard,
   StyledButton,
-  FormField, // Added FormField
+  // FormField, // No longer directly used
   StyledFormControl, // Added StyledFormControl
   StyledFormSelect,  // Added StyledFormSelect
   StyledPagination, // Added
+  ListControlsToolbar, // Added ListControlsToolbar
   // StyledBadge, // Not used in this version of FacultyList as no status is shown
 } from '../../components';
 import styles from './FacultyListPage.module.scss';
@@ -90,52 +91,42 @@ const FacultyListPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
-      {/* Page Title is part of StyledCard.Header in this layout */}
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Faculty Management</h1>
+      </div>
       <StyledCard className={styles.contentCard}>
         <StyledCard.Header>
-          <StyledCard.Title className={styles.pageTitle}>Faculty Management</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.pageTitle}>Faculty Management</StyledCard.Title> */}
         </StyledCard.Header>
-        {/* Control Bar is now inside StyledCard.Body or just before it, but outside Header */}
-        <div className={styles.tableControls}>
-            <div className={styles.filterSection}>
-              <div className={styles.searchFilterItem}>
-                <FormField
-                  controlId="searchTerm"
-                  label="Search Faculty"
-                  type="text"
-                  placeholder="Name or email..."
-                  value={searchTerm}
-                  onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                />
-              </div>
-              <div className={styles.dropdownFilterItem}>
-                <FormField
-                  controlId="departmentFilter"
-                  label="Department"
-                  as="select"
-                  value={departmentFilter}
-                  onChange={(e) => { setDepartmentFilter(e.target.value); setCurrentPage(1); }}
-                  options={departmentOptions.map(dept => ({ value: dept === 'All' ? '' : dept, label: dept }))}
-                />
-              </div>
-              <div className={styles.dropdownFilterItem}>
-                <FormField
-                  controlId="titleFilter"
-                  label="Title/Role"
-                  as="select" // Changed to select for consistency, can be text if free-form search is preferred
-                  value={titleFilter}
-                  onChange={(e) => { setTitleFilter(e.target.value); setCurrentPage(1); }}
-                  options={titleOptions.map(title => ({ value: title === 'All' ? '' : title, label: title }))}
-                />
-              </div>
-            </div>
-            <div className={styles.actionsSection}>
-              <StyledButton variant="primary" onClick={() => navigate('/admin/faculty/new')} className={styles.addButton}>
-                <span className={`material-symbols-outlined ${styles.buttonIcon}`}>add</span>
-                Add New Faculty
-              </StyledButton>
-            </div>
-          </div>
+        <ListControlsToolbar
+          searchTerm={searchTerm}
+          onSearchChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+          searchPlaceholder="Name or email..."
+          searchLabel="Search Faculty"
+          filters={[
+            {
+              controlId: "departmentFilter",
+              label: "Department",
+              value: departmentFilter,
+              onChange: (e) => { setDepartmentFilter(e.target.value); setCurrentPage(1); },
+              options: departmentOptions.map(dept => ({ value: dept === 'All' ? '' : dept, label: dept })),
+              type: 'select',
+            },
+            {
+              controlId: "titleFilter",
+              label: "Title/Role",
+              value: titleFilter,
+              onChange: (e) => { setTitleFilter(e.target.value); setCurrentPage(1); },
+              options: titleOptions.map(title => ({ value: title === 'All' ? '' : title, label: title })),
+              type: 'select',
+            }
+          ]}
+          addAction={{
+            label: "Add New Faculty",
+            onClick: () => navigate('/admin/faculty/new'),
+            icon: "add",
+          }}
+        />
         <StyledCard.Body>
           {/* The headerActions div is removed from here as Add button moved to tableControls */}
           {filteredFaculty.length === 0 ? (
