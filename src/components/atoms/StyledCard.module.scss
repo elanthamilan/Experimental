@@ -1,98 +1,86 @@
 @use '../../styles/variables' as v;
+@use 'sass:color'; // For rgba with SCSS variables
 
 // StyledCard.module.scss
 // Centralized card styling following design system principles
 
 .cardBase {
-  border-radius: v.$base-border-radius; // 8px
-  border: 1px solid var(--border-color, #e0e0e0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
-  background: var(--card-bg, #ffffff);
+  border-radius: v.$base-border-radius;
+  border: v.$base-border-width solid v.$outline-variant-color;
+  // For box-shadow, using the SCSS fallback of $outline-color for rgba's color part.
+  // Ideally, a dedicated shadow token or mixin would be used.
+  box-shadow: 0 2px 4px rgba(color.red(v.$outline-fallback), color.green(v.$outline-fallback), color.blue(v.$outline-fallback), 0.1);
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out; // Added transform
+  background-color: v.$surface-color; // Changed from background to background-color
 
   &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 8px rgba(color.red(v.$outline-fallback), color.green(v.$outline-fallback), color.blue(v.$outline-fallback), 0.15);
   }
 }
 
 .card-default {
-  // Default card styling
+  // Default card styling - can inherit from cardBase
 }
 
 .card-stats {
   border: none;
-  background: linear-gradient(135deg, var(--primary-color, #007bff) 0%, var(--secondary-color, #6c757d) 100%);
-  color: white;
+  // Ensure SCSS variables are interpolated correctly in linear-gradient
+  background: linear-gradient(135deg, #{v.$primary-color}, #{v.$secondary-color});
+  color: v.$on-primary-color; // Assuming primary provides good contrast, or use v.$white
 
-  .cardBody { // This seems like a specific class for a stats card's body, not the general .cardBody
+  .cardBody { // This specific class for stats card's body
     text-align: center;
-    padding: calc(#{v.$base_padding} * 1.5); // 1.5rem
+    padding: calc(#{v.$base-padding} * 1.5);
   }
 }
 
 .card-elevated {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  // Using a more pronounced shadow, again with SCSS fallback for rgba color part
+  box-shadow: 0 8px 16px rgba(color.red(v.$outline-fallback), color.green(v.$outline-fallback), color.blue(v.$outline-fallback), 0.15);
 
   &:hover {
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 24px rgba(color.red(v.$outline-fallback), color.green(v.$outline-fallback), color.blue(v.$outline-fallback), 0.2);
     transform: translateY(-2px);
   }
 }
 
 .card-bordered {
-  border: 2px solid var(--primary-color, #007bff);
+  border: v.$secondary-border-width solid v.$primary-color; // Using secondary-border-width for emphasis
   box-shadow: none;
 }
 
 .cardHeader {
-  background: var(--card-header-bg, #f8f9fa);
-  border-bottom: 1px solid var(--border-color, #e0e0e0);
-  padding: v.$base-padding calc(#{v.$base_padding} * 1.25); // 1rem 1.25rem
-  font-weight: v.$font-weight-semibold; // 600
-  font-size: calc(#{v.$font-size-base} * 1.1); // Approx 1.1rem if base is 14-16px
+  background-color: v.$surface-container-color; // Using surface-container as per revised plan
+  color: v.$on-surface-color; // Using on-surface as per revised plan
+  border-bottom: v.$base-border-width solid v.$outline-variant-color;
+  padding: v.$base-padding calc(#{v.$base-padding} * 1.25);
+  font-weight: v.$font-weight-semibold;
+  font-size: calc(#{v.$font-size-base} * 1.1);
 }
 
 .cardBody { // General card body
-  padding: calc(#{v.$base_padding} * 1.25); // 1.25rem
+  padding: calc(#{v.$base-padding} * 1.25);
+  color: v.$on-surface-color; // Ensure body text is also themed
 }
 
 .cardFooter {
-  background: var(--card-footer-bg, #f8f9fa);
-  border-top: 1px solid var(--border-color, #e0e0e0);
-  padding: v.$gap-medium calc(#{v.$base_padding} * 1.25); // 0.75rem 1.25rem
+  background-color: v.$surface-container-lowest-color; // As per revised plan
+  color: v.$on-surface-variant-color; // As per revised plan
+  border-top: v.$base-border-width solid v.$outline-variant-color;
+  padding: v.$gap-medium calc(#{v.$base-padding} * 1.25);
 }
 
 .cardTitle {
-  margin-bottom: v.$gap-medium; // 0.75rem
-  font-weight: v.$font-weight-semibold; // 600
-  font-size: calc(#{v.$font-size-base} * 1.25); // 1.25rem
-  color: var(--text-color, #212529);
+  margin-bottom: v.$gap-medium;
+  font-weight: v.$font-weight-semibold;
+  font-size: calc(#{v.$font-size-base} * 1.25);
+  color: v.$on-surface-color; // Changed from var(--text-color, ...)
 }
 
 .cardText {
   margin-bottom: 0;
-  color: var(--text-color-secondary, #6c757d);
+  color: v.$on-surface-variant-color; // Changed from var(--text-color-secondary, ...)
 }
 
-// Dark mode support
-[data-theme="dark"] {
-  .cardBase {
-    background: var(--card-bg-dark, #2d3748);
-    border-color: var(--border-color-dark, #4a5568);
-    color: var(--text-color-dark, #e2e8f0);
-  }
-
-  .cardHeader,
-  .cardFooter {
-    background: var(--card-header-bg-dark, #1a202c);
-    border-color: var(--border-color-dark, #4a5568);
-  }
-
-  .cardTitle {
-    color: var(--text-color-dark, #e2e8f0);
-  }
-
-  .cardText {
-    color: var(--text-color-secondary-dark, #a0aec0);
-  }
-}
+// Dark mode support block is removed as theme variables handle this.
+// [data-theme="dark"] { ... }
