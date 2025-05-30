@@ -2,7 +2,7 @@
 
 .formControlFeedback {
   width: 100%;
-  margin-top: 0.25rem; // Consider using v.$spacing-xs or a specific form feedback margin variable
+  margin-top: calc(#{v.$gap-small} / 2); // 0.25rem -> Consider using v.$spacing-xs or a specific form feedback margin variable
   font-size: v.$font-size-small;
   display: block; // Ensure it takes up its own line if not already
 }

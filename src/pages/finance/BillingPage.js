@@ -6,8 +6,10 @@ import styles from './BillingPage.module.scss'; // Use new SCSS module
 const BillingPage = () => {
   return (
     <StyledContainer className={styles.pageContainer}>
-      <h1 className={styles.pageTitle}>Billing</h1>
-      <p className={styles.pageText}>Details for Billing will be displayed here.</p>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Billing</h1>
+        <p className={styles.pageDescription}>Details for Billing will be displayed here.</p>
+      </div>
     </StyledContainer>
   );
 };

@@ -8,10 +8,11 @@ import {
   StyledTable,
   StyledCard,
   StyledButton,
-  FormField,
+  // FormField, // No longer directly used
   StyledFormControl,
   StyledFormSelect,
   StyledPagination, // Added
+  ListControlsToolbar, // Added
   // StyledBadge, // Import if status column is added
 } from '../../components';
 import styles from './ExamScheduleListPage.module.scss';
@@ -97,50 +98,42 @@ const ExamScheduleListPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Examination Schedules</h1>
+      </div>
       <StyledCard className={styles.contentCard}>
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>Examination Schedules</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>Examination Schedules</StyledCard.Title> */}
         </StyledCard.Header>
 
-        <div className={styles.tableControls}>
-          <div className={styles.filterSection}>
-            <div className={styles.searchFilterItem}>
-              <FormField
-                controlId="searchTerm"
-                label="Search Exam/Course"
-                type="text"
-                placeholder="Exam or Course Name..."
-                value={searchTerm}
-                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-              />
-            </div>
-            <div className={styles.dropdownFilterItem}>
-              <FormField
-                controlId="courseFilter"
-                label="Filter by Course"
-                as="select"
-                value={courseFilter}
-                onChange={(e) => { setCourseFilter(e.target.value); setCurrentPage(1); }}
-                options={courseOptions}
-              />
-            </div>
-            <div className={styles.dateFilterItem}>
-              <FormField
-                controlId="dateFilter"
-                label="Filter by Date"
-                type="date"
-                value={dateFilter}
-                onChange={(e) => { setDateFilter(e.target.value); setCurrentPage(1); }}
-              />
-            </div>
-          </div>
-          <div className={styles.actionsSection}>
-            <StyledButton variant="primary" onClick={() => navigate('/academic/examschedules/new')} className={styles.addButton}>
-              <span className={`material-symbols-outlined ${styles.buttonIcon}`}>add</span>
-              Add New Schedule
-            </StyledButton>
-          </div>
-        </div>
+        <ListControlsToolbar
+          searchTerm={searchTerm}
+          onSearchChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+          searchPlaceholder="Exam or Course Name..."
+          searchLabel="Search Exam/Course"
+          filters={[
+            {
+              controlId: "courseFilter",
+              label: "Filter by Course",
+              value: courseFilter,
+              onChange: (e) => { setCourseFilter(e.target.value); setCurrentPage(1); },
+              options: courseOptions,
+              type: 'select',
+            },
+            {
+              controlId: "dateFilter",
+              label: "Filter by Date",
+              value: dateFilter,
+              onChange: (e) => { setDateFilter(e.target.value); setCurrentPage(1); },
+              type: 'date',
+            }
+          ]}
+          addAction={{
+            label: "Add New Schedule",
+            onClick: () => navigate('/academic/examschedules/new'),
+            icon: "add",
+          }}
+        />
         
         <StyledCard.Body>
           {/* Removed headerActions div */}

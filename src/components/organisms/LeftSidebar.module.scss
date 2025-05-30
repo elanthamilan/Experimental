@@ -73,6 +73,13 @@ $tree-line-l3-left: $tree-indent-l2 - math.div($tree-line-h-length, 2) - math.di
   gap: v.$gap-medium; // Gap between logo and name
 }
 
+.customLogo {
+  max-height: 40px; // Example max height, adjust as needed
+  max-width: 180px;   // Ensure it scales down if too wide, allow more width
+  object-fit: contain;
+  // margin-right: v.$gap-medium; // Remove margin if it's replacing the whole brandContainer content
+}
+
 .brandContainer {
   display: flex;
   align-items: center;

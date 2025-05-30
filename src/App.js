@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
-import { themes, applyTheme } from './themes';
+import { themes, applyTheme, defaultSpacingValues } from './themes'; // Import defaultSpacingValues
 
 import LeftSidebar from './components/organisms/LeftSidebar';
 import AddEditForm from './components/organisms/AddEditForm';
@@ -54,6 +54,9 @@ import CourseDetailPage from './pages/academic/CourseDetailPage';
 import ComponentPreviewPage from './pages/ComponentPreviewPage';
 // Settings Page Import
 import SettingsPage from './pages/SettingsPage';
+// Sub-Institution Management Page Imports
+import SubInstitutionListPage from './pages/admin/SubInstitutionListPage';
+import AddEditSubInstitutionPage from './pages/admin/AddEditSubInstitutionPage';
 import { fontWeightOptions } from './data/fonts'; // Import fontWeightOptions
 import { fontSizeOptions } from './themes'; // Import fontSizeOptions from themes
 import { Link } from 'react-router-dom';
@@ -306,9 +309,98 @@ function App() {
   const [headerFontWeight, setHeaderFontWeight] = useState('semibold');
   const [bodyFontWeight, setBodyFontWeight] = useState('normal');
 
+  // New theme states for advanced white labeling
+  const [customLogoUrl, setCustomLogoUrl] = useState('');
+  const [baseBorderRadius, setBaseBorderRadius] = useState('8px'); // Store as string with 'px' or handle conversion
+  const [inputBorderRadius, setInputBorderRadius] = useState('4px'); // Store as string with 'px'
+  const [cardHeaderBg, setCardHeaderBg] = useState(''); 
+  const [cardHeaderText, setCardHeaderText] = useState(''); 
+  const [tableHeaderText, setTableHeaderText] = useState(''); 
+  const [uiDensity, setUiDensity] = useState('default'); 
+
+  // New direct color override states
+  const [secondaryBtnBg, setSecondaryBtnBg] = useState('');
+  const [secondaryBtnText, setSecondaryBtnText] = useState('');
+  const [inputFocusBorder, setInputFocusBorder] = useState('');
+  const [navActiveItemBg, setNavActiveItemBg] = useState('');
+  const [navActiveItemText, setNavActiveItemText] = useState('');
+
+  // Typography states
+  const [pageTitleSize, setPageTitleSize] = useState('2.5rem');
+  const [pageTitleWeight, setPageTitleWeight] = useState('700');
+  const [buttonTextSize, setButtonTextSize] = useState('0.875rem');
+  const [buttonTextWeight, setButtonTextWeight] = useState('600');
+  const [inputTextSize, setInputTextSize] = useState('0.875rem');
+  const [inputTextWeight, setInputTextWeight] = useState('400');
+
   useEffect(() => {
-    applyTheme(currentTheme, isDarkMode); // Applies color and font-family variables, now with isDarkMode
-  }, [currentTheme, isDarkMode]); // Added isDarkMode to dependency array
+    applyTheme(currentTheme, isDarkMode); // Applies base theme colors and derived values
+
+    // Apply direct overrides if they exist
+    if (secondaryBtnBg) document.documentElement.style.setProperty('--theme-button-secondary-bg-direct', secondaryBtnBg);
+    else document.documentElement.style.removeProperty('--theme-button-secondary-bg-direct'); // Allow fallback to derived
+
+    if (secondaryBtnText) document.documentElement.style.setProperty('--theme-button-secondary-text-direct', secondaryBtnText);
+    else document.documentElement.style.removeProperty('--theme-button-secondary-text-direct');
+
+    if (inputFocusBorder) document.documentElement.style.setProperty('--theme-input-focus-border-direct', inputFocusBorder);
+    else document.documentElement.style.removeProperty('--theme-input-focus-border-direct');
+    
+    if (navActiveItemBg) document.documentElement.style.setProperty('--theme-nav-active-item-bg-direct', navActiveItemBg);
+    else document.documentElement.style.removeProperty('--theme-nav-active-item-bg-direct');
+
+    if (navActiveItemText) document.documentElement.style.setProperty('--theme-nav-active-item-text-direct', navActiveItemText);
+    else document.documentElement.style.removeProperty('--theme-nav-active-item-text-direct');
+
+    // Apply border radii directly
+    if (baseBorderRadius.match(/^\d+px$/) || baseBorderRadius.match(/^\d+rem$/) || baseBorderRadius.match(/^\d+em$/) || baseBorderRadius === '0') {
+      document.documentElement.style.setProperty('--theme-border-radius-base', baseBorderRadius);
+    } else if (baseBorderRadius.match(/^\d+$/)) { 
+      document.documentElement.style.setProperty('--theme-border-radius-base', `${baseBorderRadius}px`);
+    }
+    if (inputBorderRadius.match(/^\d+px$/) || inputBorderRadius.match(/^\d+rem$/) || inputBorderRadius.match(/^\d+em$/) || inputBorderRadius === '0') {
+      document.documentElement.style.setProperty('--theme-border-radius-input', inputBorderRadius);
+    } else if (inputBorderRadius.match(/^\d+$/)) { 
+      document.documentElement.style.setProperty('--theme-border-radius-input', `${inputBorderRadius}px`);
+    }
+
+    // Apply new typography CSS variables
+    document.documentElement.style.setProperty('--theme-font-pagetitle-size', pageTitleSize);
+    document.documentElement.style.setProperty('--theme-font-pagetitle-weight', pageTitleWeight);
+    document.documentElement.style.setProperty('--theme-font-button-size', buttonTextSize);
+    document.documentElement.style.setProperty('--theme-font-button-weight', buttonTextWeight);
+    document.documentElement.style.setProperty('--theme-font-input-size', inputTextSize);
+    document.documentElement.style.setProperty('--theme-font-input-weight', inputTextWeight);
+
+  }, [currentTheme, isDarkMode, baseBorderRadius, inputBorderRadius, secondaryBtnBg, secondaryBtnText, inputFocusBorder, navActiveItemBg, navActiveItemText, pageTitleSize, pageTitleWeight, buttonTextSize, buttonTextWeight, inputTextSize, inputTextWeight]);
+
+  // useEffect for applying UI density
+  useEffect(() => {
+    const densityFactors = {
+      compact: 0.8,
+      default: 1.0,
+      comfort: 1.2,
+    };
+    const factor = densityFactors[uiDensity] || 1.0;
+
+    // Base values are defined in themes.js and set as CSS vars by applyTheme
+    // We read the canonical default values, scale them, and then set them.
+    for (const varName in defaultSpacingValues) {
+      const baseValueStr = defaultSpacingValues[varName];
+      if (baseValueStr) {
+        const valueMatch = baseValueStr.match(/^(\d*\.?\d+)(px|rem|em)$/);
+        if (valueMatch) {
+          const num = parseFloat(valueMatch[1]);
+          const unit = valueMatch[2];
+          document.documentElement.style.setProperty(varName, `${num * factor}${unit}`);
+        } else {
+          // Handle non-numeric/non-unit values if any, or log warning
+          // For now, assume all default spacings are numeric with units
+          document.documentElement.style.setProperty(varName, baseValueStr); // Apply as is if not scalable
+        }
+      }
+    }
+  }, [uiDensity]); // Only re-run when uiDensity changes. Theme changes re-apply base values via applyTheme.
 
   useEffect(() => {
     const selectedWeight = fontWeightOptions.find(fw => fw.value === globalFontWeight);
@@ -363,7 +455,35 @@ function App() {
       headerFontWeight,
       setHeaderFontWeight,
       bodyFontWeight,
-      setBodyFontWeight
+      setBodyFontWeight,
+      // Advanced white labeling
+      customLogoUrl,
+      setCustomLogoUrl,
+      baseBorderRadius,
+      setBaseBorderRadius,
+      inputBorderRadius,
+      setInputBorderRadius,
+      cardHeaderBg, // Though applied by themes.js, pass for settings page
+      setCardHeaderBg,
+      cardHeaderText, // Though applied by themes.js, pass for settings page
+      setCardHeaderText,
+      tableHeaderText, 
+      setTableHeaderText,
+      uiDensity,
+      setUiDensity,
+      // New direct color overrides
+      secondaryBtnBg, setSecondaryBtnBg,
+      secondaryBtnText, setSecondaryBtnText,
+      inputFocusBorder, setInputFocusBorder,
+      navActiveItemBg, setNavActiveItemBg,
+      navActiveItemText, setNavActiveItemText,
+      // New typography controls
+      pageTitleSize, setPageTitleSize,
+      pageTitleWeight, setPageTitleWeight,
+      buttonTextSize, setButtonTextSize,
+      buttonTextWeight, setButtonTextWeight,
+      inputTextSize, setInputTextSize,
+      inputTextWeight, setInputTextWeight
     }}>
       <div
         className={`${styles.appContainer} ${isMobile ? styles.mobile : ''}`}
@@ -460,6 +580,11 @@ function App() {
               <Route path="/academic/examschedules" element={<ExamScheduleListPage />} />
               <Route path="/academic/examschedules/new" element={<AddEditExamSchedulePage />} />
               <Route path="/academic/examschedules/edit/:scheduleId" element={<AddEditExamSchedulePage />} />
+
+              {/* Sub-Institution Management Routes */}
+              <Route path="/admin/sub-institutions" element={<SubInstitutionListPage />} />
+              <Route path="/admin/sub-institutions/new" element={<AddEditSubInstitutionPage />} />
+              <Route path="/admin/sub-institutions/edit/:subInstId" element={<AddEditSubInstitutionPage isEdit={true} />} />
 
               {/* Component Preview Page Route */}
               <Route path="/component-preview" element={<ComponentPreviewPage />} />

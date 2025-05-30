@@ -10,11 +10,12 @@ import {
   StyledFormLabel,
   StyledFormSelect,
   FileUploadDropzone,
-  FormField
+  FormField,
+  // ProductTableRow, // Removed as component was deleted
 } from '../components';
 
 // Import specific molecules that aren't in main export
-import ProductTableRow from '../components/molecules/ProductTableRow';
+// import ProductTableRow from '../components/molecules/ProductTableRow'; // Removed direct import
 
 const ComponentPreviewPage = () => {
   // Mock handlers for ProductTableRow
@@ -131,8 +132,12 @@ const ComponentPreviewPage = () => {
         </div>
 
         <div className={styles.componentPreview}>
-          <h3 className={styles.componentName}>ProductTableRow</h3>
+          <h3 className={styles.componentName}>ProductTableRow (Removed)</h3>
           <div className={styles.componentInstance}>
+            <p className={styles.notes}>
+              The ProductTableRow component has been removed from the project.
+            </p>
+            {/* 
             <p className={styles.notes}>
               ProductTableRow is designed to work within a specific table structure (e.g., part of a <code>&lt;tbody&gt;</code>)
               and requires several props and handlers from a parent component, typically for managing a list of products.
@@ -140,7 +145,6 @@ const ComponentPreviewPage = () => {
               See <code>AddEditForm.js</code> for a more complete usage example.
             </p>
             <div style={{ border: '1px dashed #ccc', padding: '10px', marginTop: '10px' }}>
-              {/* Minimal table structure for context, actual component is just the <tr> */}
               <table>
                 <thead>
                   <tr>
@@ -181,6 +185,7 @@ const ComponentPreviewPage = () => {
                 </tbody>
               </table>
             </div>
+            */}
           </div>
         </div>
       </section>

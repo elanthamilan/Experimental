@@ -11,7 +11,7 @@
 }
 
 .imgThumbnail {
-  padding: 0.25rem; // Or use a variable: calc(#{v.$base-padding} / 4);
+  padding: calc(#{v.$gap-small} / 2); // 0.25rem
   background-color: v.$surface-color;
   border: v.$base-border-width solid v.$outline-variant-color;
   border-radius: v.$border-radius-small; // Using a smaller radius for thumbnails usually looks better

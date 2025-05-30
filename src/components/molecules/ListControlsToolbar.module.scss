@@ -1,0 +1,41 @@
+@use '../../styles/variables' as v;
+
+/* Styles adapted from StudentListPage.module.scss for Control Bar */
+.tableControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; /* Align items to bottom for varied heights */
+  padding: v.$base-padding calc(#{v.$base_padding} * 1.5); /* Use theme variables */
+  background-color: var(--theme-surface-container-lowest); /* Subtle background */
+  border-radius: v.$base_border_radius; 
+  margin-bottom: calc(#{v.$base_padding} * 1.5); 
+  gap: v.$base-padding; 
+  flex-wrap: wrap;
+
+  .filterSection { /* Wrapper for filter elements */
+    display: flex;
+    gap: v.$base-padding; 
+    align-items: flex-end; /* Align form fields if labels are on top */
+    flex-wrap: wrap; /* Allow filters to wrap on smaller screens */
+    flex-grow: 1; /* Allow filter section to take available space */
+  }
+
+  .searchFilterItem, .dropdownFilterItem {
+    flex-grow: 1; /* Allow individual filters to grow */
+    min-width: 200px; /* Minimum width for filters */
+  }
+
+  .actionsSection { /* Wrapper for action buttons like "Add New" */
+    display: flex;
+    align-items: flex-end; /* Align with form fields */
+  }
+}
+
+.addButton { /* For the "Add New" button */
+  display: inline-flex;
+  align-items: center;
+  .buttonIcon {
+    vertical-align: middle;
+    margin-right: v.$gap-small; 
+  }
+}

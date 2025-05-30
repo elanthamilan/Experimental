@@ -137,11 +137,3 @@
   color: var(--theme-on-surface-variant);
   margin-top: var(--spacing-medium);
 }
-
-.alertDanger { // For react-bootstrap Alert
-  background-color: var(--theme-error-container);
-  color: var(--theme-on-error-container);
-  border-color: var(--theme-error);
-  padding: var(--spacing-medium);
-  border-radius: var(--border-radius-medium);
-}

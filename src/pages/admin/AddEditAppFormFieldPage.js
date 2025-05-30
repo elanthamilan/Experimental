@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // Added useMemo
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockApplicationFormFields } from '../../data/mockApplicationFormFields';
 // import { Row, Col } from 'react-bootstrap'; // Removed
-import StyledButton from '../../components/atoms/StyledButton';
-import StyledCard from '../../components/atoms/StyledCard';
-import StyledContainer from '../../components/atoms/StyledContainer';
-import FormField from '../../components/molecules/FormField';
-import { StyledRow, StyledCol } from '../../components'; // Added
+import {
+  StyledButton,
+  StyledCard,
+  StyledContainer,
+  FormField,
+  StyledRow,
+  StyledCol,
+  StyledAlert, // Added StyledAlert
+} from '../../components';
 import styles from './AddEditAppFormFieldPage.module.scss'; // Using its own SCSS module
 
 const AddEditAppFormFieldPage = () => {
@@ -14,14 +18,14 @@ const AddEditAppFormFieldPage = () => {
   const navigate = useNavigate();
   const isEditMode = Boolean(fieldId);
 
-  const initialFormData = {
+  const initialFormData = useMemo(() => ({ // Wrapped in useMemo
     id: '',
     label: '',
     type: 'text', // Default type
     required: false,
     options: '', // Stored as comma-separated string in form
     order: 0,
-  };
+  }), []); // Empty dependency array as it's static
 
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState('');
@@ -45,7 +49,7 @@ const AddEditAppFormFieldPage = () => {
       const maxOrder = mockApplicationFormFields.reduce((max, field) => Math.max(max, field.order), 0);
       setFormData({ ...initialFormData, id: newId, order: maxOrder + 1 });
     }
-  }, [fieldId, isEditMode, navigate]);
+  }, [fieldId, isEditMode, navigate, initialFormData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -100,22 +104,17 @@ const AddEditAppFormFieldPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>{isEditMode ? 'Edit Application Form Field' : 'Add New Application Form Field'}</h1>
+      </div>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header>
           {/* Assuming StyledCard.Title can accept a className or is styled by parent .formCard :global(.card-header) */}
-          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Application Form Field' : 'Add New Application Form Field'}</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Application Form Field' : 'Add New Application Form Field'}</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
-          {error && (
-            <div className={styles.alertDanger} role="alert">
-              {error}
-            </div>
-          )}
-          {successMessage && (
-            <div className={styles.alertSuccess} role="alert">
-              {successMessage}
-            </div>
-          )}
+          {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
+          {successMessage && <StyledAlert variant="success" dismissible onClose={() => setSuccessMessage('')}>{successMessage}</StyledAlert>}
           <form onSubmit={handleSubmit}>
             <StyledRow className="mb-3"> {/* Ensure Rows have bottom margin if FormFields don't */}
               <StyledCol className="col-md-4">

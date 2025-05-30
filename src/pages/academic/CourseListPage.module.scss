@@ -1,24 +1,43 @@
 @use '../../styles/variables' as v; // Assuming variables are accessible
 
 .pageContainer {
-  padding: var(--spacing-medium) var(--spacing-large);
+  padding: v.$base-padding calc(#{v.$base_padding} * 1.5); // var(--spacing-medium) var(--spacing-large)
   background-color: var(--theme-background);
   min-height: 100vh;
   color: var(--theme-on-background);
 }
 
 .pageHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-large);
+  margin-bottom: v.$base-margin * 3;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    text-align: left;
+  }
 }
 
 .pageTitle {
-  font-family: var(--theme-font-display);
-  font-size: var(--font-size-xxlarge, 2.5rem);
-  font-weight: var(--font-weight-bold, 700);
-  color: var(--theme-primary);
+  color: var(--theme-text-color, v.$on-surface-color);
+  font-size: var(--theme-font-pagetitle-size, 2.5rem);
+  font-family: var(--theme-font-display, v.$font-family-display);
+  font-weight: var(--theme-font-pagetitle-weight, 700);
+  margin-bottom: v.$base-margin;
+  line-height: 1.2;
+
+  /* Responsive size adjustments can be handled by the theme setting itself or by more specific theme variables. */
+}
+
+.pageDescription {
+  font-size: 1.1rem;
+  color: var(--theme-text-muted, v.$on-surface-variant-color);
+  font-family: var(--theme-font-body, v.$font-family-body);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    margin: 0;
+  }
 }
 
 /* Control Bar for filters and actions */
@@ -26,16 +45,16 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: var(--spacing-medium); 
+  padding: v.$base-padding; // var(--spacing-medium)
   background-color: var(--theme-surface-container-lowest);
-  border-radius: var(--border-radius-medium);
-  margin-bottom: var(--spacing-large);
-  gap: var(--spacing-medium);
+  border-radius: v.$base_border_radius; // var(--border-radius-medium) -> base_border_radius
+  margin-bottom: calc(#{v.$base_padding} * 1.5); // var(--spacing-large)
+  gap: v.$base_padding; // var(--spacing-medium)
   flex-wrap: wrap;
 
   .filterSection {
     display: flex;
-    gap: var(--spacing-medium);
+    gap: v.$base_padding; // var(--spacing-medium)
     align-items: flex-end;
     flex-wrap: wrap;
     flex-grow: 1;
@@ -57,7 +76,7 @@
   align-items: center;
   .buttonIcon {
     vertical-align: middle;
-    margin-right: var(--spacing-xsmall);
+    margin-right: v.$gap-small; // var(--spacing-xsmall)
   }
 }
 
@@ -66,11 +85,11 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: var(--spacing-medium) 0;
+  padding: v.$base-padding 0; // var(--spacing-medium)
   font-size: var(--font-size-small);
   color: var(--theme-on-surface-variant);
   flex-wrap: wrap;
-  gap: var(--spacing-large);
+  gap: calc(#{v.$base_padding} * 1.5); // var(--spacing-large)
 }
 
 .resultsText {
@@ -80,7 +99,7 @@
 
 .paginationControls { // For react-bootstrap Pagination
   display: flex;
-  gap: var(--spacing-xsmall);
+  gap: v.$gap-small; // var(--spacing-xsmall)
   margin-bottom: 0;
 
   :global(.page-item) {
@@ -99,7 +118,7 @@
     color: var(--theme-on-surface-variant);
     font-weight: var(--font-weight-medium);
     box-shadow: none !important;
-    gap: var(--spacing-xxsmall);
+    gap: calc(#{v.$gap-small} / 2); // var(--spacing-xxsmall)
     white-space: nowrap;
 
     &:hover {
@@ -124,7 +143,7 @@
 .pageInputControls {
   display: flex;
   align-items: center;
-  gap: var(--spacing-small);
+  gap: v.$gap-medium; // var(--spacing-small)
   color: var(--theme-on-surface-variant);
 
   .pageInput { // For StyledFormControl
@@ -169,7 +188,7 @@
 
 .noDataText {
   color: var(--theme-on-surface-variant);
-  margin-top: var(--spacing-medium);
+  margin-top: v.$base-padding; // var(--spacing-medium)
   font-style: italic;
   text-align: center;
 }

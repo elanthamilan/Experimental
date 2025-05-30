@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { mockStaff } from '../../data/mockStaff';
-import { mockDepartments } from '../../data/mockDepartments'; // For department filter
+// import { mockDepartments } from '../../data/mockDepartments'; // Removed unused import
 // import { Pagination } from 'react-bootstrap'; // Removed
 import {
   StyledContainer,
@@ -23,7 +23,7 @@ const StaffListPage = () => {
   const [roleFilter, setRoleFilter] = useState(''); // Assuming roles are free text for now or could be a predefined list
 
   const [departmentOptions, setDepartmentOptions] = useState([]);
-  const [roleOptions, setRoleOptions] = useState([]); // For dynamic role filtering if desired
+  // const [roleOptions, setRoleOptions] = useState([]); // Removed unused state
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -34,8 +34,8 @@ const StaffListPage = () => {
     // const uniqueDepartments = ['All', ...mockDepartments.map(dept => dept.name)];
     setDepartmentOptions(uniqueDepartments);
 
-    const uniqueRoles = ['All', ...new Set(mockStaff.map(staff => staff.role).filter(Boolean))];
-    setRoleOptions(uniqueRoles);
+    // const uniqueRoles = ['All', ...new Set(mockStaff.map(staff => staff.role).filter(Boolean))]; // Removed unused role options logic
+    // setRoleOptions(uniqueRoles); // Removed unused role options logic
   }, []);
 
 
@@ -121,10 +121,13 @@ const StaffListPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Staff Management (Non-Academic)</h1>
+      </div>
       <StyledCard className={styles.contentCard}>
         <StyledCard.Header>
           {/* The page title is part of the Card Header here, not a separate H1 */}
-          <StyledCard.Title className={styles.cardTitle}>Staff Management (Non-Academic)</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>Staff Management (Non-Academic)</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
           <div className={styles.tableControls}>

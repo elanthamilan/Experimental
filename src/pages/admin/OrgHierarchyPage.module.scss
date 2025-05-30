@@ -1,5 +1,41 @@
+@use '../../styles/variables' as v;
+
+// Standard Page Header Styles (copied from DashboardPage.module.scss)
+.pageHeader {
+  margin-bottom: v.$base-margin * 3;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    text-align: left;
+  }
+}
+
+.pageTitle {
+  color: var(--theme-text-color, v.$on-surface-color);
+  font-size: var(--theme-font-pagetitle-size, 2.5rem);
+  font-family: var(--theme-font-display, v.$font-family-display);
+  font-weight: var(--theme-font-pagetitle-weight, 700);
+  margin-bottom: v.$base-margin;
+  line-height: 1.2;
+
+  /* Responsive size adjustments can be handled by the theme setting itself or by more specific theme variables. */
+}
+
+.pageDescription {
+  font-size: 1.1rem;
+  color: var(--theme-text-muted, v.$on-surface-variant-color);
+  font-family: var(--theme-font-body, v.$font-family-body);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    margin: 0;
+  }
+}
+
 .pageContainer {
-  padding: var(--spacing-medium) var(--spacing-large);
+  padding: v.$base-padding calc(#{v.$base_padding} * 1.5); // var(--spacing-medium) var(--spacing-large)
   background-color: var(--theme-background);
   min-height: 100vh;
 }
@@ -7,21 +43,21 @@
 .contentCard { // General card for content sections
   background-color: var(--theme-surface);
   border: 1px solid var(--theme-outline-variant);
-  border-radius: var(--border-radius-large);
+  border-radius: v.$base_border_radius; // var(--border-radius-large)
   box-shadow: var(--shadow-elevation-2);
-  margin-bottom: var(--spacing-large);
+  margin-bottom: calc(#{v.$base_padding} * 1.5); // var(--spacing-large)
 
   :global(.card-header) { // For StyledCard.Header
     background-color: var(--theme-surface-container);
     color: var(--theme-on-surface-variant);
-    font-size: var(--font-size-large);
-    font-weight: var(--font-weight-semibold);
+    font-size: v.$font-size-large; // var(--font-size-large)
+    font-weight: v.$font-weight-semibold;
     border-bottom: 1px solid var(--theme-outline-variant);
-    padding: var(--spacing-medium) var(--spacing-large);
+    padding: v.$base-padding calc(#{v.$base_padding} * 1.5); // var(--spacing-medium) var(--spacing-large)
   }
 
   :global(.card-body) { // For StyledCard.Body
-    padding: var(--spacing-large);
+    padding: calc(#{v.$base_padding} * 1.5); // var(--spacing-large)
     color: var(--theme-on-surface);
   }
 }
@@ -33,14 +69,14 @@
 .headerActions {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: var(--spacing-medium); // Replaces mb-3
+  margin-bottom: v.$base-padding; // var(--spacing-medium) // Replaces mb-3
 }
 
 .addButton {
   // Styling for the button itself is handled by StyledButton variant="primary"
   .buttonIcon {
     vertical-align: middle;
-    margin-right: var(--spacing-xsmall); // Replaces me-2 on span
+    margin-right: v.$gap-small; // var(--spacing-xsmall) // Replaces me-2 on span
   }
 }
 
@@ -50,8 +86,8 @@
 }
 
 .dataTable { // Styling for StyledTable (or react-bootstrap Table if StyledTable is not used)
-  margin-top: var(--spacing-small);
-  font-size: var(--font-size-small);
+  margin-top: v.$gap-medium; // var(--spacing-small)
+  font-size: v.$font-size-small; // var(--font-size-small)
 
   :global(th) {
     background-color: var(--theme-surface-container-low);
@@ -77,7 +113,7 @@
 
 .noDataText {
   color: var(--theme-on-surface-variant);
-  margin-top: var(--spacing-medium);
+  margin-top: v.$base-padding; // var(--spacing-medium)
   font-style: italic;
   text-align: center;
 }

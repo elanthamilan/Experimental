@@ -244,7 +244,49 @@ export const generateThemeColors = (primary, secondary, tertiary, isDark = false
     // Hover and Active states - these should ideally use rgba over existing colors for subtlety
     '--theme-background-hover': hexToRgba(primary, 0.08), // M3 state layer opacity for hover
     '--theme-background-active': hexToRgba(primary, 0.12), // M3 state layer opacity for active/focus
+
+    // New variables for card/table headers and border radii
+    '--theme-card-header-bg': mixColors(m3Surface, primary, isDark ? 0.12 : 0.05), // Primary tinted surface
+    '--theme-card-header-text': getAccessibleOnColor(mixColors(m3Surface, primary, isDark ? 0.12 : 0.05)), // Accessible text on card header bg
+    '--theme-table-header-text': m3OnSurfaceVariant, // Slightly muted for table headers
+    '--theme-border-radius-base': '8px', // Default base border radius
+    '--theme-border-radius-input': '4px', // Default input border radius
+
+    // New Spacing Variables
+    '--theme-base-padding': '1rem',
+    '--theme-base-margin': '1rem',
+    '--theme-gap-small': '0.5rem',
+    '--theme-gap-medium': '0.75rem',
+    '--theme-gap-large': '1rem',
+    '--theme-input-padding-y-sm': '0.25rem',
+    '--theme-input-padding-x-sm': '0.5rem',
+    '--theme-input-padding-y-lg': '0.5rem',
+    '--theme-input-padding-x-lg': '1rem',
+    '--theme-card-padding': '1.5rem', // Default: 1rem * 1.5
+    // Note: More specific paddings like for $input-padding (10px 12px) or $button-padding (0 0.75rem)
+    // could also be added if fine-grained control per component type is needed for density.
+    // For now, focusing on base gaps and generic input paddings.
+
+    // New direct color role defaults (will be overridden by context if set)
+    '--theme-button-secondary-bg-direct': secondaryContainer,
+    '--theme-button-secondary-text-direct': onSecondaryContainer,
+    '--theme-input-focus-border-direct': primary,
+    '--theme-nav-active-item-bg-direct': primaryContainer,
+    '--theme-nav-active-item-text-direct': onPrimaryContainer,
   };
+};
+
+// Define default spacing values for 1.0 density scale
+export const defaultSpacingValues = {
+  '--theme-base-padding': '1rem',
+  '--theme-base-margin': '1rem',
+  '--theme-gap-small': '0.5rem',
+  '--theme-gap-medium': '0.75rem',
+  '--theme-gap-large': '1rem',
+  '--theme-input-padding-y-sm': '0.25rem',
+  '--theme-input-padding-x-sm': '0.5rem',
+  '--theme-input-padding-y-lg': '0.5rem',
+  '--theme-input-padding-x-lg': '1rem',
 };
 
 export const themes = [
