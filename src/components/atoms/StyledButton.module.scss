@@ -7,8 +7,8 @@
   padding: v.$button-padding;
   border-radius: v.$base-border-radius;
   font-family: v.$font-family-body; // Changed to body font
-  font-weight: v.$font-weight-semibold; // SCSS
-  font-size: v.$font-size-base; // SCSS
+  font-weight: v.$button-font-weight; // SCSS - Now uses CSS Var
+  font-size: v.$button-font-size; // SCSS - Now uses CSS Var
   line-height: v.$button-line-height;
   display: inline-flex;
   align-items: center;

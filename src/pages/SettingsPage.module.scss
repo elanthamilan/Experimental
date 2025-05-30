@@ -293,6 +293,23 @@
   }
 }
 
+// Styles for Layout Density and other text inputs
+.densitySelectorGroup, .textInputGroup { // Shared styling for form groups
+  composes: fontSelectorGroup; // Inherit from fontSelectorGroup
+}
+
+.densityRadioGroup {
+  composes: fontWeightRadioGroup; // Inherit from fontWeightRadioGroup
+}
+
+.typographySubheading {
+  font-size: 0.9rem;
+  font-weight: v.$font-weight-bold;
+  color: var(--theme-on-surface-variant);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 .fontWeightRadioGroup {
   display: flex;
   flex-direction: column; // Stack radio buttons by default
