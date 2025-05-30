@@ -1,0 +1,132 @@
+@use '../../styles/variables' as v;
+
+.offcanvasBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--theme-backdrop-background, rgba(0, 0, 0, 0.5)); // Themed
+  z-index: v.$zindex-offcanvas-backdrop;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+
+  &.show {
+    opacity: 1;
+  }
+}
+
+.offcanvasPanel {
+  position: fixed;
+  background-color: var(--theme-surface, v.$surface-color); // Themed
+  color: var(--theme-on-surface, v.$on-surface-color); // Themed
+  box-shadow: v.$elevation-shadow-4; // Example shadow
+  z-index: v.$zindex-offcanvas;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%; // Ensure it doesn't exceed viewport width
+  max-height: 100%; // Ensure it doesn't exceed viewport height
+  visibility: hidden; // Hidden by default, shown by transform and visibility
+  transition: transform 0.3s ease-in-out, visibility 0.3s ease-in-out;
+
+  &.show {
+    visibility: visible;
+  }
+}
+
+// Placement Start (Left)
+.placementStart {
+  top: 0;
+  left: 0;
+  width: v.$offcanvas-horizontal-width;
+  height: 100vh;
+  border-right: 1px solid var(--theme-outline-variant, v.$outline-variant-color);
+  transform: translateX(-100%);
+
+  &.show {
+    transform: translateX(0);
+  }
+}
+
+// Placement End (Right)
+.placementEnd {
+  top: 0;
+  right: 0;
+  width: v.$offcanvas-horizontal-width;
+  height: 100vh;
+  border-left: 1px solid var(--theme-outline-variant, v.$outline-variant-color);
+  transform: translateX(100%);
+
+  &.show {
+    transform: translateX(0);
+  }
+}
+
+// Placement Top
+.placementTop {
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: v.$offcanvas-vertical-height;
+  border-bottom: 1px solid var(--theme-outline-variant, v.$outline-variant-color);
+  transform: translateY(-100%);
+
+  &.show {
+    transform: translateY(0);
+  }
+}
+
+// Placement Bottom
+.placementBottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: v.$offcanvas-vertical-height;
+  border-top: 1px solid var(--theme-outline-variant, v.$outline-variant-color);
+  transform: translateY(100%);
+
+  &.show {
+    transform: translateY(0);
+  }
+}
+
+.offcanvasHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: v.$offcanvas-header-padding-y v.$offcanvas-header-padding-x;
+  border-bottom: 1px solid var(--theme-outline-variant, v.$outline-variant-color);
+}
+
+.offcanvasTitle {
+  margin: 0;
+  font-size: v.$offcanvas-title-font-size;
+  font-weight: v.$offcanvas-title-font-weight;
+  line-height: v.$offcanvas-title-line-height;
+  color: var(--theme-on-surface, v.$on-surface-color); // Ensure title color is themed
+}
+
+.closeButton {
+  // Assuming StyledButton variant="link" is used.
+  // Adjust if a different variant or specific styling is needed.
+  padding: v.$offcanvas-close-button-padding; // Make it easier to click
+  color: var(--theme-on-surface-variant, v.$on-surface-variant-color); // Themed close icon
+
+  &:hover, &:focus {
+    color: var(--theme-on-surface, v.$on-surface-color); // Darker on hover/focus
+    background-color: var(--theme-surface-container-hover, v.$background-hover); // Subtle background
+  }
+
+  // Ensure icon size is appropriate
+  :global(.material-symbols-outlined) {
+    font-size: v.$offcanvas-close-icon-size;
+  }
+}
+
+.offcanvasBody {
+  padding: v.$offcanvas-body-padding-y v.$offcanvas-body-padding-x;
+  flex-grow: 1;
+  overflow-y: auto; // Enable scrolling for long content
+}

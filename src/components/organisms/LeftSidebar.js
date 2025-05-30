@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react'; // Added useContext
+import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { Nav, Collapse, OverlayTrigger, Tooltip } from 'react-bootstrap'; // Added OverlayTrigger, Tooltip
-import StyledButton from '../atoms/StyledButton';
-import StyledFormSelect from '../atoms/StyledFormSelect'; // Added StyledFormSelect
+// react-bootstrap components removed
+import { StyledButton, StyledFormSelect } from '../../components'; // Ensure these are from design system
 import styles from './LeftSidebar.module.scss';
-import { useNavigate } from 'react-router-dom';
+// useNavigate is not used, so removing it. If it was intended for a specific action, that action needs to be clear.
+// import { useNavigate } from 'react-router-dom'; 
 import { ThemeContext } from '../../App'; // Import ThemeContext
 
 const LeftSidebar = () => {
-  const navigate = useNavigate();
-  const { currentUserRole, setCurrentUserRole, USER_ROLES, customLogoUrl } = useContext(ThemeContext); // Consume customLogoUrl
-  const [activeKey, setActiveKey] = useState('dashboard');
+  // const navigate = useNavigate(); // Not used
+  const { currentUserRole, setCurrentUserRole, USER_ROLES, customLogoUrl } = useContext(ThemeContext);
+  const [activeKey, setActiveKey] = useState('dashboard'); // To track active link
   const [searchTerm, setSearchTerm] = useState('');
 
   // State for collapsible Level 1 groups
@@ -317,132 +317,116 @@ const LeftSidebar = () => {
         </StyledFormSelect>
       </div>
 
-      {/* Updated Nav section */}
-      <Nav className={`flex-column ${styles.sidebarNav}`} activeKey={activeKey} onSelect={(k) => setActiveKey(k)}>
+      {/* Updated Nav section to UL */}
+      <ul className={`flex-column ${styles.sidebarNav}`} > {/* Removed activeKey and onSelect, handled by Link components */}
         {/* Render top-level items first */}
         {topLevelItems.length === 0 && searchTerm ? (
-          <div className={styles.noResults}>No top-level items found.</div>
-        ) : topLevelItems.map(item => {
-      if (item.eventKey === 'dashboard') { // Specifically target the dashboard link
-        return (
-          <Link
-            to={item.path} // Should be '/dashboard'
-            key={item.eventKey}
-            className={`${styles.navLink} ${activeKey === item.eventKey ? styles.active : ''} d-flex align-items-center px-3 py-2`} // Basic styling, you might need to adjust
-            onClick={() => setActiveKey(item.eventKey)} // Keep active state update
-            style={{ textDecoration: 'none' }}
-          >
-            <Icon name={item.icon} className={styles.navLinkIcon} /> <span className="ms-2">{item.label}</span>
-          </Link>
-        );
-      }
-      // For other top-level items, use the existing StyledButton
-      // Convert other top-level items (e.g., User Profile)
-      if (item.path) { // Ensure it's a navigation item
-         return (
-           <Link
-             to={item.path}
-             key={item.eventKey}
-             className={`${styles.navLink} ${activeKey === item.eventKey ? styles.active : ''} d-flex align-items-center px-3 py-2`}
-             onClick={() => setActiveKey(item.eventKey)}
-             style={{ textDecoration: 'none' }}
-           >
-             <Icon name={item.icon} className={styles.navLinkIcon} /> <span className="ms-2">{item.label}</span>
-           </Link>
-         );
-      }
-      // Fallback or non-navigational items (if any)
-      return null;
-    })}
+          <li className={styles.noResults}>No top-level items found.</li>
+        ) : topLevelItems.map(item => (
+          <li key={item.eventKey} className={styles.navItem}>
+            <Link
+              to={item.path}
+              className={`${styles.navLink} ${activeKey === item.eventKey ? styles.active : ''} d-flex align-items-center px-3 py-2`}
+              onClick={() => setActiveKey(item.eventKey)}
+              style={{ textDecoration: 'none' }}
+            >
+              <Icon name={item.icon} className={styles.navLinkIcon} /> <span className="ms-2">{item.label}</span>
+            </Link>
+          </li>
+        ))}
 
         {groupedItems.length === 0 && searchTerm && topLevelItems.length > 0 ? (
-          <div className={styles.noResults}>No grouped items found.</div>
+          <li className={styles.noResults}>No grouped items found.</li>
         ) : groupedItems.length === 0 && searchTerm && topLevelItems.length === 0 ? (
-           <div className={styles.noResults}>No navigation items found.</div>
+          <li className={styles.noResults}>No navigation items found.</li>
         ) : (
-          groupedItems.map(([groupKey, groupData]) => (
-            <div key={groupKey} className={styles.navGroup}>
-              {(() => {
-                const isGroupActivePath = !searchTerm && groupData.items.some(item =>
-                  activeKey === item.eventKey ||
-                  (item.children && item.children.some(child => activeKey === child.eventKey))
-                );
-                return (
-                  <div className={styles.groupHeader} onClick={() => toggleGroup(groupKey)} aria-controls={`collapse-${groupKey}`} aria-expanded={searchTerm ? true : openGroups[groupKey]}>
-                    {groupData.title} <Icon name={(searchTerm ? true : openGroups[groupKey]) ? 'expand_more' : 'chevron_right'} className={isGroupActivePath ? styles.activePathIcon : ''} />
-                  </div>
-                );
-              })()}
-              <Collapse in={searchTerm ? true : openGroups[groupKey]}>
-                <div id={`collapse-${groupKey}`} className={styles.groupItemsContainer}>
-                  {groupData.items.map(item => {
-                    const hasChildren = item.children && item.children.length > 0;
-                    const isSubmenuOpen = searchTerm && hasChildren ? true : openSubmenus[item.eventKey];
+          groupedItems.map(([groupKey, groupData]) => {
+            const isGroupOpen = searchTerm ? true : openGroups[groupKey];
+            const isGroupActivePath = !searchTerm && groupData.items.some(item =>
+              activeKey === item.eventKey ||
+              (item.children && item.children.some(child => activeKey === child.eventKey))
+            );
+            return (
+              <li key={groupKey} className={styles.navGroupItem}> {/* Changed div to li */}
+                <div 
+                  className={styles.groupHeader} 
+                  onClick={() => toggleGroup(groupKey)} 
+                  aria-controls={`collapse-${groupKey}`} 
+                  aria-expanded={isGroupOpen}
+                >
+                  {groupData.title} <Icon name={isGroupOpen ? 'expand_more' : 'chevron_right'} className={isGroupActivePath ? styles.activePathIcon : ''} />
+                </div>
+                <div 
+                  id={`collapse-${groupKey}`} 
+                  className={`${styles.collapsibleContent} ${isGroupOpen ? styles.isExpanded : ''} ${styles.groupItemsContainer}`}
+                >
+                  <ul className={styles.nestedList}> {/* Added UL for nested items */}
+                    {groupData.items.map(item => {
+                      const hasChildren = item.children && item.children.length > 0;
+                      const isSubmenuOpen = searchTerm && hasChildren ? true : openSubmenus[item.eventKey];
 
-                    // Refactored Level 2 items based on detailed instructions
-                    if (item.path) { // If it's meant to be a link
-                      return (
-                        <div key={item.eventKey} className={styles.level2Wrapper}>
-                          <Link
-                            to={item.path}
-                            key={item.eventKey}
-                            onClick={() => {
-                              setActiveKey(item.eventKey);
-                              if (hasChildren) {
-                                toggleSubmenu(item.eventKey);
-                              }
-                            }}
-                            className={`${styles.navLink} ${styles.level2Link} ${(!hasChildren && activeKey === item.eventKey) ? styles.active : ''} ${(!searchTerm && hasChildren && item.children && item.children.some(child => activeKey === child.eventKey)) ? styles.activePathParent : ''} d-flex justify-content-between align-items-center w-100`}
-                            aria-controls={hasChildren ? `submenu-${item.eventKey}` : undefined}
-                            aria-expanded={hasChildren ? isSubmenuOpen : undefined}
-                            style={{ textDecoration: 'none' }}
-                          >
-                            <div className="d-flex align-items-center">
-                              <Icon name={item.icon} className={styles.navLinkIcon} />
-                              <span className={`${styles.linkLabel} ms-2`}>{item.label}</span>
-                            </div>
-                            {hasChildren && (
-                              <Icon
-                                name={isSubmenuOpen ? 'expand_more' : 'chevron_right'}
-                                className={`${styles.expandIconSubmenu} ${!searchTerm && item.children.some(child => activeKey === child.eventKey) ? styles.activePathIcon : ''}`}
-                              />
-                            )}
-                          </Link>
-                          {hasChildren && (
-                            <Collapse in={isSubmenuOpen}>
-                              <div id={`submenu-${item.eventKey}`} className={styles.level3Container}>
-                                {/* Refactored Level 3 items */}
-                                {item.children.map(childItem => {
-                                  if (childItem.path) { // Ensure it's a navigational item
-                                    return (
-                                      <div key={childItem.eventKey} className={styles.level3Wrapper}>
-                                        <Link
-                                          to={childItem.path}
-                                          key={childItem.eventKey}
-                                          className={`${styles.navLink} ${activeKey === childItem.eventKey ? styles.active : ''} ${styles.level3Link} d-flex align-items-center w-100`}
-                                          onClick={() => setActiveKey(childItem.eventKey)}
-                                          style={{ textDecoration: 'none' }}
-                                        >
-                                          {childItem.icon && <Icon name={childItem.icon} className={styles.navLinkIcon} />}
-                                          <span className={`${styles.linkLabel} ms-2`}>{childItem.label}</span>
-                                        </Link>
-                                      </div>
-                                    );
-                                  }
-                                  return null;
-                                })}
-                              </div>
-                            </Collapse>
-                          )}
-                        </div>
-                      );
-                    } else if (hasChildren) { // Purely a toggle, not a link itself (item.path is false)
+                      if (item.path) {
                         return (
-                          <div key={item.eventKey} className={styles.level2Wrapper}>
+                          <li key={item.eventKey} className={`${styles.navItem} ${styles.level2Wrapper}`}>
+                            <Link
+                              to={item.path}
+                              onClick={(e) => {
+                                // Prevent navigation if it's meant to be a toggle for children, allow if no children or if search term exists
+                                if (hasChildren && !searchTerm) { 
+                                   // e.preventDefault(); // This might be too aggressive if parent itself is clickable
+                                }
+                                setActiveKey(item.eventKey);
+                                if (hasChildren) {
+                                  toggleSubmenu(item.eventKey);
+                                }
+                              }}
+                              className={`${styles.navLink} ${styles.level2Link} ${(!hasChildren && activeKey === item.eventKey) ? styles.active : ''} ${(!searchTerm && hasChildren && item.children && item.children.some(child => activeKey === child.eventKey)) ? styles.activePathParent : ''} d-flex justify-content-between align-items-center w-100`}
+                              aria-controls={hasChildren ? `submenu-${item.eventKey}` : undefined}
+                              aria-expanded={hasChildren ? isSubmenuOpen : undefined}
+                              style={{ textDecoration: 'none' }}
+                            >
+                              <div className="d-flex align-items-center">
+                                <Icon name={item.icon} className={styles.navLinkIcon} />
+                                <span className={`${styles.linkLabel} ms-2`}>{item.label}</span>
+                              </div>
+                              {hasChildren && (
+                                <Icon
+                                  name={isSubmenuOpen ? 'expand_more' : 'chevron_right'}
+                                  className={`${styles.expandIconSubmenu} ${!searchTerm && item.children.some(child => activeKey === child.eventKey) ? styles.activePathIcon : ''}`}
+                                />
+                              )}
+                            </Link>
+                            {hasChildren && (
+                              <div 
+                                id={`submenu-${item.eventKey}`} 
+                                className={`${styles.collapsibleContent} ${isSubmenuOpen ? styles.isExpanded : ''} ${styles.level3Container}`}
+                              >
+                                <ul className={styles.nestedList}> {/* Added UL for L3 items */}
+                                  {item.children.map(childItem => (
+                                    <li key={childItem.eventKey} className={`${styles.navItem} ${styles.level3Wrapper}`}>
+                                      <Link
+                                        to={childItem.path}
+                                        className={`${styles.navLink} ${activeKey === childItem.eventKey ? styles.active : ''} ${styles.level3Link} d-flex align-items-center w-100`}
+                                        onClick={() => setActiveKey(childItem.eventKey)}
+                                        style={{ textDecoration: 'none' }}
+                                      >
+                                        {childItem.icon && <Icon name={childItem.icon} className={styles.navLinkIcon} />}
+                                        <span className={`${styles.linkLabel} ms-2`}>{childItem.label}</span>
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                          </li>
+                        );
+                      } else if (hasChildren) { // Purely a toggle (item.path is false)
+                        return (
+                          <li key={item.eventKey} className={`${styles.navItem} ${styles.level2Wrapper}`}>
                             <StyledButton // This is a toggle-only button
-                              variant="link"
+                              variant="link" // Ensure this variant looks like other nav links
                               onClick={() => toggleSubmenu(item.eventKey)}
-                              className={`${styles.navButton} ${styles.level2Link} ${(!searchTerm && item.children && item.children.some(child => activeKey === child.eventKey)) ? styles.activePathParent : ''} d-flex justify-content-between align-items-center w-100`}
+                              className={`${styles.navButtonAsLink} ${styles.level2Link} ${(!searchTerm && item.children && item.children.some(child => activeKey === child.eventKey)) ? styles.activePathParent : ''} d-flex justify-content-between align-items-center w-100`}
                               aria-controls={`submenu-${item.eventKey}`}
                               aria-expanded={isSubmenuOpen}
                             >
@@ -455,41 +439,38 @@ const LeftSidebar = () => {
                                 className={styles.expandIconSubmenu}
                               />
                             </StyledButton>
-                            <Collapse in={isSubmenuOpen}>
-                              <div id={`submenu-${item.eventKey}`} className={styles.level3Container}>
-                                {/* Level 3 items under a toggle-only parent */}
-                                {item.children.map(childItem => { // These children should still be Links
-                                  if (childItem.path) {
-                                    return (
-                                      <div key={childItem.eventKey} className={styles.level3Wrapper}>
-                                        <Link
-                                          to={childItem.path}
-                                          key={childItem.eventKey}
-                                          className={`${styles.navLink} ${activeKey === childItem.eventKey ? styles.active : ''} ${styles.level3Link} d-flex align-items-center w-100`}
-                                          onClick={() => setActiveKey(childItem.eventKey)}
-                                          style={{ textDecoration: 'none' }}
-                                        >
-                                          {childItem.icon && <Icon name={childItem.icon} className={styles.navLinkIcon} />}
-                                          <span className={`${styles.linkLabel} ms-2`}>{childItem.label}</span>
-                                        </Link>
-                                      </div>
-                                    );
-                                  }
-                                  return null;
-                                })}
-                              </div>
-                            </Collapse>
-                          </div>
+                            <div 
+                              id={`submenu-${item.eventKey}`} 
+                              className={`${styles.collapsibleContent} ${isSubmenuOpen ? styles.isExpanded : ''} ${styles.level3Container}`}
+                            >
+                              <ul className={styles.nestedList}> {/* Added UL for L3 items */}
+                                {item.children.map(childItem => (
+                                  <li key={childItem.eventKey} className={`${styles.navItem} ${styles.level3Wrapper}`}>
+                                    <Link
+                                      to={childItem.path}
+                                      className={`${styles.navLink} ${activeKey === childItem.eventKey ? styles.active : ''} ${styles.level3Link} d-flex align-items-center w-100`}
+                                      onClick={() => setActiveKey(childItem.eventKey)}
+                                      style={{ textDecoration: 'none' }}
+                                    >
+                                      {childItem.icon && <Icon name={childItem.icon} className={styles.navLinkIcon} />}
+                                      <span className={`${styles.linkLabel} ms-2`}>{childItem.label}</span>
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </li>
                         );
-                    }
-                    // Fallback for items that don't fit above criteria (e.g. no path, no children)
-                    return null;
-                  })}
+                      }
+                      return null; // Fallback
+                    })}
+                  </ul>
                 </div>
-              </Collapse>
-            </div>
-        )))}
-      </Nav>
+              </li>
+            );
+          })
+        )}
+      </ul>
     </div>
   );
 };

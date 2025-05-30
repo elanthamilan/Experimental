@@ -100,6 +100,7 @@ const CourseListPage = () => {
     <StyledContainer className={styles.pageContainer}>
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>Course Management</h1>
+        <p className={styles.pageDescription}>View, search, and manage academic courses.</p>
       </div>
 
       <ListControlsToolbar

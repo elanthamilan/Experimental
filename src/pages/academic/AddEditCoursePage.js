@@ -76,6 +76,9 @@ const AddEditCoursePage = () => {
     <StyledContainer className={styles.pageContainer}>
       <div className={styles.pageHeader}> {/* Use own styles or common AdminPages.module.scss */}
         <h1 className={styles.pageTitle}>{isEditMode ? 'Edit Course Information' : 'Add New Course'}</h1>
+        <p className={styles.pageDescription}>
+          {isEditMode ? 'Update the details for the existing course.' : 'Fill in the details to create a new course.'}
+        </p>
       </div>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header className={styles.formCardHeader}>

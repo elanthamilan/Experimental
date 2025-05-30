@@ -36,10 +36,10 @@ const DataTable = ({ data, onEdit, onDelete }) => {
               <td>{item.semesters}</td>
               <td>
                 <StyledButton variant="outline-primary" size="sm" onClick={() => onEdit(item)} className="me-2">
-                  Edit
+                  <span className="material-symbols-outlined me-1">edit</span>Edit
                 </StyledButton>
                 <StyledButton variant="outline-danger" size="sm" onClick={() => onDelete(item.id)}>
-                  Delete
+                  <span className="material-symbols-outlined me-1">delete</span>Delete
                 </StyledButton>
               </td>
             </tr>

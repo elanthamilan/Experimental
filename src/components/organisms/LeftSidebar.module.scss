@@ -386,3 +386,18 @@ $tree-line-l3-left: $tree-indent-l2 - math.div($tree-line-h-length, 2) - math.di
     }
   }
 }
+
+// Custom Collapse Styles
+.collapsibleContent {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease-out; // Adjust timing and easing as needed
+  // background-color: transparent; // Ensure no weird background during collapse
+}
+
+.isExpanded {
+  max-height: 1000px; // A large enough value to accommodate content.
+  // Consider using 'auto' with JS if content height is highly variable and 1000px isn't always sufficient,
+  // but for typical sidebar menus, a large fixed value is often okay.
+  // transition: max-height 0.3s ease-in; // Can use a different ease for expansion if desired
+}
