@@ -80,110 +80,20 @@
   }
 }
 
-/* Pagination styles */
-.paginationContainer {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: v.$base-padding 0; // var(--spacing-medium)
-  font-size: var(--font-size-small);
-  color: var(--theme-on-surface-variant);
-  flex-wrap: wrap;
-  gap: calc(#{v.$base_padding} * 1.5); // var(--spacing-large)
-}
+/* Styles for .dataTable, .paginationContainer, .resultsText, .paginationControls, 
+   .pageInputControls, and .itemsPerPageSelect are removed as ResultsTable 
+   and its own stylesheet should manage these aspects. */
 
-.resultsText {
-  margin-right: auto;
-  color: var(--theme-on-surface-variant);
-}
-
-.paginationControls { // For react-bootstrap Pagination
-  display: flex;
-  gap: v.$gap-small; // var(--spacing-xsmall)
-  margin-bottom: 0;
-
-  :global(.page-item) {
-    margin: 0 !important;
-  }
-
-  :global(.page-link) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: calc(var(--input-height-small, 32px) + 2px);
-    padding: var(--button-padding-small);
-    background-color: var(--theme-surface-container-high);
-    border: 1px solid var(--theme-outline-variant);
-    border-radius: var(--border-radius-small);
-    color: var(--theme-on-surface-variant);
-    font-weight: var(--font-weight-medium);
-    box-shadow: none !important;
-    gap: calc(#{v.$gap-small} / 2); // var(--spacing-xxsmall)
-    white-space: nowrap;
-
-    &:hover {
-      background-color: var(--theme-surface-container-high-hover);
-    }
-    .material-symbols-outlined {
-      font-size: 1.1rem;
-    }
-  }
-
-  :global(.page-item.disabled .page-link) {
-    opacity: 0.6;
-  }
-
-  :global(.page-item.active .page-link) {
-    background-color: var(--theme-primary);
-    border-color: var(--theme-primary);
-    color: var(--theme-on-primary);
-  }
-}
-
-.pageInputControls {
-  display: flex;
-  align-items: center;
-  gap: v.$gap-medium; // var(--spacing-small)
-  color: var(--theme-on-surface-variant);
-
-  .pageInput { // For StyledFormControl
-    width: 60px;
-    height: calc(var(--input-height-small, 32px) + 2px);
-    text-align: center;
-    font-size: var(--font-size-small);
-    border-radius: var(--border-radius-small);
-  }
-  .totalPagesText {
-     color: var(--theme-on-surface-variant);
-  }
-}
-
-.itemsPerPageSelect { // For StyledFormSelect
-  width: auto;
-  height: calc(var(--input-height-small, 32px) + 2px);
-  font-size: var(--font-size-small);
-  border-radius: var(--border-radius-small);
-}
-
-.dataTable {
-  margin-top: 0; 
-  font-size: var(--font-size-small);
-
-  :global(th) {
-    background-color: var(--theme-surface-container-low);
-    color: var(--theme-on-surface-variant);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  :global(td) {
-    color: var(--theme-on-surface);
-    vertical-align: middle;
-  }
-}
+/* .dataTable { ... } was removed */
+/* .paginationContainer { ... } was removed */
+/* .resultsText { ... } was removed */
+/* .paginationControls { ... } was removed */
+/* .pageInputControls { ... } was removed */
+/* .itemsPerPageSelect { ... } was removed */
 
 .actionButtonIcon {
   vertical-align: middle;
-  font-size: 1rem; 
+  font-size: 1rem;
 }
 
 .noDataText {

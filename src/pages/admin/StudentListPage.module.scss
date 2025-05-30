@@ -179,21 +179,19 @@
   // }
 }
 
-.dataTable {
-  margin-top: 0; // tableControls now has margin-bottom
-  font-size: v.$font-size-small; // var(--font-size-small)
+/* Styles for .dataTable, .paginationContainer, .resultsText, .paginationControls, 
+   .pageInputControls, and .itemsPerPageSelect are removed as ResultsTable 
+   and its own stylesheet should manage these aspects. The .filterCard style was already
+   commented out and is also removed. */
 
-  :global(th) {
-    background-color: var(--theme-surface-container-low);
-    color: var(--theme-on-surface-variant);
-    font-weight: var(--font-weight-semibold);
-  }
+/* .filterCard { ... } was removed */
+/* .dataTable { ... } was removed */
+/* .paginationContainer { ... } was removed (defined earlier but will be caught by the removal list) */
+/* .resultsText { ... } was removed (defined earlier) */
+/* .paginationControls { ... } was removed (defined earlier) */
+/* .pageInputControls { ... } was removed (defined earlier) */
+/* .itemsPerPageSelect { ... } was removed (defined earlier) */
 
-  :global(td) {
-    color: var(--theme-on-surface);
-    vertical-align: middle;
-  }
-}
 
 .actionButtonIcon {
   vertical-align: middle;

@@ -193,23 +193,19 @@
 
 .dataTable {
   // margin-top: 0; // No longer needed as control bar is separate or part of card structure
-  font-size: v.$font-size-small; // var(--font-size-small)
+  /* .dataTable { ... } and its :global selectors are removed as ResultsTable handles table styling. */
+  /* font-size: v.$font-size-small; // var(--font-size-small) */
 
-  :global(th) {
-    background-color: var(--theme-surface-container-low);
-    color: var(--theme-on-surface-variant);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  :global(td) {
-    color: var(--theme-on-surface);
-    vertical-align: middle;
-  }
+  /* :global(th) { ... } was removed */
+  /* :global(td) { ... } was removed */
 }
+/* Pagination specific styles (.paginationContainer, .resultsText, .paginationControls, 
+   .pageInputControls, .itemsPerPageSelect) are removed. */
+/* The commented-out .headerActions style is also removed. */
 
 .actionButtonIcon {
-  vertical-align: middle; 
-  font-size: 1rem; 
+  vertical-align: middle;
+  font-size: 1rem;
 }
 
 .noDataText {
@@ -220,9 +216,4 @@
   // padding: calc(#{v.$base_padding} * 1.5); // var(--spacing-large) // Only if inside card body and card body has no padding
 }
 
-// Remove .headerActions if it's fully replaced by .tableControls .actionsSection
-// .headerActions {
-//   display: flex;
-//   justify-content: flex-end;
-//   margin-bottom: v.$base-padding; // var(--spacing-medium)
-// }
+// .headerActions { ... } was removed (it was already commented out)

@@ -212,23 +212,18 @@
 
 .dataTable {
   // margin-top: 0; // Removed as tableControls provide separation
-  font-size: v.$font-size-small; // var(--font-size-small)
+  /* .dataTable { ... } and its :global selectors are removed as ResultsTable handles table styling. */
+  /* font-size: v.$font-size-small; // var(--font-size-small) */
 
-  :global(th) {
-    background-color: var(--theme-surface-container-low);
-    color: var(--theme-on-surface-variant);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  :global(td) {
-    color: var(--theme-on-surface);
-    vertical-align: middle;
-  }
+  /* :global(th) { ... } was removed */
+  /* :global(td) { ... } was removed */
 }
+/* Pagination specific styles (.paginationContainer, .resultsText, .paginationControls, 
+   .pageInputControls, .itemsPerPageSelect) are removed. */
 
 .actionButtonIcon {
   vertical-align: middle;
-  font-size: 1rem; 
+  font-size: 1rem;
 }
 
 .noDataText {

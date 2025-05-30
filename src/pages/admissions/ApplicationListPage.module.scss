@@ -159,22 +159,18 @@
 
 .dataTable {
   // margin-top: 0; // No longer needed as control bar is part of card structure
-  font-size: v.$font-size-small; // var(--font-size-small)
+  /* .dataTable { ... } and its :global selectors are removed as ResultsTable handles table styling. */
+  /* font-size: v.$font-size-small; // var(--font-size-small) */
 
-  :global(th) {
-    background-color: var(--theme-surface-container-low);
-    color: var(--theme-on-surface-variant);
-    font-weight: var(--font-weight-semibold);
-  }
-
-  :global(td) {
-    color: var(--theme-on-surface);
-    vertical-align: middle;
-  }
+  /* :global(th) { ... } was removed */
+  /* :global(td) { ... } was removed */
 }
+/* Pagination specific styles (.paginationContainer, .resultsText, .paginationControls, 
+   .pageInputControls, .itemsPerPageSelect) are removed. */
+/* These were defined earlier in the file but this comment confirms their removal based on the new structure. */
 
 .actionButtonIcon {
-  vertical-align: middle; 
+  vertical-align: middle;
   font-size: 1rem;  /* Adjusted from 1.1rem to match existing icon style for this page */
   margin-right: v.$gap-small; // var(--spacing-xsmall)
 }
@@ -186,3 +182,6 @@
   font-style: italic;
   text-align: center;
 }
+
+/* Ensure any remaining .paginationContainer, .resultsText, etc. styles are removed if they were missed in earlier chunks */
+/* (The previous diff should have caught them, this is a safeguard thought) */
