@@ -617,3 +617,70 @@ $breakpoint-large: 992px; // Example breakpoint (Bootstrap lg)
 // .contentWrapper { display: flex; flex-grow: 1; }
 // .mainContent { flex-grow: 1; overflow-y: auto; }
 // Header would be a direct child of .appContainer
+
+// --- CSS Tooltip Styles (copied/adapted for UtilitySidebar) ---
+// Applied to elements with [data-tooltip]
+[data-tooltip] {
+  position: relative; // Needed for absolute positioning of pseudo-elements
+
+  &::before,
+  &::after {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    z-index: v.$zindex-tooltip; // Ensure tooltip is on top (ensure $zindex-tooltip is available or define it)
+  }
+
+  // Tooltip content box
+  &::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    background-color: var(--theme-tooltip-background, v.$tooltip-bg-color); // Themed
+    color: var(--theme-tooltip-text-color, v.$tooltip-text-color); // Themed
+    padding: v.$tooltip-padding-y v.$tooltip-padding-x; // Use variables
+    border-radius: v.$tooltip-border-radius; // Use variables
+    font-size: v.$tooltip-font-size; // Use variables
+    line-height: v.$tooltip-line-height; // Use variables
+    white-space: nowrap;
+    box-shadow: v.$tooltip-shadow; // Use variables
+  }
+
+  // Show tooltip on hover/focus
+  &:hover::before,
+  &:hover::after,
+  &:focus::before,
+  &:focus::after {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  // Placement: Top (Default)
+  &.tooltipTop[data-tooltip]::before,
+  &:not([class*="tooltipBottom"]):not([class*="tooltipLeft"]):not([class*="tooltipRight"])[data-tooltip]::before {
+    bottom: calc(100% + #{v.$tooltip-arrow-size}); // Use variable for arrow size if using arrows
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  // Placement: Bottom
+  &.tooltipBottom[data-tooltip]::before {
+    top: calc(100% + #{v.$tooltip-arrow-size});
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  // Placement: Left
+  &.tooltipLeft[data-tooltip]::before {
+    right: calc(100% + #{v.$tooltip-arrow-size});
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  // Placement: Right
+  &.tooltipRight[data-tooltip]::before {
+    left: calc(100% + #{v.$tooltip-arrow-size});
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

@@ -55,6 +55,7 @@ const AddEditStudentPage = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState(''); // For error messages
   const [successMessage, setSuccessMessage] = useState(''); // For success messages
+  const [missingMandatoryDocs, setMissingMandatoryDocs] = useState([]);
 
   useEffect(() => {
     if (isEditMode && studentId) {
@@ -74,6 +75,23 @@ const AddEditStudentPage = () => {
           parentGuardianPhone: studentToEdit.parentGuardianInfo?.[0]?.phone || '',
           parentGuardianEmail: studentToEdit.parentGuardianInfo?.[0]?.email || '',
         });
+
+        // Check for missing mandatory documents
+        const missingDocs = [];
+        const mandatoryDocNames = ["Birth Certificate", "Photo ID", "Address Proof"];
+        if (studentToEdit.documents && studentToEdit.documents.length > 0) {
+          mandatoryDocNames.forEach(docName => {
+            const doc = studentToEdit.documents.find(d => d.name === docName && d.isMandatory);
+            if (!doc || !doc.uploaded) {
+              missingDocs.push(docName);
+            }
+          });
+        } else {
+          // If documents array is empty or not present, all mandatory are considered missing
+          missingDocs.push(...mandatoryDocNames);
+        }
+        setMissingMandatoryDocs(missingDocs);
+
       } else {
         alert(`Student with ID ${studentId} not found.`);
         navigate('/students');
@@ -166,6 +184,18 @@ const AddEditStudentPage = () => {
         <StyledCard.Body>
           {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
           {successMessage && <StyledAlert variant="success" dismissible onClose={() => setSuccessMessage('')}>{successMessage}</StyledAlert>}
+          
+          {isEditMode && missingMandatoryDocs.length > 0 && (
+            <StyledAlert variant="info" className={styles.formFieldAlert}>
+              <span className="material-symbols-outlined me-1" style={{ verticalAlign: 'middle' }}>info</span>
+              <strong>Missing Mandatory Documents:</strong>
+              <ul>
+                {missingMandatoryDocs.map(docName => <li key={docName}>{docName}</li>)}
+              </ul>
+              Please upload these documents to complete the student's profile.
+            </StyledAlert>
+          )}
+
           <form onSubmit={handleSubmit}> {/* Keep react-bootstrap Form as main wrapper for FormField */}
             <h5 className={styles.sectionTitle}>Personal Details</h5> {/* Styled section title */}
             <StyledRow className="mb-3">

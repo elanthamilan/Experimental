@@ -3,8 +3,8 @@ import { themes, applyTheme, defaultSpacingValues } from './themes'; // Import d
 
 import LeftSidebar from './components/organisms/LeftSidebar';
 import AddEditForm from './components/organisms/AddEditForm';
-import { Offcanvas, OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
-import StyledButton from './components/atoms/StyledButton';
+// React Bootstrap components removed: Offcanvas, OverlayTrigger, Tooltip, Dropdown
+import { StyledButton, StyledOffcanvas, StyledDropdown } from './components'; // Import custom components
 import { Routes, Route } from 'react-router-dom';
 
 // Import SIS Page Placeholders
@@ -50,6 +50,8 @@ import ExamScheduleListPage from './pages/academic/ExamScheduleListPage';
 import AddEditExamSchedulePage from './pages/academic/AddEditExamSchedulePage';
 // Course Detail Page Import
 import CourseDetailPage from './pages/academic/CourseDetailPage';
+// Attendance Page Import
+import AttendancePage from './pages/academic/AttendancePage';
 // Component Preview Page Import
 import ComponentPreviewPage from './pages/ComponentPreviewPage';
 // Settings Page Import
@@ -93,192 +95,150 @@ const USER_ROLES = {
 // }
 
 const UtilitySidebar = () => {
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  // const [showUserDropdown, setShowUserDropdown] = useState(false); // StyledDropdown manages its own state
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
 
   const {
     setTheme,
     isDarkMode,
     setIsDarkMode,
-    // Font customization from context
     headerFontSize,
     setHeaderFontSize,
     setBodyFontSize
   } = useContext(ThemeContext);
 
-  // Mock user data - replace with actual user context
   const currentUser = {
     name: 'John Doe',
     email: 'john.doe@example.com',
-    avatar: null, // URL to avatar image
+    avatar: null,
     role: 'Administrator'
   };
 
   const handleLogout = () => {
-    // Implement logout logic
     console.log('Logout clicked');
   };
 
-  // Theme cycling function
   const handleThemeChange = () => {
-    const availableThemes = themes.slice(0, 6); // Use first 6 themes
+    const availableThemes = themes.slice(0, 6);
     const nextIndex = (currentThemeIndex + 1) % availableThemes.length;
     setCurrentThemeIndex(nextIndex);
     setTheme(availableThemes[nextIndex].id);
   };
 
-  // Font size cycling function
   const handleFontSizeChange = () => {
     const currentHeaderIndex = fontSizeOptions.findIndex(option => option.value === headerFontSize);
-
-    // If current font size is not found, start from the beginning
     const startIndex = currentHeaderIndex === -1 ? 0 : currentHeaderIndex;
     const nextIndex = (startIndex + 1) % fontSizeOptions.length;
-
     setHeaderFontSize(fontSizeOptions[nextIndex].value);
     setBodyFontSize(fontSizeOptions[nextIndex].value);
   };
 
-  const renderTooltip = (props, text) => (
-    <Tooltip id={`tooltip-${text.toLowerCase().replace(' ', '-')}`} {...props}>
-      {text}
-    </Tooltip>
-  );
+  // renderTooltip function removed
 
   return (
     <div className={styles.utilitySidebar}>
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Apps')}>
-        <div className={styles.squareIconButton}>
-          <span className="material-symbols-outlined">apps</span>
-        </div>
-      </OverlayTrigger>
+      {/* Tooltips now use data-tooltip and CSS classes from App.module.scss */}
+      <div className={`${styles.squareIconButton} ${styles.tooltipLeft}`} data-tooltip="Apps">
+        <span className="material-symbols-outlined">apps</span>
+      </div>
 
       <hr className={styles.divider} />
 
-      {/* Theme Settings - Direct Controls */}
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Cycle Themes')}>
-        <div
-          className={styles.circleIconButton}
-          onClick={handleThemeChange}
-        >
-          <span className="material-symbols-outlined">palette</span>
-        </div>
-      </OverlayTrigger>
-
-      {/* Font Size Controls */}
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Cycle Font Size')}>
-        <div
-          className={styles.circleIconButton}
-          onClick={handleFontSizeChange}
-        >
-          <span className="material-symbols-outlined">text_fields</span>
-        </div>
-      </OverlayTrigger>
-
-      {/* Dark Mode Toggle */}
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Toggle Dark Mode')}>
-        <div
-          className={styles.circleIconButton}
-          onClick={() => setIsDarkMode(!isDarkMode)}
-        >
-          <span className="material-symbols-outlined">
-            {isDarkMode ? 'light_mode' : 'dark_mode'}
-          </span>
-        </div>
-      </OverlayTrigger>
-
-      {/* Settings Page Link */}
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Settings')}>
-        <Link to="/settings" className={styles.circleIconButton}>
-          <span className="material-symbols-outlined">settings</span>
-        </Link>
-      </OverlayTrigger>
-
-      {/* User Profile Dropdown */}
-      <Dropdown
-        show={showUserDropdown}
-        onToggle={setShowUserDropdown}
-        align="start"
-        drop="start"
-        style={{ position: 'static' }}
+      <div
+        className={`${styles.circleIconButton} ${styles.tooltipLeft}`}
+        data-tooltip="Cycle Themes"
+        onClick={handleThemeChange}
       >
-        <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'User Profile')}>
-          <Dropdown.Toggle
-            as="div"
-            className={styles.circleIconButton}
-            onClick={() => setShowUserDropdown(!showUserDropdown)}
+        <span className="material-symbols-outlined">palette</span>
+      </div>
+
+      <div
+        className={`${styles.circleIconButton} ${styles.tooltipLeft}`}
+        data-tooltip="Cycle Font Size"
+        onClick={handleFontSizeChange}
+      >
+        <span className="material-symbols-outlined">text_fields</span>
+      </div>
+
+      <div
+        className={`${styles.circleIconButton} ${styles.tooltipLeft}`}
+        data-tooltip="Toggle Dark Mode"
+        onClick={() => setIsDarkMode(!isDarkMode)}
+      >
+        <span className="material-symbols-outlined">
+          {isDarkMode ? 'light_mode' : 'dark_mode'}
+        </span>
+      </div>
+
+      <Link to="/settings" className={`${styles.circleIconButton} ${styles.tooltipLeft}`} data-tooltip="Settings">
+        <span className="material-symbols-outlined">settings</span>
+      </Link>
+
+      {/* User Profile Dropdown with StyledDropdown */}
+      <StyledDropdown
+        className={`${styles.userDropdownContainer} ${styles.tooltipLeft}`} // Added tooltipLeft for consistency if trigger needs it
+        trigger={
+          <div 
+            className={`${styles.circleIconButton} ${styles.tooltipLeft}`} // Apply tooltip to the trigger div
+            data-tooltip="User Profile"
+            // aria-expanded and aria-haspopup are handled by StyledDropdown on the trigger clone
           >
             <span className="material-symbols-outlined">account_circle</span>
-          </Dropdown.Toggle>
-        </OverlayTrigger>
-
-        <Dropdown.Menu
-          className={styles.utilityDropdownMenu}
-          style={{
-            position: 'fixed',
-            zIndex: 9999,
-            right: '80px',
-            top: '120px'
-          }}
-        >
-          <div className={styles.dropdownHeader}>
-            <div className={styles.userInfo}>
-              <div className={styles.userAvatar}>
-                {currentUser.avatar ? (
-                  <img src={currentUser.avatar} alt={currentUser.name} />
-                ) : (
-                  <span className="material-symbols-outlined">account_circle</span>
-                )}
-              </div>
-              <div className={styles.userDetails}>
-                <div className={styles.userName}>{currentUser.name}</div>
-                <div className={styles.userRole}>{currentUser.role}</div>
-                <div className={styles.userEmail}>{currentUser.email}</div>
-              </div>
+          </div>
+        }
+        menuClassName={styles.utilityDropdownMenu} // Apply custom class for positioning if needed
+      >
+        <div className={styles.dropdownHeader}>
+          <div className={styles.userInfo}>
+            <div className={styles.userAvatar}>
+              {currentUser.avatar ? (
+                <img src={currentUser.avatar} alt={currentUser.name} />
+              ) : (
+                <span className="material-symbols-outlined">account_circle</span>
+              )}
+            </div>
+            <div className={styles.userDetails}>
+              <div className={styles.userName}>{currentUser.name}</div>
+              <div className={styles.userRole}>{currentUser.role}</div>
+              <div className={styles.userEmail}>{currentUser.email}</div>
             </div>
           </div>
+        </div>
 
-          <hr className={styles.dropdownDivider} />
+        <StyledDropdown.Divider className={styles.dropdownDivider} />
 
-          <Dropdown.Item as={Link} to="/profile" className={styles.dropdownItem}>
-            <span className="material-symbols-outlined">account_circle</span>
-            User Profile
-          </Dropdown.Item>
+        <StyledDropdown.Item as={Link} to="/profile" className={styles.dropdownItem}>
+          <span className="material-symbols-outlined">account_circle</span>
+          User Profile
+        </StyledDropdown.Item>
 
-          <Dropdown.Item as={Link} to="/settings" className={styles.dropdownItem}>
-            <span className="material-symbols-outlined">settings</span>
-            Settings
-          </Dropdown.Item>
+        <StyledDropdown.Item as={Link} to="/settings" className={styles.dropdownItem}>
+          <span className="material-symbols-outlined">settings</span>
+          Settings
+        </StyledDropdown.Item>
 
-          <hr className={styles.dropdownDivider} />
+        <StyledDropdown.Divider className={styles.dropdownDivider} />
 
-          <Dropdown.Item
-            onClick={handleLogout}
-            className={`${styles.dropdownItem} ${styles.logoutItem}`}
-          >
-            <span className="material-symbols-outlined">logout</span>
-            Logout
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+        <StyledDropdown.Item
+          onClick={handleLogout}
+          className={`${styles.dropdownItem} ${styles.logoutItem}`}
+        >
+          <span className="material-symbols-outlined">logout</span>
+          Logout
+        </StyledDropdown.Item>
+      </StyledDropdown>
 
       <hr className={styles.divider} />
 
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Calendar')}>
-        <div className={styles.circleIconButton}>
-           <span className="material-symbols-outlined">calendar_today</span>
-        </div>
-      </OverlayTrigger>
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Tasks')}>
-        <div className={styles.circleIconButton}>
-           <span className="material-symbols-outlined">task_alt</span>
-        </div>
-      </OverlayTrigger>
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Notifications')}>
-        <div className={styles.circleIconButton}>
-           <span className="material-symbols-outlined">notifications</span>
-        </div>
-      </OverlayTrigger>
+      <div className={`${styles.circleIconButton} ${styles.tooltipLeft}`} data-tooltip="Calendar">
+         <span className="material-symbols-outlined">calendar_today</span>
+      </div>
+      <div className={`${styles.circleIconButton} ${styles.tooltipLeft}`} data-tooltip="Tasks">
+         <span className="material-symbols-outlined">task_alt</span>
+      </div>
+      <div className={`${styles.circleIconButton} ${styles.tooltipLeft}`} data-tooltip="Notifications">
+         <span className="material-symbols-outlined">notifications</span>
+      </div>
     </div>
   );
 }
@@ -492,14 +452,19 @@ function App() {
         {!isMobile ? (
            <LeftSidebar />
         ) : (
-           <Offcanvas show={showMobileMenu} onHide={() => setShowMobileMenu(false)} placement="start">
-             <Offcanvas.Header closeButton>
-               <Offcanvas.Title>Menu</Offcanvas.Title>
-             </Offcanvas.Header>
-             <Offcanvas.Body className={styles.mobileOffcanvasBody}>
-               <LeftSidebar />
-             </Offcanvas.Body>
-           </Offcanvas>
+          <StyledOffcanvas
+            show={showMobileMenu}
+            onHide={() => setShowMobileMenu(false)}
+            placement="start"
+            title="Menu"
+            // className for StyledOffcanvas's panel can be added if needed
+            // e.g. panelClassName={styles.mobileOffcanvasPanel}
+          >
+            {/* Pass LeftSidebar as children, specific body class might need to be handled by StyledOffcanvas or a wrapper div */}
+            <div className={styles.mobileOffcanvasBody}> {/* Keep this wrapper if specific styling is needed beyond StyledOffcanvas.Body defaults */}
+              <LeftSidebar />
+            </div>
+          </StyledOffcanvas>
         )}
 
         <div className={styles.appPage}>
@@ -529,11 +494,12 @@ function App() {
               <Route path="/courses/new" element={<AddEditCoursePage />} />
               <Route path="/courses/edit/:courseId" element={<AddEditCoursePage />} />
               <Route path="/courses/:courseId" element={<CourseDetailPage />} /> {/* Added this route */}
+              <Route path="/academic/attendance" element={<AttendancePage />} /> {/* Added AttendancePage Route */}
               <Route path="/grades" element={<GradebookPage />} />
-              <Route path="/admissions" element={<AdmissionsPage />} />
-              <Route path="/billing" element={<BillingPage />} />
-              <Route path="/reports" element={<ReportsPage />} />
-              <Route path="/profile" element={<UserProfilePage />} />
+              {/* <Route path="/admissions" element={<AdmissionsPage />} /> */} {/* Route removed */}
+              {/* <Route path="/billing" element={<BillingPage />} /> */} {/* Route removed */}
+              {/* <Route path="/reports" element={<ReportsPage />} /> */} {/* Route removed */}
+              {/* <Route path="/profile" element={<UserProfilePage />} /> */} {/* Route removed */}
               <Route path="/settings" element={<SettingsPage />} />
 
               {/* Faculty Management Routes */}
@@ -590,9 +556,9 @@ function App() {
               <Route path="/component-preview" element={<ComponentPreviewPage />} />
 
               {/* Additional utility routes */}
-              <Route path="/feedback" element={<div>Feedback Page - Coming Soon</div>} />
-              <Route path="/tutorial" element={<div>Tutorial Page - Coming Soon</div>} />
-              <Route path="/manual" element={<div>User Manual Page - Coming Soon</div>} />
+              {/* <Route path="/feedback" element={<div>Feedback Page - Coming Soon</div>} /> */} {/* Route removed */}
+              {/* <Route path="/tutorial" element={<div>Tutorial Page - Coming Soon</div>} /> */} {/* Route removed */}
+              {/* <Route path="/manual" element={<div>User Manual Page - Coming Soon</div>} /> */} {/* Route removed */}
               <Route path="/logout" element={<div>Logout Page - Coming Soon</div>} />
             </Routes>
           </main>

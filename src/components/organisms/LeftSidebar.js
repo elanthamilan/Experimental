@@ -47,6 +47,7 @@ const LeftSidebar = () => {
   const navGroups = useMemo(() => ({
     topLevel: [
       { eventKey: 'dashboard', icon: 'dashboard', label: 'Dashboard', path: '/dashboard' },
+      // UserProfilePage link removed from here if it existed
     ],
     academics: {
       title: 'Academics',
@@ -85,6 +86,13 @@ const LeftSidebar = () => {
           label: 'Exam Schedules',
           path: '/academic/examschedules',
           roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER]
+        },
+        { 
+          eventKey: 'attendance', 
+          icon: 'rule_folder', // Using rule_folder as an example icon
+          label: 'Attendance', 
+          path: '/academic/attendance', // Path matches the route set in App.js
+          roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER] // Assuming Admin and Teacher can access
         }
       ]
     },
@@ -92,16 +100,16 @@ const LeftSidebar = () => {
       title: 'Administration',
       items: [
          {
-           eventKey: 'admissions_group', // New eventKey for parent
+           eventKey: 'admissions_group', 
            icon: 'confirmation_number',
            label: 'Admissions',
-           // path: '/admissions', // Optional: parent can still link to main admissions page
+           // path attribute removed, making this a non-navigable group header
            roles: [USER_ROLES.ADMIN],
            children: [
-             { eventKey: 'admissions_dashboard', label: 'Admissions Overview', path: '/admissions', roles: [USER_ROLES.ADMIN] }, // Link to existing page
+             // { eventKey: 'admissions_dashboard', label: 'Admissions Overview', path: '/admissions', roles: [USER_ROLES.ADMIN] }, // Link to existing page - REMOVED
              { eventKey: 'app_form_fields', label: 'Form Fields Config', path: '/admin/admissions/formfields', roles: [USER_ROLES.ADMIN] },
              {
-               eventKey: 'submitted_applications',
+               eventKey: 'submitted_applications', // This child and its path are kept
                label: 'Submitted Applications',
                path: '/admissions/applications',
                roles: [USER_ROLES.ADMIN]
@@ -129,7 +137,7 @@ const LeftSidebar = () => {
            path: '/admin/faculty',
            roles: [USER_ROLES.ADMIN]
          },
-         { eventKey: 'reports', icon: 'analytics', label: 'Reports', path: '/reports', roles: [USER_ROLES.ADMIN] },
+         // { eventKey: 'reports', icon: 'analytics', label: 'Reports', path: '/reports', roles: [USER_ROLES.ADMIN] }, // Reports link removed
          {
            eventKey: 'department_mgmt',
            icon: 'corporate_fare', // Example icon
@@ -163,10 +171,10 @@ const LeftSidebar = () => {
      finance: {
       title: 'Finance',
       items: [
-        { eventKey: 'billing', icon: 'payments', label: 'Billing', path: '/billing', roles: [USER_ROLES.ADMIN, USER_ROLES.STUDENT] }, // Admin manages, Student views own
+        // { eventKey: 'billing', icon: 'payments', label: 'Billing', path: '/billing', roles: [USER_ROLES.ADMIN, USER_ROLES.STUDENT] }, // Billing link removed
         {
           eventKey: 'financial_year_mgmt',
-          icon: 'account_balance_wallet', // Example icon
+          icon: 'account_balance_wallet',
           label: 'Financial Years',
           path: '/admin/financialyears',
           roles: [USER_ROLES.ADMIN]
@@ -179,10 +187,11 @@ const LeftSidebar = () => {
       items: [
         { eventKey: 'feedback', icon: 'feedback', label: 'Feedback', path: '/feedback' },
         { eventKey: 'tutorial', icon: 'integration_instructions', label: 'Tutorial', path: '/tutorial' },
-        { eventKey: 'manual', icon: 'library_books', label: 'User Manual', path: '/manual' },
+        { eventKey: 'manual', icon: 'library_books', label: 'User Manual', path: '/manual' }, // This will be removed by removing the whole group
       ]
     }
-  }), [USER_ROLES]); // Only recreate when USER_ROLES changes
+    // Help & Resources group will be removed entirely in a subsequent diff block
+  }), [USER_ROLES]);
 
   // Filter logic based on role and search term
   // Initialize openGroups based on all group keys to ensure new groups are considered
@@ -200,31 +209,62 @@ const LeftSidebar = () => {
       setOpenGroups(initialOpenGroupsState);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navGroups]); // Rerun if navGroups structure changes (e.g. new group added)
-  // Removed openGroups from dependency array to prevent loop, as we are setting it here.
-  // This hook's purpose is to initialize open state for *newly added* groups.
+  }, [navGroups]);
 
 
   const [filteredNavGroups, setFilteredNavGroups] = useState({ topLevel: [], grouped: [] });
 
   useEffect(() => {
     const lowerSearch = searchTerm.toLowerCase();
+    
+    const availableNavGroups = { ...navGroups };
+    // Remove 'helpAndResources' group before filtering if it exists
+    // This ensures it's completely gone from processing
+    if (availableNavGroups.helpAndResources) {
+      delete availableNavGroups.helpAndResources;
+    }
+    // Also remove if any topLevel item pointed to /profile
+    const newTopLevelNav = availableNavGroups.topLevel ? availableNavGroups.topLevel.filter(item => item.path !== '/profile') : [];
 
-    let newTopLevel = navGroups.topLevel.filter(item =>
+
+    let newTopLevel = newTopLevelNav.filter(item =>
       (!item.roles || item.roles.includes(currentUserRole)) &&
       item.label.toLowerCase().includes(lowerSearch)
     );
 
-    let newGrouped = Object.entries(navGroups)
-      .filter(([key]) => key !== 'topLevel')
+    let newGrouped = Object.entries(availableNavGroups)
+      .filter(([key]) => key !== 'topLevel' && key !== 'helpAndResources') // Explicitly filter out helpAndResources here too
       .map(([groupKey, groupData]) => {
         if (groupData.roles && !groupData.roles.includes(currentUserRole)) {
-          return null; // Filter out group if role doesn't match
+          return null; 
         }
         const filteredItems = groupData.items.reduce((acc, item) => {
           if (item.roles && !item.roles.includes(currentUserRole)) {
-            return acc; // Filter out item if role doesn't match
+            return acc; 
           }
+          // Remove specific paths if they are being deleted
+          if (item.path === '/admissions' || item.path === '/billing' || item.path === '/reports') {
+              // If item has children, keep the item but remove its path, making it a toggle only
+              if (item.children && item.children.length > 0) {
+                  const itemWithoutPath = { ...item };
+                  delete itemWithoutPath.path; 
+                  // Now check if children or label match search
+                  if (itemWithoutPath.label.toLowerCase().includes(lowerSearch)) {
+                      acc.push(itemWithoutPath);
+                  } else {
+                      const filteredChildren = itemWithoutPath.children.filter(child =>
+                          (!child.roles || child.roles.includes(currentUserRole)) &&
+                          child.label.toLowerCase().includes(lowerSearch)
+                      );
+                      if (filteredChildren.length > 0) {
+                          acc.push({ ...itemWithoutPath, children: filteredChildren });
+                      }
+                  }
+                  return acc;
+              }
+              return acc; // If no children, remove the item entirely
+          }
+
           if (item.label.toLowerCase().includes(lowerSearch)) {
             acc.push(item);
           } else if (item.children) {
@@ -244,16 +284,14 @@ const LeftSidebar = () => {
 
     setFilteredNavGroups({ topLevel: newTopLevel, grouped: newGrouped });
 
-    // Auto-expand groups when searching
     if (searchTerm) {
       const allOpen = {};
       newGrouped.forEach(([key]) => allOpen[key] = true);
       setOpenGroups(prev => ({ ...prev, ...allOpen }));
-      // Auto-expand submenus with children if they contain search results
       const openSubs = {};
       newGrouped.forEach(([, groupData]) => {
         groupData.items.forEach(item => {
-          if (item.children && item.children.length > 0) { // Check if item has children after filtering
+          if (item.children && item.children.length > 0) { 
             openSubs[item.eventKey] = true;
           }
         });
@@ -261,13 +299,12 @@ const LeftSidebar = () => {
       setOpenSubmenus(prev => ({ ...prev, ...openSubs }));
     }
 
-  }, [currentUserRole, searchTerm, navGroups]); // Rerun on role or search term change
+  }, [currentUserRole, searchTerm, navGroups]);
 
 
   // Filter logic
   const lowerSearchTerm = searchTerm.toLowerCase();
 
-  // No longer need to re-declare topLevelItems and groupedItems here, use from state
   const { topLevel: topLevelItems, grouped: groupedItems } = filteredNavGroups;
 
   return (

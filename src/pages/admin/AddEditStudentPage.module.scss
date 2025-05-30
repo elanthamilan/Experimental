@@ -124,3 +124,29 @@
     margin-right: var(--spacing-xsmall);
   }
 }
+
+.formFieldAlert {
+  margin-bottom: var(--spacing-large); // Add some space below the alert
+  // Or use a more specific variable like v.$base-margin * 2;
+
+  ul {
+    margin-top: v.$spacing-xs;
+    margin-bottom: 0;
+    padding-left: v.$spacing-md; // Indent list
+  }
+}
+
+// Section title styling (as seen in AddEditStudentPage.js)
+.sectionTitle {
+  font-size: 1.2rem; // Example size
+  font-weight: v.$font-weight-semibold;
+  color: var(--theme-on-surface); // Or a specific title color
+  margin-top: v.$spacing-large;
+  margin-bottom: v.$spacing-medium;
+  padding-bottom: v.$spacing-xs;
+  border-bottom: 1px solid var(--theme-outline-variant);
+
+  &:first-of-type {
+    margin-top: 0; // No top margin for the very first section title
+  }
+}

@@ -12,6 +12,7 @@ import {
   // StyledPagination, // Removed
   ListControlsToolbar,
   ResultsTable, // Added
+  StyledAlert, // Added StyledAlert for the insight
 } from '../../components';
 import styles from './StudentListPage.module.scss';
 
@@ -25,6 +26,27 @@ const StudentListPage = () => {
 
   // const [currentPage, setCurrentPage] = useState(1); // Removed
   // const [itemsPerPage, setItemsPerPage] = useState(10); // Removed
+
+  // Logic for Incomplete Profiles Insight
+  const studentsWithIncompleteDocs = mockStudents.filter(student => {
+    if (!student.documents || student.documents.length === 0) {
+      // Assuming if documents array is missing/empty, mandatory docs are effectively missing.
+      // This depends on how strict the definition of "incomplete" should be.
+      // For this task, let's say they are incomplete if mandatory docs aren't explicitly uploaded.
+      // A more robust check would be to see if ALL defined mandatory docs are present and uploaded.
+      // The current logic in the prompt checks if *any* mandatory doc is missing.
+      const mandatoryDocTypes = ["Birth Certificate", "Photo ID", "Address Proof"]; // As per plan
+      return mandatoryDocTypes.some(mDoc => 
+        !student.documents?.find(d => d.name === mDoc && d.uploaded)
+      );
+    }
+    const hasMissingMandatoryDoc = student.documents.some(doc =>
+      doc.isMandatory && !doc.uploaded
+    );
+    return hasMissingMandatoryDoc;
+  });
+  const incompleteStudentsCount = studentsWithIncompleteDocs.length;
+
 
   useEffect(() => {
     const uniqueMajors = ['All', ...new Set(mockStudents.map(student => student.major).filter(m => m))];
@@ -93,7 +115,15 @@ const StudentListPage = () => {
     <StyledContainer className={styles.pageContainer}>
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>Student Management</h1>
+        {/* Description can be added here if desired, similar to other pages */}
       </div>
+
+      {incompleteStudentsCount > 0 && (
+        <StyledAlert variant="warning" className={styles.pageInsightAlert}>
+          <span className="material-symbols-outlined me-1" style={{ verticalAlign: 'middle' }}>warning</span>
+          <strong>Attention:</strong> {incompleteStudentsCount} student(s) have incomplete mandatory document uploads. Please review their profiles.
+        </StyledAlert>
+      )}
 
       <ListControlsToolbar
         searchTerm={searchTerm}
