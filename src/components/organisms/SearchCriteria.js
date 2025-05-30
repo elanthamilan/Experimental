@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col } from 'react-bootstrap';
-import StyledButton from '../atoms/StyledButton';
-import FormField from '../molecules/FormField';
+import { StyledRow, StyledCol, FormField, StyledButton } from '../../components';
 import styles from './SearchCriteria.module.scss';
 
 // Define options for label lookup
@@ -89,8 +87,8 @@ const SearchCriteria = () => {
       <div className={styles.formContainer}>
         <form onSubmit={handleSearch}>
           {/* Row 1: Institution, Degree, Program */}
-          <Row className="mb-3">
-            <Col xs={12} sm={6} md={4}>
+          <StyledRow className="mb-3">
+            <StyledCol xs={12} sm={6} md={4}>
               <FormField
                 controlId="formInstitution"
                 label="*Institution"
@@ -103,8 +101,8 @@ const SearchCriteria = () => {
                   { value: 'Other University 2', label: 'Other University 2' },
                 ]}
               />
-            </Col>
-            <Col xs={12} sm={6} md={4}>
+            </StyledCol>
+            <StyledCol xs={12} sm={6} md={4}>
               <FormField
                 controlId="formDegree"
                 label="Degree"
@@ -114,8 +112,8 @@ const SearchCriteria = () => {
                 onChange={handleChange}
                 options={degreeOptions}
               />
-            </Col>
-            <Col xs={12} sm={6} md={4}>
+            </StyledCol>
+            <StyledCol xs={12} sm={6} md={4}>
               <FormField
                 controlId="formProgram"
                 label="Program"
@@ -125,12 +123,12 @@ const SearchCriteria = () => {
                 onChange={handleChange}
                 options={programOptions}
               />
-            </Col>
-          </Row>
+            </StyledCol>
+          </StyledRow>
 
           {/* Row 2: Academic Year, Exam Month, Subject */}
-          <Row className="mb-3">
-             <Col xs={12} sm={6} md={4}>
+          <StyledRow className="mb-3">
+             <StyledCol xs={12} sm={6} md={4}>
                <FormField
                  controlId="formAcademicYear"
                  label="Academic year"
@@ -144,8 +142,8 @@ const SearchCriteria = () => {
                    { value: '2022-2023', label: '2022-2023' },
                  ]}
                />
-             </Col>
-             <Col xs={12} sm={6} md={4}>
+             </StyledCol>
+             <StyledCol xs={12} sm={6} md={4}>
                <FormField
                  controlId="formExamMonth"
                  label="*Exam month"
@@ -169,8 +167,8 @@ const SearchCriteria = () => {
                   { value: '12', label: 'December' },
                  ]}
                />
-             </Col>
-             <Col xs={12} sm={6} md={4}>
+             </StyledCol>
+             <StyledCol xs={12} sm={6} md={4}>
                <FormField
                  controlId="formSubject"
                  label="Subject"
@@ -184,12 +182,12 @@ const SearchCriteria = () => {
                    { value: 'Mathematics II', label: 'Mathematics II' },
                  ]}
                />
-             </Col>
-          </Row>
+             </StyledCol>
+          </StyledRow>
 
           {/* Row 3: Section, Checkbox, Buttons */}
-          <Row>
-             <Col xs={12} sm={6} md={4}>
+          <StyledRow>
+             <StyledCol xs={12} sm={6} md={4}>
                <FormField
                  controlId="formSection"
                  label="Section"
@@ -203,9 +201,9 @@ const SearchCriteria = () => {
                    { value: 'B', label: 'B' },
                  ]}
                />
-             </Col>
+             </StyledCol>
 
-            <Col xs={12} md={8} className="d-flex align-items-end justify-content-between justify-content-md-end mt-3 mt-md-0">
+            <StyledCol xs={12} md={8} className="d-flex align-items-end justify-content-between justify-content-md-end mt-3 mt-md-0">
                <FormField
                  controlId="formDisplayRevaluation"
                  label="Display revaluation"
@@ -222,8 +220,8 @@ const SearchCriteria = () => {
                    <span className="material-symbols-outlined">search</span> Search
                  </StyledButton>
               </div>
-            </Col>
-          </Row>
+            </StyledCol>
+          </StyledRow>
         </form>
       </div>
     </div>

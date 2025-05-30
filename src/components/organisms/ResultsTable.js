@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types'; // Import PropTypes
-import { Pagination, DropdownButton, Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import StyledContainer from '../atoms/StyledContainer';
-import StyledTable from '../atoms/StyledTable';
-import StyledButton from '../atoms/StyledButton';
-import StyledFormCheck from '../atoms/StyledFormCheck';
-import StyledBadge from '../atoms/StyledBadge';
-import StyledFormControl from '../atoms/StyledFormControl';
-import StyledFormSelect from '../atoms/StyledFormSelect';
-import SearchInput from '../molecules/SearchInput';
+import {
+  StyledContainer,
+  StyledTable,
+  StyledButton,
+  StyledFormCheck,
+  StyledBadge, // Assuming StyledBadge is used or might be needed
+  StyledFormControl,
+  StyledFormSelect,
+  SearchInput,
+  StyledPagination,
+  StyledDropdown,
+} from '../../components';
 import styles from './ResultsTable.module.scss';
 
 const ResultsTable = ({
@@ -153,10 +156,17 @@ const ResultsTable = ({
                 className={styles.searchInput}
               />
             )}
-            <DropdownButton id="actions-dropdown" title="Action" variant="outline-secondary" className={styles.actionDropdown}>
-              <Dropdown.Item href="#/action-1">Action 1</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Action 2</Dropdown.Item>
-            </DropdownButton>
+            <StyledDropdown
+              className={styles.actionDropdown}
+              trigger={
+                <StyledButton variant="outline-secondary" id="actions-dropdown-trigger">
+                  Action <span className="material-symbols-outlined">arrow_drop_down</span>
+                </StyledButton>
+              }
+            >
+              <StyledDropdown.Item href="#/action-1">Action 1</StyledDropdown.Item>
+              <StyledDropdown.Item href="#/action-2">Action 2</StyledDropdown.Item>
+            </StyledDropdown>
             {addActionLabel && addActionTo && (
               <StyledButton as={Link} to={addActionTo} variant="primary" className={styles.addButton}>
                 <span className="material-symbols-outlined">add</span> {addActionLabel}
@@ -167,13 +177,19 @@ const ResultsTable = ({
       ) : (
         <div className={styles.multiSelectActionBar}>
           <span className={styles.selectionCount}>{numSelected} / {filteredData.length} selected</span>
-          <DropdownButton id="multi-actions-dropdown" title="Actions" variant="primary" className={styles.multiActionDropdown}>
-            {/* Add relevant multi-select actions here */}
-            <Dropdown.Item href="#/multi-action-1">Publish Selected</Dropdown.Item>
-            <Dropdown.Item href="#/multi-action-2">Unpublish Selected</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item href="#/multi-action-3">Delete Selected</Dropdown.Item>
-          </DropdownButton>
+          <StyledDropdown
+            className={styles.multiActionDropdown}
+            trigger={
+              <StyledButton variant="primary" id="multi-actions-dropdown-trigger">
+                Actions <span className="material-symbols-outlined">arrow_drop_down</span>
+              </StyledButton>
+            }
+          >
+            <StyledDropdown.Item href="#/multi-action-1">Publish Selected</StyledDropdown.Item>
+            <StyledDropdown.Item href="#/multi-action-2">Unpublish Selected</StyledDropdown.Item>
+            <StyledDropdown.Divider />
+            <StyledDropdown.Item href="#/multi-action-3">Delete Selected</StyledDropdown.Item>
+          </StyledDropdown>
           {/* Use StyledButton */}
           <StyledButton variant="link" onClick={handleSelectAllFiltered} className={styles.selectAllLink}>
             Select all {filteredData.length}
@@ -228,39 +244,14 @@ const ResultsTable = ({
         <span className={styles.resultsText}>Showing {filteredData.length > 0 ? indexOfFirstItem + 1 : 0}-{Math.min(indexOfLastItem, filteredData.length)} of {filteredData.length} results</span>
 
         <div className="d-flex align-items-center gap-3"> {/* Wrapper for pagination controls */}
-          <Pagination className={styles.paginationControls}>
-            {/* Using Material Symbols for Pagination */}
-            <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1 || totalPages === 0}>
-              <span className="material-symbols-outlined">first_page</span>
-            </Pagination.First>
-            <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1 || totalPages === 0}>
-               <span className="material-symbols-outlined">chevron_left</span>
-               Prev {/* Text from feedback */}
-            </Pagination.Prev>
-
-            {/* Basic pagination items - Needs better logic for large page counts */}
-            {/* Render only if there are pages */}
-            {totalPages > 0 && [...Array(totalPages).keys()].map(number => (
-              // Improved logic to show first, last, current, and neighbors
-              (number === 0 || number === totalPages - 1 || Math.abs(number + 1 - currentPage) <= 1) ? (
-                <Pagination.Item key={number + 1} active={number + 1 === currentPage} onClick={() => handlePageChange(number + 1)}>
-                  {number + 1}
-                </Pagination.Item>
-              ) : (
-                // Show ellipsis only once between groups
-                (number === 1 && currentPage > 3) || (number === totalPages - 2 && currentPage < totalPages - 2) ? <Pagination.Ellipsis key={`ellipsis-${number}`} disabled /> : null
-              )
-            ))}
-
-            <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages || totalPages === 0}>
-               Next {/* Text from feedback */}
-               <span className="material-symbols-outlined">chevron_right</span>
-            </Pagination.Next>
-             {/* Add Last Page Button if needed */}
-             {/* <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages || totalPages === 0}>
-               <span className="material-symbols-outlined">last_page</span>
-             </Pagination.Last> */}
-          </Pagination>
+          <StyledPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            size="sm" // Assuming sm size is appropriate
+            maxVisiblePages={5} // Optional: Adjust as needed
+            className={styles.paginationControls}
+          />
 
           <div className={styles.pageInputControls}>
             <span>Page</span>
