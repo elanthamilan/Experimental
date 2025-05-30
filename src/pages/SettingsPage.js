@@ -20,7 +20,15 @@ import {
 import styles from './SettingsPage.module.scss';
 
 const SettingsPage = () => {
-  const { currentTheme, setTheme, isDarkMode, globalFontWeight, setGlobalFontWeight } = useTheme();
+  const {
+    currentTheme, setTheme, isDarkMode, globalFontWeight, setGlobalFontWeight,
+    customLogoUrl, setCustomLogoUrl,
+    baseBorderRadius, setBaseBorderRadius,
+    inputBorderRadius, setInputBorderRadius,
+    // cardHeaderBg, setCardHeaderBg, // These are derived in themes.js for now
+    // cardHeaderText, setCardHeaderText,
+    // tableHeaderText, setTableHeaderText 
+  } = useTheme();
 
   // State for custom theme builder (colors)
   const [customPrimary, setCustomPrimary] = useState('#006C74');
@@ -32,8 +40,16 @@ const SettingsPage = () => {
   const [selectedHeaderFont, setSelectedHeaderFont] = useState("Inter, sans-serif");
   const [selectedBodyFont, setSelectedBodyFont] = useState("Roboto, sans-serif");
 
-  // State for base font size
-  const [baseFontSize, setBaseFontSize] = useState(16);
+  // State for base font size - now directly from context for live updates via App.js
+  // const [baseFontSize, setBaseFontSize] = useState(16);
+  // Instead, use the context's baseFontSize if available, or keep local for this page's specific adjustments before saving
+  const { baseFontSize: contextBaseFontSize, setBaseFontSize: setContextBaseFontSize } = useTheme();
+  const [localBaseFontSize, setLocalBaseFontSize] = useState(contextBaseFontSize || 16);
+
+  // Local state for new settings, initialized from context
+  const [localCustomLogoUrl, setLocalCustomLogoUrl] = useState(customLogoUrl || '');
+  const [localBaseBorderRadius, setLocalBaseBorderRadius] = useState(baseBorderRadius || '8px');
+  const [localInputBorderRadius, setLocalInputBorderRadius] = useState(inputBorderRadius || '4px');
 
   // State for saved custom themes
   const [savedCustomThemes, setSavedCustomThemes] = useState([]);
@@ -65,7 +81,7 @@ const SettingsPage = () => {
   // Initialize custom pickers from currentTheme or defaults
   useEffect(() => {
     const activeThemeData = predefinedThemes.find(t => t.id === currentTheme);
-    if (activeThemeData && !activeThemeData.isCustom) { // Do not reset pickers if currentTheme is a custom one being applied
+    if (activeThemeData && !activeThemeData.isCustom) { 
       setCustomPrimary(activeThemeData.seedColors.primary);
       setCustomSecondary(activeThemeData.seedColors.secondary);
       setCustomTertiary(activeThemeData.seedColors.tertiary);
@@ -73,12 +89,15 @@ const SettingsPage = () => {
       const bodyFont = googleFonts.find(f => f.name === activeThemeData.fonts.body)?.value || `"${activeThemeData.fonts.body}", sans-serif`;
       setSelectedHeaderFont(headerFont);
       setSelectedBodyFont(bodyFont);
-      // Base font size and global font weight are global, not reset by predefined theme selection here
-      // but rather controlled by their own UI elements or initial context values.
+      // Initialize local new settings from predefined theme if applicable (though they don't store these yet)
+      // For now, these will just reset to defaults or keep their current context values.
+      setLocalCustomLogoUrl(customLogoUrl || ''); // Keep context or default
+      setLocalBaseBorderRadius(baseBorderRadius || '8px'); // Keep context or default
+      setLocalInputBorderRadius(inputBorderRadius || '4px'); // Keep context or default
     }
-    const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    setBaseFontSize(rootFontSize || 16);
-  }, [currentTheme]);
+    // setLocalBaseFontSize(parseFloat(getComputedStyle(document.documentElement).fontSize) || 16);
+    setLocalBaseFontSize(contextBaseFontSize || 16); // Sync with context's base font size
+  }, [currentTheme, customLogoUrl, baseBorderRadius, inputBorderRadius, contextBaseFontSize]);
 
   // Generate and apply custom theme palette (colors - debounced)
   const applyCustomColorsLive = useCallback(
@@ -113,13 +132,18 @@ const SettingsPage = () => {
 
   // Apply base font size live
   useEffect(() => {
-    document.documentElement.style.fontSize = `${baseFontSize}px`;
-  }, [baseFontSize]);
+    // document.documentElement.style.fontSize = `${baseFontSize}px`;
+    // Live update for base font size now handled by App.js useEffect when setContextBaseFontSize is called
+  }, []); // Removed baseFontSize dependency, App.js handles it.
 
   const previewColorKeys = [
     '--theme-primary', '--theme-on-primary', '--theme-primary-container', '--theme-on-primary-container',
-    '--theme-secondary', '--theme-on-secondary',
+    '--theme-secondary', '--theme-on-secondary', '--theme-secondary-container', '--theme-on-secondary-container',
+    '--theme-tertiary', '--theme-on-tertiary', '--theme-tertiary-container', '--theme-on-tertiary-container',
     '--theme-background', '--theme-on-background', '--theme-surface', '--theme-on-surface',
+    '--theme-surface-variant', '--theme-on-surface-variant', '--theme-outline',
+    '--theme-card-header-bg', '--theme-card-header-text',
+    '--theme-table-header-bg', '--theme-table-header-text',
   ];
 
   const handleApplyPredefinedTheme = (themeId) => {
@@ -147,30 +171,47 @@ const SettingsPage = () => {
         display: headerFontName,
         body: bodyFontName,
       },
-      baseFontSize: baseFontSize,
-      globalFontWeight: globalFontWeight, // From ThemeContext
+      baseFontSize: localBaseFontSize, // Use local state for saving
+      globalFontWeight: globalFontWeight, 
       isCustom: true,
+      // Save new settings
+      customLogoUrl: localCustomLogoUrl,
+      baseBorderRadius: localBaseBorderRadius,
+      inputBorderRadius: localInputBorderRadius,
+      // cardHeaderBg, cardHeaderText, tableHeaderText are derived from primary/secondary/tertiary
+      // so no need to save them explicitly if generateThemeColors handles them.
     };
     setSavedCustomThemes(prevThemes => [...prevThemes, newCustomTheme]);
   };
 
   const handleApplySavedTheme = (themeToApply) => {
-    // Set color pickers
+    // Apply colors
     setCustomPrimary(themeToApply.seedColors.primary);
     setCustomSecondary(themeToApply.seedColors.secondary);
     setCustomTertiary(themeToApply.seedColors.tertiary);
 
-    // Set font selectors - find the value from googleFonts list using the stored name
+    // Apply fonts
     const headerFontValue = googleFonts.find(f => f.name === themeToApply.fonts.display)?.value || themeToApply.fonts.display;
     const bodyFontValue = googleFonts.find(f => f.name === themeToApply.fonts.body)?.value || themeToApply.fonts.body;
     setSelectedHeaderFont(headerFontValue);
     setSelectedBodyFont(bodyFontValue);
+    
+    // Apply base font size via context
+    setContextBaseFontSize(themeToApply.baseFontSize); 
+    setLocalBaseFontSize(themeToApply.baseFontSize); // also update local state for UI
 
-    // Set base font size
-    setBaseFontSize(themeToApply.baseFontSize);
-
-    // Set global font weight (this will trigger context update and App.js useEffect)
+    // Apply global font weight via context
     setGlobalFontWeight(themeToApply.globalFontWeight);
+
+    // Apply new settings via context
+    setCustomLogoUrl(themeToApply.customLogoUrl || '');
+    setLocalCustomLogoUrl(themeToApply.customLogoUrl || '');
+
+    setBaseBorderRadius(themeToApply.baseBorderRadius || '8px');
+    setLocalBaseBorderRadius(themeToApply.baseBorderRadius || '8px');
+
+    setInputBorderRadius(themeToApply.inputBorderRadius || '4px');
+    setLocalInputBorderRadius(themeToApply.inputBorderRadius || '4px');
 
     // Note: The individual useEffects for colors, fonts, baseFontSize will apply these settings live.
     // We don't call setTheme() here to avoid confusion with predefined themes unless specifically desired.
@@ -216,7 +257,10 @@ const SettingsPage = () => {
                         <div className={styles.secondarySwatch} style={{ backgroundColor: theme.seedColors.secondary }} title={`Secondary: ${theme.seedColors.secondary}`} />
                         <div className={styles.tertiarySwatch} style={{ backgroundColor: theme.seedColors.tertiary }} title={`Tertiary: ${theme.seedColors.tertiary}`} />
                       </div>
-                      <p>Header: {theme.fonts.display}, Body: {theme.fonts.body}</p>
+                      <p>Fonts: H: {theme.fonts.display}, B: {theme.fonts.body}</p>
+                      <p>Size: {theme.baseFontSize || 'N/A'}px, Weight: {fontWeightOptions.find(fw => fw.value === theme.globalFontWeight)?.label || theme.globalFontWeight}</p>
+                      <p>Radii: Base: {theme.baseBorderRadius || 'N/A'}, Input: {theme.inputBorderRadius || 'N/A'}</p>
+                      {theme.customLogoUrl && <p>Logo: <img src={theme.customLogoUrl} alt="custom logo preview" style={{height: '20px', verticalAlign: 'middle'}} /></p>}
                       {theme.vibe && <p><em>Vibe: {theme.vibe}</em></p>}
                     </div>
                     <StyledButton
@@ -363,8 +407,12 @@ const SettingsPage = () => {
                     controlId="baseFontSize"
                     label="Base Size (px)"
                     type="number"
-                    value={baseFontSize}
-                    onChange={(e) => setBaseFontSize(Math.max(10, Math.min(24, Number(e.target.value))))}
+                    value={localBaseFontSize} // Use local state for input control
+                    onChange={(e) => {
+                      const newSize = Math.max(10, Math.min(24, Number(e.target.value)));
+                      setLocalBaseFontSize(newSize);
+                      setContextBaseFontSize(newSize); // Also update context for live preview via App.js
+                    }}
                     min="10"
                     max="24"
                     className={styles.fontSizeControlGroup}
@@ -388,6 +436,50 @@ const SettingsPage = () => {
                   </StyledFormGroup>
                 </form>
               </div>
+              <hr />
+              {/* Layout & Style Section */}
+              <div>
+                <h5>Layout & Style</h5>
+                <form>
+                  <FormField
+                    controlId="customLogoUrl"
+                    label="Custom Logo URL"
+                    type="url"
+                    placeholder="https://example.com/logo.png"
+                    value={localCustomLogoUrl}
+                    onChange={(e) => {
+                      setLocalCustomLogoUrl(e.target.value);
+                      setCustomLogoUrl(e.target.value); // Live update via context
+                    }}
+                    className={styles.textInputGroup}
+                  />
+                  <FormField
+                    controlId="baseBorderRadius"
+                    label="Base Border Radius"
+                    type="text" // Use text to allow '8px' or '0.5rem' etc.
+                    placeholder="e.g., 8px or 0.5rem"
+                    value={localBaseBorderRadius}
+                    onChange={(e) => {
+                      setLocalBaseBorderRadius(e.target.value);
+                      setBaseBorderRadius(e.target.value); // Live update via context
+                    }}
+                    className={styles.textInputGroup}
+                  />
+                  <FormField
+                    controlId="inputBorderRadius"
+                    label="Input Border Radius"
+                    type="text"
+                    placeholder="e.g., 4px or 0.25rem"
+                    value={localInputBorderRadius}
+                    onChange={(e) => {
+                      setLocalInputBorderRadius(e.target.value);
+                      setInputBorderRadius(e.target.value); // Live update via context
+                    }}
+                    className={styles.textInputGroup}
+                  />
+                </form>
+              </div>
+
               <div className={styles.saveThemeSection}>
                 <StyledButton variant="success" onClick={handleSaveCustomTheme} className={styles.saveThemeButton}>
                   💾 Save Custom Theme

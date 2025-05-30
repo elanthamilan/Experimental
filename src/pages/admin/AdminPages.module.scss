@@ -1,7 +1,45 @@
+@use '../../styles/variables' as v;
+
 // Minimal placeholder for admin page styles
 // Add your styles here as needed
 
 .admin-page {
   // Example style
   padding: 16px;
+}
+
+// Standard Page Header Styles (copied from DashboardPage.module.scss)
+.pageHeader {
+  margin-bottom: v.$base-margin * 3;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    text-align: left;
+  }
+}
+
+.pageTitle {
+  color: var(--theme-text-color, v.$on-surface-color);
+  font-size: 2.5rem;
+  font-family: var(--theme-font-display, v.$font-family-display);
+  font-weight: 700;
+  margin-bottom: v.$base-margin;
+  line-height: 1.2;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+}
+
+.pageDescription {
+  font-size: 1.1rem;
+  color: var(--theme-text-muted, v.$on-surface-variant-color);
+  font-family: var(--theme-font-body, v.$font-family-body);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    margin: 0;
+  }
 }

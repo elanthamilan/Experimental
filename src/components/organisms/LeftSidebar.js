@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useContext } from 'react'; // Added useContext
 import { Link } from 'react-router-dom';
 import { Nav, Collapse, OverlayTrigger, Tooltip } from 'react-bootstrap'; // Added OverlayTrigger, Tooltip
 import StyledButton from '../atoms/StyledButton';
 import StyledFormSelect from '../atoms/StyledFormSelect'; // Added StyledFormSelect
 import styles from './LeftSidebar.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { useTheme } from '../../App';
+import { ThemeContext } from '../../App'; // Import ThemeContext
 
 const LeftSidebar = () => {
   const navigate = useNavigate();
-  const { currentUserRole, setCurrentUserRole, USER_ROLES } = useTheme(); // Added setCurrentUserRole
+  const { currentUserRole, setCurrentUserRole, USER_ROLES, customLogoUrl } = useContext(ThemeContext); // Consume customLogoUrl
   const [activeKey, setActiveKey] = useState('dashboard');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -150,7 +150,14 @@ const LeftSidebar = () => {
            label: 'Component Preview',
            path: '/component-preview',
            roles: [USER_ROLES.ADMIN]
-         } // Added Component Preview link
+         }, // Added Component Preview link
+         {
+          eventKey: 'sub_institution_mgmt',
+          icon: 'domain_add', 
+          label: 'Sub-Institutions',
+          path: '/admin/sub-institutions', 
+          roles: [USER_ROLES.ADMIN]
+        }
       ]
     },
      finance: {
@@ -267,12 +274,14 @@ const LeftSidebar = () => {
     <div className={styles.sidebarContainer}>
       {/* Updated Header based on Softech example */}
       <div className={styles.sidebarHeader}>
-         {/* TODO: Replace with actual logo and brand name */}
-         <div className={styles.brandContainer}>
+        {customLogoUrl ? (
+          <img src={customLogoUrl} alt="Custom Logo" className={styles.customLogo} />
+        ) : (
+          <div className={styles.brandContainer}> {/* Keep brandContainer if logo is not present */}
             <div className={styles.brandLogoPlaceholder}></div> {/* Placeholder for square logo */}
             <span className={styles.brandName}>School Name</span>
-            {/* Subtitle removed as per request for cleaner look with full-width logo */}
-         </div>
+          </div>
+        )}
          {/* Icon can be kept or removed based on design preference with new logo style */}
          {/* <Icon name="unfold_more" className={styles.brandExpandIcon} /> */}
       </div>

@@ -244,6 +244,13 @@ export const generateThemeColors = (primary, secondary, tertiary, isDark = false
     // Hover and Active states - these should ideally use rgba over existing colors for subtlety
     '--theme-background-hover': hexToRgba(primary, 0.08), // M3 state layer opacity for hover
     '--theme-background-active': hexToRgba(primary, 0.12), // M3 state layer opacity for active/focus
+
+    // New variables for card/table headers and border radii
+    '--theme-card-header-bg': mixColors(m3Surface, primary, isDark ? 0.12 : 0.05), // Primary tinted surface
+    '--theme-card-header-text': getAccessibleOnColor(mixColors(m3Surface, primary, isDark ? 0.12 : 0.05)), // Accessible text on card header bg
+    '--theme-table-header-text': m3OnSurfaceVariant, // Slightly muted for table headers
+    '--theme-border-radius-base': '8px', // Default base border radius
+    '--theme-border-radius-input': '4px', // Default input border radius
   };
 };
 

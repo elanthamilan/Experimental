@@ -54,6 +54,9 @@ import CourseDetailPage from './pages/academic/CourseDetailPage';
 import ComponentPreviewPage from './pages/ComponentPreviewPage';
 // Settings Page Import
 import SettingsPage from './pages/SettingsPage';
+// Sub-Institution Management Page Imports
+import SubInstitutionListPage from './pages/admin/SubInstitutionListPage';
+import AddEditSubInstitutionPage from './pages/admin/AddEditSubInstitutionPage';
 import { fontWeightOptions } from './data/fonts'; // Import fontWeightOptions
 import { fontSizeOptions } from './themes'; // Import fontSizeOptions from themes
 import { Link } from 'react-router-dom';
@@ -306,9 +309,29 @@ function App() {
   const [headerFontWeight, setHeaderFontWeight] = useState('semibold');
   const [bodyFontWeight, setBodyFontWeight] = useState('normal');
 
+  // New theme states for advanced white labeling
+  const [customLogoUrl, setCustomLogoUrl] = useState('');
+  const [baseBorderRadius, setBaseBorderRadius] = useState('8px'); // Store as string with 'px' or handle conversion
+  const [inputBorderRadius, setInputBorderRadius] = useState('4px'); // Store as string with 'px'
+  const [cardHeaderBg, setCardHeaderBg] = useState(''); // Will be set by theme or custom
+  const [cardHeaderText, setCardHeaderText] = useState(''); // Will be set by theme or custom
+  const [tableHeaderText, setTableHeaderText] = useState(''); // Will be set by theme or custom
+
   useEffect(() => {
     applyTheme(currentTheme, isDarkMode); // Applies color and font-family variables, now with isDarkMode
-  }, [currentTheme, isDarkMode]); // Added isDarkMode to dependency array
+    // Apply border radii directly
+    if (baseBorderRadius.match(/^\d+px$/) || baseBorderRadius.match(/^\d+rem$/) || baseBorderRadius.match(/^\d+em$/) || baseBorderRadius === '0') {
+      document.documentElement.style.setProperty('--theme-border-radius-base', baseBorderRadius);
+    } else if (baseBorderRadius.match(/^\d+$/)) { // if it's a number string
+      document.documentElement.style.setProperty('--theme-border-radius-base', `${baseBorderRadius}px`);
+    }
+    if (inputBorderRadius.match(/^\d+px$/) || inputBorderRadius.match(/^\d+rem$/) || inputBorderRadius.match(/^\d+em$/) || inputBorderRadius === '0') {
+      document.documentElement.style.setProperty('--theme-border-radius-input', inputBorderRadius);
+    } else if (inputBorderRadius.match(/^\d+$/)) { // if it's a number string
+      document.documentElement.style.setProperty('--theme-border-radius-input', `${inputBorderRadius}px`);
+    }
+    // Note: Card/Table header colors are applied via themes.js and applyTheme
+  }, [currentTheme, isDarkMode, baseBorderRadius, inputBorderRadius]); 
 
   useEffect(() => {
     const selectedWeight = fontWeightOptions.find(fw => fw.value === globalFontWeight);
@@ -363,7 +386,21 @@ function App() {
       headerFontWeight,
       setHeaderFontWeight,
       bodyFontWeight,
-      setBodyFontWeight
+      setBodyFontWeight,
+      // Advanced white labeling
+      customLogoUrl,
+      setCustomLogoUrl,
+      baseBorderRadius,
+      setBaseBorderRadius,
+      inputBorderRadius,
+      setInputBorderRadius,
+      cardHeaderBg, // Though applied by themes.js, pass for settings page
+      setCardHeaderBg,
+      cardHeaderText, // Though applied by themes.js, pass for settings page
+      setCardHeaderText,
+      // tableHeaderBg is already part of theme generation
+      tableHeaderText, // Though applied by themes.js, pass for settings page
+      setTableHeaderText
     }}>
       <div
         className={`${styles.appContainer} ${isMobile ? styles.mobile : ''}`}
@@ -460,6 +497,11 @@ function App() {
               <Route path="/academic/examschedules" element={<ExamScheduleListPage />} />
               <Route path="/academic/examschedules/new" element={<AddEditExamSchedulePage />} />
               <Route path="/academic/examschedules/edit/:scheduleId" element={<AddEditExamSchedulePage />} />
+
+              {/* Sub-Institution Management Routes */}
+              <Route path="/admin/sub-institutions" element={<SubInstitutionListPage />} />
+              <Route path="/admin/sub-institutions/new" element={<AddEditSubInstitutionPage />} />
+              <Route path="/admin/sub-institutions/edit/:subInstId" element={<AddEditSubInstitutionPage isEdit={true} />} />
 
               {/* Component Preview Page Route */}
               <Route path="/component-preview" element={<ComponentPreviewPage />} />

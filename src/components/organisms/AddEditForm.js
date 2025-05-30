@@ -10,7 +10,7 @@ import FormField from '../molecules/FormField';
 // import StyledFormControl from '../atoms/StyledFormControl';
 // import StyledFormSelect from '../atoms/StyledFormSelect';
 // import StyledFormCheck from '../atoms/StyledFormCheck';
-import ProductTableRow from '../molecules/ProductTableRow'; // Import molecule
+// import ProductTableRow from '../molecules/ProductTableRow'; // Removed as component was deleted
 import FileUploadDropzone from '../molecules/FileUploadDropzone'; // Import molecule
 import styles from './AddEditForm.module.scss';
 
@@ -402,7 +402,7 @@ const AddEditForm = () => {
                    <Col md={3} className="text-end">TOTAL</Col>
                  </Row>
                  {/* Map over productRows state and render ProductTableRow molecule */}
-                 {productRows.map(row => (
+                 {/* {productRows.map(row => (
                    <ProductTableRow
                      key={row.id}
                      rowId={row.id}
@@ -413,7 +413,7 @@ const AddEditForm = () => {
                      onQuantityChange={(id, value) => handleProductChange(id, 'qty', value)}
                      onRemoveRow={handleRemoveProductRow}
                    />
-                 ))}
+                 ))} */}
                  {/* Add Button */}
                  <StyledButton
                    variant="link"
