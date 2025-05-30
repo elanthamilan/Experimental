@@ -16,6 +16,8 @@ import {
   StyledCol,  
   StyledListGroup,      // Added
   StyledListGroupItem,  // Added
+  StyledAlert,          // Added for preview
+  StyledBadge           // Added for preview
 } from '../components';
 import styles from './SettingsPage.module.scss';
 
@@ -659,6 +661,89 @@ const SettingsPage = () => {
                 <p className={styles.saveThemeNote}>
                   <strong>Note:</strong> Live previews are temporary. Save your theme to persist these custom settings.
                 </p>
+              </div>
+            </StyledCard.Body>
+          </StyledCard>
+
+          {/* Component Preview Showcase Card */}
+          <StyledCard className={styles.settingsSectionCard}>
+            <StyledCard.Header>
+              <div className={styles.sectionHeaderContent}>
+                <h3>Component Preview Showcase</h3>
+                <p>See how common components look with the current theme settings.</p>
+              </div>
+            </StyledCard.Header>
+            <StyledCard.Body>
+              {/* StyledButton Previews */}
+              <div className="mb-3">
+                <h5>Buttons</h5>
+                <StyledButton variant="primary" className="me-2 mb-2">Primary</StyledButton>
+                <StyledButton variant="secondary" className="me-2 mb-2">Secondary</StyledButton>
+                <StyledButton variant="success" className="me-2 mb-2">Success</StyledButton>
+                <StyledButton variant="danger" className="me-2 mb-2">Danger</StyledButton>
+                <StyledButton variant="warning" className="me-2 mb-2">Warning</StyledButton>
+                <StyledButton variant="info" className="me-2 mb-2">Info</StyledButton>
+                <StyledButton variant="light" className="me-2 mb-2">Light</StyledButton>
+                <StyledButton variant="dark" className="me-2 mb-2">Dark</StyledButton>
+                <StyledButton variant="link" className="me-2 mb-2">Link</StyledButton>
+              </div>
+
+              {/* StyledAlert Previews */}
+              <div className="mb-3">
+                <h5>Alerts</h5>
+                <StyledAlert variant="success">This is a success alert.</StyledAlert>
+                <StyledAlert variant="danger">This is a danger alert.</StyledAlert>
+                <StyledAlert variant="warning">This is a warning alert.</StyledAlert>
+                <StyledAlert variant="info">This is an info alert.</StyledAlert>
+                {/* Add primary/secondary if they exist for StyledAlert */}
+                <StyledAlert variant="primary">This is a primary alert.</StyledAlert>
+                <StyledAlert variant="secondary">This is a secondary alert (often darker/neutral).</StyledAlert>
+              </div>
+
+              {/* StyledCard Preview */}
+              <div className="mb-3">
+                <h5>Card</h5>
+                <StyledCard>
+                  <StyledCard.Header>Sample Card Header</StyledCard.Header>
+                  <StyledCard.Body>
+                    This is the body of the sample card. It should reflect the current theme's card styling.
+                    It can contain various elements and text, adapting to the theme applied.
+                  </StyledCard.Body>
+                </StyledCard>
+              </div>
+
+              {/* FormField Preview */}
+              <div className="mb-3">
+                <h5>Form Field</h5>
+                <FormField
+                  controlId="previewFormInput"
+                  label="Sample Input Label"
+                  type="text"
+                  placeholder="Enter sample text..."
+                />
+                <FormField
+                  controlId="previewFormSelect"
+                  label="Sample Select Label"
+                  as="select"
+                  options={[
+                    { value: '1', label: 'Option 1' },
+                    { value: '2', label: 'Option 2' },
+                    { value: '3', label: 'Option 3' },
+                  ]}
+                />
+              </div>
+
+              {/* StyledBadge Previews */}
+              <div>
+                <h5>Badges</h5>
+                <StyledBadge variant="primary" className="me-2">Primary</StyledBadge>
+                <StyledBadge variant="secondary" className="me-2">Secondary</StyledBadge>
+                <StyledBadge variant="success" className="me-2">Success</StyledBadge>
+                <StyledBadge variant="danger" className="me-2">Danger</StyledBadge>
+                <StyledBadge variant="warning" className="me-2">Warning</StyledBadge>
+                <StyledBadge variant="info" className="me-2">Info</StyledBadge>
+                <StyledBadge variant="light" className="me-2 text-dark">Light</StyledBadge> {/* Added text-dark for visibility on light badge */}
+                <StyledBadge variant="dark" className="me-2">Dark</StyledBadge>
               </div>
             </StyledCard.Body>
           </StyledCard>
