@@ -93,33 +93,8 @@
   white-space: nowrap;
 }
 
-// Status badge styling in tables
-.statusBadge {
-  display: inline-block;
-  padding: 0.25em 0.6em;
-  font-size: 0.75em;
-  font-weight: 700;
-  line-height: 1;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  border-radius: 0.375rem;
-
-  &.status-active {
-    color: #155724;
-    background-color: #d4edda;
-  }
-
-  &.status-inactive {
-    color: #721c24;
-    background-color: #f8d7da;
-  }
-
-  &.status-pending {
-    color: #856404;
-    background-color: #fff3cd;
-  }
-}
+// Status badge styling in tables - REMOVED
+// .statusBadge { ... }
 
 // Dark mode support
 [data-theme="dark"] {
