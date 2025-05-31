@@ -49,6 +49,7 @@ export { default as FileUploadDropzone } from './molecules/FileUploadDropzone';
 export { default as StatsCard } from './molecules/StatsCard';
 export { default as StyledDropdown } from './molecules/StyledDropdown';
 export { default as StyledOffcanvas } from './molecules/StyledOffcanvas';
+export { default as StyledBreadcrumb } from './molecules/StyledBreadcrumb'; // Added StyledBreadcrumb
 // export { default as ThemeDrawer } from './molecules/ThemeDrawer'; // Removed as unused
 // export { default as Toolbar } from './molecules/Toolbar'; // Removed as unused
 // export { default as ProductTableRow } from './molecules/ProductTableRow'; // Removed as unused

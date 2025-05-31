@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { Row, Col, Form as BootstrapForm, Breadcrumb, Alert, Card, Button as BootstrapButton } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
-import StyledContainer from '../atoms/StyledContainer';
-import StyledCard from '../atoms/StyledCard';
-import StyledButton from '../atoms/StyledButton';
-import StyledFormLabel from '../atoms/StyledFormLabel';
-import FormField from '../molecules/FormField';
-// Atoms below are used via FormField molecule
-// import StyledFormControl from '../atoms/StyledFormControl';
-// import StyledFormSelect from '../atoms/StyledFormSelect';
-// import StyledFormCheck from '../atoms/StyledFormCheck';
-// import ProductTableRow from '../molecules/ProductTableRow'; // Removed as component was deleted
-import FileUploadDropzone from '../molecules/FileUploadDropzone'; // Import molecule
+import {
+  StyledContainer,
+  StyledRow,
+  StyledCol,
+  StyledBreadcrumb,
+  StyledAlert,
+  StyledCard, // Will use its sub-components StyledCard.Body, StyledCard.Title, StyledCard.Text
+  StyledButton,
+  StyledFormLabel,
+  StyledFormGroup, // For wrapping file upload or other groups if needed
+  FormField,
+  FileUploadDropzone,
+} from '../../components'; // Assuming all are exported from main components index
 import styles from './AddEditForm.module.scss';
 
 const AddEditForm = () => {
@@ -100,19 +101,19 @@ const AddEditForm = () => {
   ];
   const showErrors = true; // Control visibility based on validation state
 
+  const breadcrumbItems = [
+    { label: 'Home', path: '/', isActive: false },
+    { label: pageTitle, isActive: true }
+  ];
+
   return (
-    <StyledContainer fluid className={styles.formPageContainer}> {/* Apply container class */}
+    <StyledContainer fluid className={styles.formPageContainer}>
       {/* 1. Breadcrumbs & Top Actions */}
-      <Row className="align-items-center mb-3">
-        <Col>
-          <Breadcrumb>
-            <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/" }}>Home</Breadcrumb.Item>
-            {/* Add more levels if needed */}
-            <Breadcrumb.Item active>{pageTitle}</Breadcrumb.Item>
-          </Breadcrumb>
-        </Col>
-        <Col xs="auto">
-          {/* Top action buttons like Send Feedback, Video, Manual - Use StyledButton if desired */}
+      <StyledRow className="align-items-center mb-3"> {/* Replaced Row with StyledRow */}
+        <StyledCol> {/* Replaced Col with StyledCol */}
+          <StyledBreadcrumb items={breadcrumbItems} />
+        </StyledCol>
+        <StyledCol xs="auto"> {/* Replaced Col with StyledCol */}
           <StyledButton variant="link" size="sm" className="text-decoration-none me-2">
              <span className="material-symbols-outlined" style={{ fontSize: '16px', verticalAlign: 'text-bottom' }}>feedback</span> Send feedback
           </StyledButton>
@@ -123,66 +124,60 @@ const AddEditForm = () => {
              <span className="material-symbols-outlined" style={{ fontSize: '16px', verticalAlign: 'text-bottom' }}>menu_book</span> User manual
            </StyledButton>
           {isEditing && (
-             // TODO: Add 'danger' or 'outline-danger' variant to StyledButton if needed
-            <BootstrapButton variant="outline-danger" size="sm" onClick={() => {/* TODO: handleDelete */}}>
+            <StyledButton variant="outline-danger" size="sm" onClick={() => {/* TODO: handleDelete */}}>
               <span className="material-symbols-outlined" style={{ fontSize: '16px', verticalAlign: 'text-bottom' }}>delete</span> Delete
-            </BootstrapButton>
+            </StyledButton>
           )}
-        </Col>
-      </Row>
+        </StyledCol>
+      </StyledRow>
 
       {/* Page Title */}
-      <h2 className={`mb-3 ${styles.pageTitle}`}>{pageTitle}</h2> {/* Apply title style */}
+      <h2 className={`mb-3 ${styles.pageTitle}`}>{pageTitle}</h2>
 
       {/* 1.1 Error Summary */}
       {showErrors && errorSummary.length > 0 && (
-        <Alert variant="danger" className="mb-3">
+        <StyledAlert variant="danger" className="mb-3"> {/* Replaced Alert */}
           <h6>There are {errorSummary.length} errors to be resolved</h6>
           <ul>
             {errorSummary.map(err => (
               <li key={err.id}>
-                {/* TODO: Make this clickable to scroll (onClick={() => handleScrollToError(err.id)}) */}
-                 {/* Using BootstrapButton directly for this specific link style */}
-                <BootstrapButton variant="link" className="p-0 text-danger text-decoration-none" >
+                <StyledButton variant="link" className="p-0 text-danger text-decoration-none" onClick={() => {/* TODO: handleScrollToError(err.id) */}}>
                   {err.message}
-                </BootstrapButton>
+                </StyledButton>
               </li>
             ))}
           </ul>
-        </Alert>
+        </StyledAlert>
       )}
 
       {/* 1.2 Callouts */}
-      <Alert variant="warning" className="d-flex align-items-center mb-3">
+      <StyledAlert variant="warning" className="d-flex align-items-center mb-3"> {/* Replaced Alert */}
         <span className="material-symbols-outlined me-2">warning</span>
         Callouts can be colored and have an icon too.
-        {/* TODO: Add Delete button if needed for specific callouts */}
-      </Alert>
-      <Alert variant="info" className="d-flex align-items-center mb-3">
+      </StyledAlert>
+      <StyledAlert variant="info" className="d-flex align-items-center mb-3"> {/* Replaced Alert */}
         <span className="material-symbols-outlined me-2">info</span>
         Callouts can be colored and have an icon too.
-      </Alert>
-      {/* Add more callouts as needed */}
-
+      </StyledAlert>
 
       {/* 2. Form Sections */}
-      <BootstrapForm onSubmit={() => {/* TODO: handleSubmit */}}> {/* Use BootstrapForm */}
+      <form onSubmit={() => {/* TODO: handleSubmit */}}> {/* Replaced BootstrapForm with form */}
 
         {/* 2.1 Section: Basics (First Instance) */}
-        <StyledCard variant="default" className={`${styles.formSectionCard} mb-3`}>
-          <Card.Body>
+        <StyledCard variant="default" className={`${styles.formSectionCard} mb-3`}> {/* StyledCard used directly */}
+          <StyledCard.Body> {/* Replaced Card.Body */}
             {/* Card Title and Description */}
-            <Row>
-              <Col md={4}> {/* Left side with title/description */}
-                <Card.Title>Basics</Card.Title>
-                <Card.Text className="text-muted">
+            <StyledRow> {/* Replaced Row */}
+              <StyledCol md={4}> {/* Replaced Col */}
+                <StyledCard.Title>Basics</StyledCard.Title> {/* Replaced Card.Title */}
+                <StyledCard.Text className="text-muted"> {/* Replaced Card.Text */}
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                </Card.Text>
-              </Col>
-              <Col md={8}> {/* Right side with form fields */}
+                </StyledCard.Text>
+              </StyledCol>
+              <StyledCol md={8}> {/* Replaced Col */}
                 {/* 2.1.1 & 2.1.2 */}
-                <Row>
-                  <Col md={6}>
+                <StyledRow> {/* Replaced Row */}
+                  <StyledCol md={6}> {/* Replaced Col */}
                     <FormField
                       controlId="formField2_1_1"
                       label="Collection Name"
@@ -193,10 +188,10 @@ const AddEditForm = () => {
                       value={formData.field2_1_1}
                       onChange={handleChange}
                     />
-                  </Col>
-                  <Col md={6}>
+                  </StyledCol>
+                  <StyledCol md={6}> {/* Replaced Col */}
                      <FormField
-                       controlId="field2_1_2" // Use name for controlId too for consistency
+                       controlId="field2_1_2"
                        label="Discount Amount"
                        type="number" // Assuming currency might be number
                        placeholder="e.g. 10.00"
@@ -205,10 +200,9 @@ const AddEditForm = () => {
                        name="field2_1_2"
                        value={formData.field2_1_2}
                        onChange={handleChange}
-                       // TODO: Add currency validation if needed
                      />
-                  </Col>
-                </Row>
+                  </StyledCol>
+                </StyledRow>
                 {/* 2.1.3 */}
                 <FormField
                   controlId="field2_1_3"
@@ -222,8 +216,8 @@ const AddEditForm = () => {
                   onChange={handleChange}
                 />
                  {/* 2.1.4 */}
-                 <Row>
-                   <Col md={6}>
+                 <StyledRow> {/* Replaced Row */}
+                   <StyledCol md={6}> {/* Replaced Col */}
                      <FormField
                        controlId="formField2_1_4a"
                        label="Label"
@@ -231,8 +225,8 @@ const AddEditForm = () => {
                        placeholder="Input text"
                        className="mb-3"
                      />
-                   </Col>
-                   <Col md={6}>
+                   </StyledCol>
+                   <StyledCol md={6}> {/* Replaced Col */}
                      <FormField
                        controlId="formField2_1_4b"
                        label="Label"
@@ -240,14 +234,13 @@ const AddEditForm = () => {
                        placeholder="Input text"
                        className="mb-3"
                      />
-                   </Col>
-                 </Row>
+                   </StyledCol>
+                 </StyledRow>
                  {/* 2.1.6 File Upload */}
-                 <BootstrapForm.Group className="mb-3" controlId="formField2_1_6">
+                 <StyledFormGroup className="mb-3" controlId="formField2_1_6"> {/* Replaced BootstrapForm.Group */}
                    <StyledFormLabel>Upload Images/Documents</StyledFormLabel>
                    <FileUploadDropzone onFilesAccepted={handleFilesAccepted} />
-                   {/* TODO: Display uploaded file previews/list if needed */}
-                 </BootstrapForm.Group>
+                 </StyledFormGroup>
                  {/* 2.1.7 Checkbox */}
                  <FormField
                    controlId="field2_1_7"
@@ -257,28 +250,25 @@ const AddEditForm = () => {
                    checked={formData.field2_1_7}
                    onChange={handleChange}
                  />
-              </Col>
-            </Row>
-          </Card.Body>
+              </StyledCol>
+            </StyledRow>
+          </StyledCard.Body>
         </StyledCard>
 
         {/* 2.1.5 User Info / Transportation Dept Section */}
-        {/* This section seems misplaced in the screenshot, combining user info and transportation? */}
-        {/* Recreating based on the visual grouping */}
-        <Card className={`${styles.formSectionCard} mb-3`}> {/* Apply card style */}
-          <Card.Body>
-             <Row>
-              <Col md={4}>
-                 {/* Assuming this is related to the user shown at bottom-left */}
-                 <Card.Title>John Smith</Card.Title>
-                 <Card.Text className="text-muted">JS Accounts team</Card.Text>
+        <StyledCard className={`${styles.formSectionCard} mb-3`}> {/* Replaced Card */}
+          <StyledCard.Body> {/* Replaced Card.Body */}
+             <StyledRow> {/* Replaced Row */}
+              <StyledCol md={4}> {/* Replaced Col */}
+                 <StyledCard.Title>John Smith</StyledCard.Title> {/* Replaced Card.Title */}
+                 <StyledCard.Text className="text-muted">JS Accounts team</StyledCard.Text> {/* Replaced Card.Text */}
                  <hr/>
-                 <Card.Title>Transportation Department</Card.Title>
-                 <Card.Text className="text-muted">
+                 <StyledCard.Title>Transportation Department</StyledCard.Title> {/* Replaced Card.Title */}
+                 <StyledCard.Text className="text-muted"> {/* Replaced Card.Text */}
                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                 </Card.Text>
-              </Col>
-              <Col md={8}>
+                 </StyledCard.Text>
+              </StyledCol>
+              <StyledCol md={8}> {/* Replaced Col */}
                  {/* 2.1.8 Dropdown */}
                  <FormField
                    controlId="field2_1_8"
@@ -306,24 +296,22 @@ const AddEditForm = () => {
                    checked={formData.field2_1_9}
                    onChange={handleChange}
                  />
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
+              </StyledCol>
+            </StyledRow>
+          </StyledCard.Body>
+        </StyledCard>
 
         {/* 2.2 Section: Basics (Checkboxes) */}
-        <Card className={`${styles.formSectionCard} mb-3`}> {/* Apply card style */}
-          <Card.Body>
-            <Row>
-              <Col md={4}>
-                <Card.Title>Basics</Card.Title>
-                <Card.Text className="text-muted">
+        <StyledCard className={`${styles.formSectionCard} mb-3`}> {/* Replaced Card */}
+          <StyledCard.Body> {/* Replaced Card.Body */}
+            <StyledRow> {/* Replaced Row */}
+              <StyledCol md={4}> {/* Replaced Col */}
+                <StyledCard.Title>Basics</StyledCard.Title> {/* Replaced Card.Title */}
+                <StyledCard.Text className="text-muted"> {/* Replaced Card.Text */}
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                </Card.Text>
-              </Col>
-              <Col md={8}>
-                {/* 2.2.1 Checkboxes */}
-                {/* 2.2.1 Checkboxes */}
+                </StyledCard.Text>
+              </StyledCol>
+              <StyledCol md={8}> {/* Replaced Col */}
                 <FormField controlId="formField2_2_1a" label="Checkbox" type="checkbox" className="mb-2" />
                 <FormField controlId="formField2_2_1b" label="Checkbox" type="checkbox" className="mb-2" defaultChecked />
                 {/* 2.2.2 Dropdown */}
@@ -340,81 +328,74 @@ const AddEditForm = () => {
                  />
                 <FormField controlId="formField2_2_1c" label="Checkbox" type="checkbox" className="mb-2" />
                 <FormField controlId="formField2_2_1d" label="Checkbox" type="checkbox" className="mb-2" />
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
+              </StyledCol>
+            </StyledRow>
+          </StyledCard.Body>
+        </StyledCard>
 
         {/* 2.3 Section: Basics (Radio Buttons) */}
-        <Card className={`${styles.formSectionCard} mb-3`}> {/* Apply card style */}
-          <Card.Body>
-             <Row>
-              <Col md={4}>
-                <Card.Title>Basics</Card.Title>
-                <Card.Text className="text-muted">
+        <StyledCard className={`${styles.formSectionCard} mb-3`}> {/* Replaced Card */}
+          <StyledCard.Body> {/* Replaced Card.Body */}
+             <StyledRow> {/* Replaced Row */}
+              <StyledCol md={4}> {/* Replaced Col */}
+                <StyledCard.Title>Basics</StyledCard.Title> {/* Replaced Card.Title */}
+                <StyledCard.Text className="text-muted"> {/* Replaced Card.Text */}
                   Lorem ipsum dolor sit amet, conem fetat adipiscing elit, sed do eiusmod tempor
-                </Card.Text>
-              </Col>
-              <Col md={8}>
+                </StyledCard.Text>
+              </StyledCol>
+              <StyledCol md={8}> {/* Replaced Col */}
                 {/* 2.3.1 Radio Group */}
                 <FormField
                   controlId="manualRadio"
                   label="Manual"
                   type="radio"
-                  name="productAddType" // Name groups radios
-                  value="manual" // Value for this option
+                  name="productAddType"
+                  value="manual"
                   checked={formData.productAddType === 'manual'}
                   onChange={handleChange}
                   className="mb-1"
                 />
-                <BootstrapForm.Text className="text-muted d-block ms-4 mb-2">Add products to this collection one by one.</BootstrapForm.Text>
+                {/* Replaced BootstrapForm.Text with p and SCSS class */}
+                <p className={`${styles.formTextMuted} d-block ms-4 mb-2`}>Add products to this collection one by one.</p>
                 <FormField
                   controlId="automatedRadio"
                   label="Automated"
                   type="radio"
-                  name="productAddType" // Name groups radios
-                  value="automated" // Value for this option
+                  name="productAddType"
+                  value="automated"
                   checked={formData.productAddType === 'automated'}
                   onChange={handleChange}
                 />
-                <BootstrapForm.Text className="text-muted d-block ms-4 mb-2">Existing and future products that match the conditions you set will automatically be added to this collection.</BootstrapForm.Text>
+                {/* Replaced BootstrapForm.Text with p and SCSS class */}
+                <p className={`${styles.formTextMuted} d-block ms-4 mb-2`}>Existing and future products that match the conditions you set will automatically be added to this collection.</p>
                  {/* 2.5 Additional Settings Link (Placeholder) */}
                 <StyledButton variant="link" size="sm" className="p-0">Additional settings +</StyledButton>
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
+              </StyledCol>
+            </StyledRow>
+          </StyledCard.Body>
+        </StyledCard>
 
         {/* 2.6 Product Table Section */}
-        <Card className={`${styles.formSectionCard} mb-3`}> {/* Apply card style */}
-          <Card.Body>
-             <Row>
-              <Col md={4}>
+        <StyledCard className={`${styles.formSectionCard} mb-3`}> {/* Replaced Card */}
+          <StyledCard.Body> {/* Replaced Card.Body */}
+             <StyledRow> {/* Replaced Row */}
+              <StyledCol md={4}> {/* Replaced Col */}
                  {/* 2.4 Basics Title (Collapsible?) */}
-                 <Card.Title>Basics +</Card.Title>
-                 {/* Description might go here if expanded */}
-              </Col>
-              <Col md={8}>
+                 <StyledCard.Title>Basics +</StyledCard.Title> {/* Replaced Card.Title */}
+              </StyledCol>
+              <StyledCol md={8}> {/* Replaced Col */}
                  {/* 2.6 Product Table */}
-                 <Row className="mb-2 text-muted small fw-bold">
-                   <Col md={6}>PRODUCT</Col>
-                   <Col md={3} className="text-center">QTY</Col>
-                   <Col md={3} className="text-end">TOTAL</Col>
-                 </Row>
-                 {/* Map over productRows state and render ProductTableRow molecule */}
-                 {/* {productRows.map(row => (
+                 <StyledRow className="mb-2 text-muted small fw-bold"> {/* Replaced Row */}
+                   <StyledCol md={6}>PRODUCT</StyledCol> {/* Replaced Col */}
+                   <StyledCol md={3} className="text-center">QTY</StyledCol> {/* Replaced Col */}
+                   <StyledCol md={3} className="text-end">TOTAL</StyledCol> {/* Replaced Col */}
+                 </StyledRow>
+                 {/* {productRows.map(row => ( // ProductTableRow was removed, so this is commented
                    <ProductTableRow
                      key={row.id}
                      rowId={row.id}
-                     productValue={row.product}
-                     quantityValue={row.qty}
-                     totalValue={row.total} // Pass total if calculated
-                     onProductChange={(id, value) => handleProductChange(id, 'product', value)}
-                     onQuantityChange={(id, value) => handleProductChange(id, 'qty', value)}
-                     onRemoveRow={handleRemoveProductRow}
-                   />
-                 ))} */}
-                 {/* Add Button */}
+                    // ...
+                 // ))} */}
                  <StyledButton
                    variant="link"
                    size="sm"
@@ -423,28 +404,26 @@ const AddEditForm = () => {
                  >
                    + Add
                  </StyledButton>
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
              <hr/>
-             <Row>
-               <Col md={4}>
-                 {/* 2.7 Basics Title (Collapsible?) */}
-                 <Card.Title>Basics +</Card.Title>
-                  <Card.Text className="text-muted">
+             <StyledRow> {/* Replaced Row */}
+               <StyledCol md={4}> {/* Replaced Col */}
+                 <StyledCard.Title>Basics +</StyledCard.Title> {/* Replaced Card.Title */}
+                  <StyledCard.Text className="text-muted"> {/* Replaced Card.Text */}
                    Laren mum dolor sit amet, consechetar adipiscing wit sad do wisted tempor
-                 </Card.Text>
-               </Col>
-               <Col md={8}>
+                 </StyledCard.Text>
+               </StyledCol>
+               <StyledCol md={8}> {/* Replaced Col */}
                  {/* 2.8.1 Tags Input */}
-                 {/* TODO: Refactor Tags Input - might need a dedicated molecule or library */}
-                 <BootstrapForm.Group className="mb-3" controlId="formField2_8_1">
+                 <StyledFormGroup className="mb-3" controlId="formField2_8_1"> {/* Replaced BootstrapForm.Group */}
                    <StyledFormLabel>Label</StyledFormLabel>
                    <div className={`border p-2 rounded ${styles.tagInputPlaceholder}`}>
                       <span className="badge bg-secondary me-1">Selection <button type="button" className="btn-close btn-close-white ms-1" style={{fontSize: '0.6em'}} aria-label="Remove"></button></span>
                       <span className="badge bg-secondary me-1">Selection <button type="button" className="btn-close btn-close-white ms-1" style={{fontSize: '0.6em'}} aria-label="Remove"></button></span>
                       <input type="text" placeholder="Select" className="d-inline-block border-0 shadow-none p-0 ms-1 bg-light" style={{outline: 'none'}}/>
                    </div>
-                 </BootstrapForm.Group>
+                 </StyledFormGroup>
                  {/* 2.8.2 Dropdown */}
                  <FormField
                    controlId="formField2_8_2"
@@ -457,36 +436,31 @@ const AddEditForm = () => {
                    ]}
                    className="mb-3"
                  />
-               </Col>
-             </Row>
-              <hr/>
-              <Row>
-                <Col md={4}>
-                   {/* 2.9 Additional Settings Title (Collapsible?) */}
-                   <Card.Title>Additional settings +</Card.Title>
-                </Col>
-                <Col md={8}>
-                   {/* 2.9.1 Checkboxes */}
-                   <StyledFormLabel>Query string forwarding and caching</StyledFormLabel> {/* Keep label separate if it applies to multiple checks */}
-                   <FormField controlId="formField2_9_1a" label="Checkbox" type="checkbox" defaultChecked />
-                   <FormField controlId="formField2_9_1b" label="Checkbox" type="checkbox" />
-                </Col>
-              </Row>
-          </Card.Body>
-        </Card>
+               </StyledCol>
+            </StyledRow>
+             <hr/>
+             <StyledRow> {/* Replaced Row */}
+               <StyledCol md={4}> {/* Replaced Col */}
+                 <StyledCard.Title>Additional settings +</StyledCard.Title> {/* Replaced Card.Title */}
+               </StyledCol>
+               <StyledCol md={8}> {/* Replaced Col */}
+                 {/* 2.9.1 Checkboxes */}
+                 <StyledFormLabel>Query string forwarding and caching</StyledFormLabel>
+                 <FormField controlId="formField2_9_1a" label="Checkbox" type="checkbox" defaultChecked />
+                 <FormField controlId="formField2_9_1b" label="Checkbox" type="checkbox" />
+               </StyledCol>
+             </StyledRow>
+          </StyledCard.Body>
+        </StyledCard>
 
         {/* 3. Bottom Action Buttons */}
         <div className={`text-end mt-4 mb-3 ${styles.formActions}`}>
-           {/* Apply specific button styles using StyledButton */}
-           {/* TODO: Implement handleReset */}
            <StyledButton variant="secondary" type="button" className={`me-2 ${styles.resetButton}`} onClick={() => console.log('Reset clicked')}>Reset</StyledButton>
-           {/* TODO: Implement handleDiscard */}
            <StyledButton variant="outline-secondary" type="button" className={`me-2 ${styles.discardButton}`} onClick={() => console.log('Discard clicked')}>Discard</StyledButton>
-           {/* Submit button triggers form onSubmit */}
            <StyledButton variant="primary" type="submit" className={styles.saveButton}>Save</StyledButton>
         </div>
 
-      </BootstrapForm> {/* Use BootstrapForm */}
+      </form> {/* Replaced BootstrapForm with form */}
     </StyledContainer>
   );
 };

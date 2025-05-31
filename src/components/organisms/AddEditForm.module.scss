@@ -227,3 +227,11 @@
       color: v.$text-color-secondary;
    }
 }
+
+.formTextMuted {
+  font-size: v.$font-size-sm; // Consistent small text size
+  color: var(--theme-on-surface-variant, v.$on-surface-variant-color); // Muted text color from theme
+  // display: block; // This is handled by utility class d-block if used
+  // margin-left: ...; // This is handled by utility class ms-4 if used
+  // margin-bottom: ...; // This is handled by utility class mb-2 if used
+}

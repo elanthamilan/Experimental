@@ -1,6 +1,6 @@
 import React from 'react';
-import { Row, Col } from 'react-bootstrap';
-import StatsCard from '../molecules/StatsCard';
+import { StyledRow, StyledCol } from '../../components'; // Updated import
+import StatsCard from '../molecules/StatsCard'; // Assuming StatsCard is correctly in molecules
 import styles from './SummaryStats.module.scss';
 
 const SummaryStats = () => {
@@ -30,9 +30,9 @@ const SummaryStats = () => {
 
   return (
     <div className={styles.summaryContainer}>
-      <Row className="g-4">
+      <StyledRow className="g-4"> {/* Replaced Row with StyledRow */}
         {stats.map((stat) => (
-          <Col md={4} key={stat.id}>
+          <StyledCol md={4} key={stat.id}> {/* Replaced Col with StyledCol */}
             <StatsCard
               title={stat.title}
               value={stat.value}
@@ -40,9 +40,9 @@ const SummaryStats = () => {
               icon={stat.icon}
               className={styles[stat.id]}
             />
-          </Col>
+          </StyledCol>
         ))}
-      </Row>
+      </StyledRow>
     </div>
   );
 };

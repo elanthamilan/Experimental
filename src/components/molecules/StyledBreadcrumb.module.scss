@@ -1,0 +1,73 @@
+@use '../../styles/variables' as v;
+@use 'sass:math';
+
+.breadcrumbNav {
+  // Optional: Add any specific styling for the <nav> element itself
+  // e.g., margin-bottom: v.$spacing-md;
+}
+
+.breadcrumbList {
+  display: flex;
+  flex-wrap: wrap; // Allow wrapping on small screens if needed
+  list-style: none;
+  padding: v.$breadcrumb-padding-y v.$breadcrumb-padding-x;
+  margin: 0; // Reset default ol margin
+  background-color: var(--theme-surface-container-low, v.$surface-container-low-color); // Subtle background
+  border-radius: v.$breadcrumb-border-radius;
+  // box-shadow: v.$elevation-shadow-1; // Optional subtle shadow
+}
+
+.breadcrumbItem {
+  display: flex;
+  align-items: center;
+  font-size: v.$breadcrumb-font-size;
+  font-family: var(--theme-font-body, v.$font-family-body);
+
+  // Separator logic
+  &:not(:first-child) {
+    &::before {
+      content: var(--theme-breadcrumb-separator, "/") ; // Use CSS variable for separator, fallback to /
+      display: inline-block;
+      padding: 0 v.$breadcrumb-item-padding-x;
+      color: var(--theme-breadcrumb-separator-color, v.$on-surface-variant-color);
+      // Example for SVG separator (ensure SVG is properly URL-encoded)
+      // content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d'%3e%3cpath fill-rule='evenodd' d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+      // width: 1em; // Adjust if using SVG
+      // height: 1em; // Adjust if using SVG
+    }
+  }
+
+  span { // For non-link items (including active)
+    color: var(--theme-on-surface-variant, v.$on-surface-variant-color);
+  }
+
+  &.active {
+    span {
+      color: var(--theme-on-surface, v.$on-surface-color); // Active item text color
+      font-weight: v.$breadcrumb-active-font-weight;
+    }
+    // No pointer events or hover effects for the active item
+    .breadcrumbLink { // Should not happen if logic is correct, but as a safeguard
+      pointer-events: none;
+      color: var(--theme-on-surface, v.$on-surface-color);
+    }
+  }
+}
+
+.breadcrumbLink {
+  color: var(--theme-primary, v.$primary-color); // Link color
+  text-decoration: none;
+  transition: color 0.15s ease-in-out;
+
+  &:hover,
+  &:focus {
+    color: var(--theme-primary-hover, color.scale(v.$primary-color, $lightness: -10%)); // Darken primary on hover
+    text-decoration: underline;
+    outline: none; // Or custom focus style
+  }
+
+  &:focus-visible { // More specific focus style
+     box-shadow: 0 0 0 2px var(--theme-primary-container, rgba(v.$primary-color, 0.25));
+     border-radius: v.$border-radius-small;
+  }
+}
