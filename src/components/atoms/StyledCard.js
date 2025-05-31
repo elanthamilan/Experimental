@@ -1,9 +1,8 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
 import styles from './StyledCard.module.scss';
 
 /**
- * A reusable styled card component based on React-Bootstrap Card.
+ * A reusable styled card component. Renders as a <div>.
  * Provides consistent styling and behavior across the application.
  *
  * Props:
@@ -12,7 +11,7 @@ import styles from './StyledCard.module.scss';
  * - className: Additional CSS classes
  * - header: Optional header content (when used as prop)
  * - footer: Optional footer content (when used as prop)
- * - Other props are passed down to the underlying React-Bootstrap Card
+ * - Other props are passed down to the underlying <div> element.
  *
  * Can be used in two ways:
  * 1. With header/footer props: <StyledCard header="Title">Content</StyledCard>
@@ -27,65 +26,66 @@ const StyledCard = ({
   ...props
 }) => {
   const cardClass = styles[`card-${variant}`] || styles['card-default'];
+  const combinedClassName = `${styles.cardBase} ${cardClass} ${className}`.trim();
 
   // If header/footer props are provided, use the prop-based approach
   if (header || footer) {
     return (
-      <Card className={`${styles.cardBase} ${cardClass} ${className}`} {...props}>
+      <div className={combinedClassName} {...props}>
         {header && (
-          <Card.Header className={styles.cardHeader}>
+          <div className={styles.cardHeader}> {/* Rendered as a simple div by default */}
             {header}
-          </Card.Header>
+          </div>
         )}
-        <Card.Body className={styles.cardBody}>
+        <div className={styles.cardBody}> {/* Rendered as a simple div */}
           {children}
-        </Card.Body>
+        </div>
         {footer && (
-          <Card.Footer className={styles.cardFooter}>
+          <div className={styles.cardFooter}> {/* Rendered as a simple div */}
             {footer}
-          </Card.Footer>
+          </div>
         )}
-      </Card>
+      </div>
     );
   }
 
-  // Otherwise, use the sub-component approach
+  // Otherwise, use the sub-component approach (children are expected to be StyledCard.Header, .Body, etc.)
   return (
-    <Card className={`${styles.cardBase} ${cardClass} ${className}`} {...props}>
+    <div className={combinedClassName} {...props}>
       {children}
-    </Card>
+    </div>
   );
 };
 
 // Sub-components for flexible usage
 StyledCard.Header = ({ children, className = '', ...props }) => (
-  <Card.Header className={`${styles.cardHeader} ${className}`} {...props}>
+  <div className={`${styles.cardHeader} ${className}`.trim()} {...props}>
     {children}
-  </Card.Header>
+  </div>
 );
 
 StyledCard.Body = ({ children, className = '', ...props }) => (
-  <Card.Body className={`${styles.cardBody} ${className}`} {...props}>
+  <div className={`${styles.cardBody} ${className}`.trim()} {...props}>
     {children}
-  </Card.Body>
+  </div>
 );
 
 StyledCard.Footer = ({ children, className = '', ...props }) => (
-  <Card.Footer className={`${styles.cardFooter} ${className}`} {...props}>
+  <div className={`${styles.cardFooter} ${className}`.trim()} {...props}>
     {children}
-  </Card.Footer>
+  </div>
 );
 
-StyledCard.Title = ({ children, className = '', ...props }) => (
-  <Card.Title className={`${styles.cardTitle} ${className}`} {...props}>
+StyledCard.Title = ({ children, className = '', as: Component = 'h5', ...props }) => (
+  <Component className={`${styles.cardTitle} ${className}`.trim()} {...props}>
     {children}
-  </Card.Title>
+  </Component>
 );
 
-StyledCard.Text = ({ children, className = '', ...props }) => (
-  <Card.Text className={`${styles.cardText} ${className}`} {...props}>
+StyledCard.Text = ({ children, className = '', as: Component = 'p', ...props }) => (
+  <Component className={`${styles.cardText} ${className}`.trim()} {...props}>
     {children}
-  </Card.Text>
+  </Component>
 );
 
 export default StyledCard;

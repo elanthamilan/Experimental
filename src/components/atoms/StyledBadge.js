@@ -1,10 +1,10 @@
 import React from 'react';
-import { Badge } from 'react-bootstrap';
 import styles from './StyledBadge.module.scss';
 
 /**
- * A reusable styled badge component based on React-Bootstrap Badge.
+ * A reusable styled badge component.
  * Provides consistent styling and behavior across the application.
+ * Renders as a <span> element.
  *
  * Props:
  * - variant: 'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark' (default: 'primary')
@@ -12,7 +12,7 @@ import styles from './StyledBadge.module.scss';
  * - pill: boolean - makes badge pill-shaped (default: false)
  * - children: Badge content
  * - className: Additional CSS classes
- * - Other props are passed down to the underlying React-Bootstrap Badge
+ * - Other props are passed down to the underlying <span> element.
  */
 const StyledBadge = ({
   variant = 'primary',
@@ -26,13 +26,15 @@ const StyledBadge = ({
   const sizeClass = styles[`badge-${size}`] || styles['badge-md'];
   const pillClass = pill ? styles['badge-pill'] : '';
 
+  const combinedClassName = `${styles.badgeBase} ${badgeClass} ${sizeClass} ${pillClass} ${className}`.trim();
+
   return (
-    <Badge 
-      className={`${styles.badgeBase} ${badgeClass} ${sizeClass} ${pillClass} ${className}`}
-      {...props}
+    <span
+      className={combinedClassName}
+      {...props} // Spread other valid HTML attributes for a span
     >
       {children}
-    </Badge>
+    </span>
   );
 };
 

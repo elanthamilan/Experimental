@@ -1,9 +1,8 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
 import styles from './StyledContainer.module.scss';
 
 /**
- * A reusable styled container component based on React-Bootstrap Container.
+ * A reusable styled container component. Renders as a <div>.
  * Provides consistent spacing and layout across the application.
  *
  * Props:
@@ -11,8 +10,8 @@ import styles from './StyledContainer.module.scss';
  * - spacing: 'none', 'sm', 'md', 'lg', 'xl' (default: 'md')
  * - children: Container content
  * - className: Additional CSS classes
- * - fluid: boolean - makes container fluid (default: false)
- * - Other props are passed down to the underlying React-Bootstrap Container
+ * - fluid: boolean - makes container fluid (default: false). If true, overrides 'variant' for fluid behavior.
+ * - Other props are passed down to the underlying <div> element.
  */
 const StyledContainer = ({
   variant = 'default',
@@ -22,17 +21,29 @@ const StyledContainer = ({
   fluid = false,
   ...props
 }) => {
-  const containerClass = styles[`container-${variant}`] || styles['container-default'];
+  let determinedVariant = variant;
+  if (fluid && variant !== 'fluid') {
+    // If fluid prop is true, it forces the container to be fluid,
+    // potentially overriding other variant styles if they conflict with fluid width.
+    // The SCSS should define `container-fluid` to handle max-width: 100%.
+    determinedVariant = 'fluid';
+  } else if (variant === 'fluid') {
+    determinedVariant = 'fluid'; // Explicitly set for clarity if variant is 'fluid'
+  }
+  // If neither fluid=true nor variant='fluid', determinedVariant remains the initially passed variant.
+
+  const containerClass = styles[`container-${determinedVariant}`] || styles['container-default'];
   const spacingClass = styles[`spacing-${spacing}`] || styles['spacing-md'];
 
+  const combinedClassName = `${styles.containerBase} ${containerClass} ${spacingClass} ${className}`.trim();
+
   return (
-    <Container 
-      fluid={fluid || variant === 'fluid'}
-      className={`${styles.containerBase} ${containerClass} ${spacingClass} ${className}`}
+    <div
+      className={combinedClassName}
       {...props}
     >
       {children}
-    </Container>
+    </div>
   );
 };
 

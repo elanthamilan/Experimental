@@ -1,61 +1,143 @@
 @use '../../styles/variables' as v;
-@use 'sass:math'; 
+@use 'sass:math';
 
-// Base styles for checkbox and radio
-.formCheck {
-  :global(.form-check-input) {
-    border-radius: v.$input-border-radius;
-    border: v.$base-border-width solid v.$outline-color; // Use outline color for base border
-    background-color: v.$surface-color; // Background should be surface or transparent
-    margin-top: 0.2em;
+// Common base for all check/radio/switch containers
+.formCheckBase {
+  display: flex; // Changed from block to flex for better alignment of input and label
+  align-items: center; // Align items vertically
+  position: relative; // For potential custom styling of input/label parts
+  padding-left: 0; // Remove default padding, will be handled by input/label margins or padding
+  min-height: calc(#{v.$font-size-base} * #{v.$line-height-base} + #{v.$form-check-input-margin-y} * 2); // From Bootstrap _forms.scss
+  margin-bottom: v.$form-check-margin-bottom;
+}
 
-    &:focus {
-      box-shadow: none;
-      border-color: v.$primary-color; // Focus with primary color
-    }
-    &:checked {
-        background-color: v.$primary-color; // Checked state uses primary color
-        border-color: v.$primary-color; // Border also primary
-        // For M3, the checkmark icon itself would be v.$on-primary-color
-        // This requires SVG background-image which is more complex here.
-    }
+.formCheckInput {
+  width: v.$form-check-input-width;
+  height: v.$form-check-input-width;
+  margin-top: math.div( (v.$line-height-base * 1em) - v.$form-check-input-width, 2); // Approximate vertical center
+  margin-right: v.$form-check-input-margin-x;
+  vertical-align: top; // Keep if not using flex align-items on parent
+  background-color: var(--theme-surface, v.$surface-color);
+  border: v.$form-check-input-border-width solid var(--theme-outline, v.$outline-color);
+  appearance: none; // Remove default browser styling
+  print-color-adjust: exact; // Ensure colors are printed correctly
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+
+  &:focus {
+    border-color: var(--theme-primary, v.$primary-color);
+    outline: 0;
+    box-shadow: 0 0 0 v.$input-focus-width var(--theme-input-focus-ring-color, rgba(v.$primary-color, 0.25));
   }
 
-  :global(.form-check-input[type="radio"]) {
-     border-radius: 50%;
+  &:active {
+    filter: brightness(90%);
   }
 
-  .checkLabel {
-    font-family: v.$font-family-body; // Changed to body font
-    font-size: v.$font-size-base; // SCSS
-    color: v.$on-surface-color; // Text on surface
-    line-height: v.$line-height-base; // SCSS
-    padding-left: math.div(v.$gap-small, 2); 
+  &:disabled {
+    pointer-events: none;
+    filter: none;
+    opacity: v.$form-check-input-disabled-opacity;
+    ~ .formCheckLabel { // Style label when input is disabled
+      opacity: v.$form-check-label-disabled-opacity;
+      cursor: not-allowed;
+    }
   }
 }
 
-// Styles for switches (can inherit from formCheck or be separate)
+// Checkbox specific styles
+.formCheck {
+  @extend .formCheckBase;
+  .formCheckInput {
+    border-radius: v.$form-check-input-border-radius; // Slightly rounded for checkbox
+    &:checked {
+      background-color: var(--theme-primary, v.$primary-color);
+      border-color: var(--theme-primary, v.$primary-color);
+      // Using an SVG for the checkmark, URL-encoded
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='#{v.$on-primary-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+      backgroundRepeat: no-repeat;
+      background-position: center;
+      background-size: v.$form-check-input-checked-bg-size;
+    }
+  }
+}
+
+// Radio specific styles
+.formRadio { // Assuming a different wrapper class if radios need distinct layout from checkboxes
+  @extend .formCheckBase; // Can extend .formCheck if layout is identical
+  .formCheckInput {
+    border-radius: 50%; // Circular for radio
+    &:checked {
+      background-color: var(--theme-primary, v.$primary-color);
+      border-color: var(--theme-primary, v.$primary-color);
+      // Using an SVG for the radio dot
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='#{v.$on-primary-color}'/%3e%3c/svg%3e");
+      backgroundRepeat: no-repeat;
+      background-position: center;
+      background-size: 10px 10px; // Adjust size of dot
+    }
+  }
+}
+
+// Label specific styles (shared by checkbox, radio, switch)
+.formCheckLabel {
+  font-family: var(--theme-font-body, v.$font-family-body);
+  font-size: var(--theme-font-size-base, v.$font-size-base);
+  color: var(--theme-on-surface, v.$on-surface-color);
+  line-height: var(--theme-line-height-base, v.$line-height-base);
+  cursor: pointer;
+  user-select: none; // Prevent text selection on click
+}
+
+.checkLabel { // Inner span for the text content of the label
+  // This class was in the original JS label. Keeping it if specific styling for the text part is needed.
+  // For now, .formCheckLabel styles should suffice.
+}
+
+// Switch specific styles
 .formSwitch {
-  @extend .formCheck; 
+  @extend .formCheckBase; // Basic layout
+  padding-left: v.$form-switch-padding-start; // Make space for the switch track
 
-  :global(.form-switch .form-check-input) {
-    // Example using variables defined previously in ResultsTable.module.scss
-    // These would need to be themed or use fixed values if uncommented
-    // $_switch-track-bg: #DFE1E5; 
-    // $_switch-track-border: 2px solid #7F8A9D;
-    // $_switch-track-radius: 14px;
-    // $_switch-thumb-bg: #7F8A9D;
+  .formCheckInput {
+    width: v.$form-switch-width;
+    margin-left: calc(#{v.$form-switch-padding-start} * -1); // Pull input back into padding area
+    border-radius: v.$form-switch-border-radius;
+    background-image: none; // Remove checkbox/radio background image
+    position: relative; // For pseudo-elements (thumb)
+    border-color: var(--theme-outline-variant, v.$outline-variant-color); // Track color when off
+    background-color: var(--theme-surface-container-highest, color.scale(v.$outline-variant-color, $lightness: 10%)); // Track color when off
 
-    // background-color: $_switch-track-bg;
-    // border: $_switch-track-border;
-    // border-radius: $_switch-track-radius;
-    // background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='#{$_switch-thumb-bg}'/%3e%3c/svg%3e");
+    &::before { // Thumb
+      content: "";
+      position: absolute;
+      width: v.$form-switch-thumb-size;
+      height: v.$form-switch-thumb-size;
+      border-radius: 50%;
+      background-color: var(--theme-outline, v.$outline-color); // Thumb color when off
+      top: 50%;
+      left: v.$form-switch-thumb-offset;
+      transform: translateY(-50%);
+      transition: transform 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    }
 
-    // &:focus { box-shadow: none; }
-    // &:checked {
-    //   background-color: v.$primary-brand-color;
-    //   border-color: v.$primary-brand-color;
-    //   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='#{v.$white}'/%3e%3c/svg%3e"); // Use public v.$white
-    // }
+    &:focus {
+      border-color: var(--theme-primary, v.$primary-color); // Keep focus style
+      // background-image: none; // Ensure no checkmark on focus for switch
+    }
+
+    &:checked {
+      background-color: var(--theme-primary, v.$primary-color); // Track color when on
+      border-color: var(--theme-primary, v.$primary-color);
+      // background-image: none; // Ensure no checkmark
+
+      &::before { // Thumb when checked
+        transform: translateY(-50%) translateX(calc(#{v.$form-switch-width} - #{v.$form-switch-thumb-size} - (#{v.$form-switch-thumb-offset} * 2)));
+        background-color: var(--theme-on-primary, v.$on-primary-color); // Thumb color when on
+      }
+    }
+  }
+  // Adjust label position for switch
+  .formCheckLabel {
+    margin-left: v.$gap-small; // Add some space between switch and label text
   }
 }

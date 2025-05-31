@@ -24,14 +24,17 @@
   &:focus {
     border-color: v.$primary-color; // Focus with primary color
     // box-shadow: v.$input-focus-box-shadow !important; // Removed for cleaner M3 look
-    color: v.$on-surface-color; // Keep text color on surface
+    color: var(--theme-on-surface, v.$on-surface-color); // Keep text color on surface, themed
   }
+}
 
-  &.form-select-sm {
-     height: auto;
-     padding-top: 0.25rem;
-     padding-bottom: 0.25rem;
-     padding-left: 0.5rem;
-     font-size: .875rem;
-  }
+// Renamed from .form-select-sm to a module class
+.formSelectSm {
+  height: auto; // Or a specific smaller height variable if defined e.g., v.$input-height-sm
+  padding-top: 0.25rem; // Consider using theme variables if available
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem; // Consider using theme variables
+  font-size: .875rem; // Consider using theme variables like v.$font-size-sm
+  // Ensure padding-right is maintained or adjusted if the arrow size changes for sm variant
+  // background-position might need adjustment if padding changes significantly
 }
