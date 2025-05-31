@@ -184,7 +184,7 @@ const AddEditStudentPage = () => {
         <StyledCard.Body>
           {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
           {successMessage && <StyledAlert variant="success" dismissible onClose={() => setSuccessMessage('')}>{successMessage}</StyledAlert>}
-          
+
           {isEditMode && missingMandatoryDocs.length > 0 && (
             <StyledAlert variant="info" className={styles.formFieldAlert}>
               <span className="material-symbols-outlined me-1" style={{ verticalAlign: 'middle' }}>info</span>

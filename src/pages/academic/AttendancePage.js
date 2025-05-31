@@ -3,12 +3,12 @@ import {
   StyledContainer,
   ListControlsToolbar,
   ResultsTable,
-  StyledBadge, 
+  StyledBadge,
   StyledAlert, // Added for AI insight
   // FormField might be used by ListControlsToolbar internally
 } from '../../components';
 import { mockAttendance } from '../../data/mockAttendance';
-import { mockStudents } from '../../data/mockStudents'; 
+import { mockStudents } from '../../data/mockStudents';
 import { mockCourses } from '../../data/mockCourses';
 import styles from './AttendancePage.module.scss';
 
@@ -130,7 +130,7 @@ const AttendancePage = () => {
       },
     },
   ], []);
-  
+
   const listControlsFilters = [
     {
       controlId: "courseFilter",
@@ -193,7 +193,7 @@ const AttendancePage = () => {
       <ResultsTable
         data={studentCourseAttendanceStats} // Use the calculated stats
         columns={columns}
-        showSearch={false} 
+        showSearch={false}
         showFilterTabs={false}
       />
       {studentCourseAttendanceStats.length === 0 && (

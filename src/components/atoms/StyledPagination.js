@@ -61,13 +61,13 @@ const StyledPagination = ({
             endPage = currentPage;
         }
       }
-      
+
       else { // Show ... x Current y ...
         startPage = currentPage - quarterPagesToShow;
         endPage = currentPage + quarterPagesToShow;
       }
     }
-    
+
     // Ensure startPage and endPage are within bounds, especially for small totalPages
     if (totalPages <= maxVisiblePages) {
         startPage = 1;

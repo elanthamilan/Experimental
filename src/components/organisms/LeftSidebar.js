@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { StyledButton, StyledFormSelect } from '../../components'; // Ensure these are from design system
 import styles from './LeftSidebar.module.scss';
 // useNavigate is not used, so removing it. If it was intended for a specific action, that action needs to be clear.
-// import { useNavigate } from 'react-router-dom'; 
+// import { useNavigate } from 'react-router-dom';
 import { ThemeContext } from '../../App'; // Import ThemeContext
 
 const LeftSidebar = () => {
@@ -87,10 +87,10 @@ const LeftSidebar = () => {
           path: '/academic/examschedules',
           roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER]
         },
-        { 
-          eventKey: 'attendance', 
+        {
+          eventKey: 'attendance',
           icon: 'rule_folder', // Using rule_folder as an example icon
-          label: 'Attendance', 
+          label: 'Attendance',
           path: '/academic/attendance', // Path matches the route set in App.js
           roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER] // Assuming Admin and Teacher can access
         }
@@ -100,7 +100,7 @@ const LeftSidebar = () => {
       title: 'Administration',
       items: [
          {
-           eventKey: 'admissions_group', 
+           eventKey: 'admissions_group',
            icon: 'confirmation_number',
            label: 'Admissions',
            // path attribute removed, making this a non-navigable group header
@@ -216,7 +216,7 @@ const LeftSidebar = () => {
 
   useEffect(() => {
     const lowerSearch = searchTerm.toLowerCase();
-    
+
     const availableNavGroups = { ...navGroups };
     // Remove 'helpAndResources' group before filtering if it exists
     // This ensures it's completely gone from processing
@@ -236,18 +236,18 @@ const LeftSidebar = () => {
       .filter(([key]) => key !== 'topLevel' && key !== 'helpAndResources') // Explicitly filter out helpAndResources here too
       .map(([groupKey, groupData]) => {
         if (groupData.roles && !groupData.roles.includes(currentUserRole)) {
-          return null; 
+          return null;
         }
         const filteredItems = groupData.items.reduce((acc, item) => {
           if (item.roles && !item.roles.includes(currentUserRole)) {
-            return acc; 
+            return acc;
           }
           // Remove specific paths if they are being deleted
           if (item.path === '/admissions' || item.path === '/billing' || item.path === '/reports') {
               // If item has children, keep the item but remove its path, making it a toggle only
               if (item.children && item.children.length > 0) {
                   const itemWithoutPath = { ...item };
-                  delete itemWithoutPath.path; 
+                  delete itemWithoutPath.path;
                   // Now check if children or label match search
                   if (itemWithoutPath.label.toLowerCase().includes(lowerSearch)) {
                       acc.push(itemWithoutPath);
@@ -291,7 +291,7 @@ const LeftSidebar = () => {
       const openSubs = {};
       newGrouped.forEach(([, groupData]) => {
         groupData.items.forEach(item => {
-          if (item.children && item.children.length > 0) { 
+          if (item.children && item.children.length > 0) {
             openSubs[item.eventKey] = true;
           }
         });
@@ -385,16 +385,16 @@ const LeftSidebar = () => {
             );
             return (
               <li key={groupKey} className={styles.navGroupItem}> {/* Changed div to li */}
-                <div 
-                  className={styles.groupHeader} 
-                  onClick={() => toggleGroup(groupKey)} 
-                  aria-controls={`collapse-${groupKey}`} 
+                <div
+                  className={styles.groupHeader}
+                  onClick={() => toggleGroup(groupKey)}
+                  aria-controls={`collapse-${groupKey}`}
                   aria-expanded={isGroupOpen}
                 >
                   {groupData.title} <Icon name={isGroupOpen ? 'expand_more' : 'chevron_right'} className={isGroupActivePath ? styles.activePathIcon : ''} />
                 </div>
-                <div 
-                  id={`collapse-${groupKey}`} 
+                <div
+                  id={`collapse-${groupKey}`}
                   className={`${styles.collapsibleContent} ${isGroupOpen ? styles.isExpanded : ''} ${styles.groupItemsContainer}`}
                 >
                   <ul className={styles.nestedList}> {/* Added UL for nested items */}
@@ -409,7 +409,7 @@ const LeftSidebar = () => {
                               to={item.path}
                               onClick={(e) => {
                                 // Prevent navigation if it's meant to be a toggle for children, allow if no children or if search term exists
-                                if (hasChildren && !searchTerm) { 
+                                if (hasChildren && !searchTerm) {
                                    // e.preventDefault(); // This might be too aggressive if parent itself is clickable
                                 }
                                 setActiveKey(item.eventKey);
@@ -434,8 +434,8 @@ const LeftSidebar = () => {
                               )}
                             </Link>
                             {hasChildren && (
-                              <div 
-                                id={`submenu-${item.eventKey}`} 
+                              <div
+                                id={`submenu-${item.eventKey}`}
                                 className={`${styles.collapsibleContent} ${isSubmenuOpen ? styles.isExpanded : ''} ${styles.level3Container}`}
                               >
                                 <ul className={styles.nestedList}> {/* Added UL for L3 items */}
@@ -476,8 +476,8 @@ const LeftSidebar = () => {
                                 className={styles.expandIconSubmenu}
                               />
                             </StyledButton>
-                            <div 
-                              id={`submenu-${item.eventKey}`} 
+                            <div
+                              id={`submenu-${item.eventKey}`}
                               className={`${styles.collapsibleContent} ${isSubmenuOpen ? styles.isExpanded : ''} ${styles.level3Container}`}
                             >
                               <ul className={styles.nestedList}> {/* Added UL for L3 items */}

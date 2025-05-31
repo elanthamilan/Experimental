@@ -36,7 +36,7 @@ const StudentListPage = () => {
       // A more robust check would be to see if ALL defined mandatory docs are present and uploaded.
       // The current logic in the prompt checks if *any* mandatory doc is missing.
       const mandatoryDocTypes = ["Birth Certificate", "Photo ID", "Address Proof"]; // As per plan
-      return mandatoryDocTypes.some(mDoc => 
+      return mandatoryDocTypes.some(mDoc =>
         !student.documents?.find(d => d.name === mDoc && d.uploaded)
       );
     }

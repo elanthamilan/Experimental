@@ -49,7 +49,7 @@ export const mockAttendance = [
   { studentId: 'student002', courseId: 'c3', date: '2024-04-10', status: 'Present' },
   { studentId: 'student002', courseId: 'c3', date: '2024-04-11', status: 'Present' },
   { studentId: 'student002', courseId: 'c3', date: '2024-04-12', status: 'Absent' }, // 6 Present / 10 Total = 60%
-  
+
   // Student student003 (Charlie)
   // Course c1: Target 100% attendance (10/10)
   { studentId: 'student003', courseId: 'c1', date: '2024-04-01', status: 'Present' },

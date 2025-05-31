@@ -87,7 +87,7 @@ const StyledDropdown = ({ trigger, children, className = '', menuClassName = '',
     },
     [isOpen, onOpenChange]
   );
-  
+
   useEffect(() => {
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);

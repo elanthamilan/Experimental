@@ -178,7 +178,7 @@ const UtilitySidebar = () => {
       <StyledDropdown
         className={`${styles.userDropdownContainer} ${styles.tooltipLeft}`} // Added tooltipLeft for consistency if trigger needs it
         trigger={
-          <div 
+          <div
             className={`${styles.circleIconButton} ${styles.tooltipLeft}`} // Apply tooltip to the trigger div
             data-tooltip="User Profile"
             // aria-expanded and aria-haspopup are handled by StyledDropdown on the trigger clone

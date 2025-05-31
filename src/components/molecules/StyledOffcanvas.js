@@ -85,7 +85,7 @@ const StyledOffcanvas = ({
       onHide();
     }
   };
-  
+
   // Add a small delay for the exit animation before removing from DOM (optional)
   // For simplicity, we'll rely on CSS transitions on `show` class for now.
   // If `show` is false, the component won't render the panel, so transitions might need careful handling.
