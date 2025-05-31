@@ -1,5 +1,6 @@
 @use '../../styles/variables' as v;
 @use 'sass:math';
+@use 'sass:color';
 
 .breadcrumbNav {
   // Optional: Add any specific styling for the <nav> element itself
@@ -61,7 +62,7 @@
 
   &:hover,
   &:focus {
-    color: var(--theme-primary-hover, color.scale(v.$primary-color, $lightness: -10%)); // Darken primary on hover
+    color: var(--theme-primary-hover, #0B7FB8); // Darken primary on hover
     text-decoration: underline;
     outline: none; // Or custom focus style
   }

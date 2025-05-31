@@ -9,7 +9,7 @@
 
 // Standard Page Header Styles (copied from DashboardPage.module.scss for consistency)
 .pageHeader {
-  margin-bottom: v.$base-margin * 3;
+  margin-bottom: calc(#{v.$base-margin-value} * 3);
   text-align: center;
 
   @media (min-width: 768px) {
@@ -32,17 +32,17 @@
   font-family: var(--theme-font-body, v.$font-family-body);
   line-height: 1.6;
   max-width: 600px;
-  margin: 0 auto v.$base-margin * 2; // Add some margin below description
+  margin: 0 auto calc(#{v.$base-margin-value} * 2); // Add some margin below description
 
   @media (min-width: 768px) {
-    margin: 0 0 v.$base-margin * 2 0; // Adjust margin for left align
+    margin: 0 0 calc(#{v.$base-margin-value} * 2) 0; // Adjust margin for left align
   }
 }
 
 // Additional styles for this page if needed
 .filterControls {
   // If ListControlsToolbar needs a specific wrapper on this page
-  margin-bottom: v.$base-margin * 2;
+  margin-bottom: calc(#{v.$base-margin-value} * 2);
 }
 
 .statusPresent {

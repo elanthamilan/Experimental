@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { StyledRow, StyledCol, FormField, StyledButton } from '../../components';
+import StyledRow from '../atoms/StyledRow';
+import StyledCol from '../atoms/StyledCol';
+import FormField from '../molecules/FormField';
+import StyledButton from '../atoms/StyledButton';
 import styles from './SearchCriteria.module.scss';
 
 // Define options for label lookup

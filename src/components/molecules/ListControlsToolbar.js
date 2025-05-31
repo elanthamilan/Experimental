@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormField, StyledButton } from '../index'; // Assuming components are exported from here
+import FormField from './FormField';
+import StyledButton from '../atoms/StyledButton';
 import styles from './ListControlsToolbar.module.scss';
 
 const ListControlsToolbar = ({

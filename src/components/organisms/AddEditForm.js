@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import {
-  StyledContainer,
-  StyledRow,
-  StyledCol,
-  StyledBreadcrumb,
-  StyledAlert,
-  StyledCard, // Will use its sub-components StyledCard.Body, StyledCard.Title, StyledCard.Text
-  StyledButton,
-  StyledFormLabel,
-  StyledFormGroup, // For wrapping file upload or other groups if needed
-  FormField,
-  FileUploadDropzone,
-} from '../../components'; // Assuming all are exported from main components index
+import StyledContainer from '../atoms/StyledContainer';
+import StyledRow from '../atoms/StyledRow';
+import StyledCol from '../atoms/StyledCol';
+import StyledBreadcrumb from '../molecules/StyledBreadcrumb';
+import StyledAlert from '../atoms/StyledAlert';
+import StyledCard from '../atoms/StyledCard';
+import StyledButton from '../atoms/StyledButton';
+import StyledFormLabel from '../atoms/StyledFormLabel';
+import StyledFormGroup from '../atoms/StyledFormGroup';
+import FormField from '../molecules/FormField';
+import FileUploadDropzone from '../molecules/FileUploadDropzone';
 import styles from './AddEditForm.module.scss';
 
 const AddEditForm = () => {

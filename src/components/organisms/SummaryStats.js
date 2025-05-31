@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyledRow, StyledCol } from '../../components'; // Updated import
+import StyledRow from '../atoms/StyledRow';
+import StyledCol from '../atoms/StyledCol';
 import StatsCard from '../molecules/StatsCard'; // Assuming StatsCard is correctly in molecules
 import styles from './SummaryStats.module.scss';
 

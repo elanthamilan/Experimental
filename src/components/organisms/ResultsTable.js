@@ -1,23 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types'; // Import PropTypes
 import { Link } from 'react-router-dom';
-import {
-  StyledContainer,
-  StyledTable,
-  StyledButton,
-  StyledFormCheck,
-  StyledBadge, // Assuming StyledBadge is used or might be needed
-  StyledFormControl,
-  StyledFormSelect,
-  SearchInput,
-  StyledPagination,
-  StyledDropdown,
-} from '../../components';
+import StyledContainer from '../atoms/StyledContainer';
+import StyledTable from '../atoms/StyledTable';
+import StyledButton from '../atoms/StyledButton';
+import StyledFormCheck from '../atoms/StyledFormCheck';
+import StyledBadge from '../atoms/StyledBadge';
+import StyledFormControl from '../atoms/StyledFormControl';
+import StyledFormSelect from '../atoms/StyledFormSelect';
+import SearchInput from '../molecules/SearchInput';
+import StyledPagination from '../atoms/StyledPagination';
+import StyledDropdown from '../molecules/StyledDropdown';
 import styles from './ResultsTable.module.scss';
 
 const ResultsTable = ({
-  data,
-  columns,
+  data = [],
+  columns = [],
   addActionLabel,
   addActionTo,
   showFilterTabs = true,
@@ -281,12 +279,12 @@ const ResultsTable = ({
 };
 
 ResultsTable.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object),
   columns: PropTypes.arrayOf(PropTypes.shape({
     header: PropTypes.string.isRequired,
     accessor: PropTypes.string.isRequired,
     cell: PropTypes.func, // Optional custom cell renderer
-  })).isRequired,
+  })),
   addActionLabel: PropTypes.string,
   addActionTo: PropTypes.string,
   showFilterTabs: PropTypes.bool,

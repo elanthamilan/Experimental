@@ -48,7 +48,7 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
 }
 
 .pageBody {
-    padding: v.$base-padding * 1.5; // Use shared variable
+    padding: calc(#{v.$base-padding-value} * 1.5); // Use calculation with SCSS variable
     // background-color: v.$white; // Use shared variable if needed
     flex-grow: 1;
     overflow-y: auto; // Allow content within pageBody to scroll if it exceeds viewport height

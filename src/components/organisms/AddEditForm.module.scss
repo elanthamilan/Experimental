@@ -17,7 +17,7 @@
 }
 
 .formSectionCard {
-  margin-bottom: v.$base-margin * 1.5;
+  margin-bottom: calc(#{v.$base-margin-value} * 1.5);
   border-radius: v.$card-border-radius;
   border: v.$base-border-width solid v.$outline-variant-color !important; 
   background-color: v.$surface-color !important; // Ensure themed surface color applies
@@ -41,7 +41,7 @@
     font-size: 13px;
     line-height: 20px;
     color: v.$text-color-secondary !important; // Ensure themed text color
-    margin-bottom: v.$base-margin * 1.5;
+    margin-bottom: calc(#{v.$base-margin-value} * 1.5);
   }
 }
 
@@ -128,7 +128,7 @@
 }
 
 .formActions {
-  margin-top: v.$base-margin * 2;
+  margin-top: calc(#{v.$base-margin-value} * 2);
   padding-top: v.$base-margin;
   border-top: v.$base-border-width solid v.$border-color;
 
@@ -215,7 +215,7 @@
 }
 
 :global(.breadcrumb) {
-   margin-bottom: v.$base-margin * 1.5;
+   margin-bottom: calc(#{v.$base-margin-value} * 1.5);
    :global(.breadcrumb-item a) {
       color: v.$text-color-link;
       text-decoration: none;

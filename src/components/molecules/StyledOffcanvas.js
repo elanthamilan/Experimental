@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { StyledButton } from '../../components'; // Assuming StyledButton is in components/index.js
+import StyledButton from '../atoms/StyledButton';
 import styles from './StyledOffcanvas.module.scss';
 
 const OffcanvasHeader = ({ children, onClose, titleId }) => (

@@ -5,7 +5,7 @@
 }
 
 .pageHeader {
-  margin-bottom: v.$base-margin * 3;
+  margin-bottom: calc(#{v.$base-margin-value} * 3);
   text-align: center;
 
   @media (min-width: 768px) {
@@ -293,23 +293,7 @@
   }
 }
 
-// Styles for Layout Density and other text inputs
-.densitySelectorGroup, .textInputGroup { // Shared styling for form groups
-  composes: fontSelectorGroup; // Inherit from fontSelectorGroup
-}
-
-.densityRadioGroup {
-  composes: fontWeightRadioGroup; // Inherit from fontWeightRadioGroup
-}
-
-.typographySubheading {
-  font-size: 0.9rem;
-  font-weight: v.$font-weight-bold;
-  color: var(--theme-on-surface-variant);
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-}
-
+// Define base radio group first
 .fontWeightRadioGroup {
   display: flex;
   flex-direction: column; // Stack radio buttons by default
@@ -331,6 +315,23 @@
         border-color: var(--theme-outline);
      }
   }
+}
+
+// Styles for Layout Density and other text inputs
+.densitySelectorGroup, .textInputGroup { // Shared styling for form groups
+  composes: fontSelectorGroup; // Inherit from fontSelectorGroup
+}
+
+.densityRadioGroup {
+  composes: fontWeightRadioGroup; // Inherit from fontWeightRadioGroup
+}
+
+.typographySubheading {
+  font-size: 0.9rem;
+  font-weight: v.$font-weight-bold;
+  color: var(--theme-on-surface-variant);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .myThemeListItem { // Specific styling for saved custom themes if needed

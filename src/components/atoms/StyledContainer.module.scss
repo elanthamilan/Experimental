@@ -37,7 +37,7 @@
   border: 1px solid var(--theme-border-color, v.$outline-variant-color);
   border-radius: v.$base-border-radius;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  margin-bottom: v.$base-margin * 2;
+  margin-bottom: calc(#{v.$base-margin-value} * 2);
   transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
 
   &:hover {
@@ -56,15 +56,15 @@
 }
 
 .spacing-md {
-  padding: v.$base-padding v.$base-padding * 1.5;
+  padding: v.$base-padding calc(#{v.$base-padding-value} * 1.5);
 }
 
 .spacing-lg {
-  padding: v.$base-padding * 1.5 v.$base-padding * 2;
+  padding: calc(#{v.$base-padding-value} * 1.5) calc(#{v.$base-padding-value} * 2);
 }
 
 .spacing-xl {
-  padding: v.$base-padding * 2 v.$base-padding * 3;
+  padding: calc(#{v.$base-padding-value} * 2) calc(#{v.$base-padding-value} * 3);
 }
 
 // Responsive spacing adjustments using design system breakpoints
@@ -78,11 +78,11 @@
   }
 
   .spacing-lg {
-    padding: v.$base-padding v.$base-padding * 1.5;
+    padding: v.$base-padding calc(#{v.$base-padding-value} * 1.5);
   }
 
   .spacing-xl {
-    padding: v.$base-padding * 1.5 v.$base-padding * 2;
+    padding: calc(#{v.$base-padding-value} * 1.5) calc(#{v.$base-padding-value} * 2);
   }
 
   .container-fluid {
@@ -103,7 +103,7 @@
 // Special styling for different container contexts
 .container-fluid.spacing-md {
   // Better padding for fluid containers
-  padding: v.$base-padding * 1.5 v.$base-padding * 2;
+  padding: calc(#{v.$base-padding-value} * 1.5) calc(#{v.$base-padding-value} * 2);
 
   @media (max-width: 768px) {
     padding: v.$base-padding;

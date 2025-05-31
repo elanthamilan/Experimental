@@ -2,7 +2,7 @@
 
 .dashboardContainer {
   background-color: var(--theme-app-background, v.$background-color);
-  padding: v.$base-padding * 2;
+  padding: calc(#{v.$base-padding-value} * 2);
   min-height: calc(100vh - 120px); // Account for header and toolbar
 }
 
@@ -12,7 +12,7 @@
 }
 
 .pageHeader {
-  margin-bottom: v.$base-margin * 3;
+  margin-bottom: calc(#{v.$base-margin-value} * 3);
   text-align: center;
 
   @media (min-width: 768px) {
@@ -47,7 +47,7 @@
 }
 
 .section {
-  margin-bottom: v.$base-margin * 2.5;
+  margin-bottom: calc(#{v.$base-margin-value} * 2.5);
 
   &:last-child {
     margin-bottom: 0;
@@ -61,6 +61,6 @@
   }
 
   .section {
-    margin-bottom: v.$base-margin * 2;
+    margin-bottom: calc(#{v.$base-margin-value} * 2);
   }
 }

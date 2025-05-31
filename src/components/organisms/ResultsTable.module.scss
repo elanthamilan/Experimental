@@ -167,7 +167,7 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
   padding: 0;
   background-color: $table-container-bg;
   border: $table-container-border; // Added border
-  margin-top: v.$base-margin * 1.5;
+  margin-top: calc(#{v.$base-margin-value} * 1.5);
   border-radius: $table-container-radius;
   box-shadow: $table-container-shadow;
   overflow: hidden;
@@ -637,7 +637,7 @@ $selected-row-bg: v.$primary-container-hover-bg; // Themed
 .multiSelectActionBar {
   display: flex;
   align-items: center;
-  padding: v.$gap-medium v.$base-padding * 1.5;
+  padding: v.$gap-medium calc(#{v.$base-padding-value} * 1.5);
   background-color: $multi-select-bar-bg;
   border-bottom: $multi-select-border;
   gap: v.$gap-large;

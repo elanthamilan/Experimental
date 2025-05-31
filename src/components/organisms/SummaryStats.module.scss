@@ -5,7 +5,7 @@
 // (None needed for now, using shared variables)
 
 .summaryContainer {
-  margin-bottom: v.$base-margin * 2;
+  margin-bottom: calc(#{v.$base-margin-value} * 2);
   padding: 0; // Remove padding to avoid double containers
 }
 

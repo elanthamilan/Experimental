@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { StyledButton, StyledCard } from '../../components'; // Assuming StyledCard might be used for the menu
+import StyledButton from '../atoms/StyledButton';
+import StyledCard from '../atoms/StyledCard';
 import styles from './StyledDropdown.module.scss';
 
 const StyledDropdownItem = ({ children, onClick, href, disabled, className = '', ...props }) => {
@@ -32,7 +33,8 @@ const StyledDropdownDivider = ({ className = '' }) => (
 const StyledDropdown = ({ trigger, children, className = '', menuClassName = '', onOpenChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const node = useRef(null);
-  const triggerRef = useRef(null); // Ref for the trigger element
+  const triggerRef = useRef(null);
+  const uniqueId = React.useId(); // Move useId to top level // Ref for the trigger element
 
   const toggleDropdown = useCallback(() => {
     setIsOpen(prevIsOpen => {
@@ -104,7 +106,7 @@ const StyledDropdown = ({ trigger, children, className = '', menuClassName = '',
   }, [isOpen, handleClickOutside, handleKeyDown]);
 
   // Assign a unique ID to the trigger for aria-labelledby
-  const triggerId = trigger.props.id || `dropdown-trigger-${React.useId()}`;
+  const triggerId = trigger.props.id || `dropdown-trigger-${uniqueId}`;
 
   return (
     <div ref={node} className={`${styles.dropdown} ${className}`}>

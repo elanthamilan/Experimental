@@ -2,7 +2,7 @@
 
 // Standard Page Header Styles (copied from DashboardPage.module.scss)
 .pageHeader {
-  margin-bottom: v.$base-margin * 3;
+  margin-bottom: calc(#{v.$base-margin-value} * 3);
   text-align: center;
 
   @media (min-width: 768px) {

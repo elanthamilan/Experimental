@@ -14,7 +14,7 @@
 .formCheckInput {
   width: v.$form-check-input-width;
   height: v.$form-check-input-width;
-  margin-top: math.div( (v.$line-height-base * 1em) - v.$form-check-input-width, 2); // Approximate vertical center
+  margin-top: calc((#{v.$line-height-base} * 1em - #{v.$form-check-input-width}) / 2); // Approximate vertical center
   margin-right: v.$form-check-input-margin-x;
   vertical-align: top; // Keep if not using flex align-items on parent
   background-color: var(--theme-surface, v.$surface-color);
@@ -105,7 +105,7 @@
     background-image: none; // Remove checkbox/radio background image
     position: relative; // For pseudo-elements (thumb)
     border-color: var(--theme-outline-variant, v.$outline-variant-color); // Track color when off
-    background-color: var(--theme-surface-container-highest, color.scale(v.$outline-variant-color, $lightness: 10%)); // Track color when off
+    background-color: var(--theme-surface-container-highest, v.$surface-container-highest-color); // Track color when off
 
     &::before { // Thumb
       content: "";

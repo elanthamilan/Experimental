@@ -4,7 +4,9 @@ import { themes, applyTheme, defaultSpacingValues } from './themes'; // Import d
 import LeftSidebar from './components/organisms/LeftSidebar';
 import AddEditForm from './components/organisms/AddEditForm';
 // React Bootstrap components removed: Offcanvas, OverlayTrigger, Tooltip, Dropdown
-import { StyledButton, StyledOffcanvas, StyledDropdown } from './components'; // Import custom components
+import StyledButton from './components/atoms/StyledButton';
+import StyledOffcanvas from './components/molecules/StyledOffcanvas';
+import StyledDropdown from './components/molecules/StyledDropdown';
 import { Routes, Route } from 'react-router-dom';
 
 // Import SIS Page Placeholders
@@ -16,10 +18,7 @@ import AddEditStaffPage from './pages/admin/AddEditStaffPage';
 import CourseListPage from './pages/academic/CourseListPage';
 import AddEditCoursePage from './pages/academic/AddEditCoursePage';
 import GradebookPage from './pages/academic/GradebookPage';
-import AdmissionsPage from './pages/admin/AdmissionsPage';
-import BillingPage from './pages/finance/BillingPage';
-import ReportsPage from './pages/admin/ReportsPage';
-import UserProfilePage from './pages/user/UserProfilePage';
+// Removed unused imports: AdmissionsPage, BillingPage, ReportsPage, UserProfilePage
 // Faculty Management Page Imports
 import FacultyListPage from './pages/admin/FacultyListPage';
 import AddEditFacultyPage from './pages/admin/AddEditFacultyPage';

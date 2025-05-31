@@ -11,6 +11,9 @@ const StyledFormCheck = ({
   type = 'checkbox', // Default to checkbox if no type is provided
   label,
   id,
+  isInvalid,
+  feedback,
+  feedbackType,
   ...props
 }) => {
   const generatedId = useId(); // React hook for generating unique IDs

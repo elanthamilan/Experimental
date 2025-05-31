@@ -15,7 +15,7 @@ $page-title-color: v.$text-color-primary;
 
 .searchCriteriaContainer {
   padding: 0; // Remove padding to avoid double containers
-  margin-bottom: v.$base-margin * 1.5;
+  margin-bottom: calc(#{v.$base-margin-value} * 1.5);
 }
 
 .pageTitle {
@@ -29,7 +29,7 @@ $page-title-color: v.$text-color-primary;
 
 .formContainer {
   background-color: $form-background-color;
-  padding: v.$base-padding * 1.5;
+  padding: calc(#{v.$base-padding-value} * 1.5);
   border-radius: v.$base-border-radius;
   border: v.$base-border-width solid $form-border-color;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -130,7 +130,7 @@ $page-title-color: v.$text-color-primary;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: v.$base-padding v.$base-padding * 1.5; // Match formContainer padding
+  padding: v.$base-padding calc(#{v.$base-padding-value} * 1.5); // Match formContainer padding
 }
 
 .previewText {

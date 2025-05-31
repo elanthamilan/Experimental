@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo, useContext } from 'react';
 import { Link } from 'react-router-dom';
 // react-bootstrap components removed
-import { StyledButton, StyledFormSelect } from '../../components'; // Ensure these are from design system
+import StyledButton from '../atoms/StyledButton';
+import StyledFormSelect from '../atoms/StyledFormSelect';
 import styles from './LeftSidebar.module.scss';
 // useNavigate is not used, so removing it. If it was intended for a specific action, that action needs to be clear.
 // import { useNavigate } from 'react-router-dom';
