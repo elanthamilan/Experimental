@@ -31,10 +31,12 @@
 // Renamed from .form-select-sm to a module class
 .formSelectSm {
   height: auto; // Or a specific smaller height variable if defined e.g., v.$input-height-sm
-  padding-top: 0.25rem; // Consider using theme variables if available
-  padding-bottom: 0.25rem;
-  padding-left: 0.5rem; // Consider using theme variables
-  font-size: .875rem; // Consider using theme variables like v.$font-size-sm
+  padding-top: v.$input-padding-y-sm;
+  padding-bottom: v.$input-padding-y-sm;
+  padding-left: v.$input-padding-x-sm;
+  padding-right: calc(v.$input-padding-x-sm + 16px + v.$gap-small);
+  font-size: v.$font-size-sm;
+  background-position: right v.$input-padding-x-sm center;
   // Ensure padding-right is maintained or adjusted if the arrow size changes for sm variant
   // background-position might need adjustment if padding changes significantly
 }

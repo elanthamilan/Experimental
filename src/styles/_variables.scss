@@ -4,7 +4,7 @@
 // These align with MD3 light theme defaults or sensible general fallbacks.
 
 // Core Palette Fallbacks (Based on MD3 Light Theme defaults or project's default theme)
-$primary-fallback: #0D9BE1; // Default theme's primary from original themes.js
+$primary-fallback: #0072C6; // Default theme's primary from original themes.js
 $secondary-fallback: #87CEEB; // Default theme's secondary
 $tertiary-fallback: #FFD700; // Default theme's tertiary
 
@@ -237,7 +237,7 @@ $outline-button-hover-bg: var(--theme-background-hover, rgba($primary-fallback, 
 
 // Outline Secondary Button (Custom variant, or could map to a standard MD3 text button with secondary color)
 $outline-secondary-button-bg: transparent;
-$outline-secondary-button-text: $secondary-color; // Use secondary color for text
+$outline-secondary-button-text: $on-surface-variant-color; // Use secondary color for text
 $outline-secondary-button-border: $base-border-width solid $outline-color; // Use neutral outline
 $outline-secondary-button-hover-bg: var(--theme-secondary-hover-state-layer, rgba($secondary-fallback, 0.08)); // Secondary color hover state layer
 
