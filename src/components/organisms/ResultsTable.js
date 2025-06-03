@@ -40,7 +40,7 @@ const initializeManagedColumns = (propsColumns, savedColumnSettingsArray) => {
     originalAccessor: col.accessor,
     headerContent: col.header,
     CellRenderer: col.cell,
-    isVisible: true,
+    isVisible: col.isVisible !== undefined ? col.isVisible : true, // Respect prop default
     width: 150, // Default width
     minWidth: 50,
     order: index,
@@ -101,6 +101,8 @@ const ResultsTable = ({
   const [columnFilters, setColumnFilters] = useState(() => loadedSettings?.columnFilters || {});
   const [activeFilterPopover, setActiveFilterPopover] = useState(null);
   const [currentPopoverFilterValue, setCurrentPopoverFilterValue] = useState('');
+  const [showColumnVisibilityMenu, setShowColumnVisibilityMenu] = useState(false);
+  const columnVisibilityMenuRef = useRef(null);
 
   // Filter/Tab state - Counts updated based on new data
   const [activeFilter, setActiveFilter] = useState('All'); // Tab filter state not saved
@@ -108,6 +110,55 @@ const ResultsTable = ({
   useEffect(() => {
     setManagedColumns(initializeManagedColumns(columns, loadedSettings?.columnSettings));
   }, [columns, loadedSettings]);
+
+  // Click-away listener for column visibility menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showColumnVisibilityMenu &&
+          columnVisibilityMenuRef.current &&
+          !columnVisibilityMenuRef.current.contains(event.target)) {
+        // Check if the click is on the toggle button itself to avoid immediate re-close
+        // This can be done by adding a ref to the button or checking class names,
+        // but for now, the button's own toggle logic might be sufficient.
+        // A more robust way is to pass the event target to the toggle function from button and check there.
+        // However, the current setup for button is just setShowColumnVisibilityMenu(prev => !prev)
+        // Let's find the button by a temporary ID or class if needed, or rely on event propagation.
+        // For now, let's assume the button is not inside the menu, so this check is okay.
+
+        // A common pattern is to ensure the click wasn't on the button that opens the menu.
+        // If the button has a specific ref or class, we can check here.
+        // For this example, we assume the button is outside columnVisibilityMenuRef.
+        // If the button itself is clicked, its own onClick will handle toggling.
+        // This listener is primarily for clicks *not* on the menu or its toggle button.
+
+        // Let's refine: if the click is on the toggle button, its own handler should work.
+        // This effect should close the menu if the click is anywhere else.
+        // We need to ensure the button click doesn't also trigger this immediately.
+        // A simple way is to check if the target is the button.
+        // For this, the button would need a ref.
+        // Let's assume the button's onClick handles its own toggle and this handles "away" clicks.
+
+        // A better approach for click-away that correctly handles the toggle button:
+        // Check if the event target is outside the menu AND outside the button.
+        // This requires a ref on the button. Let's add `columnVisibilityButtonRef`.
+        // For now, the provided logic is:
+        if (!event.target.closest(`.${styles.columnVisibilityButton}`)) { // Check if click is not on or inside the button
+             setShowColumnVisibilityMenu(false);
+        }
+      }
+    };
+
+    if (showColumnVisibilityMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showColumnVisibilityMenu]); // Dependency: showColumnVisibilityMenu
+
 
   const handleMouseDown = (e, columnId) => {
     e.preventDefault();
@@ -552,6 +603,31 @@ const ResultsTable = ({
               >
                 Reset View
               </StyledButton>
+            )}
+            <StyledButton
+              variant="outline-secondary"
+              size="sm"
+              onClick={() => setShowColumnVisibilityMenu(prev => !prev)}
+              title="Show/Hide Columns"
+              className={styles.columnVisibilityButton}
+            >
+              <span className="material-symbols-outlined">view_column</span>
+              Columns
+            </StyledButton>
+            {showColumnVisibilityMenu && (
+              <div ref={columnVisibilityMenuRef} className={styles.columnVisibilityMenu}>
+                <div className={styles.popoverTitle}>Show/Hide Columns</div>
+                {managedColumns.map(col => (
+                  <StyledFormCheck
+                    key={col.id}
+                    type="checkbox"
+                    label={col.headerContent || col.id}
+                    checked={col.isVisible}
+                    onChange={() => handleToggleColumnVisibility(col.id)}
+                    className={styles.visibilityMenuItem}
+                  />
+                ))}
+              </div>
             )}
             <StyledDropdown
               className={styles.actionDropdown}

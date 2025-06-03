@@ -390,6 +390,57 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
   outline-offset: -2px;
 }
 
+.columnVisibilityButton {
+  display: inline-flex;
+  align-items: center;
+  gap: v.$gap-small;
+  // Add specific margins if needed, e.g., margin-left: v.$gap-medium;
+}
+
+.columnVisibilityMenu {
+  position: absolute;
+  // top: 100%; // This would be relative to a non-static parent.
+  // right: 0;  // Example, adjust based on where it's anchored.
+  // For now, let's make it appear near the button.
+  // If .tableActions is the anchor (needs position: relative):
+  top: calc(100% + #{v.$spacing-xs}); // Below the controls bar where .tableActions is
+  right: v.$gap-medium; // Align to the right of .tableActions
+
+  background-color: v.$surface-color;
+  border: v.$base-border-width solid v.$outline-color;
+  border-radius: v.$base-border-radius;
+  box-shadow: v.$elevation-shadow-3;
+  padding: v.$gap-medium;
+  z-index: 30;
+  min-width: 220px;
+  max-width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+
+  .popoverTitle { // Specific to this menu's title if needed, else global .popoverTitle applies
+    font-size: v.$font-size-base;
+    font-weight: v.$font-weight-semibold;
+    margin-bottom: v.$gap-medium;
+    color: v.$text-color-primary;
+  }
+}
+
+.visibilityMenuItem {
+  display: block;
+  margin-bottom: v.$gap-small;
+  padding: v.$spacing-xs v.$gap-small;
+  border-radius: v.$border-radius-small;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$background-hover;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
 .filterIcon {
   cursor: pointer;
   display: inline-flex;
