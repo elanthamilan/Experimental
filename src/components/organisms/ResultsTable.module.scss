@@ -357,12 +357,45 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
   }
 }
 
+.resizeHandle {
+  position: absolute;
+  top: 0;
+  right: -3px; // Position slightly outside to grab edge
+  width: 6px;  // Wider for easier grabbing
+  height: 100%;
+  cursor: col-resize;
+  z-index: 10; // Ensure it's above header content if any overlap
+  // background-color: rgba(0, 0, 255, 0.1); // Optional: for debugging visibility
+}
+
+.densityControls {
+  display: flex;
+  align-items: center;
+  gap: v.$gap-small;
+  :global(.btn) {
+    padding: v.$input-padding-y-sm v.$input-padding-x-sm;
+  }
+}
+
+.draggingColumn {
+  opacity: 0.5;
+  // Potentially add a border or background change
+}
+
+.dragOverColumn {
+  // Example: Highlight the column being dragged over
+  // This could be a border, background change, or a pseudo-element indicator
+  // For simplicity, a left or right border can indicate drop position
+  outline: 2px dashed v.$primary-color; // Use your theme's primary color
+  outline-offset: -2px;
+}
+
 .dataTable {
   margin-bottom: 0;
 
   :global(thead th) {
     background-color: $table-header-bg !important; // Uses themed var: v.$surface-container-color
-    height: $table-header-height;
+    // height: $table-header-height; // Commented out
     font-family: $table-header-font-family; // Uses themed var: v.$font-family-display
     font-weight: $table-header-font-weight;
     font-size: $table-header-font-size;
@@ -374,15 +407,19 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
     border-top: none !important;
     border-left: none !important;
     border-right: none !important;
-    padding: 0 v.$gap-small;
+    padding-left: v.$gap-small; // Keep horizontal padding
+    padding-right: v.$gap-small; // Keep horizontal padding
     white-space: nowrap;
+    // Default (Regular) Density Vertical Padding for TH
+    padding-top: math.div(v.$gap-small, 2);
+    padding-bottom: math.div(v.$gap-small, 2);
   }
 
   :global(tbody tr) {
     background-color: $table-row-odd-bg !important; // Uses themed var: v.$surface-color
     color: $table-row-text-color !important; // Uses themed var: v.$on-surface-color
     border-bottom: $table-row-border-bottom; // Uses themed var: v.$outline-variant-color
-    height: $table-row-height;
+    // height: $table-row-height; // Commented out
     transition: background-color 0.15s ease-in-out;
 
      &:last-child {
@@ -409,9 +446,28 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
     line-height: $table-row-line-height;
     color: $table-row-text-color !important;
     vertical-align: middle;
-    padding: v.$gap-small;
+    padding-left: v.$gap-small;  // Keep horizontal padding
+    padding-right: v.$gap-small; // Keep horizontal padding
     border-left: none !important;
     border-right: none !important;
+    // Default (Regular) Density Vertical Padding for TD
+    padding-top: v.$gap-small;
+    padding-bottom: v.$gap-small;
+  }
+
+  // Density Modifier Classes
+  &.densityCompact {
+    :global(thead th), :global(tbody td) {
+      padding-top: v.$spacing-xs;    // 0.25rem (4px)
+      padding-bottom: v.$spacing-xs; // 0.25rem (4px)
+    }
+  }
+
+  &.densityRelaxed {
+    :global(thead th), :global(tbody td) {
+      padding-top: v.$gap-medium;     // 0.75rem (12px)
+      padding-bottom: v.$gap-medium;  // 0.75rem (12px)
+    }
   }
 
   // Ensure form-check-input styles are separate from td border overrides

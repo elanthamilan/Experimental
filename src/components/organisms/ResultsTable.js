@@ -28,9 +28,123 @@ const ResultsTable = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const headerCheckboxRef = useRef(null); // Ref for indeterminate state
+  const [managedColumns, setManagedColumns] = useState([]);
+  const [resizingColumn, setResizingColumn] = useState(null);
+  const [draggingColumnId, setDraggingColumnId] = useState(null);
+  const [dragOverColumnId, setDragOverColumnId] = useState(null);
+  const [density, setDensity] = useState('regular'); // Options: 'compact', 'regular', 'relaxed'
 
   // Filter/Tab state - Counts updated based on new data
   const [activeFilter, setActiveFilter] = useState('All');
+
+  useEffect(() => {
+    const newManagedColumns = columns.map((col, index) => ({
+      id: col.accessor, // Assuming accessor is unique, otherwise generate ID
+      originalAccessor: col.accessor,
+      headerContent: col.header,
+      CellRenderer: col.cell,
+      isVisible: true,
+      width: 150, // Default width in pixels
+      minWidth: 50,
+      order: index,
+      canResize: true,
+      canReorder: true,
+      canSort: true,
+      sortDirection: null,
+    }));
+    setManagedColumns(newManagedColumns);
+  }, [columns]);
+
+  const handleMouseDown = (e, columnId) => {
+    e.preventDefault();
+    const column = managedColumns.find(c => c.id === columnId);
+    if (column) {
+      setResizingColumn({
+        id: columnId,
+        initialX: e.clientX,
+        initialWidth: column.width,
+      });
+    }
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!resizingColumn) return;
+      e.preventDefault();
+      const deltaX = e.clientX - resizingColumn.initialX;
+      const newWidth = resizingColumn.initialWidth + deltaX;
+
+      setManagedColumns(prevCols =>
+        prevCols.map(c =>
+          c.id === resizingColumn.id ? { ...c, width: Math.max(c.minWidth, newWidth) } : c
+        )
+      );
+    };
+
+    const handleMouseUp = (e) => {
+      if (!resizingColumn) return;
+      e.preventDefault();
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      setResizingColumn(null);
+    };
+
+    if (resizingColumn) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [resizingColumn, managedColumns]); // Add managedColumns to dependencies to ensure minWidth is up-to-date
+
+  const handleDragStart = (e, columnId) => {
+    e.dataTransfer.setData('text/plain', columnId);
+    setDraggingColumnId(columnId);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault(); // Necessary to allow dropping
+  };
+
+  const handleDragEnter = (e, targetColumnId) => {
+    e.preventDefault();
+    setDragOverColumnId(targetColumnId);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setDragOverColumnId(null);
+  };
+
+  const handleDrop = (e, droppedOnColumnId) => {
+    e.preventDefault();
+    const sourceColumnId = e.dataTransfer.getData('text/plain');
+    setDraggingColumnId(null);
+    setDragOverColumnId(null);
+
+    if (sourceColumnId === droppedOnColumnId) return;
+
+    setManagedColumns(prevCols => {
+      const sourceIndex = prevCols.findIndex(c => c.id === sourceColumnId);
+      const targetIndex = prevCols.findIndex(c => c.id === droppedOnColumnId);
+
+      if (sourceIndex === -1 || targetIndex === -1) return prevCols;
+
+      const newCols = [...prevCols];
+      const [draggedCol] = newCols.splice(sourceIndex, 1);
+      newCols.splice(targetIndex, 0, draggedCol);
+
+      return newCols.map((col, index) => ({ ...col, order: index }));
+    });
+  };
+
+  // Prepare columns for rendering (sorted and filtered)
+  const visibleColumns = managedColumns
+    .filter(col => col.isVisible)
+    .sort((a, b) => a.order - b.order);
 
   // Conditionally calculate filter counts if tabs are shown and data has 'status'
   let publishedCount = 0;
@@ -154,6 +268,32 @@ const ResultsTable = ({
                 className={styles.searchInput}
               />
             )}
+            <div className={styles.densityControls}>
+              <StyledButton
+                variant={density === 'compact' ? 'primary' : 'outline-secondary'}
+                onClick={() => setDensity('compact')}
+                size="sm"
+                title="Compact density"
+              >
+                <span className="material-symbols-outlined">density_small</span>
+              </StyledButton>
+              <StyledButton
+                variant={density === 'regular' ? 'primary' : 'outline-secondary'}
+                onClick={() => setDensity('regular')}
+                size="sm"
+                title="Regular density"
+              >
+                <span className="material-symbols-outlined">density_medium</span>
+              </StyledButton>
+              <StyledButton
+                variant={density === 'relaxed' ? 'primary' : 'outline-secondary'}
+                onClick={() => setDensity('relaxed')}
+                size="sm"
+                title="Relaxed density"
+              >
+                <span className="material-symbols-outlined">density_large</span>
+              </StyledButton>
+            </div>
             <StyledDropdown
               className={styles.actionDropdown}
               trigger={
@@ -200,7 +340,11 @@ const ResultsTable = ({
       )}
 
 
-      <StyledTable variant="hover" responsive className={styles.dataTable}>
+      <StyledTable
+        variant="hover"
+        responsive
+        className={`${styles.dataTable} ${styles[`density${density.charAt(0).toUpperCase() + density.slice(1)}`]}`}
+      >
         <thead>
           <tr>
             <th>
@@ -211,8 +355,30 @@ const ResultsTable = ({
                 // Checked and indeterminate state managed by useEffect
               />
             </th>
-            {columns.map((col) => (
-              <th key={col.accessor}>{col.header}</th>
+            {visibleColumns.map((col) => (
+              <th
+                key={col.id}
+                style={{ width: `${col.width}px`, position: 'relative' }}
+                draggable={col.canReorder ? "true" : undefined}
+                onDragStart={col.canReorder ? (e) => handleDragStart(e, col.id) : undefined}
+                onDragOver={col.canReorder ? handleDragOver : undefined}
+                onDrop={col.canReorder ? (e) => handleDrop(e, col.id) : undefined}
+                onDragEnter={col.canReorder ? (e) => handleDragEnter(e, col.id) : undefined}
+                onDragLeave={col.canReorder ? handleDragLeave : undefined}
+                className={`
+                  ${draggingColumnId === col.id ? styles.draggingColumn : ''}
+                  ${dragOverColumnId === col.id ? styles.dragOverColumn : ''}
+                `}
+              >
+                {col.headerContent}
+                {col.canResize && (
+                  <div
+                    className={styles.resizeHandle}
+                    onMouseDown={(e) => handleMouseDown(e, col.id)}
+                    data-column-id={col.id}
+                  />
+                )}
+              </th>
             ))}
           </tr>
         </thead>
@@ -227,9 +393,9 @@ const ResultsTable = ({
                   aria-label={`Select row ${item.id}`}
                 />
               </td>
-              {columns.map((col) => (
-                <td key={col.accessor}>
-                  {col.cell ? col.cell(item) : item[col.accessor]}
+              {visibleColumns.map((col) => (
+                <td key={col.id}>
+                  {col.CellRenderer ? col.CellRenderer(item) : item[col.originalAccessor]}
                 </td>
               ))}
             </tr>
