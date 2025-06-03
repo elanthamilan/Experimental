@@ -390,6 +390,34 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
   outline-offset: -2px;
 }
 
+.sortableHeader {
+  cursor: pointer;
+}
+
+.headerContentWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: v.$gap-small;
+  width: 100%;
+}
+
+.sortIndicator {
+  display: inline-flex;
+  align-items: center;
+  :global(.material-symbols-outlined) {
+    font-size: 18px;
+    color: v.$on-surface-variant-color;
+    opacity: 0.6;
+    transition: color 0.15s ease-in-out, opacity 0.15s ease-in-out;
+  }
+
+  &.activeSortIndicator :global(.material-symbols-outlined) {
+    color: v.$primary-color;
+    opacity: 1.0;
+  }
+}
+
 .dataTable {
   margin-bottom: 0;
 

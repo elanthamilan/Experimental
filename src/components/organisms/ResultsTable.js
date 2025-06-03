@@ -33,6 +33,7 @@ const ResultsTable = ({
   const [draggingColumnId, setDraggingColumnId] = useState(null);
   const [dragOverColumnId, setDragOverColumnId] = useState(null);
   const [density, setDensity] = useState('regular'); // Options: 'compact', 'regular', 'relaxed'
+  const [sortConfig, setSortConfig] = useState({ columnId: null, direction: 'none' });
 
   // Filter/Tab state - Counts updated based on new data
   const [activeFilter, setActiveFilter] = useState('All');
@@ -50,7 +51,8 @@ const ResultsTable = ({
       canResize: true,
       canReorder: true,
       canSort: true,
-      sortDirection: null,
+      sortDirection: null, // This will be updated based on sortConfig for UI indication later
+      sortType: col.sortType || 'alphanumeric',
     }));
     setManagedColumns(newManagedColumns);
   }, [columns]);
@@ -141,12 +143,82 @@ const ResultsTable = ({
     });
   };
 
-  // Prepare columns for rendering (sorted and filtered)
+  const handleSort = (columnIdToSort) => {
+    let direction = 'asc';
+    if (sortConfig.columnId === columnIdToSort && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    } else if (sortConfig.columnId === columnIdToSort && sortConfig.direction === 'desc') {
+      direction = 'none';
+    }
+
+    setSortConfig({
+      columnId: direction === 'none' ? null : columnIdToSort,
+      direction,
+    });
+    setCurrentPage(1);
+  };
+
+  // Prepare columns for rendering (sorted and filtered by visibility and order)
   const visibleColumns = managedColumns
     .filter(col => col.isVisible)
     .sort((a, b) => a.order - b.order);
 
+  // Memoize processed (filtered, sorted, paginated) items
+  const processedItemsResult = React.useMemo(() => {
+    let items = [...data];
+
+    // Apply filtering
+    if (showFilterTabs && activeFilter !== 'All' && items.some(item => item.hasOwnProperty('status'))) {
+      items = items.filter(item => {
+        if (activeFilter === 'Pending') return item.status === 'PENDING';
+        if (activeFilter === 'Verified') return item.status === 'VERIFIED';
+        if (activeFilter === 'Finalized') return item.status === 'FINALIZED';
+        if (activeFilter === 'Published to portal') return item.status === 'PUBLISHED';
+        return true;
+      });
+    }
+    const totalFilteredItems = items.length;
+
+    // Apply sorting
+    if (sortConfig.columnId && sortConfig.direction !== 'none') {
+      const columnToSortBy = managedColumns.find(col => col.id === sortConfig.columnId);
+      if (columnToSortBy) {
+        items.sort((a, b) => {
+          const valA = a[columnToSortBy.originalAccessor];
+          const valB = b[columnToSortBy.originalAccessor];
+
+          // Handle null or undefined values
+          if (valA == null && valB == null) return 0;
+          if (valA == null) return sortConfig.direction === 'asc' ? -1 : 1;
+          if (valB == null) return sortConfig.direction === 'asc' ? 1 : -1;
+
+          let comparison = 0;
+          if (columnToSortBy.sortType === 'numeric') {
+            comparison = parseFloat(valA) - parseFloat(valB);
+          } else if (columnToSortBy.sortType === 'date') {
+            comparison = new Date(valA) - new Date(valB);
+          } else { // alphanumeric
+            comparison = String(valA).localeCompare(String(valB));
+          }
+          return sortConfig.direction === 'asc' ? comparison : -comparison;
+        });
+      }
+    }
+
+    // Apply pagination
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const itemsToDisplay = items.slice(indexOfFirstItem, indexOfLastItem);
+
+    return { itemsToDisplay, totalFilteredItems };
+  }, [data, activeFilter, showFilterTabs, sortConfig, managedColumns, currentPage, itemsPerPage]);
+
+  const { itemsToDisplay, totalFilteredItems } = processedItemsResult;
+  const totalPages = Math.ceil(totalFilteredItems / itemsPerPage);
+
+
   // Conditionally calculate filter counts if tabs are shown and data has 'status'
+  // Note: This filter count logic should ideally use the raw `data` prop before any other processing.
   let publishedCount = 0;
   let pendingCount = 0;
   let verifiedCount = 0;
@@ -183,15 +255,6 @@ const ResultsTable = ({
     return true;
   });
 
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // Paginate the filtered data
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Calculate total pages based on filtered data
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-
   const handlePageChange = (pageNumber) => {
     // Reset to page 1 if filter changes? Optional.
     setCurrentPage(pageNumber);
@@ -206,16 +269,16 @@ const ResultsTable = ({
   useEffect(() => {
     if (headerCheckboxRef.current) {
       const numSelected = selectedRows.length;
-      const numCurrentItems = currentItems.length;
+      const numCurrentItems = itemsToDisplay.length; // Use itemsToDisplay
       headerCheckboxRef.current.checked = numSelected === numCurrentItems && numCurrentItems > 0;
       headerCheckboxRef.current.indeterminate = numSelected > 0 && numSelected < numCurrentItems;
     }
-  }, [selectedRows, currentItems]);
+  }, [selectedRows, itemsToDisplay]);
 
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
-      setSelectedRows(currentItems.map(item => item.id));
+      setSelectedRows(itemsToDisplay.map(item => item.id)); // Use itemsToDisplay
     } else {
       setSelectedRows([]);
     }
@@ -230,8 +293,20 @@ const ResultsTable = ({
   };
 
   const handleSelectAllFiltered = () => {
-    // Select all items that match the current filter, across all pages
-    setSelectedRows(filteredData.map(item => item.id));
+    // This should select all items that match the current filter, across all pages of that filter.
+    // The `processedItemsResult` already filters, but not sorts for this specific selection.
+    // We need to re-filter the original data for this action.
+    let itemsToSelect = [...data];
+    if (showFilterTabs && activeFilter !== 'All' && itemsToSelect.some(item => item.hasOwnProperty('status'))) {
+       itemsToSelect = itemsToSelect.filter(item => {
+        if (activeFilter === 'Pending') return item.status === 'PENDING';
+        if (activeFilter === 'Verified') return item.status === 'VERIFIED';
+        if (activeFilter === 'Finalized') return item.status === 'FINALIZED';
+        if (activeFilter === 'Published to portal') return item.status === 'PUBLISHED';
+        return true;
+      });
+    }
+    setSelectedRows(itemsToSelect.map(item => item.id));
   };
 
   const handleClearSelection = () => {
@@ -260,6 +335,7 @@ const ResultsTable = ({
           </div>
           )}
           <div className={styles.tableActions}>
+            {/* Search input - future enhancement: integrate with filtering/sorting */}
             {showSearch && (
               <SearchInput
                 placeholder="Search all"
@@ -314,7 +390,7 @@ const ResultsTable = ({
         </div>
       ) : (
         <div className={styles.multiSelectActionBar}>
-          <span className={styles.selectionCount}>{numSelected} / {filteredData.length} selected</span>
+          <span className={styles.selectionCount}>{numSelected} / {totalFilteredItems} selected</span>
           <StyledDropdown
             className={styles.multiActionDropdown}
             trigger={
@@ -330,7 +406,7 @@ const ResultsTable = ({
           </StyledDropdown>
           {/* Use StyledButton */}
           <StyledButton variant="link" onClick={handleSelectAllFiltered} className={styles.selectAllLink}>
-            Select all {filteredData.length}
+            Select all {totalFilteredItems}
           </StyledButton>
           {/* Use StyledButton */}
           <StyledButton variant="link" onClick={handleClearSelection} className={styles.clearSelectionLink}>
@@ -365,12 +441,27 @@ const ResultsTable = ({
                 onDrop={col.canReorder ? (e) => handleDrop(e, col.id) : undefined}
                 onDragEnter={col.canReorder ? (e) => handleDragEnter(e, col.id) : undefined}
                 onDragLeave={col.canReorder ? handleDragLeave : undefined}
+                onClick={() => col.canSort && handleSort(col.id)}
                 className={`
                   ${draggingColumnId === col.id ? styles.draggingColumn : ''}
                   ${dragOverColumnId === col.id ? styles.dragOverColumn : ''}
+                  ${col.canSort ? styles.sortableHeader : ''}
                 `}
               >
-                {col.headerContent}
+                <div className={styles.headerContentWrapper}>
+                  <span>{col.headerContent}</span>
+                  {col.canSort && (
+                    <span className={`${styles.sortIndicator} ${ (sortConfig.columnId === col.id && sortConfig.direction !== 'none') ? styles.activeSortIndicator : ''}`}>
+                      {sortConfig.columnId === col.id ? (
+                        sortConfig.direction === 'asc' ? <span className="material-symbols-outlined">arrow_upward</span> :
+                        sortConfig.direction === 'desc' ? <span className="material-symbols-outlined">arrow_downward</span> :
+                        <span className="material-symbols-outlined">unfold_more</span> // Should ideally not happen if columnId is null for 'none'
+                      ) : (
+                        <span className="material-symbols-outlined">unfold_more</span>
+                      )}
+                    </span>
+                  )}
+                </div>
                 {col.canResize && (
                   <div
                     className={styles.resizeHandle}
@@ -383,7 +474,7 @@ const ResultsTable = ({
           </tr>
         </thead>
         <tbody>
-          {currentItems.map((item) => (
+          {itemsToDisplay.map((item) => (
             <tr key={item.id} className={selectedRows.includes(item.id) ? styles.selectedRow : ''}>
               <td>
                 <StyledFormCheck
@@ -404,8 +495,10 @@ const ResultsTable = ({
       </StyledTable>
 
       <div className={styles.paginationContainer}>
-         {/* Update results text based on filtered data */}
-        <span className={styles.resultsText}>Showing {filteredData.length > 0 ? indexOfFirstItem + 1 : 0}-{Math.min(indexOfLastItem, filteredData.length)} of {filteredData.length} results</span>
+        <span className={styles.resultsText}>
+          Showing {totalFilteredItems > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}-
+          {Math.min(currentPage * itemsPerPage, totalFilteredItems)} of {totalFilteredItems} results
+        </span>
 
         <div className="d-flex align-items-center gap-3"> {/* Wrapper for pagination controls */}
           <StyledPagination
