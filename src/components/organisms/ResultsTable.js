@@ -13,6 +13,68 @@ import StyledPagination from '../atoms/StyledPagination';
 import StyledDropdown from '../molecules/StyledDropdown';
 import styles from './ResultsTable.module.scss';
 
+const LOCALSTORAGE_KEY = 'resultsTableUserSettings_v1';
+
+const loadSettingsFromLocalStorage = () => {
+  try {
+    const serializedSettings = localStorage.getItem(LOCALSTORAGE_KEY);
+    if (serializedSettings === null) {
+      return undefined;
+    }
+    const settings = JSON.parse(serializedSettings);
+    if (settings && settings.version === 1) {
+      return settings;
+    } else {
+      localStorage.removeItem(LOCALSTORAGE_KEY);
+      return undefined;
+    }
+  } catch (error) {
+    console.warn("Could not load table settings from localStorage:", error);
+    return undefined;
+  }
+};
+
+const initializeManagedColumns = (propsColumns, savedColumnSettingsArray) => {
+  let initialColumns = propsColumns.map((col, index) => ({
+    id: col.accessor,
+    originalAccessor: col.accessor,
+    headerContent: col.header,
+    CellRenderer: col.cell,
+    isVisible: true,
+    width: 150, // Default width
+    minWidth: 50,
+    order: index,
+    canResize: true,
+    canReorder: true,
+    canSort: true,
+    sortDirection: null,
+    sortType: col.sortType || 'alphanumeric',
+    canFilter: col.canFilter !== undefined ? col.canFilter : true,
+    filterType: col.filterType || 'text',
+  }));
+
+  if (savedColumnSettingsArray) {
+    const savedSettingsMap = new Map(
+      savedColumnSettingsArray.map(cs => [cs.id, cs])
+    );
+
+    initialColumns.forEach(col => {
+      if (savedSettingsMap.has(col.id)) {
+        const savedCol = savedSettingsMap.get(col.id);
+        col.width = savedCol.width !== undefined ? savedCol.width : col.width;
+        col.order = savedCol.order !== undefined ? savedCol.order : col.order;
+        col.isVisible = savedCol.isVisible !== undefined ? savedCol.isVisible : col.isVisible;
+      }
+    });
+
+    initialColumns.sort((a, b) => a.order - b.order);
+    // Re-normalize order
+    initialColumns = initialColumns.map((col, index) => ({ ...col, order: index }));
+  }
+  return initialColumns;
+};
+
+
 const ResultsTable = ({
   data = [],
   columns = [],
@@ -24,43 +86,28 @@ const ResultsTable = ({
   // const initialData = [...] // Removed initialData
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const loadedSettings = React.useMemo(() => loadSettingsFromLocalStorage(), []);
+
+  const [itemsPerPage, setItemsPerPage] = useState(() => loadedSettings?.itemsPerPage || 10);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const headerCheckboxRef = useRef(null); // Ref for indeterminate state
+  const [searchTerm, setSearchTerm] = useState(''); // Not saved/loaded for now
+  const headerCheckboxRef = useRef(null);
   const [managedColumns, setManagedColumns] = useState([]);
   const [resizingColumn, setResizingColumn] = useState(null);
   const [draggingColumnId, setDraggingColumnId] = useState(null);
   const [dragOverColumnId, setDragOverColumnId] = useState(null);
-  const [density, setDensity] = useState('regular'); // Options: 'compact', 'regular', 'relaxed'
-  const [sortConfig, setSortConfig] = useState({ columnId: null, direction: 'none' });
-  const [columnFilters, setColumnFilters] = useState({});
-  const [activeFilterPopover, setActiveFilterPopover] = useState(null); // Stores columnId
+  const [density, setDensity] = useState(() => loadedSettings?.density || 'regular');
+  const [sortConfig, setSortConfig] = useState(() => loadedSettings?.sortConfig || { columnId: null, direction: 'none' });
+  const [columnFilters, setColumnFilters] = useState(() => loadedSettings?.columnFilters || {});
+  const [activeFilterPopover, setActiveFilterPopover] = useState(null);
   const [currentPopoverFilterValue, setCurrentPopoverFilterValue] = useState('');
 
   // Filter/Tab state - Counts updated based on new data
-  const [activeFilter, setActiveFilter] = useState('All');
+  const [activeFilter, setActiveFilter] = useState('All'); // Tab filter state not saved
 
   useEffect(() => {
-    const newManagedColumns = columns.map((col, index) => ({
-      id: col.accessor, // Assuming accessor is unique, otherwise generate ID
-      originalAccessor: col.accessor,
-      headerContent: col.header,
-      CellRenderer: col.cell,
-      isVisible: true,
-      width: 150, // Default width in pixels
-      minWidth: 50,
-      order: index,
-      canResize: true,
-      canReorder: true,
-      canSort: true,
-      sortDirection: null, // This will be updated based on sortConfig for UI indication later
-      sortType: col.sortType || 'alphanumeric',
-      canFilter: col.canFilter !== undefined ? col.canFilter : true,
-      filterType: col.filterType || 'text',
-    }));
-    setManagedColumns(newManagedColumns);
-  }, [columns]);
+    setManagedColumns(initializeManagedColumns(columns, loadedSettings?.columnSettings));
+  }, [columns, loadedSettings]);
 
   const handleMouseDown = (e, columnId) => {
     e.preventDefault();
@@ -164,6 +211,22 @@ const ResultsTable = ({
   const clearAllColumnFilters = () => {
     setColumnFilters({});
     setCurrentPage(1);
+  };
+
+  const resetTableSettings = () => {
+    localStorage.removeItem(LOCALSTORAGE_KEY);
+    setItemsPerPage(10);
+    setDensity('regular');
+    setSortConfig({ columnId: null, direction: 'none' });
+    setColumnFilters({});
+    setCurrentPage(1);
+    // Re-initialize columns to their default state from props
+    setManagedColumns(initializeManagedColumns(columns, undefined));
+    // activeFilterPopover and currentPopoverFilterValue are transient, reset if needed
+    setActiveFilterPopover(null);
+    setCurrentPopoverFilterValue('');
+    // searchTerm is also transient for now
+    setSearchTerm('');
   };
 
   const handleSort = (columnIdToSort) => {
@@ -291,6 +354,31 @@ const ResultsTable = ({
 
   const { itemsToDisplay, totalFilteredItems } = processedItemsResult;
   const totalPages = Math.ceil(totalFilteredItems / itemsPerPage);
+
+  const saveSettingsToLocalStorage = (settings) => {
+    try {
+      localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(settings));
+    } catch (error) {
+      console.warn("Could not save table settings to localStorage:", error);
+    }
+  };
+
+  useEffect(() => {
+    const currentSettings = {
+      version: 1,
+      columnSettings: managedColumns.map(col => ({
+        id: col.id,
+        order: col.order,
+        width: col.width,
+        isVisible: col.isVisible,
+      })),
+      density: density,
+      sortConfig: sortConfig,
+      columnFilters: columnFilters,
+      itemsPerPage: itemsPerPage,
+    };
+    saveSettingsToLocalStorage(currentSettings);
+  }, [managedColumns, density, sortConfig, columnFilters, itemsPerPage]);
 
 
   // Conditionally calculate filter counts if tabs are shown and data has 'status'
@@ -453,6 +541,16 @@ const ResultsTable = ({
                 className={styles.clearAllFiltersButton}
               >
                 Clear All Filters
+              </StyledButton>
+            )}
+            {loadedSettings && (
+              <StyledButton
+                variant="link"
+                onClick={resetTableSettings}
+                className={styles.resetTableSettingsButton}
+                title="Reset all table customizations (order, width, filters, etc.)"
+              >
+                Reset View
               </StyledButton>
             )}
             <StyledDropdown
