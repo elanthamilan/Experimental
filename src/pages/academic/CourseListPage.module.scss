@@ -1,30 +1,10 @@
 @use '../../styles/variables' as v; // Assuming variables are accessible
 
 .pageContainer {
-  padding: v.$base-padding calc(#{v.$base_padding} * 1.5); // var(--spacing-medium) var(--spacing-large)
+  padding: calc(#{v.$base-padding-value} * 1.5);
   background-color: var(--theme-background);
   min-height: 100vh;
   color: var(--theme-on-background);
-}
-
-.pageHeader {
-  margin-bottom: calc(#{v.$base-margin-value} * 3);
-  text-align: center;
-
-  @media (min-width: 768px) {
-    text-align: left;
-  }
-}
-
-.pageTitle {
-  color: var(--theme-text-color, v.$on-surface-color);
-  font-size: var(--theme-font-pagetitle-size, 2.5rem);
-  font-family: var(--theme-font-display, v.$font-family-display);
-  font-weight: var(--theme-font-pagetitle-weight, 700);
-  margin-bottom: v.$base-margin;
-  line-height: 1.2;
-
-  /* Responsive size adjustments can be handled by the theme setting itself or by more specific theme variables. */
 }
 
 .pageDescription {

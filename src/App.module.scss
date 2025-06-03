@@ -47,6 +47,20 @@ $utility-divider-color: v.$outline-color; // Dividers use outline color
   z-index: 1; // Lower than utilitySidebar
 }
 
+.pageHeader {
+  margin-bottom: calc(#{v.$base-margin-value} * 2); // Adjusted from *3 to be a bit less, can be fine-tuned
+  text-align: left; // Default to left, specific pages can override if needed
+}
+
+.pageTitle {
+  color: var(--theme-text-color, v.$on-surface-color);
+  font-size: var(--theme-font-pagetitle-size, 2.5rem); // Ensure these CSS vars are set by theme
+  font-family: var(--theme-font-display, v.$font-family-display);
+  font-weight: var(--theme-font-pagetitle-weight, 700); // Ensure these CSS vars are set by theme
+  margin-bottom: v.$base-margin;
+  line-height: 1.2;
+}
+
 .pageBody {
     padding: calc(#{v.$base-padding-value} * 1.5); // Use calculation with SCSS variable
     // background-color: v.$white; // Use shared variable if needed

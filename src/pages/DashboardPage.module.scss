@@ -2,35 +2,13 @@
 
 .dashboardContainer {
   background-color: var(--theme-app-background, v.$background-color);
-  padding: calc(#{v.$base-padding-value} * 2);
+  padding: calc(#{v.$base-padding-value} * 1.5);
   min-height: calc(100vh - 120px); // Account for header and toolbar
 }
 
 .dashboardContent {
   width: 100%; // Full width layout
   margin: 0;
-}
-
-.pageHeader {
-  margin-bottom: calc(#{v.$base-margin-value} * 3);
-  text-align: center;
-
-  @media (min-width: 768px) {
-    text-align: left;
-  }
-}
-
-.pageTitle {
-  color: var(--theme-text-color, v.$on-surface-color);
-  font-size: var(--theme-font-pagetitle-size, 2.5rem);
-  font-family: var(--theme-font-display, v.$font-family-display);
-  font-weight: var(--theme-font-pagetitle-weight, 700);
-  margin-bottom: v.$base-margin;
-  line-height: 1.2;
-
-  /* Responsive size adjustments can be handled by the theme setting itself if a responsive unit like vw is used, 
-     or by more specific theme variables for different breakpoints if needed. 
-     For now, removing direct media query override here to simplify and rely on the CSS var. */
 }
 
 .pageDescription {
@@ -56,10 +34,6 @@
 
 // Responsive adjustments
 @media (max-width: 768px) {
-  .dashboardContainer {
-    padding: v.$base-padding;
-  }
-
   .section {
     margin-bottom: calc(#{v.$base-margin-value} * 2);
   }

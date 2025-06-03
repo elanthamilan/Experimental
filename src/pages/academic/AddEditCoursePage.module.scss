@@ -1,27 +1,9 @@
 @use '../../styles/variables' as v; // Make sure this path is correct for this file
 
 .pageContainer {
-  padding: var(--spacing-medium) var(--spacing-large); // Example using theme variables for spacing
+  padding: calc(#{v.$base-padding-value} * 1.5);
   background-color: var(--theme-background);
   min-height: 100vh;
-}
-
-.pageHeader {
-  margin-bottom: calc(#{v.$base-margin-value} * 3);
-  text-align: center;
-
-  @media (min-width: 768px) {
-    text-align: left;
-  }
-}
-
-.pageTitle {
-  color: var(--theme-text-color, v.$on-surface-color);
-  font-size: var(--theme-font-pagetitle-size, 2.5rem);
-  font-family: var(--theme-font-display, v.$font-family-display);
-  font-weight: var(--theme-font-pagetitle-weight, 700);
-  margin-bottom: v.$base-margin;
-  line-height: 1.2;
 }
 
 .pageDescription {

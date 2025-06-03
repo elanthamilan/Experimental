@@ -34,15 +34,6 @@ $page-title-color: v.$text-color-primary;
   border: v.$base-border-width solid $form-border-color;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 
-  :global(.form-label) {
-    font-family: v.$font-family-body; // Changed to body font
-    font-weight: v.$input-label-font-weight;
-    font-size: v.$input-label-font-size;
-    line-height: v.$line-height-base;
-    color: v.$input-label-color;
-    margin-bottom: math.div(v.$gap-small, 2);
-  }
-
   :global(.form-select) {
     background-color: v.$input-bg;
     border: v.$input-border;
