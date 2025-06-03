@@ -1,5 +1,52 @@
 @use 'src/styles/_variables.scss' as v;
 
 .styledFormGroup {
-  margin-bottom: v.$base-margin; // Or a more specific variable like v.$form-group-margin-bottom if defined
+  margin-bottom: v.$form-group-spacing-md; // Use design system form spacing
+}
+
+// Spacing variants for different form densities
+.styledFormGroup-xs {
+  margin-bottom: v.$form-group-spacing-xs;
+}
+
+.styledFormGroup-sm {
+  margin-bottom: v.$form-group-spacing-sm;
+}
+
+.styledFormGroup-md {
+  margin-bottom: v.$form-group-spacing-md;
+}
+
+.styledFormGroup-lg {
+  margin-bottom: v.$form-group-spacing-lg;
+}
+
+// Form field spacing within groups
+.formField {
+  margin-bottom: v.$form-field-spacing-md;
+
+  &:last-child {
+    margin-bottom: 0; // Remove margin from last field in group
+  }
+}
+
+// Form field spacing variants
+.formField-xs {
+  margin-bottom: v.$form-field-spacing-xs;
+}
+
+.formField-sm {
+  margin-bottom: v.$form-field-spacing-sm;
+}
+
+.formField-md {
+  margin-bottom: v.$form-field-spacing-md;
+}
+
+.formField-lg {
+  margin-bottom: v.$form-field-spacing-lg;
+}
+
+.formField-xl {
+  margin-bottom: v.$form-field-spacing-xl;
 }

@@ -1,0 +1,52 @@
+@use '../../styles/variables' as v;
+
+.formSection {
+  margin-bottom: v.$form-section-spacing-md; // Default form section spacing
+  
+  &:last-child {
+    margin-bottom: 0; // Remove margin from last section
+  }
+}
+
+// Form section spacing variants
+.formSection-sm {
+  margin-bottom: v.$form-section-spacing-sm;
+}
+
+.formSection-md {
+  margin-bottom: v.$form-section-spacing-md;
+}
+
+.formSection-lg {
+  margin-bottom: v.$form-section-spacing-lg;
+}
+
+// Section header styling
+.sectionHeader {
+  margin-bottom: v.$form-field-spacing-lg;
+  
+  &:empty {
+    margin-bottom: 0;
+  }
+}
+
+.sectionTitle {
+  font-family: v.$font-family-display;
+  font-weight: v.$font-weight-semibold;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: v.$text-color-primary;
+  margin-bottom: v.$form-field-spacing-xs;
+}
+
+.sectionDescription {
+  font-family: v.$font-family-body;
+  font-size: 0.875rem;
+  line-height: 1.43;
+  color: v.$text-color-secondary;
+  margin-bottom: 0;
+}
+
+.sectionContent {
+  // Content area - no additional spacing as FormField components handle their own spacing
+}

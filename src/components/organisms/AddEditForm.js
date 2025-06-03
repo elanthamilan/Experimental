@@ -10,6 +10,8 @@ import StyledButton from '../atoms/StyledButton';
 import StyledFormLabel from '../atoms/StyledFormLabel';
 import StyledFormGroup from '../atoms/StyledFormGroup';
 import FormField from '../molecules/FormField';
+import FormRow from '../molecules/FormRow';
+import FormSection from '../molecules/FormSection';
 import FileUploadDropzone from '../molecules/FileUploadDropzone';
 import styles from './AddEditForm.module.scss';
 
@@ -162,96 +164,99 @@ const AddEditForm = () => {
       <form onSubmit={() => {/* TODO: handleSubmit */}}> {/* Replaced BootstrapForm with form */}
 
         {/* 2.1 Section: Basics (First Instance) */}
-        <StyledCard variant="default" className={`${styles.formSectionCard} mb-3`}> {/* StyledCard used directly */}
-          <StyledCard.Body> {/* Replaced Card.Body */}
-            {/* Card Title and Description */}
-            <StyledRow> {/* Replaced Row */}
-              <StyledCol md={4}> {/* Replaced Col */}
-                <StyledCard.Title>Basics</StyledCard.Title> {/* Replaced Card.Title */}
-                <StyledCard.Text className="text-muted"> {/* Replaced Card.Text */}
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                </StyledCard.Text>
-              </StyledCol>
-              <StyledCol md={8}> {/* Replaced Col */}
-                {/* 2.1.1 & 2.1.2 */}
-                <StyledRow> {/* Replaced Row */}
-                  <StyledCol md={6}> {/* Replaced Col */}
-                    <FormField
-                      controlId="formField2_1_1"
-                      label="Collection Name"
-                      type="text"
-                      placeholder="e.g. Summer Collection"
-                      className="mb-3"
-                      name="field2_1_1" // Use name for state handling
-                      value={formData.field2_1_1}
-                      onChange={handleChange}
-                    />
-                  </StyledCol>
-                  <StyledCol md={6}> {/* Replaced Col */}
-                     <FormField
-                       controlId="field2_1_2"
-                       label="Discount Amount"
-                       type="number" // Assuming currency might be number
-                       placeholder="e.g. 10.00"
-                       inputGroupPrepend="$"
-                       className="mb-3"
-                       name="field2_1_2"
-                       value={formData.field2_1_2}
-                       onChange={handleChange}
-                     />
-                  </StyledCol>
-                </StyledRow>
-                {/* 2.1.3 */}
-                <FormField
-                  controlId="field2_1_3"
-                  label="Description"
-                  as="textarea"
-                  rows={3}
-                  placeholder="Enter a description for this collection..."
-                  className="mb-3"
-                  name="field2_1_3"
-                  value={formData.field2_1_3}
-                  onChange={handleChange}
-                />
-                 {/* 2.1.4 */}
-                 <StyledRow> {/* Replaced Row */}
-                   <StyledCol md={6}> {/* Replaced Col */}
-                     <FormField
-                       controlId="formField2_1_4a"
-                       label="Label"
-                       type="text"
-                       placeholder="Input text"
-                       className="mb-3"
-                     />
-                   </StyledCol>
-                   <StyledCol md={6}> {/* Replaced Col */}
-                     <FormField
-                       controlId="formField2_1_4b"
-                       label="Label"
-                       type="text"
-                       placeholder="Input text"
-                       className="mb-3"
-                     />
-                   </StyledCol>
-                 </StyledRow>
-                 {/* 2.1.6 File Upload */}
-                 <StyledFormGroup className="mb-3" controlId="formField2_1_6"> {/* Replaced BootstrapForm.Group */}
-                   <StyledFormLabel>Upload Images/Documents</StyledFormLabel>
-                   <FileUploadDropzone onFilesAccepted={handleFilesAccepted} />
-                 </StyledFormGroup>
-                 {/* 2.1.7 Checkbox */}
-                 <FormField
-                   controlId="field2_1_7"
-                   label="Remember the informations"
-                   type="checkbox"
-                   name="field2_1_7"
-                   checked={formData.field2_1_7}
-                   onChange={handleChange}
-                 />
-              </StyledCol>
-            </StyledRow>
-          </StyledCard.Body>
-        </StyledCard>
+        <FormSection
+          title="Basics"
+          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+          spacing="md"
+        >
+          <StyledRow>
+            <StyledCol md={4}>
+              {/* Title and description are now handled by FormSection */}
+            </StyledCol>
+            <StyledCol md={8}>
+              {/* 2.1.1 & 2.1.2 */}
+              <FormRow spacing="md">
+                <StyledCol md={6}>
+                  <FormField
+                    controlId="formField2_1_1"
+                    label="Collection Name"
+                    type="text"
+                    placeholder="e.g. Summer Collection"
+                    spacing="md"
+                    name="field2_1_1"
+                    value={formData.field2_1_1}
+                    onChange={handleChange}
+                  />
+                </StyledCol>
+                <StyledCol md={6}>
+                   <FormField
+                     controlId="field2_1_2"
+                     label="Discount Amount"
+                     type="number"
+                     placeholder="e.g. 10.00"
+                     inputGroupPrepend="$"
+                     spacing="md"
+                     name="field2_1_2"
+                     value={formData.field2_1_2}
+                     onChange={handleChange}
+                   />
+                </StyledCol>
+              </FormRow>
+
+              {/* 2.1.3 */}
+              <FormField
+                controlId="field2_1_3"
+                label="Description"
+                as="textarea"
+                rows={3}
+                placeholder="Enter a description for this collection..."
+                spacing="md"
+                name="field2_1_3"
+                value={formData.field2_1_3}
+                onChange={handleChange}
+              />
+
+               {/* 2.1.4 */}
+               <FormRow spacing="md">
+                 <StyledCol md={6}>
+                   <FormField
+                     controlId="formField2_1_4a"
+                     label="Label"
+                     type="text"
+                     placeholder="Input text"
+                     spacing="sm"
+                   />
+                 </StyledCol>
+                 <StyledCol md={6}>
+                   <FormField
+                     controlId="formField2_1_4b"
+                     label="Label"
+                     type="text"
+                     placeholder="Input text"
+                     spacing="sm"
+                   />
+                 </StyledCol>
+               </FormRow>
+
+               {/* 2.1.6 File Upload */}
+               <StyledFormGroup spacing="md" controlId="formField2_1_6">
+                 <StyledFormLabel>Upload Images/Documents</StyledFormLabel>
+                 <FileUploadDropzone onFilesAccepted={handleFilesAccepted} />
+               </StyledFormGroup>
+
+               {/* 2.1.7 Checkbox */}
+               <FormField
+                 controlId="field2_1_7"
+                 label="Remember the informations"
+                 type="checkbox"
+                 spacing="xs"
+                 name="field2_1_7"
+                 checked={formData.field2_1_7}
+                 onChange={handleChange}
+               />
+            </StyledCol>
+          </StyledRow>
+        </FormSection>
 
         {/* 2.1.5 User Info / Transportation Dept Section */}
         <StyledCard className={`${styles.formSectionCard} mb-3`}> {/* Replaced Card */}

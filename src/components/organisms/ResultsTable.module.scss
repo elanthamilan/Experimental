@@ -252,6 +252,7 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
 }
 
 .tableActions {
+  position: relative; // Added for absolute positioned column visibility menu
   display: flex;
   align-items: center;
   gap: v.$gap-medium;

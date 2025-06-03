@@ -278,6 +278,29 @@ $zindex-offcanvas-backdrop: 1040;
 // Form variables
 $form-check-input-margin-y: 0.25rem;
 
+// Form spacing system - Design System compliant
+$form-field-spacing-xs: var(--theme-form-field-spacing-xs, 0.5rem);   // 8px
+$form-field-spacing-sm: var(--theme-form-field-spacing-sm, 0.75rem);  // 12px
+$form-field-spacing-md: var(--theme-form-field-spacing-md, 1rem);     // 16px (default)
+$form-field-spacing-lg: var(--theme-form-field-spacing-lg, 1.5rem);   // 24px
+$form-field-spacing-xl: var(--theme-form-field-spacing-xl, 2rem);     // 32px
+
+// Form section spacing
+$form-section-spacing-sm: var(--theme-form-section-spacing-sm, 1.5rem);  // 24px
+$form-section-spacing-md: var(--theme-form-section-spacing-md, 2rem);    // 32px (default)
+$form-section-spacing-lg: var(--theme-form-section-spacing-lg, 2.5rem);  // 40px
+
+// Form row spacing (between form rows)
+$form-row-spacing-sm: var(--theme-form-row-spacing-sm, 1rem);    // 16px
+$form-row-spacing-md: var(--theme-form-row-spacing-md, 1.5rem);  // 24px (default)
+$form-row-spacing-lg: var(--theme-form-row-spacing-lg, 2rem);    // 32px
+
+// Form group spacing (between individual form fields)
+$form-group-spacing-xs: var(--theme-form-group-spacing-xs, 0.5rem);  // 8px
+$form-group-spacing-sm: var(--theme-form-group-spacing-sm, 0.75rem); // 12px
+$form-group-spacing-md: var(--theme-form-group-spacing-md, 1rem);    // 16px (default)
+$form-group-spacing-lg: var(--theme-form-group-spacing-lg, 1.25rem); // 20px
+
 // Breadcrumb variables
 $breadcrumb-padding-y: 0.75rem;
 $breadcrumb-padding-x: 1rem;

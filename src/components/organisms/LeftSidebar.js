@@ -47,7 +47,7 @@ const LeftSidebar = () => {
   // Grouping navigation items logically with paths - memoized to prevent infinite re-renders
   const navGroups = useMemo(() => ({
     topLevel: [
-      { eventKey: 'dashboard', icon: 'dashboard', label: 'Dashboard', path: '/dashboard' },
+      { eventKey: 'dashboard', icon: 'dashboard', label: 'Dashboard', path: '/' },
       // UserProfilePage link removed from here if it existed
     ],
     academics: {

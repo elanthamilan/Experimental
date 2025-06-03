@@ -287,6 +287,26 @@ export const defaultSpacingValues = {
   '--theme-input-padding-x-sm': '0.5rem',
   '--theme-input-padding-y-lg': '0.5rem',
   '--theme-input-padding-x-lg': '1rem',
+
+  // Form spacing system
+  '--theme-form-field-spacing-xs': '0.5rem',
+  '--theme-form-field-spacing-sm': '0.75rem',
+  '--theme-form-field-spacing-md': '1rem',
+  '--theme-form-field-spacing-lg': '1.5rem',
+  '--theme-form-field-spacing-xl': '2rem',
+
+  '--theme-form-section-spacing-sm': '1.5rem',
+  '--theme-form-section-spacing-md': '2rem',
+  '--theme-form-section-spacing-lg': '2.5rem',
+
+  '--theme-form-row-spacing-sm': '1rem',
+  '--theme-form-row-spacing-md': '1.5rem',
+  '--theme-form-row-spacing-lg': '2rem',
+
+  '--theme-form-group-spacing-xs': '0.5rem',
+  '--theme-form-group-spacing-sm': '0.75rem',
+  '--theme-form-group-spacing-md': '1rem',
+  '--theme-form-group-spacing-lg': '1.25rem',
 };
 
 export const themes = [

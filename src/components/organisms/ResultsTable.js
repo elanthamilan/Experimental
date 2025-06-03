@@ -528,6 +528,14 @@ const ResultsTable = ({
     setSelectedRows([]);
   };
 
+  const handleToggleColumnVisibility = (columnId) => {
+    setManagedColumns(prevCols =>
+      prevCols.map(col =>
+        col.id === columnId ? { ...col, isVisible: !col.isVisible } : col
+      )
+    );
+  };
+
   const numSelected = selectedRows.length;
 
   return (

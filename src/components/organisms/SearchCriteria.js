@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import StyledRow from '../atoms/StyledRow';
 import StyledCol from '../atoms/StyledCol';
 import FormField from '../molecules/FormField';
+import FormRow from '../molecules/FormRow';
 import StyledButton from '../atoms/StyledButton';
 import styles from './SearchCriteria.module.scss';
 
@@ -90,14 +90,18 @@ const SearchCriteria = () => {
       <div className={styles.formContainer}>
         <form onSubmit={handleSearch}>
           {/* Row 1: Institution, Degree, Program */}
-          <StyledRow className="mb-3">
+          <FormRow spacing="md">
             <StyledCol xs={12} sm={6} md={4}>
               <FormField
                 controlId="formInstitution"
-                label="*Institution"
+                label="Institution"
                 as="select"
                 value={formData.institution}
                 onChange={handleChange}
+                spacing="sm"
+                required={true}
+                autoComplete="organization"
+                helpText="Select your educational institution"
                 options={[
                   { value: 'SSM University', label: 'SSM University' },
                   { value: 'Other University 1', label: 'Other University 1' },
@@ -113,6 +117,7 @@ const SearchCriteria = () => {
                 placeholder="Select"
                 value={formData.degree}
                 onChange={handleChange}
+                spacing="sm"
                 options={degreeOptions}
               />
             </StyledCol>
@@ -124,13 +129,14 @@ const SearchCriteria = () => {
                 placeholder="Select"
                 value={formData.program}
                 onChange={handleChange}
+                spacing="sm"
                 options={programOptions}
               />
             </StyledCol>
-          </StyledRow>
+          </FormRow>
 
           {/* Row 2: Academic Year, Exam Month, Subject */}
-          <StyledRow className="mb-3">
+          <FormRow spacing="md">
              <StyledCol xs={12} sm={6} md={4}>
                <FormField
                  controlId="formAcademicYear"
@@ -139,6 +145,7 @@ const SearchCriteria = () => {
                  placeholder="Select"
                  value={formData.academicYear}
                  onChange={handleChange}
+                 spacing="sm"
                  options={[
                    { value: '', label: 'Select' },
                    { value: '2023-2024', label: '2023-2024' },
@@ -149,11 +156,14 @@ const SearchCriteria = () => {
              <StyledCol xs={12} sm={6} md={4}>
                <FormField
                  controlId="formExamMonth"
-                 label="*Exam month"
+                 label="Exam month"
                  as="select"
-                 placeholder="Select"
+                 placeholder="Select Month"
                  value={formData.examMonth}
                  onChange={handleChange}
+                 spacing="sm"
+                 required={true}
+                 helpText="Choose the month when the exam was conducted"
                  options={[
                   { value: '', label: 'Select Month' },
                   { value: '01', label: 'January' },
@@ -179,6 +189,7 @@ const SearchCriteria = () => {
                  placeholder="Select"
                  value={formData.subject}
                  onChange={handleChange}
+                 spacing="sm"
                  options={[
                    { value: '', label: 'Select' },
                    { value: 'Physics II', label: 'Physics II' },
@@ -186,10 +197,10 @@ const SearchCriteria = () => {
                  ]}
                />
              </StyledCol>
-          </StyledRow>
+          </FormRow>
 
           {/* Row 3: Section, Checkbox, Buttons */}
-          <StyledRow>
+          <FormRow spacing="sm">
              <StyledCol xs={12} sm={6} md={4}>
                <FormField
                  controlId="formSection"
@@ -198,6 +209,7 @@ const SearchCriteria = () => {
                  placeholder="Select"
                  value={formData.section}
                  onChange={handleChange}
+                 spacing="xs"
                  options={[
                    { value: '', label: 'Select' },
                    { value: 'A', label: 'A' },
@@ -213,6 +225,7 @@ const SearchCriteria = () => {
                  type="checkbox"
                  checked={formData.displayRevaluation}
                  onChange={handleChange}
+                 spacing="xs"
                  className={`${styles.displayRevaluationCheck} me-auto me-md-3`}
                />
                <div className="d-flex align-items-center">
@@ -224,7 +237,7 @@ const SearchCriteria = () => {
                  </StyledButton>
               </div>
             </StyledCol>
-          </StyledRow>
+          </FormRow>
         </form>
       </div>
     </div>

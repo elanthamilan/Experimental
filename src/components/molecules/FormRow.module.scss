@@ -1,0 +1,64 @@
+@use '../../styles/variables' as v;
+
+.formRow {
+  margin-bottom: v.$form-row-spacing-md; // Default form row spacing
+  
+  &:last-child {
+    margin-bottom: 0; // Remove margin from last row
+  }
+}
+
+// Form row spacing variants
+.formRow-sm {
+  margin-bottom: v.$form-row-spacing-sm;
+}
+
+.formRow-md {
+  margin-bottom: v.$form-row-spacing-md;
+}
+
+.formRow-lg {
+  margin-bottom: v.$form-row-spacing-lg;
+}
+
+// Alignment utilities
+.align-start {
+  align-items: flex-start;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-end {
+  align-items: flex-end;
+}
+
+.align-stretch {
+  align-items: stretch;
+}
+
+// Justify utilities
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}

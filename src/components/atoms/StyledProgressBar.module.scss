@@ -1,0 +1,108 @@
+@use '../../styles/variables' as v;
+
+.styledProgressBar {
+  height: 0.75rem;
+  border-radius: v.$base-border-radius;
+  background-color: v.$surface-color;
+  overflow: hidden;
+  
+  // Progress bar styling
+  :global(.progress-bar) {
+    transition: width 0.3s ease;
+    border-radius: v.$base-border-radius;
+    font-size: 0.75rem;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+  }
+}
+
+// Variant styles
+.variant-primary :global(.progress-bar) {
+  background-color: v.$primary-color;
+}
+
+.variant-secondary :global(.progress-bar) {
+  background-color: v.$secondary-color;
+}
+
+.variant-success :global(.progress-bar) {
+  background-color: #28a745; // Bootstrap success color
+}
+
+.variant-warning :global(.progress-bar) {
+  background-color: #ffc107; // Bootstrap warning color
+}
+
+.variant-danger :global(.progress-bar) {
+  background-color: v.$error-color;
+}
+
+.variant-info :global(.progress-bar) {
+  background-color: #17a2b8; // Bootstrap info color
+}
+
+// Striped variant
+.striped :global(.progress-bar) {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+}
+
+// Animated variant
+.animated :global(.progress-bar) {
+  animation: progress-bar-stripes 1s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+  0% {
+    background-position-x: 1rem;
+  }
+}
+
+// Size variants
+.styledProgressBar.sm {
+  height: 0.5rem;
+}
+
+.styledProgressBar.lg {
+  height: 1rem;
+}
+
+// Accessibility improvements
+.styledProgressBar {
+  &:focus-within {
+    outline: 2px solid v.$primary-color;
+    outline-offset: 2px;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .styledProgressBar {
+    border: 1px solid currentColor;
+  }
+  
+  :global(.progress-bar) {
+    border: 1px solid currentColor;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  :global(.progress-bar) {
+    transition: none;
+  }
+  
+  .animated :global(.progress-bar) {
+    animation: none;
+  }
+}

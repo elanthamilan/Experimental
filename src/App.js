@@ -53,6 +53,8 @@ import CourseDetailPage from './pages/academic/CourseDetailPage';
 import AttendancePage from './pages/academic/AttendancePage';
 // Component Preview Page Import
 import ComponentPreviewPage from './pages/ComponentPreviewPage';
+// Form Best Practices Page Import
+import FormBestPracticesPage from './pages/FormBestPracticesPage';
 // Settings Page Import
 import SettingsPage from './pages/SettingsPage';
 // Sub-Institution Management Page Imports
@@ -553,6 +555,9 @@ function App() {
 
               {/* Component Preview Page Route */}
               <Route path="/component-preview" element={<ComponentPreviewPage />} />
+
+              {/* Form Best Practices Page Route */}
+              <Route path="/form-best-practices" element={<FormBestPracticesPage />} />
 
               {/* Additional utility routes */}
               {/* <Route path="/feedback" element={<div>Feedback Page - Coming Soon</div>} /> */} {/* Route removed */}
