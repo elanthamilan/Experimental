@@ -390,6 +390,65 @@ $selected-row-bg: v.$primary-container-hover-bg; // Use hover state of primary c
   outline-offset: -2px;
 }
 
+.filterIcon {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: v.$border-radius-small;
+
+  :global(.material-symbols-outlined) {
+    font-size: 18px;
+    color: v.$on-surface-variant-color;
+    opacity: 0.7;
+    transition: color 0.15s ease-in-out, opacity 0.15s ease-in-out;
+  }
+
+  &:hover :global(.material-symbols-outlined) {
+    opacity: 1.0;
+  }
+
+  &.filterActive :global(.material-symbols-outlined) {
+    color: v.$primary-color;
+    opacity: 1.0;
+  }
+}
+
+.filterPopover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: v.$surface-color;
+  border: v.$base-border-width solid v.$outline-color;
+  border-radius: v.$base-border-radius;
+  box-shadow: v.$elevation-shadow-3;
+  padding: v.$base-padding;
+  z-index: 20;
+  min-width: 200px;
+
+  .popoverTitle {
+    font-size: v.$font-size-base;
+    font-weight: v.$font-weight-semibold;
+    margin-bottom: v.$gap-medium;
+    color: v.$text-color-primary;
+  }
+
+  // Targets StyledFormControl's output within the popover
+  :global(.form-control) {
+    width: 100%;
+    margin-bottom: v.$gap-medium;
+  }
+
+  .popoverFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: v.$gap-small;
+    // margin-top: v.$base-margin; // Removed - rely on input's margin-bottom
+    padding-top: v.$gap-medium; // Space above buttons
+    border-top: v.$base-border-width solid v.$outline-variant-color;
+  }
+}
+
 .sortableHeader {
   cursor: pointer;
 }

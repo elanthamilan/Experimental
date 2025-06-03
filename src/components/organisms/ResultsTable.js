@@ -34,6 +34,9 @@ const ResultsTable = ({
   const [dragOverColumnId, setDragOverColumnId] = useState(null);
   const [density, setDensity] = useState('regular'); // Options: 'compact', 'regular', 'relaxed'
   const [sortConfig, setSortConfig] = useState({ columnId: null, direction: 'none' });
+  const [columnFilters, setColumnFilters] = useState({});
+  const [activeFilterPopover, setActiveFilterPopover] = useState(null); // Stores columnId
+  const [currentPopoverFilterValue, setCurrentPopoverFilterValue] = useState('');
 
   // Filter/Tab state - Counts updated based on new data
   const [activeFilter, setActiveFilter] = useState('All');
@@ -53,6 +56,8 @@ const ResultsTable = ({
       canSort: true,
       sortDirection: null, // This will be updated based on sortConfig for UI indication later
       sortType: col.sortType || 'alphanumeric',
+      canFilter: col.canFilter !== undefined ? col.canFilter : true,
+      filterType: col.filterType || 'text',
     }));
     setManagedColumns(newManagedColumns);
   }, [columns]);
@@ -143,6 +148,24 @@ const ResultsTable = ({
     });
   };
 
+  const handleColumnFilterChange = (columnId, value) => {
+    setColumnFilters(prevFilters => {
+      const newFilters = { ...prevFilters };
+      if (value === null || value === '') { // Define "empty" criteria
+        delete newFilters[columnId];
+      } else {
+        newFilters[columnId] = value;
+      }
+      return newFilters;
+    });
+    setCurrentPage(1);
+  };
+
+  const clearAllColumnFilters = () => {
+    setColumnFilters({});
+    setCurrentPage(1);
+  };
+
   const handleSort = (columnIdToSort) => {
     let direction = 'asc';
     if (sortConfig.columnId === columnIdToSort && sortConfig.direction === 'asc') {
@@ -167,23 +190,76 @@ const ResultsTable = ({
   const processedItemsResult = React.useMemo(() => {
     let items = [...data];
 
-    // Apply filtering
-    if (showFilterTabs && activeFilter !== 'All' && items.some(item => item.hasOwnProperty('status'))) {
-      items = items.filter(item => {
+    // Apply global text search (searchTerm) - Assuming it's a simple "contains" search across all stringifiable fields
+    // This is a basic implementation. For more complex scenarios, consider more specific search logic.
+    if (searchTerm) {
+      items = items.filter(item =>
+        Object.values(item).some(value =>
+          String(value).toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    }
+
+    // Apply tab filters (based on activeFilter)
+    let dataAfterTabFilters = items;
+    if (showFilterTabs && activeFilter !== 'All' && dataAfterTabFilters.some(item => item.hasOwnProperty('status'))) {
+      dataAfterTabFilters = dataAfterTabFilters.filter(item => {
         if (activeFilter === 'Pending') return item.status === 'PENDING';
         if (activeFilter === 'Verified') return item.status === 'VERIFIED';
         if (activeFilter === 'Finalized') return item.status === 'FINALIZED';
         if (activeFilter === 'Published to portal') return item.status === 'PUBLISHED';
-        return true;
+        return true; // Should not happen if activeFilter is one of the above
       });
     }
-    const totalFilteredItems = items.length;
+
+    // Apply Column Filters
+    let dataAfterAllFilters = dataAfterTabFilters;
+    if (Object.keys(columnFilters).length > 0) {
+      dataAfterAllFilters = dataAfterTabFilters.filter(item => {
+        for (const columnId in columnFilters) {
+          const filterValue = columnFilters[columnId];
+          if (filterValue === null || filterValue === '') continue;
+
+          const columnConfig = managedColumns.find(c => c.id === columnId);
+          if (!columnConfig) continue;
+
+          const itemValue = item[columnConfig.originalAccessor];
+
+          if (itemValue == null) return false; // If item value is null/undefined, it can't match
+
+          if (columnConfig.filterType === 'text') {
+            if (!String(itemValue).toLowerCase().includes(String(filterValue).toLowerCase())) {
+              return false;
+            }
+          } else if (columnConfig.filterType === 'number') {
+            const numItemValue = parseFloat(itemValue);
+            const numFilterValue = parseFloat(filterValue);
+            if (isNaN(numItemValue) || isNaN(numFilterValue) || numItemValue !== numFilterValue) {
+                // Fallback for partial matches or if user is typing non-numeric for a number field
+                if (!String(itemValue).toLowerCase().includes(String(filterValue).toLowerCase())) {
+                    return false;
+                }
+            }
+          } else if (columnConfig.filterType === 'date') {
+            // Basic string contains for date. Assumes user types something that can be found in date string.
+            // For more robust date filtering, consider date range pickers and proper date object comparisons.
+            if (!String(itemValue).toLowerCase().includes(String(filterValue).toLowerCase())) {
+              return false;
+            }
+          }
+        }
+        return true; // Item passes all active column filters
+      });
+    }
+
+    const totalFilteredItems = dataAfterAllFilters.length;
 
     // Apply sorting
+    let sortedData = [...dataAfterAllFilters]; // Sort the data that has passed all filters
     if (sortConfig.columnId && sortConfig.direction !== 'none') {
       const columnToSortBy = managedColumns.find(col => col.id === sortConfig.columnId);
       if (columnToSortBy) {
-        items.sort((a, b) => {
+        sortedData.sort((a, b) => {
           const valA = a[columnToSortBy.originalAccessor];
           const valB = b[columnToSortBy.originalAccessor];
 
@@ -208,10 +284,10 @@ const ResultsTable = ({
     // Apply pagination
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const itemsToDisplay = items.slice(indexOfFirstItem, indexOfLastItem);
+    const itemsToDisplay = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
     return { itemsToDisplay, totalFilteredItems };
-  }, [data, activeFilter, showFilterTabs, sortConfig, managedColumns, currentPage, itemsPerPage]);
+  }, [data, searchTerm, activeFilter, showFilterTabs, columnFilters, sortConfig, managedColumns, currentPage, itemsPerPage]);
 
   const { itemsToDisplay, totalFilteredItems } = processedItemsResult;
   const totalPages = Math.ceil(totalFilteredItems / itemsPerPage);
@@ -370,6 +446,15 @@ const ResultsTable = ({
                 <span className="material-symbols-outlined">density_large</span>
               </StyledButton>
             </div>
+            {Object.keys(columnFilters).length > 0 && (
+              <StyledButton
+                variant="link"
+                onClick={clearAllColumnFilters}
+                className={styles.clearAllFiltersButton}
+              >
+                Clear All Filters
+              </StyledButton>
+            )}
             <StyledDropdown
               className={styles.actionDropdown}
               trigger={
@@ -455,10 +540,26 @@ const ResultsTable = ({
                       {sortConfig.columnId === col.id ? (
                         sortConfig.direction === 'asc' ? <span className="material-symbols-outlined">arrow_upward</span> :
                         sortConfig.direction === 'desc' ? <span className="material-symbols-outlined">arrow_downward</span> :
-                        <span className="material-symbols-outlined">unfold_more</span> // Should ideally not happen if columnId is null for 'none'
+                        <span className="material-symbols-outlined">unfold_more</span>
                       ) : (
                         <span className="material-symbols-outlined">unfold_more</span>
                       )}
+                    </span>
+                  )}
+                  {col.canFilter && (
+                    <span
+                      className={`${styles.filterIcon} ${columnFilters[col.id] ? styles.filterActive : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (activeFilterPopover === col.id) {
+                          setActiveFilterPopover(null);
+                        } else {
+                          setCurrentPopoverFilterValue(columnFilters[col.id] || '');
+                          setActiveFilterPopover(col.id);
+                        }
+                      }}
+                    >
+                      <span className="material-symbols-outlined">filter_list</span>
                     </span>
                   )}
                 </div>
@@ -469,6 +570,47 @@ const ResultsTable = ({
                     data-column-id={col.id}
                   />
                 )}
+                {activeFilterPopover === col.id && (() => {
+                  const columnBeingFiltered = managedColumns.find(c => c.id === activeFilterPopover);
+                  return (
+                    <div className={styles.filterPopover} onClick={(e) => e.stopPropagation()}>
+                      <div className={styles.popoverTitle}>
+                        Filter: {columnBeingFiltered?.headerContent || 'Column'}
+                      </div>
+                      {columnBeingFiltered?.filterType === 'text' && (
+                        <StyledFormControl
+                          type="text"
+                          value={currentPopoverFilterValue}
+                          onChange={(e) => setCurrentPopoverFilterValue(e.target.value)}
+                          placeholder={`Filter ${columnBeingFiltered?.headerContent || ''}...`}
+                          size="sm"
+                        />
+                      )}
+                      {columnBeingFiltered?.filterType === 'number' && (
+                        <StyledFormControl
+                          type="number"
+                          value={currentPopoverFilterValue}
+                          onChange={(e) => setCurrentPopoverFilterValue(e.target.value)}
+                          placeholder={`Filter ${columnBeingFiltered?.headerContent || ''}...`}
+                          size="sm"
+                        />
+                      )}
+                      {columnBeingFiltered?.filterType === 'date' && (
+                        <StyledFormControl
+                          type="text" // Using text for broader input, actual date parsing can be complex
+                          value={currentPopoverFilterValue}
+                          onChange={(e) => setCurrentPopoverFilterValue(e.target.value)}
+                          placeholder={`Filter ${columnBeingFiltered?.headerContent || ''} (e.g., YYYY-MM-DD)...`}
+                          size="sm"
+                        />
+                      )}
+                      <div className={styles.popoverFooter}>
+                        <StyledButton size="sm" onClick={() => { handleColumnFilterChange(col.id, ''); setCurrentPopoverFilterValue(''); setActiveFilterPopover(null); }}>Clear</StyledButton>
+                        <StyledButton size="sm" variant="primary" onClick={() => { handleColumnFilterChange(activeFilterPopover, currentPopoverFilterValue); setActiveFilterPopover(null); }}>Apply</StyledButton>
+                      </div>
+                    </div>
+                  );
+                })()}
               </th>
             ))}
           </tr>
