@@ -31,6 +31,7 @@ export { default as StyledCol } from './atoms/StyledCol';
 
 // Display Components
 export { default as StyledBadge } from './atoms/StyledBadge';
+export { default as StyledIcon } from './atoms/StyledIcon'; // Added StyledIcon
 export { default as StyledPagination } from './atoms/StyledPagination';
 export { default as StyledListGroup } from './atoms/StyledListGroup';
 export { default as StyledProgressBar } from './atoms/StyledProgressBar';
