@@ -27,7 +27,7 @@ const StudentProfilePage = () => {
     return (
       // Assuming StyledContainer is already imported and used as pageContainer
       <StyledContainer className={styles.pageContainer}> 
-        <StyledAlert variant="danger" className={styles.alertDanger}>Student not found.</StyledAlert> {/* Use styled div for alert */}
+        <StyledAlert variant="danger">Student not found.</StyledAlert> {/* Use styled div for alert */}
       </StyledContainer>
     );
   }
@@ -47,9 +47,12 @@ const StudentProfilePage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Student Profile</h1>
+      </div>
       <StyledCard className={styles.profileCard}>
-        <StyledCard.Header as="h4" className={styles.profileCardHeader}>
-          Student Profile
+        <StyledCard.Header className={styles.profileCardHeader}>
+          {/* Student Profile */}
         </StyledCard.Header>
         <StyledCard.Body>
           <StyledRow className="mb-4">

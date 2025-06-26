@@ -74,9 +74,15 @@ const AddEditCoursePage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}> {/* Use own styles or common AdminPages.module.scss */}
+        <h1 className={styles.pageTitle}>{isEditMode ? 'Edit Course Information' : 'Add New Course'}</h1>
+        <p className={styles.pageDescription}>
+          {isEditMode ? 'Update the details for the existing course.' : 'Fill in the details to create a new course.'}
+        </p>
+      </div>
       <StyledCard className={styles.formCard}>
-        <StyledCard.Header as="h4" className={styles.formCardHeader}>
-          {isEditMode ? 'Edit Course Information' : 'Add New Course'}
+        <StyledCard.Header className={styles.formCardHeader}>
+          {/* Title moved to pageHeader */}
         </StyledCard.Header>
         <StyledCard.Body>
           <form onSubmit={handleSubmit}>
@@ -211,8 +217,8 @@ const AddEditCoursePage = () => {
                   onChange={handleChange}
                   placeholder="Enter course syllabus or learning objectives..."
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <div className={styles.formActions}>
               <StyledButton variant="secondary" onClick={() => navigate('/courses')}>

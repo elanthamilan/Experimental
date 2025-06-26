@@ -1,10 +1,12 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
-import { themes, applyTheme } from './themes';
+import { themes, applyTheme, defaultSpacingValues } from './themes'; // Import defaultSpacingValues
 
-import LeftSidebar from './components/LeftSidebar';
-import AddEditForm from './components/AddEditForm';
-import { Offcanvas, OverlayTrigger, Tooltip, Dropdown } from 'react-bootstrap';
+import LeftSidebar from './components/organisms/LeftSidebar';
+import AddEditForm from './components/organisms/AddEditForm';
+// React Bootstrap components removed: Offcanvas, OverlayTrigger, Tooltip, Dropdown
 import StyledButton from './components/atoms/StyledButton';
+import StyledOffcanvas from './components/molecules/StyledOffcanvas';
+import StyledDropdown from './components/molecules/StyledDropdown';
 import { Routes, Route } from 'react-router-dom';
 
 // Import SIS Page Placeholders
@@ -16,10 +18,7 @@ import AddEditStaffPage from './pages/admin/AddEditStaffPage';
 import CourseListPage from './pages/academic/CourseListPage';
 import AddEditCoursePage from './pages/academic/AddEditCoursePage';
 import GradebookPage from './pages/academic/GradebookPage';
-import AdmissionsPage from './pages/admin/AdmissionsPage';
-import BillingPage from './pages/finance/BillingPage';
-import ReportsPage from './pages/admin/ReportsPage';
-import UserProfilePage from './pages/user/UserProfilePage';
+// Removed unused imports: AdmissionsPage, BillingPage, ReportsPage, UserProfilePage
 // Faculty Management Page Imports
 import FacultyListPage from './pages/admin/FacultyListPage';
 import AddEditFacultyPage from './pages/admin/AddEditFacultyPage';
@@ -50,13 +49,21 @@ import ExamScheduleListPage from './pages/academic/ExamScheduleListPage';
 import AddEditExamSchedulePage from './pages/academic/AddEditExamSchedulePage';
 // Course Detail Page Import
 import CourseDetailPage from './pages/academic/CourseDetailPage';
+// Attendance Page Import
+import AttendancePage from './pages/academic/AttendancePage';
 // Component Preview Page Import
 import ComponentPreviewPage from './pages/ComponentPreviewPage';
+// Form Best Practices Page Import
+import FormBestPracticesPage from './pages/FormBestPracticesPage';
 // Settings Page Import
 import SettingsPage from './pages/SettingsPage';
+// Sub-Institution Management Page Imports
+import SubInstitutionListPage from './pages/admin/SubInstitutionListPage';
+import AddEditSubInstitutionPage from './pages/admin/AddEditSubInstitutionPage';
 import { fontWeightOptions } from './data/fonts'; // Import fontWeightOptions
 import { fontSizeOptions } from './themes'; // Import fontSizeOptions from themes
 import { Link } from 'react-router-dom';
+import AttendanceDashboardPage from './pages/AttendanceDashboardPage';
 
 import styles from './App.module.scss';
 import './App.css';
@@ -90,192 +97,150 @@ const USER_ROLES = {
 // }
 
 const UtilitySidebar = () => {
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  // const [showUserDropdown, setShowUserDropdown] = useState(false); // StyledDropdown manages its own state
   const [currentThemeIndex, setCurrentThemeIndex] = useState(0);
 
   const {
     setTheme,
     isDarkMode,
     setIsDarkMode,
-    // Font customization from context
     headerFontSize,
     setHeaderFontSize,
     setBodyFontSize
   } = useContext(ThemeContext);
 
-  // Mock user data - replace with actual user context
   const currentUser = {
     name: 'John Doe',
     email: 'john.doe@example.com',
-    avatar: null, // URL to avatar image
+    avatar: null,
     role: 'Administrator'
   };
 
   const handleLogout = () => {
-    // Implement logout logic
     console.log('Logout clicked');
   };
 
-  // Theme cycling function
   const handleThemeChange = () => {
-    const availableThemes = themes.slice(0, 6); // Use first 6 themes
+    const availableThemes = themes.slice(0, 6);
     const nextIndex = (currentThemeIndex + 1) % availableThemes.length;
     setCurrentThemeIndex(nextIndex);
     setTheme(availableThemes[nextIndex].id);
   };
 
-  // Font size cycling function
   const handleFontSizeChange = () => {
     const currentHeaderIndex = fontSizeOptions.findIndex(option => option.value === headerFontSize);
-
-    // If current font size is not found, start from the beginning
     const startIndex = currentHeaderIndex === -1 ? 0 : currentHeaderIndex;
     const nextIndex = (startIndex + 1) % fontSizeOptions.length;
-
     setHeaderFontSize(fontSizeOptions[nextIndex].value);
     setBodyFontSize(fontSizeOptions[nextIndex].value);
   };
 
-  const renderTooltip = (props, text) => (
-    <Tooltip id={`tooltip-${text.toLowerCase().replace(' ', '-')}`} {...props}>
-      {text}
-    </Tooltip>
-  );
+  // renderTooltip function removed
 
   return (
     <div className={styles.utilitySidebar}>
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Apps')}>
-        <div className={styles.squareIconButton}>
-          <span className="material-symbols-outlined">apps</span>
-        </div>
-      </OverlayTrigger>
+      {/* Tooltips now use data-tooltip and CSS classes from App.module.scss */}
+      <div className={`${styles.squareIconButton} ${styles.tooltipLeft}`} data-tooltip="Apps">
+        <span className="material-symbols-outlined">apps</span>
+      </div>
 
       <hr className={styles.divider} />
 
-      {/* Theme Settings - Direct Controls */}
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Cycle Themes')}>
-        <div
-          className={styles.circleIconButton}
-          onClick={handleThemeChange}
-        >
-          <span className="material-symbols-outlined">palette</span>
-        </div>
-      </OverlayTrigger>
-
-      {/* Font Size Controls */}
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Cycle Font Size')}>
-        <div
-          className={styles.circleIconButton}
-          onClick={handleFontSizeChange}
-        >
-          <span className="material-symbols-outlined">text_fields</span>
-        </div>
-      </OverlayTrigger>
-
-      {/* Dark Mode Toggle */}
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Toggle Dark Mode')}>
-        <div
-          className={styles.circleIconButton}
-          onClick={() => setIsDarkMode(!isDarkMode)}
-        >
-          <span className="material-symbols-outlined">
-            {isDarkMode ? 'light_mode' : 'dark_mode'}
-          </span>
-        </div>
-      </OverlayTrigger>
-
-      {/* Settings Page Link */}
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Settings')}>
-        <Link to="/settings" className={styles.circleIconButton}>
-          <span className="material-symbols-outlined">settings</span>
-        </Link>
-      </OverlayTrigger>
-
-      {/* User Profile Dropdown */}
-      <Dropdown
-        show={showUserDropdown}
-        onToggle={setShowUserDropdown}
-        align="start"
-        drop="start"
-        style={{ position: 'static' }}
+      <div
+        className={`${styles.circleIconButton} ${styles.tooltipLeft}`}
+        data-tooltip="Cycle Themes"
+        onClick={handleThemeChange}
       >
-        <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'User Profile')}>
-          <Dropdown.Toggle
-            as="div"
-            className={styles.circleIconButton}
-            onClick={() => setShowUserDropdown(!showUserDropdown)}
+        <span className="material-symbols-outlined">palette</span>
+      </div>
+
+      <div
+        className={`${styles.circleIconButton} ${styles.tooltipLeft}`}
+        data-tooltip="Cycle Font Size"
+        onClick={handleFontSizeChange}
+      >
+        <span className="material-symbols-outlined">text_fields</span>
+      </div>
+
+      <div
+        className={`${styles.circleIconButton} ${styles.tooltipLeft}`}
+        data-tooltip="Toggle Dark Mode"
+        onClick={() => setIsDarkMode(!isDarkMode)}
+      >
+        <span className="material-symbols-outlined">
+          {isDarkMode ? 'light_mode' : 'dark_mode'}
+        </span>
+      </div>
+
+      <Link to="/settings" className={`${styles.circleIconButton} ${styles.tooltipLeft}`} data-tooltip="Settings">
+        <span className="material-symbols-outlined">settings</span>
+      </Link>
+
+      {/* User Profile Dropdown with StyledDropdown */}
+      <StyledDropdown
+        className={`${styles.userDropdownContainer} ${styles.tooltipLeft}`} // Added tooltipLeft for consistency if trigger needs it
+        trigger={
+          <div
+            className={`${styles.circleIconButton} ${styles.tooltipLeft}`} // Apply tooltip to the trigger div
+            data-tooltip="User Profile"
+            // aria-expanded and aria-haspopup are handled by StyledDropdown on the trigger clone
           >
             <span className="material-symbols-outlined">account_circle</span>
-          </Dropdown.Toggle>
-        </OverlayTrigger>
-
-        <Dropdown.Menu
-          className={styles.utilityDropdownMenu}
-          style={{
-            position: 'fixed',
-            zIndex: 9999,
-            right: '80px',
-            top: '120px'
-          }}
-        >
-          <div className={styles.dropdownHeader}>
-            <div className={styles.userInfo}>
-              <div className={styles.userAvatar}>
-                {currentUser.avatar ? (
-                  <img src={currentUser.avatar} alt={currentUser.name} />
-                ) : (
-                  <span className="material-symbols-outlined">account_circle</span>
-                )}
-              </div>
-              <div className={styles.userDetails}>
-                <div className={styles.userName}>{currentUser.name}</div>
-                <div className={styles.userRole}>{currentUser.role}</div>
-                <div className={styles.userEmail}>{currentUser.email}</div>
-              </div>
+          </div>
+        }
+        menuClassName={styles.utilityDropdownMenu} // Apply custom class for positioning if needed
+      >
+        <div className={styles.dropdownHeader}>
+          <div className={styles.userInfo}>
+            <div className={styles.userAvatar}>
+              {currentUser.avatar ? (
+                <img src={currentUser.avatar} alt={currentUser.name} />
+              ) : (
+                <span className="material-symbols-outlined">account_circle</span>
+              )}
+            </div>
+            <div className={styles.userDetails}>
+              <div className={styles.userName}>{currentUser.name}</div>
+              <div className={styles.userRole}>{currentUser.role}</div>
+              <div className={styles.userEmail}>{currentUser.email}</div>
             </div>
           </div>
+        </div>
 
-          <hr className={styles.dropdownDivider} />
+        <StyledDropdown.Divider className={styles.dropdownDivider} />
 
-          <Dropdown.Item as={Link} to="/profile" className={styles.dropdownItem}>
-            <span className="material-symbols-outlined">account_circle</span>
-            User Profile
-          </Dropdown.Item>
+        <StyledDropdown.Item as={Link} to="/profile" className={styles.dropdownItem}>
+          <span className="material-symbols-outlined">account_circle</span>
+          User Profile
+        </StyledDropdown.Item>
 
-          <Dropdown.Item as={Link} to="/settings" className={styles.dropdownItem}>
-            <span className="material-symbols-outlined">settings</span>
-            Settings
-          </Dropdown.Item>
+        <StyledDropdown.Item as={Link} to="/settings" className={styles.dropdownItem}>
+          <span className="material-symbols-outlined">settings</span>
+          Settings
+        </StyledDropdown.Item>
 
-          <hr className={styles.dropdownDivider} />
+        <StyledDropdown.Divider className={styles.dropdownDivider} />
 
-          <Dropdown.Item
-            onClick={handleLogout}
-            className={`${styles.dropdownItem} ${styles.logoutItem}`}
-          >
-            <span className="material-symbols-outlined">logout</span>
-            Logout
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+        <StyledDropdown.Item
+          onClick={handleLogout}
+          className={`${styles.dropdownItem} ${styles.logoutItem}`}
+        >
+          <span className="material-symbols-outlined">logout</span>
+          Logout
+        </StyledDropdown.Item>
+      </StyledDropdown>
 
       <hr className={styles.divider} />
 
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Calendar')}>
-        <div className={styles.circleIconButton}>
-           <span className="material-symbols-outlined">calendar_today</span>
-        </div>
-      </OverlayTrigger>
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Tasks')}>
-        <div className={styles.circleIconButton}>
-           <span className="material-symbols-outlined">task_alt</span>
-        </div>
-      </OverlayTrigger>
-      <OverlayTrigger placement="left" overlay={(props) => renderTooltip(props, 'Notifications')}>
-        <div className={styles.circleIconButton}>
-           <span className="material-symbols-outlined">notifications</span>
-        </div>
-      </OverlayTrigger>
+      <div className={`${styles.circleIconButton} ${styles.tooltipLeft}`} data-tooltip="Calendar">
+         <span className="material-symbols-outlined">calendar_today</span>
+      </div>
+      <div className={`${styles.circleIconButton} ${styles.tooltipLeft}`} data-tooltip="Tasks">
+         <span className="material-symbols-outlined">task_alt</span>
+      </div>
+      <div className={`${styles.circleIconButton} ${styles.tooltipLeft}`} data-tooltip="Notifications">
+         <span className="material-symbols-outlined">notifications</span>
+      </div>
     </div>
   );
 }
@@ -306,9 +271,98 @@ function App() {
   const [headerFontWeight, setHeaderFontWeight] = useState('semibold');
   const [bodyFontWeight, setBodyFontWeight] = useState('normal');
 
+  // New theme states for advanced white labeling
+  const [customLogoUrl, setCustomLogoUrl] = useState('');
+  const [baseBorderRadius, setBaseBorderRadius] = useState('8px'); // Store as string with 'px' or handle conversion
+  const [inputBorderRadius, setInputBorderRadius] = useState('4px'); // Store as string with 'px'
+  const [cardHeaderBg, setCardHeaderBg] = useState(''); 
+  const [cardHeaderText, setCardHeaderText] = useState(''); 
+  const [tableHeaderText, setTableHeaderText] = useState(''); 
+  const [uiDensity, setUiDensity] = useState('default'); 
+
+  // New direct color override states
+  const [secondaryBtnBg, setSecondaryBtnBg] = useState('');
+  const [secondaryBtnText, setSecondaryBtnText] = useState('');
+  const [inputFocusBorder, setInputFocusBorder] = useState('');
+  const [navActiveItemBg, setNavActiveItemBg] = useState('');
+  const [navActiveItemText, setNavActiveItemText] = useState('');
+
+  // Typography states
+  const [pageTitleSize, setPageTitleSize] = useState('2.5rem');
+  const [pageTitleWeight, setPageTitleWeight] = useState('700');
+  const [buttonTextSize, setButtonTextSize] = useState('0.875rem');
+  const [buttonTextWeight, setButtonTextWeight] = useState('600');
+  const [inputTextSize, setInputTextSize] = useState('0.875rem');
+  const [inputTextWeight, setInputTextWeight] = useState('400');
+
   useEffect(() => {
-    applyTheme(currentTheme, isDarkMode); // Applies color and font-family variables, now with isDarkMode
-  }, [currentTheme, isDarkMode]); // Added isDarkMode to dependency array
+    applyTheme(currentTheme, isDarkMode); // Applies base theme colors and derived values
+
+    // Apply direct overrides if they exist
+    if (secondaryBtnBg) document.documentElement.style.setProperty('--theme-button-secondary-bg-direct', secondaryBtnBg);
+    else document.documentElement.style.removeProperty('--theme-button-secondary-bg-direct'); // Allow fallback to derived
+
+    if (secondaryBtnText) document.documentElement.style.setProperty('--theme-button-secondary-text-direct', secondaryBtnText);
+    else document.documentElement.style.removeProperty('--theme-button-secondary-text-direct');
+
+    if (inputFocusBorder) document.documentElement.style.setProperty('--theme-input-focus-border-direct', inputFocusBorder);
+    else document.documentElement.style.removeProperty('--theme-input-focus-border-direct');
+    
+    if (navActiveItemBg) document.documentElement.style.setProperty('--theme-nav-active-item-bg-direct', navActiveItemBg);
+    else document.documentElement.style.removeProperty('--theme-nav-active-item-bg-direct');
+
+    if (navActiveItemText) document.documentElement.style.setProperty('--theme-nav-active-item-text-direct', navActiveItemText);
+    else document.documentElement.style.removeProperty('--theme-nav-active-item-text-direct');
+
+    // Apply border radii directly
+    if (baseBorderRadius.match(/^\d+px$/) || baseBorderRadius.match(/^\d+rem$/) || baseBorderRadius.match(/^\d+em$/) || baseBorderRadius === '0') {
+      document.documentElement.style.setProperty('--theme-border-radius-base', baseBorderRadius);
+    } else if (baseBorderRadius.match(/^\d+$/)) { 
+      document.documentElement.style.setProperty('--theme-border-radius-base', `${baseBorderRadius}px`);
+    }
+    if (inputBorderRadius.match(/^\d+px$/) || inputBorderRadius.match(/^\d+rem$/) || inputBorderRadius.match(/^\d+em$/) || inputBorderRadius === '0') {
+      document.documentElement.style.setProperty('--theme-border-radius-input', inputBorderRadius);
+    } else if (inputBorderRadius.match(/^\d+$/)) { 
+      document.documentElement.style.setProperty('--theme-border-radius-input', `${inputBorderRadius}px`);
+    }
+
+    // Apply new typography CSS variables
+    document.documentElement.style.setProperty('--theme-font-pagetitle-size', pageTitleSize);
+    document.documentElement.style.setProperty('--theme-font-pagetitle-weight', pageTitleWeight);
+    document.documentElement.style.setProperty('--theme-font-button-size', buttonTextSize);
+    document.documentElement.style.setProperty('--theme-font-button-weight', buttonTextWeight);
+    document.documentElement.style.setProperty('--theme-font-input-size', inputTextSize);
+    document.documentElement.style.setProperty('--theme-font-input-weight', inputTextWeight);
+
+  }, [currentTheme, isDarkMode, baseBorderRadius, inputBorderRadius, secondaryBtnBg, secondaryBtnText, inputFocusBorder, navActiveItemBg, navActiveItemText, pageTitleSize, pageTitleWeight, buttonTextSize, buttonTextWeight, inputTextSize, inputTextWeight]);
+
+  // useEffect for applying UI density
+  useEffect(() => {
+    const densityFactors = {
+      compact: 0.8,
+      default: 1.0,
+      comfort: 1.2,
+    };
+    const factor = densityFactors[uiDensity] || 1.0;
+
+    // Base values are defined in themes.js and set as CSS vars by applyTheme
+    // We read the canonical default values, scale them, and then set them.
+    for (const varName in defaultSpacingValues) {
+      const baseValueStr = defaultSpacingValues[varName];
+      if (baseValueStr) {
+        const valueMatch = baseValueStr.match(/^(\d*\.?\d+)(px|rem|em)$/);
+        if (valueMatch) {
+          const num = parseFloat(valueMatch[1]);
+          const unit = valueMatch[2];
+          document.documentElement.style.setProperty(varName, `${num * factor}${unit}`);
+        } else {
+          // Handle non-numeric/non-unit values if any, or log warning
+          // For now, assume all default spacings are numeric with units
+          document.documentElement.style.setProperty(varName, baseValueStr); // Apply as is if not scalable
+        }
+      }
+    }
+  }, [uiDensity]); // Only re-run when uiDensity changes. Theme changes re-apply base values via applyTheme.
 
   useEffect(() => {
     const selectedWeight = fontWeightOptions.find(fw => fw.value === globalFontWeight);
@@ -363,23 +417,58 @@ function App() {
       headerFontWeight,
       setHeaderFontWeight,
       bodyFontWeight,
-      setBodyFontWeight
+      setBodyFontWeight,
+      // Advanced white labeling
+      customLogoUrl,
+      setCustomLogoUrl,
+      baseBorderRadius,
+      setBaseBorderRadius,
+      inputBorderRadius,
+      setInputBorderRadius,
+      cardHeaderBg, // Though applied by themes.js, pass for settings page
+      setCardHeaderBg,
+      cardHeaderText, // Though applied by themes.js, pass for settings page
+      setCardHeaderText,
+      tableHeaderText, 
+      setTableHeaderText,
+      uiDensity,
+      setUiDensity,
+      // New direct color overrides
+      secondaryBtnBg, setSecondaryBtnBg,
+      secondaryBtnText, setSecondaryBtnText,
+      inputFocusBorder, setInputFocusBorder,
+      navActiveItemBg, setNavActiveItemBg,
+      navActiveItemText, setNavActiveItemText,
+      // New typography controls
+      pageTitleSize, setPageTitleSize,
+      pageTitleWeight, setPageTitleWeight,
+      buttonTextSize, setButtonTextSize,
+      buttonTextWeight, setButtonTextWeight,
+      inputTextSize, setInputTextSize,
+      inputTextWeight, setInputTextWeight
     }}>
       <div
         className={`${styles.appContainer} ${isMobile ? styles.mobile : ''}`}
         data-theme={isDarkMode ? 'dark' : 'light'}
       >
         {!isMobile ? (
-           <LeftSidebar />
+           <nav aria-label="Main navigation" className={styles.desktopSidebar}> {/* Landmark */}
+             <LeftSidebar />
+           </nav>
         ) : (
-           <Offcanvas show={showMobileMenu} onHide={() => setShowMobileMenu(false)} placement="start">
-             <Offcanvas.Header closeButton>
-               <Offcanvas.Title>Menu</Offcanvas.Title>
-             </Offcanvas.Header>
-             <Offcanvas.Body className={styles.mobileOffcanvasBody}>
-               <LeftSidebar />
-             </Offcanvas.Body>
-           </Offcanvas>
+          <StyledOffcanvas
+            show={showMobileMenu}
+            onHide={() => setShowMobileMenu(false)}
+            placement="start"
+            title="Menu"
+            // className for StyledOffcanvas's panel can be added if needed
+            // e.g. panelClassName={styles.mobileOffcanvasPanel}
+          >
+            {/* Pass LeftSidebar as children, specific body class might need to be handled by StyledOffcanvas or a wrapper div */}
+            <div className={styles.mobileOffcanvasBody}> {/* Keep this wrapper if specific styling is needed beyond StyledOffcanvas.Body defaults */}
+              <LeftSidebar />
+            </div>
+          </StyledOffcanvas>
         )}
 
         <div className={styles.appPage}>
@@ -409,11 +498,12 @@ function App() {
               <Route path="/courses/new" element={<AddEditCoursePage />} />
               <Route path="/courses/edit/:courseId" element={<AddEditCoursePage />} />
               <Route path="/courses/:courseId" element={<CourseDetailPage />} /> {/* Added this route */}
+              <Route path="/academic/attendance" element={<AttendancePage />} /> {/* Added AttendancePage Route */}
               <Route path="/grades" element={<GradebookPage />} />
-              <Route path="/admissions" element={<AdmissionsPage />} />
-              <Route path="/billing" element={<BillingPage />} />
-              <Route path="/reports" element={<ReportsPage />} />
-              <Route path="/profile" element={<UserProfilePage />} />
+              {/* <Route path="/admissions" element={<AdmissionsPage />} /> */} {/* Route removed */}
+              {/* <Route path="/billing" element={<BillingPage />} /> */} {/* Route removed */}
+              {/* <Route path="/reports" element={<ReportsPage />} /> */} {/* Route removed */}
+              {/* <Route path="/profile" element={<UserProfilePage />} /> */} {/* Route removed */}
               <Route path="/settings" element={<SettingsPage />} />
 
               {/* Faculty Management Routes */}
@@ -461,18 +551,31 @@ function App() {
               <Route path="/academic/examschedules/new" element={<AddEditExamSchedulePage />} />
               <Route path="/academic/examschedules/edit/:scheduleId" element={<AddEditExamSchedulePage />} />
 
+              {/* Sub-Institution Management Routes */}
+              <Route path="/admin/sub-institutions" element={<SubInstitutionListPage />} />
+              <Route path="/admin/sub-institutions/new" element={<AddEditSubInstitutionPage />} />
+              <Route path="/admin/sub-institutions/edit/:subInstId" element={<AddEditSubInstitutionPage isEdit={true} />} />
+
               {/* Component Preview Page Route */}
               <Route path="/component-preview" element={<ComponentPreviewPage />} />
 
+              {/* Form Best Practices Page Route */}
+              <Route path="/form-best-practices" element={<FormBestPracticesPage />} />
+
               {/* Additional utility routes */}
-              <Route path="/feedback" element={<div>Feedback Page - Coming Soon</div>} />
-              <Route path="/tutorial" element={<div>Tutorial Page - Coming Soon</div>} />
-              <Route path="/manual" element={<div>User Manual Page - Coming Soon</div>} />
+              {/* <Route path="/feedback" element={<div>Feedback Page - Coming Soon</div>} /> */} {/* Route removed */}
+              {/* <Route path="/tutorial" element={<div>Tutorial Page - Coming Soon</div>} /> */} {/* Route removed */}
+              {/* <Route path="/manual" element={<div>User Manual Page - Coming Soon</div>} /> */} {/* Route removed */}
               <Route path="/logout" element={<div>Logout Page - Coming Soon</div>} />
+              <Route path="/academic/attendance-dashboard" element={<AttendanceDashboardPage />} />
             </Routes>
           </main>
         </div>
-        {!isMobile && <UtilitySidebar />}
+        {!isMobile && (
+          <aside aria-label="Utility tools and user profile" className={styles.utilitySidebarContainer}> {/* Landmark */}
+            <UtilitySidebar />
+          </aside>
+        )}
       </div>
     </ThemeContext.Provider>
   );

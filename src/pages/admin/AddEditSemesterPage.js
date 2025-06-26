@@ -4,11 +4,13 @@ import { mockSemesters } from '../../data/mockSemesters';
 // import { Form } from 'react-bootstrap'; // Form removed
 import {
   StyledContainer,
+  // StyledContainer, // Removed duplicate
   StyledCard,
   StyledButton,
   FormField,
   StyledRow, // Added
   StyledCol,  // Added
+  StyledAlert, // Added StyledAlert
 } from '../../components';
 import styles from './AddEditSemesterPage.module.scss'; // Use new SCSS module
 
@@ -99,13 +101,16 @@ const AddEditSemesterPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>{isEditMode ? 'Edit Semester' : 'Add New Semester'}</h1>
+      </div>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Semester' : 'Add New Semester'}</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Semester' : 'Add New Semester'}</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
-          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
-          {success && <div className={styles.alertSuccess} role="alert">{success}</div>}
+          {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
+          {success && <StyledAlert variant="success" dismissible onClose={() => setSuccess('')}>{success}</StyledAlert>}
           <form onSubmit={handleSubmit}>
             <StyledRow className="mb-3">
               <StyledCol className="col-md-6">

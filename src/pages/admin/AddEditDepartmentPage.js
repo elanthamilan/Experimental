@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // Added useMemo
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockDepartments } from '../../data/mockDepartments';
 import { mockFaculty } from '../../data/mockFaculty';
@@ -6,11 +6,13 @@ import { mockFaculty } from '../../data/mockFaculty';
 // Import custom styled components from centralized design system
 import {
   StyledContainer,
+  // StyledContainer, // Removed duplicate
   StyledCard,
   StyledButton,
   FormField, // Import FormField
   StyledRow, // Added
   StyledCol,  // Added
+  StyledAlert, // Added StyledAlert
 } from '../../components';
 import styles from './AddEditDepartmentPage.module.scss'; // Use new SCSS module
 
@@ -19,13 +21,13 @@ const AddEditDepartmentPage = () => {
   const navigate = useNavigate();
   const isEditMode = Boolean(departmentId);
 
-  const initialFormData = {
+  const initialFormData = useMemo(() => ({ // Wrapped in useMemo
     id: '',
     name: '',
     head: '', // Stores faculty ID
     description: '',
     officeLocation: '',
-  };
+  }), []); // Empty dependency array as it's static
 
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState('');
@@ -44,7 +46,7 @@ const AddEditDepartmentPage = () => {
       const newId = `dept${String(mockDepartments.length + 1).padStart(3, '0')}`;
       setFormData({ ...initialFormData, id: newId });
     }
-  }, [departmentId, isEditMode, navigate]);
+  }, [departmentId, isEditMode, navigate, initialFormData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -89,13 +91,16 @@ const AddEditDepartmentPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>{isEditMode ? 'Edit Department' : 'Add New Department'}</h1>
+      </div>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Department' : 'Add New Department'}</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Department' : 'Add New Department'}</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
-          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
-          {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
+          {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
+          {successMessage && <StyledAlert variant="success" dismissible onClose={() => setSuccessMessage('')}>{successMessage}</StyledAlert>}
           <form onSubmit={handleSubmit}> {/* Keep react-bootstrap Form for now as FormField is used within */}
             <StyledRow className="mb-3">
               <StyledCol className="col-md-6">

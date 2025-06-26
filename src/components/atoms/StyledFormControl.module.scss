@@ -20,21 +20,25 @@
     color: v.$on-surface-color; // Keep text color on surface
   }
   &::placeholder {
-     color: v.$on-surface-variant-color; // Placeholder uses on-surface-variant
-  }
-
-  &[as="textarea"] {
-    height: auto; 
-    min-height: v.$input-height; 
+     color: var(--theme-input-placeholder-color, v.$on-surface-variant-color); // Themed placeholder
   }
 
   &[type="number"] {
     text-align: center;
   }
+}
 
-  &.form-control-sm {
-    height: auto;
-    padding: math.div(v.$gap-small, 2) v.$gap-small; 
-    font-size: v.$font-size-base * 0.9; 
-  }
+// Specific class for textarea styling if different from default input
+.textareaControl {
+  height: auto;
+  min-height: v.$input-height;
+  // Add any other textarea specific overrides if .formControl base isn't enough
+}
+
+// Specific class for small size
+.formControlSm {
+  height: auto; // Or a specific smaller height variable if defined e.g., v.$input-height-sm
+  padding: math.div(v.$gap-small, 2) v.$gap-small;
+  font-size: v.$font-size-base * 0.9;
+  // Ensure line-height is adjusted if necessary for smaller font
 }

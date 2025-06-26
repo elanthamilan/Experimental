@@ -1,0 +1,45 @@
+@use 'sass:math'; // Add math import
+@use '../../styles/variables' as v; // Use shared variables
+
+// --- Component Specific Variables ---
+// (None needed for now, using shared variables)
+
+.summaryContainer {
+  margin-bottom: calc(#{v.$base-margin-value} * 2);
+  padding: 0; // Remove padding to avoid double containers
+}
+
+.statCard {
+  // Remove borders and use Material Design 3 styling from StatsCard component
+  border: none;
+  border-radius: v.$base-border-radius;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transform: translateY(-4px);
+  }
+
+  .statValue {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--theme-text-color, v.$on-surface-color); // Themed
+    margin-bottom: math.div(v.$gap-small, 2);
+    line-height: v.$line-height-heading;
+    font-family: v.$font-family-display; // Use display font for numbers
+  }
+
+  .statTitle {
+    font-size: 0.8rem;
+    font-weight: v.$font-weight-semibold;
+    color: var(--theme-text-muted, v.$on-surface-variant-color); // Themed
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: v.$font-family-body; // Use body font for labels
+  }
+
+  :global(.card-body) {
+    padding: v.$base-padding; // Use shared variable
+  }
+}

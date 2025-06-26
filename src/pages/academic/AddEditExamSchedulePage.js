@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // Added useMemo
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockExamSchedules } from '../../data/mockExamSchedules';
 import { mockCourses } from '../../data/mockCourses';
@@ -20,7 +20,7 @@ const AddEditExamSchedulePage = () => {
   const navigate = useNavigate();
   const isEditMode = Boolean(scheduleId);
 
-  const initialFormData = {
+  const initialFormData = useMemo(() => ({ // Wrapped in useMemo
     id: '',
     courseId: '',
     examName: '',
@@ -30,7 +30,7 @@ const AddEditExamSchedulePage = () => {
     invigilators: '', // Stored as comma-separated string of faculty IDs in form
     duration: '',
     notes: '',
-  };
+  }), []); // Empty dependency array as it's static
 
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState('');
@@ -58,7 +58,7 @@ const AddEditExamSchedulePage = () => {
         id: newId,
       });
     }
-  }, [scheduleId, isEditMode, navigate]);
+  }, [scheduleId, isEditMode, navigate, initialFormData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -204,8 +204,8 @@ const AddEditExamSchedulePage = () => {
                   onChange={handleChange}
                   placeholder="e.g., 2 hours"
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <FormField
               controlId="formInvigilators"

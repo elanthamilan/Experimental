@@ -31,7 +31,7 @@
     color: v.$input-label-color; // Or a specific text color for addons
     text-align: center;
     white-space: nowrap;
-    background-color: var(--theme-surface-container-lowest, lighten(v.$outline-color, 35%)); // Slightly off-white, or a specific variable
+    background-color: var(--theme-surface-container-lowest, lighten(v.$outline-fallback, 35%)); // Slightly off-white, or a specific variable
     border: v.$base-border-width solid v.$outline-color;
     border-radius: v.$input-border-radius; // Default radius, will be adjusted
   }
@@ -155,10 +155,4 @@
 // If FormField renders StyledFormControl, then StyledFormControl itself needs to be aware.
 // Let's assume FormField passes 'form-control' to StyledFormControl's className for now.
 // Or, that StyledFormControl has a base class that can be targeted globally if needed.
-// For the purpose of this task, the focus is on the .inputGroupText styling.`StyledInputGroup.js` and `StyledInputGroup.module.scss` have been created.
-The decision was made to handle `prepend` and `append` content internally within `StyledInputGroup` using styled divs/spans, so `StyledInputGroupText.js` and its module will not be created separately.
-
-Now I'll create `StyledFormControlFeedback.js` and `StyledFormControlFeedback.module.scss`.
-
-**Step 5: Create `src/components/atoms/StyledFormControlFeedback.js`** (Skipping StyledInputGroupText.js as per note)
-**Step 6: Create `src/components/atoms/StyledFormControlFeedback.module.scss`** (Skipping StyledInputGroupText.module.scss)
+// For the purpose of this task, the focus is on the .inputGroupText styling.

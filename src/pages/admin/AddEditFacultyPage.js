@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // Added useMemo
 import { useParams, useNavigate } from 'react-router-dom';
 import { mockFaculty } from '../../data/mockFaculty';
 // import { mockCourses } from '../../data/mockCourses'; // Optional: for course selection - not directly used for select options
 // import { Form } from 'react-bootstrap'; // Form removed
 import {
   StyledContainer,
+  // StyledContainer, // Removed duplicate
   StyledCard,
   StyledButton,
   FormField,
   StyledRow, // Added
   StyledCol,  // Added
+  StyledAlert, // Added StyledAlert
 } from '../../components';
 import styles from './AddEditFacultyPage.module.scss'; // Use new SCSS module
 
@@ -18,7 +20,7 @@ const AddEditFacultyPage = () => {
   const navigate = useNavigate();
   const isEditMode = Boolean(facultyId);
 
-  const initialFormData = {
+  const initialFormData = useMemo(() => ({ // Wrapped in useMemo
     id: '',
     firstName: '',
     lastName: '',
@@ -28,7 +30,7 @@ const AddEditFacultyPage = () => {
     coursesTaught: '', // Stored as comma-separated string in form
     title: '',
     profileImageUrl: '',
-  };
+  }), []); // Empty dependency array as it's static
 
   const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState('');
@@ -56,7 +58,7 @@ const AddEditFacultyPage = () => {
         id: newId,
       });
     }
-  }, [facultyId, isEditMode, navigate]);
+  }, [facultyId, isEditMode, navigate, initialFormData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -102,13 +104,16 @@ const AddEditFacultyPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>{isEditMode ? 'Edit Faculty Member' : 'Add New Faculty Member'}</h1>
+      </div>
       <StyledCard className={styles.formCard}>
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Faculty Member' : 'Add New Faculty Member'}</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>{isEditMode ? 'Edit Faculty Member' : 'Add New Faculty Member'}</StyledCard.Title> */}
         </StyledCard.Header>
         <StyledCard.Body>
-          {error && <div className={styles.alertDanger} role="alert">{error}</div>}
-          {successMessage && <div className={styles.alertSuccess} role="alert">{successMessage}</div>}
+          {error && <StyledAlert variant="danger" dismissible onClose={() => setError('')}>{error}</StyledAlert>}
+          {successMessage && <StyledAlert variant="success" dismissible onClose={() => setSuccessMessage('')}>{successMessage}</StyledAlert>}
           <form onSubmit={handleSubmit}>
             <StyledRow className="mb-3">
               <StyledCol className="col-md-4">
@@ -199,8 +204,8 @@ const AddEditFacultyPage = () => {
                   value={formData.officeLocation}
                   onChange={handleChange}
                 />
-              </Col>
-            </Row>
+              </StyledCol>
+            </StyledRow>
 
             <FormField
               controlId="formCoursesTaught"

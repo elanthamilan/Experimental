@@ -1,7 +1,22 @@
+@use '../../styles/variables' as v; // Make sure this path is correct for this file
+
 .pageContainer {
-  padding: var(--spacing-medium) var(--spacing-large); // Example using theme variables for spacing
+  padding: calc(#{v.$base-padding-value} * 1.5);
   background-color: var(--theme-background);
   min-height: 100vh;
+}
+
+.pageDescription {
+  font-size: 1.1rem;
+  color: var(--theme-text-muted, v.$on-surface-variant-color);
+  font-family: var(--theme-font-body, v.$font-family-body);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    margin: 0;
+  }
 }
 
 .formCard {

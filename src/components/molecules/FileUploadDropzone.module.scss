@@ -3,7 +3,7 @@
 @use 'sass:math'; 
 
 .dropzoneBase {
-  padding: v.$base-padding * 1.5; 
+  padding: calc(#{v.$base-padding-value} * 1.5);
   border: v.$secondary-border-width dashed v.$outline-color; // Use outline-color directly
   border-radius: v.$input-border-radius; // SCSS
   background-color: v.$surface-color; // Use surface-color directly

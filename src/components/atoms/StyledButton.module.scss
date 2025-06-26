@@ -7,8 +7,8 @@
   padding: v.$button-padding;
   border-radius: v.$base-border-radius;
   font-family: v.$font-family-body; // Changed to body font
-  font-weight: v.$font-weight-semibold; // SCSS
-  font-size: v.$font-size-base; // SCSS
+  font-weight: v.$button-font-weight; // SCSS - Now uses CSS Var
+  font-size: v.$button-font-size; // SCSS - Now uses CSS Var
   line-height: v.$button-line-height;
   display: inline-flex;
   align-items: center;
@@ -91,4 +91,106 @@
   @extend .button-secondary; 
   width: v.$button-height; 
   padding: 0; 
+}
+
+// CSS Tooltip Styles
+// Applied to .buttonBase when [data-tooltip] is present
+.buttonBase {
+  // position: relative; // Already set in .buttonBase for tooltip positioning if needed by specific placement
+  // Tooltip pseudo-element
+  &[data-tooltip] {
+    position: relative; // Ensure this for absolute positioning of pseudo-elements
+  }
+
+  &[data-tooltip]::before,
+  &[data-tooltip]::after {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    z-index: v.$zindex-tooltip; // Ensure tooltip is on top
+  }
+
+  // Tooltip content box
+  &[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    background-color: var(--theme-tooltip-background, v.$tooltip-bg-color); // Themed
+    color: var(--theme-tooltip-text-color, v.$tooltip-text-color); // Themed
+    padding: v.$tooltip-padding-y v.$tooltip-padding-x;
+    border-radius: v.$tooltip-border-radius;
+    font-size: v.$tooltip-font-size;
+    line-height: v.$tooltip-line-height;
+    white-space: nowrap; // Keep tooltip on one line
+    box-shadow: v.$tooltip-shadow;
+  }
+
+  // Tooltip arrow (optional, can be complex with all placements)
+  // &[data-tooltip]::after {
+  //   content: '';
+  //   position: absolute;
+  //   border-width: v.$tooltip-arrow-size;
+  //   border-style: solid;
+  // }
+
+  // Show tooltip on hover/focus
+  &[data-tooltip]:hover::before,
+  &[data-tooltip]:hover::after,
+  &[data-tooltip]:focus::before,
+  &[data-tooltip]:focus::after {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  // Placement specific styles
+  // Default to top if no placement class is specified or matches
+  &.tooltipTop[data-tooltip]::before,
+  &[data-tooltip]:not([class*="tooltipBottom"]):not([class*="tooltipLeft"]):not([class*="tooltipRight"])::before { // Default to top
+    bottom: calc(100% + #{v.$tooltip-arrow-size}); // Position above the button
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  // &.tooltipTop[data-tooltip]::after,
+  // &[data-tooltip]:not([class*="tooltipBottom"]):not([class*="tooltipLeft"]):not([class*="tooltipRight"])::after { // Default to top arrow
+  //   bottom: 100%;
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  //   border-color: var(--theme-tooltip-background, v.$tooltip-bg-color) transparent transparent transparent;
+  // }
+
+  &.tooltipBottom[data-tooltip]::before {
+    top: calc(100% + #{v.$tooltip-arrow-size}); // Position below the button
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  // &.tooltipBottom[data-tooltip]::after {
+  //   top: 100%;
+  //   left: 50%;
+  //   transform: translateX(-50%);
+  //   border-color: transparent transparent var(--theme-tooltip-background, v.$tooltip-bg-color) transparent;
+  // }
+
+  &.tooltipLeft[data-tooltip]::before {
+    right: calc(100% + #{v.$tooltip-arrow-size}); // Position to the left
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  // &.tooltipLeft[data-tooltip]::after {
+  //   right: 100%;
+  //   top: 50%;
+  //   transform: translateY(-50%);
+  //   border-color: transparent transparent transparent var(--theme-tooltip-background, v.$tooltip-bg-color);
+  // }
+
+  &.tooltipRight[data-tooltip]::before {
+    left: calc(100% + #{v.$tooltip-arrow-size}); // Position to the right
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  // &.tooltipRight[data-tooltip]::after {
+  //   left: 100%;
+  //   top: 50%;
+  //   transform: translateY(-50%);
+  //   border-color: transparent var(--theme-tooltip-background, v.$tooltip-bg-color) transparent transparent;
+  // }
 }

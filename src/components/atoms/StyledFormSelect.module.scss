@@ -19,19 +19,24 @@
   background-repeat: no-repeat;
   background-position: right v.$gap-medium center;
   background-size: 16px 12px;
-  padding-right: v.$gap-medium * 3;
+  padding-right: calc(#{v.$gap-medium-value} * 3);
 
   &:focus {
     border-color: v.$primary-color; // Focus with primary color
     // box-shadow: v.$input-focus-box-shadow !important; // Removed for cleaner M3 look
-    color: v.$on-surface-color; // Keep text color on surface
+    color: var(--theme-on-surface, v.$on-surface-color); // Keep text color on surface, themed
   }
+}
 
-  &.form-select-sm {
-     height: auto;
-     padding-top: 0.25rem;
-     padding-bottom: 0.25rem;
-     padding-left: 0.5rem;
-     font-size: .875rem;
-  }
+// Renamed from .form-select-sm to a module class
+.formSelectSm {
+  height: auto; // Or a specific smaller height variable if defined e.g., v.$input-height-sm
+  padding-top: v.$input-padding-y-sm;
+  padding-bottom: v.$input-padding-y-sm;
+  padding-left: v.$input-padding-x-sm;
+  padding-right: calc(v.$input-padding-x-sm + 16px + v.$gap-small);
+  font-size: v.$font-size-sm;
+  background-position: right v.$input-padding-x-sm center;
+  // Ensure padding-right is maintained or adjusted if the arrow size changes for sm variant
+  // background-position might need adjustment if padding changes significantly
 }

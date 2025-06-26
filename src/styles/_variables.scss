@@ -4,40 +4,40 @@
 // These align with MD3 light theme defaults or sensible general fallbacks.
 
 // Core Palette Fallbacks (Based on MD3 Light Theme defaults or project's default theme)
-$_primary-fallback: #0D9BE1; // Default theme's primary from original themes.js
-$_secondary-fallback: #87CEEB; // Default theme's secondary
-$_tertiary-fallback: #FFD700; // Default theme's tertiary
+$primary-fallback: #0072C6; // Default theme's primary from original themes.js
+$secondary-fallback: #87CEEB; // Default theme's secondary
+$tertiary-fallback: #FFD700; // Default theme's tertiary
 
-$_on-primary-fallback: #FFFFFF; // Text on primary
-$_on-secondary-fallback: #001D35; // Text on secondary (example, ensure contrast with _secondary-fallback)
-$_on-tertiary-fallback: #4B3C00;  // Text on tertiary (example, ensure contrast with _tertiary-fallback)
+$on-primary-fallback: #FFFFFF; // Text on primary
+$on-secondary-fallback: #001D35; // Text on secondary (example, ensure contrast with $secondary-fallback)
+$on-tertiary-fallback: #4B3C00;  // Text on tertiary (example, ensure contrast with $tertiary-fallback)
 
-$_primary-container-fallback: #D0EFFF; // Light background for primary content
-$_on-primary-container-fallback: #001D35; // Text on primary container
-$_secondary-container-fallback: #C3E6F9;
-$_on-secondary-container-fallback: #001D35;
-$_tertiary-container-fallback: #FFF8E1;
-$_on-tertiary-container-fallback: #4B3C00;
+$primary-container-fallback: #D0EFFF; // Light background for primary content
+$on-primary-container-fallback: #001D35; // Text on primary container
+$secondary-container-fallback: #C3E6F9;
+$on-secondary-container-fallback: #001D35;
+$tertiary-container-fallback: #FFF8E1;
+$on-tertiary-container-fallback: #4B3C00;
 
-$_background-fallback: #FFFBFE;       // MD3 Background (overall window)
-$_on-background-fallback: #1C1B1F;    // MD3 On Background (text on general background)
-$_surface-fallback: #FFFBFE;          // MD3 Surface (cards, sheets, menus)
-$_on-surface-fallback: #1C1B1F;       // MD3 On Surface (primary text on surfaces)
-$_on-surface-variant-fallback: #444746; // MD3 On Surface Variant (secondary text, icons)
-$_outline-fallback: #79747E;          // MD3 Outline (borders, dividers)
-$_outline-variant-fallback: #CAC4D0;  // MD3 Outline Variant (softer borders, e.g., card outlines)
+$background-fallback: #FFFBFE;       // MD3 Background (overall window)
+$on-background-fallback: #1C1B1F;    // MD3 On Background (text on general background)
+$surface-fallback: #FFFBFE;          // MD3 Surface (cards, sheets, menus)
+$on-surface-fallback: #1C1B1F;       // MD3 On Surface (primary text on surfaces)
+$on-surface-variant-fallback: #444746; // MD3 On Surface Variant (secondary text, icons)
+$outline-fallback: #79747E;          // MD3 Outline (borders, dividers) // Made public
+$outline-variant-fallback: #CAC4D0;  // MD3 Outline Variant (softer borders, e.g., card outlines)
 
-$_error-fallback: #B3261E;            // MD3 Error
-$_on-error-fallback: #FFFFFF;         // MD3 On Error
-$_error-container-fallback: #F9DEDC;  // MD3 Error Container
-$_on-error-container-fallback: #410E0B;// MD3 On Error Container
+$error-fallback: #B3261E;            // MD3 Error
+$on-error-fallback: #FFFFFF;         // MD3 On Error
+$error-container-fallback: #F9DEDC;  // MD3 Error Container
+$on-error-container-fallback: #410E0B;// MD3 On Error Container
 
 // Specific UI Element Fallbacks (if different from general surface/background)
-$_input-bg-fallback: #FFFFFF; // Inputs often on plain white or surface
-$_dropdown-bg-fallback: $_surface-fallback;
-$_dropdown-text-fallback: $_on-surface-fallback;
-$_sidebar-bg-fallback: #F4F5F7; // From original themes.js default
-$_search-form-bg-fallback: #E9ECEF; // From original themes.js default
+$input-bg-fallback: #FFFFFF; // Inputs often on plain white or surface
+$dropdown-bg-fallback: $surface-fallback;
+$dropdown-text-fallback: $on-surface-fallback;
+$sidebar-bg-fallback: #F4F5F7; // From original themes.js default
+$search-form-bg-fallback: #E9ECEF; // From original themes.js default
 
 // Legacy/Utility Fallbacks
 $_secondary-disabled-color: #6B778A; // Keep if used for disabled states not covered by MD3 opacity
@@ -63,18 +63,44 @@ $_line-height-heading: 1.2;
 // Sizing & Spacing (Generally not themed, keep as SCSS vars)
 $input-height: 44px; // Increased for touch targets
 $button-height: 44px; // Increased for touch targets
-$base-padding: 1rem; // 16px
-$base-margin: 1rem;  // 16px
-$gap-small: 0.5rem;  // 8px
-$gap-medium: 0.75rem; // 12px
-$gap-large: 1rem;    // 16px
+
+// Base spacing values for calculations (SCSS variables)
+$base-padding-value: 1rem; // 16px
+$base-margin-value: 1rem;  // 16px
+$gap-small-value: 0.5rem;  // 8px
+$gap-medium-value: 0.75rem; // 12px
+$gap-large-value: 1rem;    // 16px
+
+// CSS custom properties for theming (use these for direct styling)
+$base-padding: var(--theme-base-padding, #{$base-padding-value});
+$base-margin: var(--theme-base-margin, #{$base-margin-value});
+$gap-small: var(--theme-gap-small, #{$gap-small-value});
+$gap-medium: var(--theme-gap-medium, #{$gap-medium-value});
+$gap-large: var(--theme-gap-large, #{$gap-large-value});
 
 // Borders (Radii and widths are generally not themed, colors are)
-$base-border-radius: 8px;
-$border-radius-small: 4px;
-$input-border-radius: 4px;
+$base-border-radius: var(--theme-border-radius-base, 8px);
+$border-radius-small: 4px; // Keep as fixed or derive from base? For now, fixed.
+$input-border-radius: var(--theme-border-radius-input, 4px);
 $base-border-width: 1px;
 $secondary-border-width: 2px;
+
+// Input/Button specific padding for different sizes
+$input-padding-y-sm: var(--theme-input-padding-y-sm, 0.25rem);
+$input-padding-x-sm: var(--theme-input-padding-x-sm, 0.5rem);
+$input-padding-y-lg: var(--theme-input-padding-y-lg, 0.5rem);
+$input-padding-x-lg: var(--theme-input-padding-x-lg, 1rem);
+
+// Pagination specific padding and font sizes
+// These are derived from input paddings, so they will automatically use CSS vars if input paddings do.
+$pagination-padding-y-sm: $input-padding-y-sm;
+$pagination-padding-x-sm: $input-padding-x-sm;
+$pagination-font-size-sm: $_font-size-small; // Uses existing SCSS var
+$pagination-line-height-sm: $_line-height-base; // Uses existing SCSS var
+$pagination-padding-y-lg: 0.5rem;
+$pagination-padding-x-lg: 1rem;
+$pagination-font-size-lg: $_font-size-large; // Uses existing SCSS var
+$pagination-line-height-lg: $_line-height-base; // Uses existing SCSS var
 
 // Grid system
 $_grid-gutter-width-fallback: 30px; // Default gutter width (e.g., 15px on each side of a col)
@@ -84,35 +110,35 @@ $grid-gutter-width: var(--theme-grid-gutter-width, $_grid-gutter-width-fallback)
 // --- CSS Custom Property Accessors (MD3 Aligned) ---
 
 // Core Accent Colors
-$primary-color: var(--theme-primary, $_primary-fallback);
-$on-primary-color: var(--theme-on-primary, $_on-primary-fallback);
-$primary-container-color: var(--theme-primary-container, $_primary-container-fallback);
-$on-primary-container-color: var(--theme-on-primary-container, $_on-primary-container-fallback);
+$primary-color: var(--theme-primary, $primary-fallback);
+$on-primary-color: var(--theme-on-primary, $on-primary-fallback);
+$primary-container-color: var(--theme-primary-container, $primary-container-fallback);
+$on-primary-container-color: var(--theme-on-primary-container, $on-primary-container-fallback);
 
-$secondary-color: var(--theme-secondary, $_secondary-fallback);
-$on-secondary-color: var(--theme-on-secondary, $_on-secondary-fallback);
-$secondary-container-color: var(--theme-secondary-container, $_secondary-container-fallback);
-$on-secondary-container-color: var(--theme-on-secondary-container, $_on-secondary-container-fallback);
+$secondary-color: var(--theme-secondary, $secondary-fallback);
+$on-secondary-color: var(--theme-on-secondary, $on-secondary-fallback);
+$secondary-container-color: var(--theme-secondary-container, $secondary-container-fallback);
+$on-secondary-container-color: var(--theme-on-secondary-container, $on-secondary-container-fallback);
 
-$tertiary-color: var(--theme-tertiary, $_tertiary-fallback);
-$on-tertiary-color: var(--theme-on-tertiary, $_on-tertiary-fallback);
-$tertiary-container-color: var(--theme-tertiary-container, $_tertiary-container-fallback);
-$on-tertiary-container-color: var(--theme-on-tertiary-container, $_on-tertiary-container-fallback);
+$tertiary-color: var(--theme-tertiary, $tertiary-fallback);
+$on-tertiary-color: var(--theme-on-tertiary, $on-tertiary-fallback);
+$tertiary-container-color: var(--theme-tertiary-container, $tertiary-container-fallback);
+$on-tertiary-container-color: var(--theme-on-tertiary-container, $on-tertiary-container-fallback);
 
 // Neutral Palette
-$background-color: var(--theme-background, $_background-fallback); // Overall app background
-$on-background-color: var(--theme-on-background, $_on-background-fallback);
-$surface-color: var(--theme-surface, $_surface-fallback); // Background for components like cards, dialogs
-$on-surface-color: var(--theme-on-surface, $_on-surface-fallback); // Primary text on surfaces
-$on-surface-variant-color: var(--theme-on-surface-variant, $_on-surface-variant-fallback); // Secondary text, icons on surfaces
-$outline-color: var(--theme-outline, $_outline-fallback); // For borders, dividers
-$outline-variant-color: var(--theme-outline-variant, $_outline-variant-fallback); // Softer borders (e.g., card outlines)
+$background-color: var(--theme-background, $background-fallback); // Overall app background
+$on-background-color: var(--theme-on-background, $on-background-fallback);
+$surface-color: var(--theme-surface, $surface-fallback); // Background for components like cards, dialogs
+$on-surface-color: var(--theme-on-surface, $on-surface-fallback); // Primary text on surfaces
+$on-surface-variant-color: var(--theme-on-surface-variant, $on-surface-variant-fallback); // Secondary text, icons on surfaces
+$outline-color: var(--theme-outline, $outline-fallback); // For borders, dividers // Updated to use public
+$outline-variant-color: var(--theme-outline-variant, $outline-variant-fallback); // Softer borders (e.g., card outlines)
 
 // Error Colors
-$error-color: var(--theme-error, $_error-fallback);
-$on-error-color: var(--theme-on-error, $_on-error-fallback);
-$error-container-color: var(--theme-error-container, $_error-container-fallback);
-$on-error-container-color: var(--theme-on-error-container, $_on-error-container-fallback);
+$error-color: var(--theme-error, $error-fallback);
+$on-error-color: var(--theme-on-error, $on-error-fallback);
+$error-container-color: var(--theme-error-container, $error-container-fallback);
+$on-error-container-color: var(--theme-on-error-container, $on-error-container-fallback);
 
 // Semantic Text Color Aliases (using MD3 roles)
 $text-color-primary: $on-surface-color;
@@ -127,7 +153,7 @@ $background-hover: var(--theme-background-hover, rgba($primary-color, 0.08)); //
 $background-active: var(--theme-background-active, rgba($primary-color, 0.12)); // MD3 active state layer
 
 // Sidebar Specific Colors (from themes.js, with fallbacks to MD3 roles or specific SCSS fallbacks)
-$sidebar-background: var(--theme-sidebar-background, $_sidebar-bg-fallback);
+$sidebar-background: var(--theme-sidebar-background, $sidebar-bg-fallback);
 $sidebar-text-color: var(--theme-sidebar-text-color, $on-surface-color);
 $sidebar-icon-color: var(--theme-sidebar-icon-color, $on-surface-variant-color);
 $sidebar-nav-item-hover-bg: var(--theme-sidebar-nav-item-hover-bg, $background-hover);
@@ -138,21 +164,22 @@ $sidebar-nav-item-active-bg: var(--theme-sidebar-nav-item-active-bg, $primary-co
 // Button Specific Colors (from themes.js, with fallbacks to MD3 roles)
 $button-primary-bg: var(--theme-button-primary-bg, $primary-color);
 $button-primary-text: var(--theme-button-primary-text, $on-primary-color);
-$button-primary-hover-bg: var(--theme-button-primary-hover-bg, color.adjust($_primary-fallback, $alpha: -0.12)); // Use SCSS fallback for color.adjust
+$button-primary-hover-bg: var(--theme-button-primary-hover-bg, color.adjust($primary-fallback, $alpha: -0.12)); // Use SCSS fallback for color.adjust
 
-$button-secondary-bg: var(--theme-button-secondary-bg, $secondary-container-color); // MD3 Filled Tonal style
-$button-secondary-text: var(--theme-button-secondary-text, $on-secondary-container-color);
-$button-secondary-hover-bg: var(--theme-button-secondary-hover-bg, color.adjust($_secondary-container-fallback, $lightness: -5%, $alpha: -0.12)); // Use SCSS fallback for color.adjust
-$primary-container-hover-bg: var(--theme-primary-container-hover-bg, color.adjust($_primary-container-fallback, $lightness: -5%)); // For elements using primary-container as base
+// Updated to use direct overrides first, then themed derived, then SCSS fallbacks
+$button-secondary-bg: var(--theme-button-secondary-bg-direct, var(--theme-button-secondary-bg, $secondary-container-color)); 
+$button-secondary-text: var(--theme-button-secondary-text-direct, var(--theme-button-secondary-text, $on-secondary-container-color));
+$button-secondary-hover-bg: var(--theme-button-secondary-hover-bg, color.adjust($secondary-container-fallback, $lightness: -5%, $alpha: -0.12)); // Use SCSS fallback for color.adjust
+$primary-container-hover-bg: var(--theme-primary-container-hover-bg, color.adjust($primary-container-fallback, $lightness: -5%)); // For elements using primary-container as base
 
 // Input & Dropdown Specific (from themes.js)
-$input-bg: var(--theme-input-bg, $_input-bg-fallback);
-$dropdown-bg: var(--theme-dropdown-bg, $_dropdown-bg-fallback);
-$dropdown-text-color: var(--theme-dropdown-text-color, $_dropdown-text-fallback);
+$input-bg: var(--theme-input-bg, $input-bg-fallback);
+$dropdown-bg: var(--theme-dropdown-bg, $dropdown-bg-fallback);
+$dropdown-text-color: var(--theme-dropdown-text-color, $dropdown-text-fallback);
 
 // Other Specific Backgrounds from themes.js
-$utility-sidebar-bg: var(--theme-utility-sidebar-bg, $_sidebar-bg-fallback); // Fallback to main sidebar bg or surface
-$search-criteria-form-bg: var(--theme-search-criteria-form-bg, $_search-form-bg-fallback); // Fallback to specific or surface
+$utility-sidebar-bg: var(--theme-utility-sidebar-bg, $sidebar-bg-fallback); // Fallback to main sidebar bg or surface
+$search-criteria-form-bg: var(--theme-search-criteria-form-bg, $search-form-bg-fallback); // Fallback to specific or surface
 
 // Compatibility Aliases (intended for temporary use until components are updated)
 $border-color: $outline-color;          // General borders should use outline color
@@ -176,19 +203,20 @@ $line-height-heading: $_line-height-heading;
 // Input Fields
 $input-border: $secondary-border-width solid #6B778A; // User-specified visible stroke color
 $input-text-color: $on-surface-color; // Text on input's background (which is $input-bg)
-$input-focus-border-color: $primary-color;
+$input-focus-border-color: var(--theme-input-focus-border-direct, $primary-color);
 // For box-shadow, use primary color with opacity. MD3 uses elevation/surface tint.
-$input-focus-box-shadow: 0 0 0 0.2rem rgba($_primary-fallback, 0.25); // Use SCSS fallback for rgba
+$input-focus-box-shadow: 0 0 0 0.2rem rgba($primary-fallback, 0.25); // Use SCSS fallback for rgba
 $input-padding: 10px 12px;
-$input-font-size: $font-size-base;
+$input-font-size: var(--theme-font-input-size, $font-size-base);
+$input-font-weight: var(--theme-font-input-weight, $font-weight-normal); // Added input font weight
 $input-label-color: $on-surface-variant-color; // Secondary text for labels
 $input-label-font-weight: $font-weight-semibold;
 $input-label-font-size: $font-size-base;
 
 // Buttons
 $button-font-family: $font-family-body; // Buttons typically use the body font
-$button-font-weight: $font-weight-semibold;
-$button-font-size: $font-size-base;
+$button-font-weight: var(--theme-font-button-weight, $font-weight-semibold);
+$button-font-size: var(--theme-font-button-size, $font-size-base);
 $button-line-height: 22px; // Adjust if needed for $button-height
 $button-padding: 0 $gap-medium; // Horizontal padding
 $button-icon-gap: $gap-small;
@@ -205,34 +233,34 @@ $secondary-button-border: 2px solid #6B778A; // User-specified stroke for second
 $outline-button-bg: transparent; // Outlined buttons are transparent
 $outline-button-text: $primary-color; // Text is often primary color
 $outline-button-border: $base-border-width solid $outline-color; // Border uses outline color
-$outline-button-hover-bg: var(--theme-background-hover, rgba($_primary-fallback, 0.08)); // Hover uses primary color with low opacity, ensure SCSS fallback for rgba
+$outline-button-hover-bg: var(--theme-background-hover, rgba($primary-fallback, 0.08)); // Hover uses primary color with low opacity, ensure SCSS fallback for rgba
 
 // Outline Secondary Button (Custom variant, or could map to a standard MD3 text button with secondary color)
 $outline-secondary-button-bg: transparent;
-$outline-secondary-button-text: $secondary-color; // Use secondary color for text
+$outline-secondary-button-text: $on-surface-variant-color; // Use secondary color for text
 $outline-secondary-button-border: $base-border-width solid $outline-color; // Use neutral outline
-$outline-secondary-button-hover-bg: var(--theme-secondary-hover-state-layer, rgba($_secondary-fallback, 0.08)); // Secondary color hover state layer
+$outline-secondary-button-hover-bg: var(--theme-secondary-hover-state-layer, rgba($secondary-fallback, 0.08)); // Secondary color hover state layer
 
 // Link/Text Button (MD3 Text Button style)
 $link-button-color: $primary-color; // Text buttons use primary color for text
-$link-button-hover-color: var(--theme-link-hover-color, color.adjust($_primary-fallback, $lightness: -10%)); // Use SCSS fallback for color.adjust
-$link-button-hover-bg: var(--theme-button-link-hover-bg, rgba($_primary-fallback, 0.08)); // Use SCSS fallback for rgba
+$link-button-hover-color: var(--theme-link-hover-color, color.adjust($primary-fallback, $lightness: -10%)); // Use SCSS fallback for color.adjust
+$link-button-hover-bg: var(--theme-button-link-hover-bg, rgba($primary-fallback, 0.08)); // Use SCSS fallback for rgba
 
 // Cards
 $card-bg: $surface-color; // Cards use surface color
 $card-border-color: $outline-variant-color; // Softer border for cards, or none if using elevation
 $card-border-radius: $base-border-radius;
-$card-padding: $base-padding * 1.5;
+$card-padding: var(--theme-card-padding, #{$base-padding-value * 1.5}); // Use calculation with SCSS variable
 $card-title-color: $on-surface-color;
 $card-text-color: $on-surface-variant-color;
 
 // Selected Row
-$selected-row-hover-bg: var(--theme-selected-row-hover-bg, rgba($_primary-fallback, 0.07)); // Use SCSS fallback for rgba
+$selected-row-hover-bg: var(--theme-selected-row-hover-bg, rgba($primary-fallback, 0.07)); // Use SCSS fallback for rgba
 
 // Dropzone
-$dropzone-hover-border-color: var(--theme-dropzone-hover-border-color, rgba($_primary-fallback, 0.4)); // Use SCSS fallback for rgba
+$dropzone-hover-border-color: var(--theme-dropzone-hover-border-color, rgba($primary-fallback, 0.4)); // Use SCSS fallback for rgba
 $dropzone-accept-border-color: var(--theme-dropzone-accept-border-color, $secondary-color); // From themes.js
-$dropzone-accept-bg-color: var(--theme-dropzone-accept-bg-color, rgba($_secondary-fallback, 0.1)); // Use SCSS fallback for rgba
+$dropzone-accept-bg-color: var(--theme-dropzone-accept-bg-color, rgba($secondary-fallback, 0.1)); // Use SCSS fallback for rgba
 
 // Dropdown Menu
 // $dropdown-bg, $dropdown-text-color already defined
@@ -241,3 +269,102 @@ $surface-container-highest-color: var(--theme-surface-container-highest, #E6E0E9
 $surface-container-color: var(--theme-surface-container, #F3EDF7); // MD3 surface-container fallback
 $surface-container-lowest-color: var(--theme-surface-container-lowest, #FFFFFF); // MD3 surface-container-lowest fallback
 $surface-container-low-color: var(--theme-surface-container-low, #F7F2FA); // MD3 surface-container-low fallback
+
+// Z-index values (generally not themed)
+$zindex-dropdown: 1000;
+$zindex-tooltip: 1070;
+$zindex-offcanvas-backdrop: 1040;
+
+// Form variables
+$form-check-input-margin-y: 0.25rem;
+
+// Form spacing system - Design System compliant
+$form-field-spacing-xs: var(--theme-form-field-spacing-xs, 0.5rem);   // 8px
+$form-field-spacing-sm: var(--theme-form-field-spacing-sm, 0.75rem);  // 12px
+$form-field-spacing-md: var(--theme-form-field-spacing-md, 1rem);     // 16px (default)
+$form-field-spacing-lg: var(--theme-form-field-spacing-lg, 1.5rem);   // 24px
+$form-field-spacing-xl: var(--theme-form-field-spacing-xl, 2rem);     // 32px
+
+// Form section spacing
+$form-section-spacing-sm: var(--theme-form-section-spacing-sm, 1.5rem);  // 24px
+$form-section-spacing-md: var(--theme-form-section-spacing-md, 2rem);    // 32px (default)
+$form-section-spacing-lg: var(--theme-form-section-spacing-lg, 2.5rem);  // 40px
+
+// Form row spacing (between form rows)
+$form-row-spacing-sm: var(--theme-form-row-spacing-sm, 1rem);    // 16px
+$form-row-spacing-md: var(--theme-form-row-spacing-md, 1.5rem);  // 24px (default)
+$form-row-spacing-lg: var(--theme-form-row-spacing-lg, 2rem);    // 32px
+
+// Form group spacing (between individual form fields)
+$form-group-spacing-xs: var(--theme-form-group-spacing-xs, 0.5rem);  // 8px
+$form-group-spacing-sm: var(--theme-form-group-spacing-sm, 0.75rem); // 12px
+$form-group-spacing-md: var(--theme-form-group-spacing-md, 1rem);    // 16px (default)
+$form-group-spacing-lg: var(--theme-form-group-spacing-lg, 1.25rem); // 20px
+
+// Breadcrumb variables
+$breadcrumb-padding-y: 0.75rem;
+$breadcrumb-padding-x: 1rem;
+
+// Surface fallback variables for calculations
+$surface-container-lowest-fallback: #FFFFFF;
+
+// Missing variables that need to be defined
+$tooltip-bg-color: #333333;
+$tooltip-text-color: #FFFFFF;
+$tooltip-padding-y: 0.25rem;
+$tooltip-padding-x: 0.5rem;
+$form-check-margin-bottom: 0.5rem;
+$form-check-input-width: 1rem;
+$breadcrumb-border-radius: 4px;
+$breadcrumb-font-size: 0.875rem;
+$breadcrumb-item-padding-x: 0.5rem;
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 0.75rem;
+$elevation-shadow-3: 0 2px 6px rgba(0, 0, 0, 0.08);
+$elevation-shadow-4: 0 4px 8px rgba(0, 0, 0, 0.1);
+$zindex-offcanvas: 1045;
+$offcanvas-horizontal-width: 320px;
+$surface-container-highest-fallback: #E6E0E9;
+$line-height-base: 1.5;
+
+// Raw values for calc() functions
+$base-margin-value: 1rem;
+$base-padding-value: 1rem;
+
+// Additional missing variables
+$tooltip-border-radius: 4px;
+$surface-variant-fallback: #E7E0EC;
+$form-check-input-margin-x: 0.25rem;
+$breadcrumb-active-font-weight: 600;
+$text-disabled: #6C757D;
+$offcanvas-vertical-height: 100vh;
+$spacing-large: 2rem;
+$spacing-medium: 1rem;
+$tooltip-font-size: 0.875rem;
+$form-check-input-border-width: 1px;
+$divider-color: #E0E0E0;
+$offcanvas-header-padding-y: 1rem;
+$offcanvas-header-padding-x: 1rem;
+$tooltip-line-height: 1.4;
+$tooltip-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+$input-focus-width: 2px;
+$offcanvas-title-font-size: 1.25rem;
+$offcanvas-title-font-weight: 600;
+$form-check-input-disabled-opacity: 0.5;
+$font-size-sm: 0.875rem;
+$tooltip-arrow-size: 5px;
+$form-check-label-disabled-opacity: 0.5;
+$offcanvas-title-line-height: 1.2;
+$form-check-input-border-radius: 0.25rem;
+$offcanvas-close-button-padding: 0.5rem;
+$form-check-input-checked-bg-size: 1rem;
+$offcanvas-close-icon-size: 1.25rem;
+$form-switch-padding-start: 2.5rem;
+$offcanvas-body-padding-y: 1rem;
+$offcanvas-body-padding-x: 1rem;
+$form-switch-width: 2rem;
+$form-switch-border-radius: 2rem;
+$surface-container-highest-color: #f5f5f5;
+$form-switch-thumb-size: 1.5rem;
+$form-switch-thumb-offset: 0.25rem;

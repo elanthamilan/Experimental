@@ -7,11 +7,12 @@ import {
   StyledTable,
   StyledCard,
   StyledButton,
-  FormField,
+  // FormField, // No longer directly used
   StyledFormControl,
   StyledFormSelect,
   StyledPagination, // Added
-  // StyledBadge, // If status needs specific badge styling beyond text
+  StyledBadge, // Added StyledBadge
+  ListControlsToolbar, // Added
 } from '../../components';
 import styles from './SemesterListPage.module.scss';
 
@@ -27,8 +28,23 @@ const SemesterListPage = () => {
 
   useEffect(() => {
     const uniqueStatuses = ['All', ...new Set(mockSemesters.map(s => s.status).filter(Boolean))];
-    setStatusOptions(uniqueStatuses);
+    setStatusOptions(uniqueStatuses.map(status => ({ value: status === 'All' ? '' : status, label: status }))); // Ensure options are in {value, label} format
   }, []);
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'Active':
+      case 'Registration Open':
+        return <StyledBadge variant="success">{status}</StyledBadge>;
+      case 'Upcoming':
+        return <StyledBadge variant="warning">{status}</StyledBadge>;
+      case 'Completed':
+      case 'Archived':
+        return <StyledBadge variant="secondary">{status}</StyledBadge>;
+      default:
+        return <StyledBadge variant="light">{status}</StyledBadge>;
+    }
+  };
 
   const filteredSemesters = mockSemesters.filter(semester => {
     const nameMatch = semester.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -83,41 +99,35 @@ const SemesterListPage = () => {
 
   return (
     <StyledContainer className={styles.pageContainer}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Semester Management</h1>
+      </div>
       <StyledCard className={styles.contentCard}>
         <StyledCard.Header>
-          <StyledCard.Title className={styles.cardTitle}>Semester Management</StyledCard.Title>
+          {/* <StyledCard.Title className={styles.cardTitle}>Semester Management</StyledCard.Title> */}
         </StyledCard.Header>
 
-        <div className={styles.tableControls}>
-          <div className={styles.filterSection}>
-            <div className={styles.searchFilterItem}>
-              <FormField
-                controlId="searchTerm"
-                label="Search Semester"
-                type="text"
-                placeholder="ID or Name..."
-                value={searchTerm}
-                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-              />
-            </div>
-            <div className={styles.dropdownFilterItem}>
-              <FormField
-                controlId="statusFilter"
-                label="Status"
-                as="select"
-                value={statusFilter}
-                onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                options={statusOptions.map(status => ({ value: status === 'All' ? '' : status, label: status }))}
-              />
-            </div>
-          </div>
-          <div className={styles.actionsSection}>
-            <StyledButton variant="primary" onClick={() => navigate('/admin/semesters/new')} className={styles.addButton}>
-              <span className={`material-symbols-outlined ${styles.buttonIcon}`}>add</span>
-              Add New Semester
-            </StyledButton>
-          </div>
-        </div>
+        <ListControlsToolbar
+          searchTerm={searchTerm}
+          onSearchChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+          searchPlaceholder="ID or Name..."
+          searchLabel="Search Semester"
+          filters={[
+            {
+              controlId: "statusFilter",
+              label: "Status",
+              value: statusFilter,
+              onChange: (e) => { setStatusFilter(e.target.value); setCurrentPage(1); },
+              options: statusOptions, // statusOptions is already in {value, label} format
+              type: 'select',
+            }
+          ]}
+          addAction={{
+            label: "Add New Semester",
+            onClick: () => navigate('/admin/semesters/new'),
+            icon: "add",
+          }}
+        />
         
         <StyledCard.Body>
           {/* Removed headerActions div as button is now in tableControls */}
@@ -142,8 +152,7 @@ const SemesterListPage = () => {
                     <td>{semester.name}</td>
                     <td>{semester.startDate}</td>
                     <td>{semester.endDate}</td>
-                    <td>{semester.status}</td> 
-                    {/* If StyledBadge is needed for status, import and use it here */}
+                    <td>{getStatusBadge(semester.status)}</td> {/* Used getStatusBadge here */}
                     <td>
                       <StyledButton
                         variant="outline-primary"

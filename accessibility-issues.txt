@@ -1,0 +1,12 @@
+Could not automatically capture accessibility issues from the browser console.
+Please manually open the application in a browser (usually at http://localhost:3000) after running `npm start`, and check the developer console for output from `@axe-core/react`.
+Copy and paste any reported accessibility violations into this file.
+
+Common areas to check:
+- Color contrast
+- ARIA attributes
+- Keyboard navigation
+- Form labels
+- Image alt text
+- Heading structure
+- Semantic HTML usage

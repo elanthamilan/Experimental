@@ -33,6 +33,7 @@ export { default as StyledCol } from './atoms/StyledCol';
 export { default as StyledBadge } from './atoms/StyledBadge';
 export { default as StyledPagination } from './atoms/StyledPagination';
 export { default as StyledListGroup } from './atoms/StyledListGroup';
+export { default as StyledProgressBar } from './atoms/StyledProgressBar';
 export { default as StyledListGroupItem } from './atoms/StyledListGroupItem';
 export { default as StyledAlert } from './atoms/StyledAlert';
 export { default as StyledImage } from './atoms/StyledImage';
@@ -42,28 +43,36 @@ export { default as StyledImage } from './atoms/StyledImage';
 
 // Form Molecules
 export { default as FormField } from './molecules/FormField';
+export { default as FormRow } from './molecules/FormRow';
+export { default as FormSection } from './molecules/FormSection';
 export { default as SearchInput } from './molecules/SearchInput';
 export { default as FileUploadDropzone } from './molecules/FileUploadDropzone';
 
 // Display Molecules
 export { default as StatsCard } from './molecules/StatsCard';
-export { default as ThemeDrawer } from './molecules/ThemeDrawer';
-export { default as Toolbar } from './molecules/Toolbar';
+export { default as StyledDropdown } from './molecules/StyledDropdown';
+export { default as StyledOffcanvas } from './molecules/StyledOffcanvas';
+export { default as StyledBreadcrumb } from './molecules/StyledBreadcrumb'; // Added StyledBreadcrumb
+// export { default as ThemeDrawer } from './molecules/ThemeDrawer'; // Removed as unused
+// export { default as Toolbar } from './molecules/Toolbar'; // Removed as unused
+// export { default as ProductTableRow } from './molecules/ProductTableRow'; // Removed as unused
+export { default as ListControlsToolbar } from './molecules/ListControlsToolbar'; // Added ListControlsToolbar
 
 // ===== ORGANISMS =====
 // Complex components made of molecules and atoms
 
 // Navigation
-export { default as LeftSidebar } from './LeftSidebar';
+export { default as LeftSidebar } from './organisms/LeftSidebar';
 
 // Data Display
-export { default as ResultsTable } from './ResultsTable';
-export { default as SummaryStats } from './SummaryStats';
+export { default as ResultsTable } from './organisms/ResultsTable';
+export { default as SummaryStats } from './organisms/SummaryStats';
 
 // Forms
-export { default as AddEditForm } from './AddEditForm';
-export { default as DataInputForm } from './DataInputForm';
-export { default as SearchCriteria } from './SearchCriteria';
+export { default as AddEditForm } from './organisms/AddEditForm';
+export { default as ProgressiveForm } from './organisms/ProgressiveForm';
+// export { default as DataInputForm } from './molecules/DataInputForm'; // Removed as unused
+export { default as SearchCriteria } from './organisms/SearchCriteria';
 
 // ===== DESIGN TOKENS =====
 // Export design tokens and utilities

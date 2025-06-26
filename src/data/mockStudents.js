@@ -32,7 +32,13 @@ export const mockStudents = [
     academicStanding: "Good Standing",
     enrollmentStatus: "Enrolled",
     admissionDate: "2021-08-15",
-    withdrawalDate: null
+    withdrawalDate: null,
+    documents: [
+      { name: "Birth Certificate", uploaded: true, isMandatory: true },
+      { name: "Photo ID", uploaded: true, isMandatory: true },
+      { name: "Address Proof", uploaded: false, isMandatory: true }, // Alice missing Address Proof
+      { name: "Previous Marksheet", uploaded: true, isMandatory: false }
+    ]
   },
   {
     id: "student002",
@@ -62,7 +68,13 @@ export const mockStudents = [
     academicStanding: "Good Standing",
     enrollmentStatus: "Enrolled",
     admissionDate: "2020-08-15",
-    withdrawalDate: null
+    withdrawalDate: null,
+    documents: [
+      { name: "Birth Certificate", uploaded: true, isMandatory: true },
+      { name: "Photo ID", uploaded: true, isMandatory: true },
+      { name: "Address Proof", uploaded: true, isMandatory: true }, // Bob has all
+      { name: "SOP", uploaded: true, isMandatory: false }
+    ]
   },
   {
     id: "student003",
@@ -92,7 +104,13 @@ export const mockStudents = [
     academicStanding: "Academic Probation",
     enrollmentStatus: "Enrolled",
     admissionDate: "2022-08-15",
-    withdrawalDate: null
+    withdrawalDate: null,
+    documents: [
+      { name: "Birth Certificate", uploaded: false, isMandatory: true }, // Charlie missing Birth Certificate
+      { name: "Photo ID", uploaded: false, isMandatory: true },       // Charlie missing Photo ID
+      { name: "Address Proof", uploaded: true, isMandatory: true },
+      { name: "Letter of Recommendation", uploaded: true, isMandatory: false }
+    ]
   },
   {
     id: "student004",
@@ -122,7 +140,13 @@ export const mockStudents = [
     academicStanding: "Dean's List",
     enrollmentStatus: "Graduated",
     admissionDate: "2019-08-15",
-    withdrawalDate: null // Not withdrawn, but graduated
+    withdrawalDate: null, // Not withdrawn, but graduated
+    documents: [
+      { name: "Birth Certificate", uploaded: true, isMandatory: true },
+      { name: "Photo ID", uploaded: true, isMandatory: true },
+      { name: "Address Proof", uploaded: true, isMandatory: true },
+      { name: "Degree Certificate", uploaded: true, isMandatory: false } // Graduated, has degree cert
+    ]
   },
   {
     id: "student005",
@@ -152,6 +176,11 @@ export const mockStudents = [
     academicStanding: "Good Standing",
     enrollmentStatus: "Withdrawn",
     admissionDate: "2018-08-15",
-    withdrawalDate: "2020-05-15"
+    withdrawalDate: "2020-05-15",
+    documents: [
+      { name: "Birth Certificate", uploaded: true, isMandatory: true },
+      { name: "Photo ID", uploaded: false, isMandatory: true }, // Withdrawn, maybe incomplete docs
+      { name: "Address Proof", uploaded: true, isMandatory: true }
+    ]
   }
 ];

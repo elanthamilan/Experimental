@@ -1,4 +1,22 @@
 @use 'src/styles/_variables.scss' as v;
+@use 'sass:color';
+
+// Helper mixin for item variants
+@mixin list-group-item-variant($state, $background, $color, $background-scss-fallback) {
+  &.item-#{$state} { // This will become .styledListGroupItem.item-primary
+    color: $color;
+    background-color: $background;
+
+    // If this item is also an action item, define its hover/focus state
+    &.action { // This will become .styledListGroupItem.item-primary.action
+      &:hover,
+      &:focus {
+        // Use the SCSS fallback color for color.adjust
+        background-color: color.adjust($background-scss-fallback, $lightness: -7%); 
+      }
+    }
+  }
+}
 
 .styledListGroupItem {
   position: relative;
@@ -35,62 +53,50 @@
       border-bottom-width: 0; // No bottom border for the last item in flush
     }
   }
-}
 
-.action {
-  cursor: pointer;
-  width: 100%; // Ensure action items take full width for clickability
+  // Action variant (for clickable items)
+  &.action {
+    cursor: pointer;
+    width: 100%; // Ensure action items take full width for clickability
 
-  &:hover,
-  &:focus {
-    // z-index: 1; // Bring item to front on hover/focus, useful if borders overlap
-    color: v.$on-surface-color; // Or could be v.$primary-color for more emphasis
-    background-color: v.$background-hover;
-  }
-}
-
-.active {
-  z-index: 2; // Higher than hover to ensure active state is prominent
-  color: v.$on-primary-color;
-  background-color: v.$primary-color;
-  border-color: v.$primary-color;
-}
-
-.disabled,
-&.disabled { // Allow applying .disabled class directly or via prop
-  color: v.$outline-color; // Or a specific disabled text variable if available
-  pointer-events: none;
-  background-color: v.$surface-color; // Or a more distinct disabled background
-  // Consider adding opacity: 0.65; if desired
-}
-
-// Contextual variants
-// Assuming existence of theme variables like $success-container-color, $on-success-container-color etc.
-// If not, use suitable fallbacks or generate them. For now, using placeholder logic.
-
-// Helper mixin for item variants
-@mixin list-group-item-variant($state, $background, $color) {
-  &.item-#{$state} {
-    color: $color;
-    background-color: $background;
-
-    &.action {
-      &:hover,
-      &:focus {
-        background-color: color.adjust($background, $blackness: 5%); // Darken background slightly on hover
-      }
+    &:hover,
+    &:focus {
+      // z-index: 1; // Bring item to front on hover/focus, useful if borders overlap
+      color: v.$on-surface-color; // Or could be v.$primary-color for more emphasis
+      background-color: v.$background-hover;
     }
   }
+
+  // Active state
+  &.active {
+    z-index: 2; // Higher than hover to ensure active state is prominent
+    color: v.$on-primary-color;
+    background-color: v.$primary-color;
+    border-color: v.$primary-color;
+  }
+
+  // Disabled state
+  // Applied when the component receives a 'disabled' class or prop
+  &.disabled {
+    color: v.$outline-color; 
+    pointer-events: none;
+    background-color: v.$surface-container-low-color; // Using a slightly off-surface color
+    // Consider opacity: 0.65; if further distinction is needed and acceptable
+  }
+
+  // Contextual variants
+  // Apply variants using the mixin
+  // Pass SCSS fallback colors for hover effect
+  @include list-group-item-variant('primary', v.$primary-container-color, v.$on-primary-container-color, v.$primary-container-fallback);
+  @include list-group-item-variant('secondary', v.$secondary-container-color, v.$on-secondary-container-color, v.$secondary-container-fallback);
+  // For the following, SCSS fallbacks are extracted from the var() definition if no direct SCSS variable exists for them
+  @include list-group-item-variant('success', var(--theme-success-container, #d1e7dd), var(--theme-on-success-container, #0a3622), #d1e7dd);
+  @include list-group-item-variant('danger', var(--theme-error-container, #f8d7da), var(--theme-on-error-container, #58151c), #f8d7da);
+  @include list-group-item-variant('warning', var(--theme-warning-container, #fff3cd), var(--theme-on-warning-container, #664d03), #fff3cd);
+  @include list-group-item-variant('info', var(--theme-info-container, #cff4fc), var(--theme-on-info-container, #055160), #cff4fc);
+  @include list-group-item-variant('light', var(--theme-surface-container-lowest, #FFFFFF), var(--theme-on-surface, #1C1B1F), #FFFFFF); 
+  @include list-group-item-variant('dark', var(--theme-surface-container-highest, #343a40), var(--theme-on-surface-inverted, #FFFFFF), #343a40); 
 }
 
-// Apply variants using the mixin
-// Ensure these variables exist in _variables.scss or are properly defined with fallbacks
-// For example, $_success-container-fallback, $_on-success-container-fallback
-@include list-group-item-variant('primary', v.$primary-container-color, v.$on-primary-container-color);
-@include list-group-item-variant('secondary', v.$secondary-container-color, v.$on-secondary-container-color);
-@include list-group-item-variant('success', var(--theme-success-container, #d1e7dd), var(--theme-on-success-container, #0a3622)); // Example with direct var() and fallbacks
-@include list-group-item-variant('danger', var(--theme-error-container, #f8d7da), var(--theme-on-error-container, #58151c));
-@include list-group-item-variant('warning', var(--theme-warning-container, #fff3cd), var(--theme-on-warning-container, #664d03)); // Assuming warning-container exists or using fallbacks
-@include list-group-item-variant('info', var(--theme-info-container, #cff4fc), var(--theme-on-info-container, #055160));       // Assuming info-container exists or using fallbacks
-@include list-group-item-variant('light', var(--theme-surface-container-lowest, #FFFFFF), var(--theme-on-surface, #1C1B1F)); // Light variant on very light surface
-@include list-group-item-variant('dark', var(--theme-surface-container-highest, #343a40), var(--theme-on-surface-inverted, #FFFFFF)); // Dark variant on very dark surface (ensure on-surface-inverted exists)
+// Note: The .active, .action, .disabled styles are defined within .styledListGroupItem
+// and the contextual variants are generated by the mixin within the same scope.

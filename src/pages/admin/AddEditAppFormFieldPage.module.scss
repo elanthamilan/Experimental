@@ -1,5 +1,41 @@
+@use '../../styles/variables' as v;
+
+// Standard Page Header Styles (copied from DashboardPage.module.scss)
+.pageHeader {
+  margin-bottom: calc(#{v.$base-margin-value} * 3);
+  text-align: center;
+
+  @media (min-width: 768px) {
+    text-align: left;
+  }
+}
+
+.pageTitle {
+  color: var(--theme-text-color, v.$on-surface-color);
+  font-size: var(--theme-font-pagetitle-size, 2.5rem);
+  font-family: var(--theme-font-display, v.$font-family-display);
+  font-weight: var(--theme-font-pagetitle-weight, 700);
+  margin-bottom: v.$base-margin;
+  line-height: 1.2;
+
+  /* Responsive size adjustments can be handled by the theme setting itself or by more specific theme variables. */
+}
+
+.pageDescription {
+  font-size: 1.1rem;
+  color: var(--theme-text-muted, v.$on-surface-variant-color);
+  font-family: var(--theme-font-body, v.$font-family-body);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    margin: 0;
+  }
+}
+
 .pageContainer {
-  padding: var(--spacing-medium) var(--spacing-large);
+  padding: v.$base-padding calc(#{v.$base_padding} * 1.5); // var(--spacing-medium) var(--spacing-large)
   background-color: var(--theme-background);
   min-height: 100vh;
 }
@@ -7,21 +43,21 @@
 .formCard {
   background-color: var(--theme-surface);
   border: 1px solid var(--theme-outline-variant);
-  border-radius: var(--border-radius-large);
+  border-radius: v.$base_border_radius; // var(--border-radius-large)
   box-shadow: var(--shadow-elevation-2);
-  margin-bottom: var(--spacing-large);
+  margin-bottom: calc(#{v.$base_padding} * 1.5); // var(--spacing-large)
 
   :global(.card-header) {
     background-color: var(--theme-surface-container);
     color: var(--theme-on-surface-variant);
-    font-size: var(--font-size-large);
-    font-weight: var(--font-weight-semibold);
+    font-size: v.$font-size-large; // var(--font-size-large)
+    font-weight: v.$font-weight-semibold;
     border-bottom: 1px solid var(--theme-outline-variant);
-    padding: var(--spacing-medium) var(--spacing-large);
+    padding: v.$base-padding calc(#{v.$base_padding} * 1.5); // var(--spacing-medium) var(--spacing-large)
   }
 
   :global(.card-body) {
-    padding: var(--spacing-large);
+    padding: calc(#{v.$base_padding} * 1.5); // var(--spacing-large)
     color: var(--theme-on-surface);
   }
 }
@@ -30,32 +66,13 @@
   font-family: var(--theme-font-display);
 }
 
-.alert {
-  padding: var(--spacing-medium);
-  margin-bottom: var(--spacing-medium);
-  border: 1px solid transparent;
-  border-radius: var(--border-radius-medium);
-}
-
-.alertDanger {
-  composes: alert;
-  color: var(--theme-on-error-container);
-  background-color: var(--theme-error-container);
-  border-color: var(--theme-error);
-}
-
-.alertSuccess {
-  composes: alert;
-  color: var(--theme-on-success-container);
-  background-color: var(--theme-success-container);
-  border-color: var(--theme-success);
-}
+// Custom alert styles removed as StyledAlert component is now used.
 
 .formActions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--spacing-medium);
-  margin-top: var(--spacing-large);
+  gap: v.$base-padding; // var(--spacing-medium)
+  margin-top: calc(#{v.$base_padding} * 1.5); // var(--spacing-large)
 }
 
 .formCheckInputLarge { // For the 'Required' checkbox
@@ -78,7 +95,7 @@
 // Ensure FormField itself adds necessary bottom margins or wrap them in Row/Col with mb-3
 // If FormField needs consistent bottom margin:
 // :global(.form-group) { // Assuming FormField renders a .form-group
-//   margin-bottom: var(--spacing-medium);
+//   margin-bottom: v.$base-padding; // var(--spacing-medium)
 // }
 // This might be too global, better to use Col with mb-3 or ensure FormField has a wrapper class option.
 // For now, relying on existing Row/Col structure with mb-3 from react-bootstrap (if used) or manual FormField className.
@@ -94,5 +111,5 @@
 }
 
 .formFieldMarginBottom { // Add to FormField components that need margin
-  margin-bottom: var(--spacing-medium);
+  margin-bottom: v.$base-padding; // var(--spacing-medium)
 }

@@ -1,15 +1,19 @@
+@use '../../styles/variables' as v;
+@use 'sass:color';
+
 // StyledBadge.module.scss
 // Centralized badge styling following design system principles
 
 .badgeBase {
   display: inline-block;
-  font-weight: 700;
+  font-family: v.$font-family-body; // Use theme variable
+  font-weight: v.$font-weight-semibold; // Use theme variable (700 is often bold, semibold is 600)
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: 0.375rem;
-  transition: all 0.15s ease-in-out;
+  border-radius: v.$border-radius-small; // Use theme variable (0.375rem is 6px, $border-radius-small is 4px, consider if $base_border_radius for 8px is better)
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out; // More specific transition
   
   &:empty {
     display: none;
@@ -34,135 +38,112 @@
 
 // Color variants
 .badge-primary {
-  color: #fff;
-  background-color: var(--primary-color, #007bff);
+  color: v.$on-primary-container-color;
+  background-color: v.$primary-container-color;
   
   &:hover {
-    background-color: var(--primary-color-dark, #0056b3);
+    // Assuming hover variables might not exist, darken fallback.
+    // Ideally, theme would provide: var(--theme-primary-container-hover, color.adjust(v.$primary-container-fallback, $lightness: -5%))
+    background-color: color.adjust(v.$primary-container-fallback, $lightness: -7%);
   }
 }
 
 .badge-secondary {
-  color: #fff;
-  background-color: var(--secondary-color, #6c757d);
+  color: v.$on-secondary-container-color;
+  background-color: v.$secondary-container-color;
   
   &:hover {
-    background-color: var(--secondary-color-dark, #545b62);
+    background-color: color.adjust(v.$secondary-container-fallback, $lightness: -7%);
   }
 }
 
-.badge-success {
-  color: #fff;
-  background-color: var(--success-color, #28a745);
+.badge-success { // Placeholder: Uses Tertiary
+  color: v.$on-tertiary-container-color;
+  background-color: v.$tertiary-container-color;
   
   &:hover {
-    background-color: var(--success-color-dark, #1e7e34);
+    background-color: color.adjust(v.$tertiary-container-fallback, $lightness: -7%);
   }
 }
 
 .badge-danger {
-  color: #fff;
-  background-color: var(--danger-color, #dc3545);
+  color: v.$on-error-container-color;
+  background-color: v.$error-container-color;
   
   &:hover {
-    background-color: var(--danger-color-dark, #bd2130);
+    background-color: color.adjust(v.$error-container-fallback, $lightness: -7%);
   }
 }
 
-.badge-warning {
-  color: #212529;
-  background-color: var(--warning-color, #ffc107);
+.badge-warning { // Placeholder: Uses Error (same as danger for now, as per plan)
+  color: v.$on-error-container-color;
+  background-color: v.$error-container-color;
+  // Consider a more distinct warning if possible, e.g. by adjusting text color or using a different base
   
   &:hover {
-    background-color: var(--warning-color-dark, #d39e00);
+    background-color: color.adjust(v.$error-container-fallback, $lightness: -7%);
   }
 }
 
-.badge-info {
-  color: #fff;
-  background-color: var(--info-color, #17a2b8);
+.badge-info { // Placeholder: Uses Secondary
+  color: v.$on-secondary-container-color;
+  background-color: v.$secondary-container-color;
   
   &:hover {
-    background-color: var(--info-color-dark, #117a8b);
+    background-color: color.adjust(v.$secondary-container-fallback, $lightness: -7%);
   }
 }
 
 .badge-light {
-  color: #212529;
-  background-color: var(--light-color, #f8f9fa);
+  color: v.$on-surface-color; // Text on surface
+  background-color: v.$surface-container-lowest-color; // Lightest surface container
   
   &:hover {
-    background-color: var(--light-color-dark, #dae0e5);
+    background-color: color.adjust(v.$surface-container-lowest-fallback, $lightness: -7%);
   }
 }
 
 .badge-dark {
-  color: #fff;
-  background-color: var(--dark-color, #343a40);
+  color: v.$on-surface-variant-color; // Or a specific on-dark if available
+  background-color: v.$surface-container-highest-color; // Darkest surface container before inverse
   
   &:hover {
-    background-color: var(--dark-color-dark, #1d2124);
+    background-color: color.adjust(v.$surface-container-highest-fallback, $lightness: -7%);
   }
 }
 
 // Pill variant
 .badge-pill {
-  border-radius: 10rem;
+  border-radius: 50rem; // More standard pill shape
 }
 
-// Status-specific badges
+// Status-specific badges - using theme variables or existing color variants
 .status-active {
-  color: #155724;
-  background-color: #d4edda;
-  border: 1px solid #c3e6cb;
+  // Use success variant styles
+  @extend .badge-success; 
+  // No border needed if container colors provide enough contrast / style
 }
 
 .status-inactive {
-  color: #721c24;
-  background-color: #f8d7da;
-  border: 1px solid #f1b0b7;
+  color: v.$on-surface-variant-color;
+  background-color: v.$surface-variant-color;
+  // No border needed
+  &:hover {
+    background-color: color.adjust(v.$surface-variant-fallback, $lightness: -7%);
+  }
 }
 
 .status-pending {
-  color: #856404;
-  background-color: #fff3cd;
-  border: 1px solid #ffeaa7;
+  // Use warning variant styles
+  @extend .badge-warning;
+  // No border needed
 }
 
 .status-draft {
-  color: #383d41;
-  background-color: #e2e3e5;
-  border: 1px solid #d6d8db;
+  // Use light variant styles (neutral, less prominent)
+  @extend .badge-light;
+  // No border needed
 }
 
-// Dark mode support
-[data-theme="dark"] {
-  .badge-light {
-    color: #fff;
-    background-color: var(--light-color-dark, #495057);
-    
-    &:hover {
-      background-color: var(--light-color-darker, #343a40);
-    }
-  }
-  
-  .status-active {
-    color: #d4edda;
-    background-color: #155724;
-  }
-  
-  .status-inactive {
-    color: #f8d7da;
-    background-color: #721c24;
-  }
-  
-  .status-pending {
-    color: #fff3cd;
-    background-color: #856404;
-  }
-  
-  .status-draft {
-    color: #e2e3e5;
-    background-color: #383d41;
-  }
-}
+// Dark mode support is removed as theme variables handle this automatically
+// [data-theme="dark"] { ... }
