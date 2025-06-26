@@ -94,7 +94,14 @@ const LeftSidebar = () => {
           label: 'Attendance',
           path: '/academic/attendance', // Path matches the route set in App.js
           roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER] // Assuming Admin and Teacher can access
-        }
+        },
+        {
+          eventKey: 'attendance_dashboard',
+          icon: 'insights',
+          label: 'Attendance Dashboard',
+          path: '/academic/attendance-dashboard',
+          roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER]
+        },
       ]
     },
     administration: {

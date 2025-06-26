@@ -63,6 +63,7 @@ import AddEditSubInstitutionPage from './pages/admin/AddEditSubInstitutionPage';
 import { fontWeightOptions } from './data/fonts'; // Import fontWeightOptions
 import { fontSizeOptions } from './themes'; // Import fontSizeOptions from themes
 import { Link } from 'react-router-dom';
+import AttendanceDashboardPage from './pages/AttendanceDashboardPage';
 
 import styles from './App.module.scss';
 import './App.css';
@@ -564,6 +565,7 @@ function App() {
               {/* <Route path="/tutorial" element={<div>Tutorial Page - Coming Soon</div>} /> */} {/* Route removed */}
               {/* <Route path="/manual" element={<div>User Manual Page - Coming Soon</div>} /> */} {/* Route removed */}
               <Route path="/logout" element={<div>Logout Page - Coming Soon</div>} />
+              <Route path="/academic/attendance-dashboard" element={<AttendanceDashboardPage />} />
             </Routes>
           </main>
         </div>
