@@ -56,7 +56,8 @@ const FormField = ({
   ...props // Spread any other props to the underlying control (e.g., disabled)
 }) => {
   // Generate unique IDs for accessibility
-  const baseControlId = controlId || React.useId(); // Ensure controlId is always present
+  const generatedId = React.useId();
+  const baseControlId = controlId || generatedId; // Ensure controlId is always present
   const helpTextId = helpText ? `${baseControlId}-help` : undefined;
   const feedbackMessageId = feedback ? `${baseControlId}-feedback` : undefined;
 
@@ -131,7 +132,7 @@ const FormField = ({
         aria-describedby={describedByIds} // Allow FormField's help/error text to describe it
         aria-required={required || undefined}
         aria-invalid={isInvalid || undefined}
-        ...(props || {})
+        {...props}
       />
     );
   } else {
