@@ -132,7 +132,7 @@ const FormField = ({
         aria-required={required || undefined}
         aria-invalid={isInvalid || undefined}
         // aria-label and aria-labelledby would typically be for the StyledFormCheck's own label if it's visually hidden
-        ...props
+        ...(props || {})
       />
     );
   } else {
