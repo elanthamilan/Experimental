@@ -2,68 +2,24 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 import { themes, applyTheme, defaultSpacingValues } from './themes'; // Import defaultSpacingValues
 
 import LeftSidebar from './components/organisms/LeftSidebar';
-import AddEditForm from './components/organisms/AddEditForm';
+// import AddEditForm from './components/organisms/AddEditForm'; // Route will be removed
 // React Bootstrap components removed: Offcanvas, OverlayTrigger, Tooltip, Dropdown
 import StyledButton from './components/atoms/StyledButton';
 import StyledOffcanvas from './components/molecules/StyledOffcanvas';
 import StyledDropdown from './components/molecules/StyledDropdown';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom'; // Added Navigate for default route
 
-// Import SIS Page Placeholders
-import DashboardPage from './pages/DashboardPage';
-import StudentListPage from './pages/admin/StudentListPage';
-import AddEditStudentPage from './pages/admin/AddEditStudentPage';
-import StaffListPage from './pages/admin/StaffListPage';
-import AddEditStaffPage from './pages/admin/AddEditStaffPage';
-import CourseListPage from './pages/academic/CourseListPage';
-import AddEditCoursePage from './pages/academic/AddEditCoursePage';
-import GradebookPage from './pages/academic/GradebookPage';
-// Removed unused imports: AdmissionsPage, BillingPage, ReportsPage, UserProfilePage
-// Faculty Management Page Imports
-import FacultyListPage from './pages/admin/FacultyListPage';
-import AddEditFacultyPage from './pages/admin/AddEditFacultyPage';
-import FacultyProfilePage from './pages/user/FacultyProfilePage';
-// Program Management Page Imports
-import ProgramListPage from './pages/admin/ProgramListPage';
-import AddEditProgramPage from './pages/admin/AddEditProgramPage';
-// Semester Management Page Imports
-import SemesterListPage from './pages/admin/SemesterListPage';
-import AddEditSemesterPage from './pages/admin/AddEditSemesterPage';
-// Department Management Page Imports
-import DepartmentListPage from './pages/admin/DepartmentListPage';
-import AddEditDepartmentPage from './pages/admin/AddEditDepartmentPage';
-// Financial Year Management Page Imports
-import FinancialYearListPage from './pages/admin/FinancialYearListPage';
-import AddEditFinancialYearPage from './pages/admin/AddEditFinancialYearPage';
-// Application Form Field Management Page Imports
-import AppFormFieldListPage from './pages/admin/AppFormFieldListPage';
-import AddEditAppFormFieldPage from './pages/admin/AddEditAppFormFieldPage';
-// Application Submission Tracking Page Imports
-import ApplicationListPage from './pages/admissions/ApplicationListPage';
-import ViewApplicationPage from './pages/admissions/ViewApplicationPage';
-// Organizational Hierarchy Management Page Imports
-import OrgHierarchyPage from './pages/admin/OrgHierarchyPage';
-import AddEditOrgHierarchyNodePage from './pages/admin/AddEditOrgHierarchyNodePage';
-// Examination Schedule Management Page Imports
-import ExamScheduleListPage from './pages/academic/ExamScheduleListPage';
-import AddEditExamSchedulePage from './pages/academic/AddEditExamSchedulePage';
-// Course Detail Page Import
-import CourseDetailPage from './pages/academic/CourseDetailPage';
-// Attendance Page Import
-import AttendancePage from './pages/academic/AttendancePage';
-// Component Preview Page Import
-import ComponentPreviewPage from './pages/ComponentPreviewPage';
-// Form Best Practices Page Import
-import FormBestPracticesPage from './pages/FormBestPracticesPage';
 // Settings Page Import
 import SettingsPage from './pages/SettingsPage';
-// Sub-Institution Management Page Imports
-import SubInstitutionListPage from './pages/admin/SubInstitutionListPage';
-import AddEditSubInstitutionPage from './pages/admin/AddEditSubInstitutionPage';
+
+// Atomic Design Demo Pages
+import AtomsPage from './pages/design_system/AtomsPage';
+import MoleculesPage from './pages/design_system/MoleculesPage';
+import OrganismsPage from './pages/design_system/OrganismsPage';
+
 import { fontWeightOptions } from './data/fonts'; // Import fontWeightOptions
 import { fontSizeOptions } from './themes'; // Import fontSizeOptions from themes
-import { Link } from 'react-router-dom';
-import AttendanceDashboardPage from './pages/AttendanceDashboardPage';
+import { Link } from 'react-router-dom'; // Keep for UtilitySidebar
 
 import styles from './App.module.scss';
 import './App.css';
@@ -483,91 +439,13 @@ function App() {
            )}
           <main className={styles.pageBody}>
             <Routes>
-              <Route path="/" element={<DashboardPage />} />
-              {/* <Route path="/add" element={<AddEditForm />} /> */} {/* Removed orphaned route */}
-              <Route path="/edit/:id" element={<AddEditForm />} />
-
-              {/* SIS Page Routes */}
-              <Route path="/students" element={<StudentListPage />} />
-              <Route path="/students/new" element={<AddEditStudentPage />} />
-              <Route path="/students/edit/:studentId" element={<AddEditStudentPage />} />
-              <Route path="/staff" element={<StaffListPage />} />
-              <Route path="/staff/new" element={<AddEditStaffPage />} />
-              <Route path="/staff/edit/:staffId" element={<AddEditStaffPage />} />
-              <Route path="/courses" element={<CourseListPage />} />
-              <Route path="/courses/new" element={<AddEditCoursePage />} />
-              <Route path="/courses/edit/:courseId" element={<AddEditCoursePage />} />
-              <Route path="/courses/:courseId" element={<CourseDetailPage />} /> {/* Added this route */}
-              <Route path="/academic/attendance" element={<AttendancePage />} /> {/* Added AttendancePage Route */}
-              <Route path="/grades" element={<GradebookPage />} />
-              {/* <Route path="/admissions" element={<AdmissionsPage />} /> */} {/* Route removed */}
-              {/* <Route path="/billing" element={<BillingPage />} /> */} {/* Route removed */}
-              {/* <Route path="/reports" element={<ReportsPage />} /> */} {/* Route removed */}
-              {/* <Route path="/profile" element={<UserProfilePage />} /> */} {/* Route removed */}
+              <Route path="/" element={<Navigate replace to="/design/atoms" />} /> {/* Default route */}
               <Route path="/settings" element={<SettingsPage />} />
-
-              {/* Faculty Management Routes */}
-              <Route path="/admin/faculty" element={<FacultyListPage />} />
-              <Route path="/admin/faculty/new" element={<AddEditFacultyPage />} />
-              <Route path="/admin/faculty/edit/:facultyId" element={<AddEditFacultyPage />} />
-              <Route path="/faculty/:facultyId" element={<FacultyProfilePage />} />
-
-              {/* Program Management Routes */}
-              <Route path="/admin/programs" element={<ProgramListPage />} />
-              <Route path="/admin/programs/new" element={<AddEditProgramPage />} />
-              <Route path="/admin/programs/edit/:programId" element={<AddEditProgramPage />} />
-
-              {/* Semester Management Routes */}
-              <Route path="/admin/semesters" element={<SemesterListPage />} />
-              <Route path="/admin/semesters/new" element={<AddEditSemesterPage />} />
-              <Route path="/admin/semesters/edit/:semesterId" element={<AddEditSemesterPage />} />
-
-              {/* Master Data Management Routes */}
-              <Route path="/admin/masterdata/departments" element={<DepartmentListPage />} />
-              <Route path="/admin/masterdata/departments/new" element={<AddEditDepartmentPage />} />
-              <Route path="/admin/masterdata/departments/edit/:departmentId" element={<AddEditDepartmentPage />} />
-
-              {/* Financial Year Management Routes */}
-              <Route path="/admin/financialyears" element={<FinancialYearListPage />} />
-              <Route path="/admin/financialyears/new" element={<AddEditFinancialYearPage />} />
-              <Route path="/admin/financialyears/edit/:financialYearId" element={<AddEditFinancialYearPage />} />
-
-              {/* Application Form Field Management Routes */}
-              <Route path="/admin/admissions/formfields" element={<AppFormFieldListPage />} />
-              <Route path="/admin/admissions/formfields/new" element={<AddEditAppFormFieldPage />} />
-              <Route path="/admin/admissions/formfields/edit/:fieldId" element={<AddEditAppFormFieldPage />} />
-
-              {/* Application Submission Tracking Routes */}
-              <Route path="/admissions/applications" element={<ApplicationListPage />} />
-              <Route path="/admissions/applications/view/:applicationId" element={<ViewApplicationPage />} />
-
-              {/* Organizational Hierarchy Management Routes */}
-              <Route path="/admin/organisation/hierarchy" element={<OrgHierarchyPage />} />
-              <Route path="/admin/organisation/hierarchy/new" element={<AddEditOrgHierarchyNodePage />} />
-              <Route path="/admin/organisation/hierarchy/edit/:nodeId" element={<AddEditOrgHierarchyNodePage />} />
-
-              {/* Examination Schedule Management Routes */}
-              <Route path="/academic/examschedules" element={<ExamScheduleListPage />} />
-              <Route path="/academic/examschedules/new" element={<AddEditExamSchedulePage />} />
-              <Route path="/academic/examschedules/edit/:scheduleId" element={<AddEditExamSchedulePage />} />
-
-              {/* Sub-Institution Management Routes */}
-              <Route path="/admin/sub-institutions" element={<SubInstitutionListPage />} />
-              <Route path="/admin/sub-institutions/new" element={<AddEditSubInstitutionPage />} />
-              <Route path="/admin/sub-institutions/edit/:subInstId" element={<AddEditSubInstitutionPage isEdit={true} />} />
-
-              {/* Component Preview Page Route */}
-              <Route path="/component-preview" element={<ComponentPreviewPage />} />
-
-              {/* Form Best Practices Page Route */}
-              <Route path="/form-best-practices" element={<FormBestPracticesPage />} />
-
-              {/* Additional utility routes */}
-              {/* <Route path="/feedback" element={<div>Feedback Page - Coming Soon</div>} /> */} {/* Route removed */}
-              {/* <Route path="/tutorial" element={<div>Tutorial Page - Coming Soon</div>} /> */} {/* Route removed */}
-              {/* <Route path="/manual" element={<div>User Manual Page - Coming Soon</div>} /> */} {/* Route removed */}
-              <Route path="/logout" element={<div>Logout Page - Coming Soon</div>} />
-              <Route path="/academic/attendance-dashboard" element={<AttendanceDashboardPage />} />
+              <Route path="/design/atoms" element={<AtomsPage />} />
+              <Route path="/design/molecules" element={<MoleculesPage />} />
+              <Route path="/design/organisms" element={<OrganismsPage />} />
+              {/* Add other minimal essential routes if any, e.g., a 404 page */}
+              {/* <Route path="*" element={<NotFoundPage />} /> */}
             </Routes>
           </main>
         </div>

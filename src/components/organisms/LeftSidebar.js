@@ -11,17 +11,13 @@ import { ThemeContext } from '../../App'; // Import ThemeContext
 const LeftSidebar = () => {
   // const navigate = useNavigate(); // Not used
   const { currentUserRole, setCurrentUserRole, USER_ROLES, customLogoUrl } = useContext(ThemeContext);
-  const [activeKey, setActiveKey] = useState('dashboard'); // To track active link
+  const [activeKey, setActiveKey] = useState('atoms'); // Default to atoms page
   const [searchTerm, setSearchTerm] = useState('');
 
   // State for collapsible Level 1 groups
   const [openGroups, setOpenGroups] = useState({
-    academics: true, // Example: Keep academics open by default
-    administration: false,
-    finance: false,
-    facilities: false,
-    studentServices: false,
-    helpAndResources: false, // Add new group here, default to closed
+    designSystem: true, // Default new group to open
+    settings: true,     // Default new group to open
   });
   // State for collapsible Level 2 submenus
   const [openSubmenus, setOpenSubmenus] = useState({}); // Track expanded L2 items by eventKey
@@ -44,180 +40,54 @@ const LeftSidebar = () => {
   // Using Material Symbols
   const Icon = ({ name, className = '' }) => <span className={`material-symbols-outlined ${className}`}>{name}</span>;
 
-  // Grouping navigation items logically with paths - memoized to prevent infinite re-renders
+  // Grouping navigation items logically with paths - memoized
   const navGroups = useMemo(() => ({
     topLevel: [
-      { eventKey: 'dashboard', icon: 'dashboard', label: 'Dashboard', path: '/' },
-      // UserProfilePage link removed from here if it existed
+      // No top-level items for now. Default route is to /design/atoms.
+      // { eventKey: 'atoms', icon: 'home', label: 'Home (Atoms)', path: '/design/atoms' }, // Example if a "home" link is desired
     ],
-    academics: {
-      title: 'Academics',
+    designSystem: {
+      title: 'Design System',
       items: [
-        {
-          eventKey: 'courses', icon: 'menu_book', label: 'Courses', path: '/courses',
-          // Assuming courses list is viewable by all, but management is admin/teacher
-          children: [
-            { eventKey: 'course_list', label: 'Course List', path: '/courses' }, // All users
-            { eventKey: 'add_course', label: 'Add New Course', path: '/courses/new', roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER] }
-          ]
-        },
-        {
-          eventKey: 'program_mgmt',
-          icon: 'article',
-          label: 'Programs',
-          path: '/admin/programs',
-          roles: [USER_ROLES.ADMIN]
-        },
-        {
-          eventKey: 'semester_mgmt',
-          icon: 'date_range',
-          label: 'Semesters',
-          path: '/admin/semesters',
-          roles: [USER_ROLES.ADMIN]
-        },
-        {
-          eventKey: 'gradebook', icon: 'assessment', label: 'Gradebook', path: '/grades',
-          roles: [USER_ROLES.TEACHER, USER_ROLES.STUDENT] // Teachers manage, Students view their own
-        },
-        // { eventKey: 'assignment_student', icon: 'assignment', label: 'My Assignments', path: '/assignments', roles: [USER_ROLES.STUDENT] }, // Removed
-        // { eventKey: 'assignment_teacher', icon: 'assignment_turned_in', label: 'Manage Assignments', path: '/assignments/manage', roles: [USER_ROLES.TEACHER] }, // Removed
-        {
-          eventKey: 'exam_schedules',
-          icon: 'event_note', // Example icon
-          label: 'Exam Schedules',
-          path: '/academic/examschedules',
-          roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER]
-        },
-        {
-          eventKey: 'attendance',
-          icon: 'rule_folder', // Using rule_folder as an example icon
-          label: 'Attendance',
-          path: '/academic/attendance', // Path matches the route set in App.js
-          roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER] // Assuming Admin and Teacher can access
-        },
-        {
-          eventKey: 'attendance_dashboard',
-          icon: 'insights',
-          label: 'Attendance Dashboard',
-          path: '/academic/attendance-dashboard',
-          roles: [USER_ROLES.ADMIN, USER_ROLES.TEACHER]
-        },
+        { eventKey: 'atoms', icon: 'grain', label: 'Atoms', path: '/design/atoms' },
+        { eventKey: 'molecules', icon: 'category', label: 'Molecules', path: '/design/molecules' },
+        { eventKey: 'organisms', icon: 'view_quilt', label: 'Organisms', path: '/design/organisms' },
       ]
+      // No roles needed for these pages currently
     },
-    administration: {
-      title: 'Administration',
+    settings: {
+      title: 'Application',
       items: [
-         {
-           eventKey: 'admissions_group',
-           icon: 'confirmation_number',
-           label: 'Admissions',
-           // path attribute removed, making this a non-navigable group header
-           roles: [USER_ROLES.ADMIN],
-           children: [
-             // { eventKey: 'admissions_dashboard', label: 'Admissions Overview', path: '/admissions', roles: [USER_ROLES.ADMIN] }, // Link to existing page - REMOVED
-             { eventKey: 'app_form_fields', label: 'Form Fields Config', path: '/admin/admissions/formfields', roles: [USER_ROLES.ADMIN] },
-             {
-               eventKey: 'submitted_applications', // This child and its path are kept
-               label: 'Submitted Applications',
-               path: '/admissions/applications',
-               roles: [USER_ROLES.ADMIN]
-             }
-           ]
-         },
-         {
-           eventKey: 'students', icon: 'school', label: 'Students', path: '/students', roles: [USER_ROLES.ADMIN],
-           children: [
-             { eventKey: 'student_list', label: 'Student List', path: '/students', roles: [USER_ROLES.ADMIN]},
-             { eventKey: 'add_student', label: 'Add New Student', path: '/students/new', roles: [USER_ROLES.ADMIN]}
-           ]
-         },
-         {
-           eventKey: 'staff', icon: 'groups', label: 'Staff', path: '/staff', roles: [USER_ROLES.ADMIN],
-           children: [
-             { eventKey: 'staff_list', label: 'Staff List', path: '/staff', roles: [USER_ROLES.ADMIN]},
-             { eventKey: 'add_staff', label: 'Add New Staff', path: '/staff/new', roles: [USER_ROLES.ADMIN]}
-           ]
-         },
-         {
-           eventKey: 'faculty_mgmt',
-           icon: 'supervisor_account',
-           label: 'Faculty',
-           path: '/admin/faculty',
-           roles: [USER_ROLES.ADMIN]
-         },
-         // { eventKey: 'reports', icon: 'analytics', label: 'Reports', path: '/reports', roles: [USER_ROLES.ADMIN] }, // Reports link removed
-         {
-           eventKey: 'department_mgmt',
-           icon: 'corporate_fare', // Example icon
-           label: 'Departments',
-           path: '/admin/masterdata/departments',
-           roles: [USER_ROLES.ADMIN] // Assuming Admin role
-         },
-         {
-           eventKey: 'org_hierarchy',
-           icon: 'account_tree', // Example icon
-           label: 'Org Hierarchy',
-           path: '/admin/organisation/hierarchy',
-           roles: [USER_ROLES.ADMIN]
-         },
-         {
-           eventKey: 'component_preview',
-           icon: 'science',
-           label: 'Component Preview',
-           path: '/component-preview',
-           roles: [USER_ROLES.ADMIN]
-         }, // Added Component Preview link
-         {
-          eventKey: 'sub_institution_mgmt',
-          icon: 'domain_add', 
-          label: 'Sub-Institutions',
-          path: '/admin/sub-institutions', 
-          roles: [USER_ROLES.ADMIN]
-        }
+        { eventKey: 'settings', icon: 'settings', label: 'Theme Settings', path: '/settings' },
       ]
-    },
-     finance: {
-      title: 'Finance',
-      items: [
-        // { eventKey: 'billing', icon: 'payments', label: 'Billing', path: '/billing', roles: [USER_ROLES.ADMIN, USER_ROLES.STUDENT] }, // Billing link removed
-        {
-          eventKey: 'financial_year_mgmt',
-          icon: 'account_balance_wallet',
-          label: 'Financial Years',
-          path: '/admin/financialyears',
-          roles: [USER_ROLES.ADMIN]
-        }
-      ]
-    },
-    // Removed facilities and studentServices for brevity in example, can be added back similarly
-    helpAndResources: { // Added Help & Resources group
-      title: 'Help & Resources',
-      items: [
-        { eventKey: 'feedback', icon: 'feedback', label: 'Feedback', path: '/feedback' },
-        { eventKey: 'tutorial', icon: 'integration_instructions', label: 'Tutorial', path: '/tutorial' },
-        { eventKey: 'manual', icon: 'library_books', label: 'User Manual', path: '/manual' }, // This will be removed by removing the whole group
-      ]
+      // No roles needed for settings page currently
     }
-    // Help & Resources group will be removed entirely in a subsequent diff block
-  }), [USER_ROLES]);
+  }), [/* USER_ROLES */]); // USER_ROLES can be removed if not used by any nav items
 
   // Filter logic based on role and search term
-  // Initialize openGroups based on all group keys to ensure new groups are considered
+  // Initialize openGroups based on all group keys from the new navGroups
   useEffect(() => {
-    const initialOpenGroupsState = { ...openGroups }; // Start with current open groups
+    const initialOpenGroupsState = {};
     let changed = false;
     Object.keys(navGroups).forEach(key => {
-      if (key !== 'topLevel' && initialOpenGroupsState[key] === undefined) {
-        // Default new groups to false, keep existing or default 'academics' to true
-        initialOpenGroupsState[key] = (key === 'academics'); // Default academics to open, others to closed
-        changed = true;
+      if (key !== 'topLevel') { // Process only grouped items
+        if (openGroups[key] === undefined) { // If group not in current state
+          initialOpenGroupsState[key] = true; // Default new groups to open
+          changed = true;
+        } else {
+          initialOpenGroupsState[key] = openGroups[key]; // Keep existing state
+        }
       }
     });
     if (changed) {
-      setOpenGroups(initialOpenGroupsState);
+      // Ensure we only update if there's a structural need, not just re-affirming existing state
+      // This check might be redundant if `changed` already covers it well.
+      if (JSON.stringify(openGroups) !== JSON.stringify(initialOpenGroupsState)) {
+         setOpenGroups(initialOpenGroupsState);
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navGroups]);
+  }, [navGroups]); // Only run when navGroups definition changes
 
 
   const [filteredNavGroups, setFilteredNavGroups] = useState({ topLevel: [], grouped: [] });
@@ -225,60 +95,27 @@ const LeftSidebar = () => {
   useEffect(() => {
     const lowerSearch = searchTerm.toLowerCase();
 
-    const availableNavGroups = { ...navGroups };
-    // Remove 'helpAndResources' group before filtering if it exists
-    // This ensures it's completely gone from processing
-    if (availableNavGroups.helpAndResources) {
-      delete availableNavGroups.helpAndResources;
-    }
-    // Also remove if any topLevel item pointed to /profile
-    const newTopLevelNav = availableNavGroups.topLevel ? availableNavGroups.topLevel.filter(item => item.path !== '/profile') : [];
-
-
-    let newTopLevel = newTopLevelNav.filter(item =>
-      (!item.roles || item.roles.includes(currentUserRole)) &&
+    // Filter topLevel items
+    let newTopLevel = (navGroups.topLevel || []).filter(item =>
       item.label.toLowerCase().includes(lowerSearch)
+      // Add role check if any topLevel items have roles: && (!item.roles || item.roles.includes(currentUserRole))
     );
 
-    let newGrouped = Object.entries(availableNavGroups)
-      .filter(([key]) => key !== 'topLevel' && key !== 'helpAndResources') // Explicitly filter out helpAndResources here too
+    // Filter grouped items
+    let newGrouped = Object.entries(navGroups)
+      .filter(([key]) => key !== 'topLevel')
       .map(([groupKey, groupData]) => {
-        if (groupData.roles && !groupData.roles.includes(currentUserRole)) {
-          return null;
-        }
+        // Add group-level role check if necessary: if (groupData.roles && !groupData.roles.includes(currentUserRole)) return null;
+
         const filteredItems = groupData.items.reduce((acc, item) => {
-          if (item.roles && !item.roles.includes(currentUserRole)) {
-            return acc;
-          }
-          // Remove specific paths if they are being deleted
-          if (item.path === '/admissions' || item.path === '/billing' || item.path === '/reports') {
-              // If item has children, keep the item but remove its path, making it a toggle only
-              if (item.children && item.children.length > 0) {
-                  const itemWithoutPath = { ...item };
-                  delete itemWithoutPath.path;
-                  // Now check if children or label match search
-                  if (itemWithoutPath.label.toLowerCase().includes(lowerSearch)) {
-                      acc.push(itemWithoutPath);
-                  } else {
-                      const filteredChildren = itemWithoutPath.children.filter(child =>
-                          (!child.roles || child.roles.includes(currentUserRole)) &&
-                          child.label.toLowerCase().includes(lowerSearch)
-                      );
-                      if (filteredChildren.length > 0) {
-                          acc.push({ ...itemWithoutPath, children: filteredChildren });
-                      }
-                  }
-                  return acc;
-              }
-              return acc; // If no children, remove the item entirely
-          }
+          // Add item-level role check if necessary: if (item.roles && !item.roles.includes(currentUserRole)) return acc;
 
           if (item.label.toLowerCase().includes(lowerSearch)) {
             acc.push(item);
-          } else if (item.children) {
+          } else if (item.children) { // If item itself doesn't match, check children
             const filteredChildren = item.children.filter(child =>
-              (!child.roles || child.roles.includes(currentUserRole)) &&
               child.label.toLowerCase().includes(lowerSearch)
+              // Add child-level role check: && (!child.roles || child.roles.includes(currentUserRole))
             );
             if (filteredChildren.length > 0) {
               acc.push({ ...item, children: filteredChildren });
@@ -292,22 +129,24 @@ const LeftSidebar = () => {
 
     setFilteredNavGroups({ topLevel: newTopLevel, grouped: newGrouped });
 
+    // Auto-expand groups if searching and items are found
     if (searchTerm) {
       const allOpen = {};
       newGrouped.forEach(([key]) => allOpen[key] = true);
-      setOpenGroups(prev => ({ ...prev, ...allOpen }));
+      setOpenGroups(prev => ({ ...prev, ...allOpen })); // Merge with previous to keep user's non-searched group states
+
       const openSubs = {};
       newGrouped.forEach(([, groupData]) => {
         groupData.items.forEach(item => {
-          if (item.children && item.children.length > 0) {
+          if (item.children && item.children.length > 0 &&
+              (item.label.toLowerCase().includes(lowerSearch) || item.children.some(c => c.label.toLowerCase().includes(lowerSearch)))) {
             openSubs[item.eventKey] = true;
           }
         });
       });
       setOpenSubmenus(prev => ({ ...prev, ...openSubs }));
     }
-
-  }, [currentUserRole, searchTerm, navGroups]);
+  }, [currentUserRole, searchTerm, navGroups]); // currentUserRole might be removed if not used for filtering
 
 
   // Filter logic

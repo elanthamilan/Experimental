@@ -1,0 +1,24 @@
+/* Shared styles for Atomic Design demo pages */
+.pageContainer {
+  padding: 20px;
+}
+
+.pageHeader {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--theme-border-color, #dee2e6); /* Fallback color */
+}
+
+.pageTitle {
+  font-size: var(--theme-font-pagetitle-size, 2rem); /* Use theme variable with fallback */
+  font-weight: var(--theme-font-pagetitle-weight, 600); /* Use theme variable with fallback */
+  color: var(--theme-text-color-primary, #212529); /* Fallback color */
+}
+
+.content {
+  background-color: var(--theme-card-bg, #ffffff); /* Fallback color */
+  padding: 20px;
+  border-radius: var(--theme-border-radius-base, 0.25rem); /* Fallback value */
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  color: var(--theme-text-color-secondary, #495057); /* Fallback color */
+}
