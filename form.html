@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Example</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Student Registration</h1>
+    <form action="/submit_registration" method="post">
+        <fieldset>
+            <legend>Personal Information</legend>
+            <div>
+                <label for="studentId">Student ID:</label>
+                <input type="text" id="studentId" name="studentId" aria-required="true" aria-describedby="studentIdError">
+                <span id="studentIdError" class="error-message" style="display:none;"></span>
+            </div>
+            <div>
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" aria-required="true" aria-describedby="fullNameError">
+                <span id="fullNameError" class="error-message" style="display:none;"></span>
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" aria-required="true" aria-describedby="emailError emailHint">
+                <span id="emailHint" class="hint-message">Please enter a valid email address.</span>
+                <span id="emailError" class="error-message" style="display:none;"></span>
+            </div>
+            <div>
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" aria-required="true" aria-describedby="dobError">
+                <span id="dobError" class="error-message" style="display:none;"></span>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Course Information</legend>
+            <div>
+                <label for="course">Course:</label>
+                <select id="course" name="course" aria-required="true" aria-describedby="courseError">
+                    <option value="">Select a course</option>
+                    <option value="math">Mathematics</option>
+                    <option value="physics">Physics</option>
+                    <option value="chemistry">Chemistry</option>
+                    <option value="cs">Computer Science</option>
+                </select>
+                <span id="courseError" class="error-message" style="display:none;"></span>
+            </div>
+            <div>
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="4" aria-describedby="commentsHint"></textarea>
+                <span id="commentsHint" class="hint-message">Any additional comments (optional).</span>
+            </div>
+        </fieldset>
+
+        <div>
+            <button type="submit">Register</button>
+            <button type="reset">Clear Form</button>
+        </div>
+    </form>
+
+    <script>
+        // Basic form validation example (client-side)
+        document.querySelector('form').addEventListener('submit', function(event) {
+            let isValid = true;
+            const fields = [
+                {id: 'studentId', errorId: 'studentIdError', required: true},
+                {id: 'fullName', errorId: 'fullNameError', required: true},
+                {id: 'email', errorId: 'emailError', required: true, type: 'email'},
+                {id: 'dob', errorId: 'dobError', required: true},
+                {id: 'course', errorId: 'courseError', required: true}
+            ];
+
+            fields.forEach(field => {
+                const inputElement = document.getElementById(field.id);
+                const errorElement = document.getElementById(field.errorId);
+                errorElement.style.display = 'none'; // Reset error message
+
+                if (field.required && !inputElement.value.trim()) {
+                    errorElement.textContent = `${inputElement.labels[0].textContent.replace(':','')} is required.`;
+                    errorElement.style.display = 'block';
+                    inputElement.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else if (field.type === 'email' && !/^\S+@\S+\.\S+$/.test(inputElement.value)) {
+                    errorElement.textContent = `A valid Email is required.`;
+                    errorElement.style.display = 'block';
+                    inputElement.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                } else {
+                    inputElement.removeAttribute('aria-invalid');
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault(); // Prevent form submission if validation fails
+                // Focus the first invalid field
+                const firstInvalidField = document.querySelector('[aria-invalid="true"]');
+                if (firstInvalidField) {
+                    firstInvalidField.focus();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
