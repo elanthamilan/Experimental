@@ -128,9 +128,9 @@ const FormField = ({
         isInvalid={isInvalid}
         // Feedback for StyledFormCheck is usually handled by its own structure or a wrapping error message.
         // For simplicity, FormField's main feedback will describe it.
-        'aria-describedby': describedByIds, // Allow FormField's help/error text to describe it
-        'aria-required': required || undefined,
-        'aria-invalid': isInvalid || undefined,
+        aria-describedby={describedByIds} // Allow FormField's help/error text to describe it
+        aria-required={required || undefined}
+        aria-invalid={isInvalid || undefined}
         // aria-label and aria-labelledby would typically be for the StyledFormCheck's own label if it's visually hidden
         ...props
       />
