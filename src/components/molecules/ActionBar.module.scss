@@ -1,0 +1,32 @@
+/* ActionBar.module.scss */
+.actionBarBase {
+  display: flex;
+  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+  padding: var(--theme-spacing-md, 1rem) 0; /* Vertical padding, no horizontal by default */
+}
+
+/* Alignment */
+.alignment-start {
+  justify-content: flex-start;
+}
+
+.alignment-center {
+  justify-content: center;
+}
+
+.alignment-end {
+  justify-content: flex-end;
+}
+
+/* Spacing (gap between items) */
+.spacing-sm {
+  gap: var(--theme-spacing-sm, 0.5rem);
+}
+
+.spacing-md {
+  gap: var(--theme-spacing-md, 1rem);
+}
+
+.spacing-lg {
+  gap: var(--theme-spacing-lg, 1.5rem);
+}

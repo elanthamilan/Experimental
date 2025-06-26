@@ -1,0 +1,58 @@
+/* PageHeader.module.scss */
+.pageHeaderBase {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Align items to the start, title might be taller */
+  padding: var(--theme-spacing-md, 1rem) 0;
+  margin-bottom: var(--theme-spacing-lg, 1.5rem);
+  border-bottom: 1px solid var(--theme-border-color, #dee2e6);
+  gap: var(--theme-spacing-md, 1rem); /* Gap between title section and actions */
+}
+
+.titleSection {
+  flex-grow: 1;
+}
+
+.breadcrumbs {
+  margin-bottom: var(--theme-spacing-xs, 0.25rem);
+  font-size: var(--theme-font-size-sm, 0.875rem);
+}
+
+.title {
+  font-size: var(--theme-font-pagetitle-size, 2rem); /* Use theme variable for page titles */
+  font-weight: var(--theme-font-pagetitle-weight, 600);
+  color: var(--theme-text-color-headings, inherit); /* Use a specific heading color or inherit */
+  margin: 0; /* Reset default heading margin */
+  line-height: 1.2;
+}
+
+.actionsSection {
+  flex-shrink: 0; /* Prevent actions from shrinking too much */
+  display: flex;
+  align-items: center; /* Align items in the action bar if it's also flex */
+
+  /* Example: If actionsSection directly contains buttons, add gap */
+  // gap: var(--theme-spacing-sm, 0.5rem);
+  // If using ActionBar component inside, it will handle its own item spacing.
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) { // Corresponds to Bootstrap's 'md' breakpoint approx.
+  .pageHeaderBase {
+    flex-direction: column;
+    align-items: stretch; /* Stretch items to full width on mobile */
+  }
+
+  .titleSection {
+    margin-bottom: var(--theme-spacing-md, 1rem); /* Add space between title and actions on mobile */
+  }
+
+  .actionsSection {
+    align-self: flex-start; /* Align actions to the start on mobile */
+    width: 100%; /* Make actions take full width if they contain multiple buttons */
+
+    > * { /* If actionsSection contains an ActionBar or similar flex container */
+      justify-content: flex-start !important; /* Override ActionBar's alignment on mobile if needed */
+    }
+  }
+}

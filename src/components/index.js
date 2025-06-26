@@ -60,6 +60,8 @@ export { default as StyledBreadcrumb } from './molecules/StyledBreadcrumb'; // A
 // export { default as Toolbar } from './molecules/Toolbar'; // Removed as unused
 // export { default as ProductTableRow } from './molecules/ProductTableRow'; // Removed as unused
 export { default as ListControlsToolbar } from './molecules/ListControlsToolbar'; // Added ListControlsToolbar
+export { default as ActionBar } from './molecules/ActionBar'; // Added ActionBar
+export { default as PageHeader } from './molecules/PageHeader'; // Added PageHeader
 
 // ===== ORGANISMS =====
 // Complex components made of molecules and atoms
