@@ -1,4 +1,4 @@
-import React, { useId } from 'react'; // Added useId for unique ID generation
+import React, { useId } from 'react'; // Add forwardRef
 import styles from './StyledFormCheck.module.scss';
 
 /**
@@ -6,16 +6,19 @@ import styles from './StyledFormCheck.module.scss';
  * Applies consistent styling from SCSS module.
  * Renders as a native HTML structure.
  */
-const StyledFormCheck = ({
-  className = '',
-  type = 'checkbox', // Default to checkbox if no type is provided
-  label,
-  id,
-  isInvalid,
-  feedback,
-  feedbackType,
-  ...props
-}) => {
+const StyledFormCheck = React.forwardRef(( // Wrap with React.forwardRef
+  {
+    className = '',
+    type = 'checkbox', // Default to checkbox if no type is provided
+    label,
+    id,
+    isInvalid,
+    feedback,
+    feedbackType,
+    ...props
+  },
+  ref // Add ref as the second argument
+) => {
   const generatedId = useId(); // React hook for generating unique IDs
   const finalId = id || generatedId;
 
@@ -34,6 +37,7 @@ const StyledFormCheck = ({
         type={actualInputType}
         id={finalId}
         className={styles.formCheckInput}
+        ref={ref} // Apply the ref to the input element
         {...props} // Spread other props like name, value, checked, onChange, disabled, etc.
       />
       {label && ( // Render label only if provided
@@ -53,6 +57,6 @@ const StyledFormCheck = ({
       */}
     </div>
   );
-};
+});
 
 export default StyledFormCheck;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; // Add forwardRef
 import styles from './StyledButton.module.scss';
 
 /**
@@ -15,16 +15,19 @@ import styles from './StyledButton.module.scss';
  * - type: Button type attribute (e.g., 'button', 'submit', 'reset'), defaults to 'button' if not an <a> tag.
  * - Other props are passed down to the underlying HTML <button> or <a> element.
  */
-const StyledButton = ({
-  variant = 'primary',
-  tooltipText,
-  tooltipPlacement = 'top',
-  children,
-  className = '',
-  href,
-  type,
-  ...props
-}) => {
+const StyledButton = React.forwardRef(( // Wrap with React.forwardRef
+  {
+    variant = 'primary',
+    tooltipText,
+    tooltipPlacement = 'top',
+    children,
+    className = '',
+    href,
+    type,
+    ...props
+  },
+  ref // Add ref as the second argument
+) => {
   const buttonClass = styles[`button-${variant}`] || styles['button-primary'];
   const combinedClassName = `${styles.buttonBase} ${buttonClass} ${className}`.trim();
 
@@ -41,6 +44,7 @@ const StyledButton = ({
       <a
         href={href}
         role="button" // Accessibility: indicate it's interactive like a button
+        ref={ref} // Apply the ref to the anchor tag
         {...tooltipAttributes}
         {...props} // Spread other props like onClick, disabled, etc.
       >
@@ -53,12 +57,13 @@ const StyledButton = ({
   return (
     <button
       type={type || 'button'}
+      ref={ref} // Apply the ref to the button tag
       {...tooltipAttributes}
       {...props} // Spread other props like onClick, disabled, etc.
     >
       {children}
     </button>
   );
-};
+});
 
 export default StyledButton;

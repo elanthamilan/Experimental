@@ -5,7 +5,7 @@ import StyledContainer from '../atoms/StyledContainer';
 import StyledTable from '../atoms/StyledTable';
 import StyledButton from '../atoms/StyledButton';
 import StyledFormCheck from '../atoms/StyledFormCheck';
-import StyledBadge from '../atoms/StyledBadge';
+// import StyledBadge from '../atoms/StyledBadge'; // Removed as unused
 import StyledFormControl from '../atoms/StyledFormControl';
 import StyledFormSelect from '../atoms/StyledFormSelect';
 import SearchInput from '../molecules/SearchInput';
@@ -457,18 +457,18 @@ const ResultsTable = ({
   }
 
 
-  // Add filtering logic based on activeFilter
-  const filteredData = data.filter(item => {
-    if (!showFilterTabs || activeFilter === 'All' || !item.hasOwnProperty('status')) {
-      return true; // Show all if tabs are hidden, 'All' is selected, or item has no status
-    }
-    // The following assumes a 'status' field in data.
-    if (activeFilter === 'Pending') return item.status === 'PENDING';
-    if (activeFilter === 'Verified') return item.status === 'VERIFIED';
-    if (activeFilter === 'Finalized') return item.status === 'FINALIZED';
-    if (activeFilter === 'Published to portal') return item.status === 'PUBLISHED';
-    return true;
-  });
+  // Add filtering logic based on activeFilter (This variable `filteredData` was unused, logic moved or handled by `processedItemsResult`)
+  // const filteredData = data.filter(item => {
+  //   if (!showFilterTabs || activeFilter === 'All' || !item.hasOwnProperty('status')) {
+  //     return true; // Show all if tabs are hidden, 'All' is selected, or item has no status
+  //   }
+  //   // The following assumes a 'status' field in data.
+  //   if (activeFilter === 'Pending') return item.status === 'PENDING';
+  //   if (activeFilter === 'Verified') return item.status === 'VERIFIED';
+  //   if (activeFilter === 'Finalized') return item.status === 'FINALIZED';
+  //   if (activeFilter === 'Published to portal') return item.status === 'PUBLISHED';
+  //   return true;
+  // });
 
   const handlePageChange = (pageNumber) => {
     // Reset to page 1 if filter changes? Optional.
@@ -562,6 +562,7 @@ const ResultsTable = ({
             {showSearch && (
               <SearchInput
                 placeholder="Search all"
+                ariaLabel="Search all items in table" // Added ariaLabel
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className={styles.searchInput}
@@ -690,11 +691,12 @@ const ResultsTable = ({
       >
         <thead>
           <tr>
-            <th>
+            <th scope="col" aria-label="Select all rows">
               <StyledFormCheck // Use StyledFormCheck
                 type="checkbox"
                 ref={headerCheckboxRef} // Set ref - Note: Forwarding ref might be needed in StyledFormCheck if not already done
                 onChange={handleSelectAll}
+                aria-label="Select all items on this page" // Label for the checkbox itself
                 // Checked and indeterminate state managed by useEffect
               />
             </th>
@@ -765,6 +767,7 @@ const ResultsTable = ({
                           value={currentPopoverFilterValue}
                           onChange={(e) => setCurrentPopoverFilterValue(e.target.value)}
                           placeholder={`Filter ${columnBeingFiltered?.headerContent || ''}...`}
+                          aria-label={`Filter by ${columnBeingFiltered?.headerContent || 'column'}`}
                           size="sm"
                         />
                       )}
@@ -774,6 +777,7 @@ const ResultsTable = ({
                           value={currentPopoverFilterValue}
                           onChange={(e) => setCurrentPopoverFilterValue(e.target.value)}
                           placeholder={`Filter ${columnBeingFiltered?.headerContent || ''}...`}
+                          aria-label={`Filter by ${columnBeingFiltered?.headerContent || 'column'}`}
                           size="sm"
                         />
                       )}
@@ -783,6 +787,7 @@ const ResultsTable = ({
                           value={currentPopoverFilterValue}
                           onChange={(e) => setCurrentPopoverFilterValue(e.target.value)}
                           placeholder={`Filter ${columnBeingFiltered?.headerContent || ''} (e.g., YYYY-MM-DD)...`}
+                          aria-label={`Filter by ${columnBeingFiltered?.headerContent || 'column'}`}
                           size="sm"
                         />
                       )}
@@ -835,22 +840,30 @@ const ResultsTable = ({
           />
 
           <div className={styles.pageInputControls}>
-            <span>Page</span>
+            <label htmlFor="results-table-current-page-input" className={styles.pageInputLabel}>Page</label>
             {/* Use StyledFormControl */}
             <StyledFormControl
               type="number"
+              id="results-table-current-page-input" // Added id
               value={currentPage}
               onChange={(e) => handlePageChange(Math.max(1, Math.min(totalPages, Number(e.target.value))))}
               className={styles.pageInput}
               min="1"
               max={totalPages}
               size="sm"
+              aria-describedby="results-table-total-pages" // Describe relationship with total pages
             />
-            <span>of <span className={styles.totalPagesLink}>{totalPages}</span></span>
+            <span id="results-table-total-pages">of <span className={styles.totalPagesLink}>{totalPages}</span></span>
           </div>
 
           {/* Use StyledFormSelect */}
-          <StyledFormSelect size="sm" className={styles.itemsPerPageSelect} value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))}>
+          <StyledFormSelect
+            size="sm"
+            className={styles.itemsPerPageSelect}
+            value={itemsPerPage}
+            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+            aria-label="Items per page" // Added aria-label
+          >
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>

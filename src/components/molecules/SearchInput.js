@@ -27,6 +27,7 @@ const SearchInput = ({
   variant = 'default',
   disabled = false,
   className = '',
+  ariaLabel, // New prop for accessibility
   ...props
 }) => {
   const inputClass = styles[`search-${variant}`] || styles['search-default'];
@@ -52,6 +53,7 @@ const SearchInput = ({
           onChange={onChange}
           disabled={disabled}
           className={styles.searchInput}
+          aria-label={ariaLabel || placeholder} // Apply aria-label
           {...props}
         />
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import StyledContainer from '../atoms/StyledContainer';
 import StyledRow from '../atoms/StyledRow';
 import StyledCol from '../atoms/StyledCol';
@@ -32,9 +32,9 @@ const AddEditForm = () => {
     productAddType: 'automated', // Basics - Radio group
     // Add more fields as needed
   });
-  const [errors, setErrors] = useState({}); // TODO: Implement validation
-  const [productRows, setProductRows] = useState([{ id: 1, product: '', qty: 1, total: 0 }]); // Example for product table
-  const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
+  // const [errors, setErrors] = useState({}); // TODO: Implement validation
+  // const [productRows, setProductRows] = useState([{ id: 1, product: '', qty: 1, total: 0 }]); // Example for product table
+  // const [uploadedFiles, setUploadedFiles] = useState([]); // State for uploaded files
 
   // --- TODO: Data Fetching (for editing) ---
   // useEffect(() => {
@@ -52,30 +52,31 @@ const AddEditForm = () => {
     }));
   };
 
-  // Product Table Handlers
-  const handleProductChange = (rowId, field, value) => {
-    setProductRows(prevRows =>
-      prevRows.map(row =>
-        row.id === rowId ? { ...row, [field]: value } : row
-      )
-    );
-    // TODO: Recalculate total if needed
-  };
+  // Product Table Handlers (Commented out as ProductTableRow is not used)
+  // const handleProductChange = (rowId, field, value) => {
+  //   setProductRows(prevRows =>
+  //     prevRows.map(row =>
+  //       row.id === rowId ? { ...row, [field]: value } : row
+  //     )
+  //   );
+  //   // TODO: Recalculate total if needed
+  // };
 
   const handleAddProductRow = () => {
-    setProductRows(prevRows => [
-      ...prevRows,
-      { id: Date.now(), product: '', qty: 1, total: 0 } // Use timestamp for unique ID
-    ]);
+    // setProductRows(prevRows => [
+    //   ...prevRows,
+    //   { id: Date.now(), product: '', qty: 1, total: 0 } // Use timestamp for unique ID
+    // ]);
+    console.log('Add product row clicked - functionality to be re-added with ProductTable');
   };
 
-  const handleRemoveProductRow = (rowId) => {
-    setProductRows(prevRows => prevRows.filter(row => row.id !== rowId));
-  };
+  // const handleRemoveProductRow = (rowId) => {
+  //   setProductRows(prevRows => prevRows.filter(row => row.id !== rowId));
+  // };
 
   const handleFilesAccepted = (files) => {
     console.log('Files accepted in AddEditForm:', files);
-    setUploadedFiles(files);
+    // setUploadedFiles(files); // uploadedFiles state is removed for now
     // TODO: Handle actual upload logic or further processing
   };
 

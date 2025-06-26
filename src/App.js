@@ -452,7 +452,9 @@ function App() {
         data-theme={isDarkMode ? 'dark' : 'light'}
       >
         {!isMobile ? (
-           <LeftSidebar />
+           <nav aria-label="Main navigation" className={styles.desktopSidebar}> {/* Landmark */}
+             <LeftSidebar />
+           </nav>
         ) : (
           <StyledOffcanvas
             show={showMobileMenu}
@@ -569,7 +571,11 @@ function App() {
             </Routes>
           </main>
         </div>
-        {!isMobile && <UtilitySidebar />}
+        {!isMobile && (
+          <aside aria-label="Utility tools and user profile" className={styles.utilitySidebarContainer}> {/* Landmark */}
+            <UtilitySidebar />
+          </aside>
+        )}
       </div>
     </ThemeContext.Provider>
   );

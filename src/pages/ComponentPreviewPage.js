@@ -18,9 +18,9 @@ import {
 // import ProductTableRow from '../components/molecules/ProductTableRow'; // Removed direct import
 
 const ComponentPreviewPage = () => {
-  // Mock handlers for ProductTableRow
-  const mockProductChange = (id, field, value) => console.log(`Product ${id} ${field} changed to: ${value}`);
-  const mockRemoveProduct = (id) => console.log(`Product ${id} removed`);
+  // Mock handlers for ProductTableRow (Removed as ProductTableRow is not used)
+  // const mockProductChange = (id, field, value) => console.log(`Product ${id} ${field} changed to: ${value}`);
+  // const mockRemoveProduct = (id) => console.log(`Product ${id} removed`);
 
   return (
     <StyledContainer className={styles.pageContainer}>

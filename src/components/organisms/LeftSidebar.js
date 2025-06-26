@@ -25,8 +25,8 @@ const LeftSidebar = () => {
   });
   // State for collapsible Level 2 submenus
   const [openSubmenus, setOpenSubmenus] = useState({}); // Track expanded L2 items by eventKey
-  // State for collapsible Level 3 sub-submenus
-  const [openSubSubmenus, setOpenSubSubmenus] = useState({}); // Track expanded L3 items by eventKey
+  // State for collapsible Level 3 sub-submenus (Removed as unused)
+  // const [openSubSubmenus, setOpenSubSubmenus] = useState({}); // Track expanded L3 items by eventKey
 
   const toggleGroup = (groupKey) => {
     setOpenGroups(prev => ({ ...prev, [groupKey]: !prev[groupKey] }));
@@ -37,9 +37,9 @@ const LeftSidebar = () => {
     // Optionally collapse deeper levels when a parent is toggled?
   };
 
-  const toggleSubSubmenu = (itemKey) => {
-    setOpenSubSubmenus(prev => ({ ...prev, [itemKey]: !prev[itemKey] }));
-  };
+  // const toggleSubSubmenu = (itemKey) => { // Removed as unused
+  //   setOpenSubSubmenus(prev => ({ ...prev, [itemKey]: !prev[itemKey] }));
+  // };
 
   // Using Material Symbols
   const Icon = ({ name, className = '' }) => <span className={`material-symbols-outlined ${className}`}>{name}</span>;
@@ -311,7 +311,7 @@ const LeftSidebar = () => {
 
 
   // Filter logic
-  const lowerSearchTerm = searchTerm.toLowerCase();
+  // const lowerSearchTerm = searchTerm.toLowerCase(); // Removed as searchTerm.toLowerCase() is used directly
 
   const { topLevel: topLevelItems, grouped: groupedItems } = filteredNavGroups;
 
@@ -337,6 +337,7 @@ const LeftSidebar = () => {
         <input
           type="text"
           placeholder="Search navigation..."
+          aria-label="Search navigation" // Added aria-label
           className={styles.searchInput}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -345,14 +346,14 @@ const LeftSidebar = () => {
 
       {/* Role Selector Added Here */}
       <div className={styles.roleSelectorContainer}>
-        <div className={styles.roleSelectorLabel}>
+        <div className={styles.roleSelectorLabel} id="role-selector-label"> {/* Added id for aria-labelledby */}
           <Icon name="admin_panel_settings" className={styles.roleSelectorIcon} />
           <span>Current Role</span>
         </div>
         <StyledFormSelect
           value={currentUserRole}
           onChange={(e) => setCurrentUserRole(e.target.value)}
-          aria-label="Select User Role"
+          aria-labelledby="role-selector-label" // Changed from aria-label to aria-labelledby
           className={styles.roleSelectorDropdown}
           size="sm"
         >

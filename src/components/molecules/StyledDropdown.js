@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import StyledButton from '../atoms/StyledButton';
 import StyledCard from '../atoms/StyledCard';
 import styles from './StyledDropdown.module.scss';
 
