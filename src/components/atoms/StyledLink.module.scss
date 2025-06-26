@@ -1,0 +1,49 @@
+/* StyledLink.module.scss */
+.linkBase {
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s ease-in-out, text-decoration-color 0.15s ease-in-out;
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-color-primary-focus, blue); /* Use theme variable */
+    outline-offset: 2px;
+    border-radius: var(--theme-border-radius-sm, 2px); /* Optional: for better focus appearance */
+  }
+}
+
+.link-default {
+  color: var(--theme-color-link, #007bff); /* Fallback: Bootstrap blue */
+  &:hover, &:focus {
+    color: var(--theme-color-link-hover, #0056b3);
+    text-decoration: underline;
+  }
+}
+
+.link-subtle {
+  color: var(--theme-text-color-secondary, #555);
+   &:hover, &:focus {
+    color: var(--theme-text-color-primary, #222);
+    text-decoration: underline;
+  }
+}
+
+.link-monochrome {
+  color: inherit; /* Inherits color from parent */
+  text-decoration: underline;
+   &:hover, &:focus {
+    color: inherit; /* Could slightly change opacity or decoration if needed */
+    text-decoration: none; /* Example: remove underline on hover for this variant */
+  }
+}
+
+.disabled {
+  color: var(--theme-text-color-disabled, #6c757d);
+  cursor: not-allowed;
+  pointer-events: none; // Prevents click events on the span
+  text-decoration: none !important; // Ensure no underline for disabled state
+
+  &:hover, &:focus {
+    color: var(--theme-text-color-disabled, #6c757d);
+    text-decoration: none !important;
+  }
+}

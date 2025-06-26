@@ -4,12 +4,22 @@ import {
   StyledButton,
   StyledIcon,
   StyledBadge,
+  StyledFormCheck, // Added
+  StyledFormControl, // Added
+  StyledFormLabel, // Added for context with form controls
+  StyledLink, // Added
+  StyledDivider, // Added
   designTokens, // For showing color values, etc.
   componentVariants // For listing variants
 } from '../../components';
 import styles from './AtomicPages.module.scss';
 
 const AtomsPage = () => {
+  const [textFieldValue, setTextFieldValue] = React.useState('');
+  const [textAreaValue, setTextAreaValue] = React.useState('');
+  const [checkboxChecked, setCheckboxChecked] = React.useState(true);
+  const [radioValue, setRadioValue] = React.useState('option1');
+
   const availableButtonVariants = componentVariants.button || ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark', 'link', 'outline-primary'];
   const availableBadgeVariants = componentVariants.badge || ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
   const commonSizes = ['sm', 'md', 'lg']; // Common sizes for demos
@@ -166,6 +176,212 @@ const AtomsPage = () => {
             </StyledBadge>
           </div>
            <p className={styles.notes}>Icon support is achieved by passing an `StyledIcon` (or other element) as a child. Specific styling for icon placement within the badge might be needed.</p>
+        </div>
+      </section>
+
+      {/* StyledFormCheck - Checkbox Section */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Checkbox (StyledFormCheck)</h2>
+        <p>Form field used to select one or multiple values from a list.</p>
+        <div className={styles.componentDemo}>
+          <h3 className={styles.demoSubtitle}>Basic Checkboxes</h3>
+          <div className={styles.demoArea} style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+            <StyledFormCheck
+              type="checkbox"
+              id="checkbox-example-1"
+              label="Default Checkbox"
+              checked={checkboxChecked}
+              onChange={() => setCheckboxChecked(!checkboxChecked)}
+              className={styles.demoElement}
+            />
+            <StyledFormCheck
+              type="checkbox"
+              id="checkbox-example-2"
+              label="Initially Unchecked"
+              className={styles.demoElement}
+            />
+            <StyledFormCheck
+              type="checkbox"
+              id="checkbox-example-3"
+              label="Disabled Checked Checkbox"
+              checked
+              disabled
+              className={styles.demoElement}
+            />
+            <StyledFormCheck
+              type="checkbox"
+              id="checkbox-example-4"
+              label="Disabled Unchecked Checkbox"
+              disabled
+              className={styles.demoElement}
+            />
+          </div>
+          <p className={styles.notes}>Checklist items: Label, Checked state, Disabled state. Error state and Indeterminate state would require more complex setup or direct prop support in StyledFormCheck.</p>
+        </div>
+      </section>
+
+      {/* StyledFormCheck - Radio Button Section */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Input Radio (StyledFormCheck)</h2>
+        <p>Form field used for selecting one option from a list.</p>
+        <div className={styles.componentDemo}>
+          <h3 className={styles.demoSubtitle}>Radio Group</h3>
+          <div className={styles.demoArea} style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+            <StyledFormCheck
+              type="radio"
+              id="radio-example-1"
+              name="exampleRadioGroup"
+              label="Option 1"
+              value="option1"
+              checked={radioValue === 'option1'}
+              onChange={(e) => setRadioValue(e.target.value)}
+              className={styles.demoElement}
+            />
+            <StyledFormCheck
+              type="radio"
+              id="radio-example-2"
+              name="exampleRadioGroup"
+              label="Option 2"
+              value="option2"
+              checked={radioValue === 'option2'}
+              onChange={(e) => setRadioValue(e.target.value)}
+              className={styles.demoElement}
+            />
+            <StyledFormCheck
+              type="radio"
+              id="radio-example-3"
+              name="exampleRadioGroup"
+              label="Option 3 (Disabled)"
+              value="option3"
+              checked={radioValue === 'option3'}
+              onChange={(e) => setRadioValue(e.target.value)}
+              disabled
+              className={styles.demoElement}
+            />
+          </div>
+          <p className={styles.notes}>Current selection: {radioValue}</p>
+          <p className={styles.notes}>Checklist items: Label, Checked state, Disabled state, Radio group. Error state would require more setup.</p>
+        </div>
+      </section>
+
+      {/* StyledFormControl - Text Field Section */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Text Field (StyledFormControl)</h2>
+        <p>Form field to enter and edit single-line text.</p>
+        <div className={styles.componentDemo}>
+          <h3 className={styles.demoSubtitle}>Basic Text Field</h3>
+          <div className={styles.demoArea} style={{ flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
+            <StyledFormLabel htmlFor="text-field-example-1">Standard Text Field</StyledFormLabel>
+            <StyledFormControl
+              type="text"
+              id="text-field-example-1"
+              placeholder="Enter text here..."
+              value={textFieldValue}
+              onChange={(e) => setTextFieldValue(e.target.value)}
+              className={styles.demoElement}
+              style={{width: '50%'}}
+            />
+            <StyledFormLabel htmlFor="text-field-example-2" className="mt-2">Disabled Text Field</StyledFormLabel>
+            <StyledFormControl
+              type="text"
+              id="text-field-example-2"
+              placeholder="Cannot edit"
+              disabled
+              className={styles.demoElement}
+              style={{width: '50%'}}
+            />
+            {/* Error state would typically be managed by a FormField molecule or parent state */}
+          </div>
+           <p className={styles.notes}>Checklist items: Label (via StyledFormLabel), Placeholder, Disabled state. Error state, Helper text, Icon/Prefix/Suffix, Sizes are often part of a molecule (like FormField) or require more direct styling/props.</p>
+        </div>
+      </section>
+
+      {/* StyledFormControl - Text Area Section */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>Text Area (StyledFormControl)</h2>
+        <p>Form field to enter and edit multiline text.</p>
+         <div className={styles.componentDemo}>
+          <h3 className={styles.demoSubtitle}>Basic Text Area</h3>
+          <div className={styles.demoArea} style={{ flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
+            <StyledFormLabel htmlFor="text-area-example-1">Standard Text Area</StyledFormLabel>
+            <StyledFormControl
+              as="textarea"
+              id="text-area-example-1"
+              rows={3}
+              placeholder="Enter multiple lines of text..."
+              value={textAreaValue}
+              onChange={(e) => setTextAreaValue(e.target.value)}
+              className={styles.demoElement}
+              style={{width: '75%'}}
+            />
+            <StyledFormLabel htmlFor="text-area-example-2" className="mt-2">Disabled Text Area</StyledFormLabel>
+            <StyledFormControl
+              as="textarea"
+              id="text-area-example-2"
+              rows={3}
+              placeholder="Cannot edit"
+              disabled
+              className={styles.demoElement}
+              style={{width: '75%'}}
+            />
+          </div>
+          <p className={styles.notes}>Checklist items: Label (via StyledFormLabel), Placeholder, Disabled state. Error state, Helper text, Sizes are often part of a molecule or require more direct styling/props.</p>
+        </div>
+      </section>
+
+      {/* StyledLink Section */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>StyledLink</h2>
+        <p>Interactive text element for navigation.</p>
+        <div className={styles.componentDemo}>
+          <h3 className={styles.demoSubtitle}>Variants & States</h3>
+          <div className={styles.demoArea}>
+            <StyledLink href="#" className={styles.demoElement}>Default Link</StyledLink>
+            <StyledLink to="/design/atoms" variant="subtle" className={styles.demoElement}>Subtle Router Link (to self)</StyledLink>
+            <StyledLink href="#" variant="monochrome" className={styles.demoElement}>Monochrome Link</StyledLink>
+            <StyledLink href="#" disabled className={styles.demoElement}>Disabled Link</StyledLink>
+          </div>
+          <p className={styles.notes}>Checklist items: Colors (via variants), Disabled state, Font inheritance (via monochrome/CSS), Accessibility role (auto via a/Link).</p>
+        </div>
+        <div className={styles.componentDemo}>
+          <h3 className={styles.demoSubtitle}>With Icons (Illustrative)</h3>
+          <div className={styles.demoArea}>
+            <StyledLink href="#" className={styles.demoElement}>
+              <StyledIcon name="open_in_new" size="sm" className={styles.btnIconAfter} /> External Link
+            </StyledLink>
+            <StyledLink to="/settings" className={styles.demoElement}>
+              <StyledIcon name="settings" size="sm" className={styles.btnIconBefore} /> Settings Page
+            </StyledLink>
+          </div>
+           <p className={styles.notes}>Icon support is by composing StyledIcon as a child.</p>
+        </div>
+      </section>
+
+      {/* StyledDivider Section */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>StyledDivider</h2>
+        <p>Element for visual content separation.</p>
+        <div className={styles.componentDemo}>
+          <h3 className={styles.demoSubtitle}>Horizontal</h3>
+          <p>Default Divider:</p>
+          <StyledDivider className={styles.demoElement} />
+          <p>Strong Divider:</p>
+          <StyledDivider variant="strong" className={styles.demoElement} />
+          <p>Dashed Divider:</p>
+          <StyledDivider variant="dashed" className={styles.demoElement} />
+        </div>
+        <div className={styles.componentDemo}>
+          <h3 className={styles.demoSubtitle}>Vertical (example in flex layout)</h3>
+          <div className={styles.demoArea} style={{ height: '50px', alignItems: 'stretch' }}>
+            <span>Item 1</span>
+            <StyledDivider orientation="vertical" className={styles.demoElement}/>
+            <span>Item 2</span>
+            <StyledDivider orientation="vertical" variant="strong" className={styles.demoElement}/>
+            <span>Item 3</span>
+            <StyledDivider orientation="vertical" variant="dashed" className={styles.demoElement}/>
+            <span>Item 4</span>
+          </div>
+          <p className={styles.notes}>Checklist items: Direction, Accessibility role (auto via hr).</p>
         </div>
       </section>
 

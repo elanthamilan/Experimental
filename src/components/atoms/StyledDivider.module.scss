@@ -1,0 +1,52 @@
+/* StyledDivider.module.scss */
+.dividerBase {
+  margin: var(--theme-spacing-md, 1rem) 0;
+  border: 0; /* Reset browser default border */
+  background-color: var(--theme-border-color, #dee2e6); /* Default color */
+  opacity: 1; /* Ensure it's visible if parent has opacity */
+}
+
+/* Orientation */
+.orientation-horizontal {
+  height: 1px;
+  width: 100%;
+}
+
+.orientation-vertical {
+  height: auto; /* Or a specific height like '100%' if in a flex/grid item */
+  align-self: stretch; /* Useful in flex containers */
+  min-height: 1.5em; /* Ensure it has some height if content around it is small, relative to font size */
+  width: 1px;
+  margin: 0 var(--theme-spacing-sm, 0.5rem); /* Margin for vertical, adjust as needed */
+  display: inline-block;
+  vertical-align: middle; /* Aligns better if used within text flow, though typically used as block */
+}
+
+/* Variants */
+.variant-default {
+  /* Uses .dividerBase background-color */
+}
+
+.variant-strong {
+  background-color: var(--theme-border-color-strong, #adb5bd); /* A darker/stronger color */
+}
+
+.variant-dashed {
+  /* For horizontal dashed line */
+  &.orientation-horizontal {
+    background-color: transparent; /* Remove solid background for dashed */
+    border-style: dashed !important; /* Use border for dashed effect */
+    border-width: 1px 0 0 0 !important;
+    border-color: var(--theme-border-color-dashed, #ced4da) !important;
+    height: 0; /* Use border for height */
+  }
+  /* For vertical dashed line - this is trickier with just <hr> styling */
+  /* Often, a div with border-left/right is used for vertical dashed lines */
+  &.orientation-vertical {
+    background-color: transparent;
+    border-style: dashed !important;
+    border-width: 0 0 0 1px !important; /* Dashed left border */
+    border-color: var(--theme-border-color-dashed, #ced4da) !important;
+    width: 0;
+  }
+}

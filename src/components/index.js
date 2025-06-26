@@ -38,6 +38,8 @@ export { default as StyledProgressBar } from './atoms/StyledProgressBar';
 export { default as StyledListGroupItem } from './atoms/StyledListGroupItem';
 export { default as StyledAlert } from './atoms/StyledAlert';
 export { default as StyledImage } from './atoms/StyledImage';
+export { default as StyledLink } from './atoms/StyledLink'; // Added StyledLink
+export { default as StyledDivider } from './atoms/StyledDivider'; // Added StyledDivider
 
 // ===== MOLECULES =====
 // Combinations of atoms that function together as a unit
